@@ -18,7 +18,7 @@ const useConfigStore = defineStore('config', {
                 mqttUsername: '',
                 mqttPassword: '',
                 /**/
-                nodeRedURL: '',
+                nodeRedURL: 'https://node-red.ami.in2p3.fr/',
             },
         };
     },

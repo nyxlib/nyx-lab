@@ -13,6 +13,11 @@ const router = createRouter({
             component: () => import('./views/HomeView.vue'),
         },
         {
+            path: '/node-red/',
+            name: 'node-red',
+            component: () => import('./views/NodeRedView.vue'),
+        },
+        {
             path: '/config/',
             name: 'config',
             component: () => import('./views/ConfigView.vue'),
