@@ -1,32 +1,33 @@
 {
-  "name": "kid-dashboard",
-  "description": "KID Dashboard",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "fast": "./node_modules/vite/bin/vite.js build",
-    "app-dev": "npm i --update vue-indi && ./node_modules/vite/bin/vite.js dev",
-    "app-prod": "npm i --update vue-indi && ./node_modules/vite/bin/vite.js build",
-    "app-preview": "npm i --update vue-indi && ./node_modules/vite/bin/vite.js preview"
-  },
-  "dependencies": {
-    "aladin-lite": "^3.3.2",
-    "bootstrap": "^5.3.3",
-    "bootstrap-icons": "^1.11.3",
-    "uuid": "^9.0.1",
-    "vue": "^3.4.21",
-    "vue-indi": "file:../indi-vue",
-    "vue-router": "^4.3.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.4",
-    "sass": "^1.72.0",
-    "vite": "^5.2.7"
-  },
-  "author": "Jérôme Odier",
-  "license": "CeCILL",
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab.in2p3.fr/lpsc-kid/kid-dashboard"
-  }
+    "name": "kid-dashboard",
+    "description": "KID Dashboard",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "fast": "./node_modules/vite/bin/vite.js build",
+        "app-dev": "npm i --update vue-indi && ./node_modules/vite/bin/vite.js dev",
+        "app-prod": "npm i --update vue-indi && ./node_modules/vite/bin/vite.js build",
+        "app-preview": "npm i --update vue-indi && ./node_modules/vite/bin/vite.js preview"
+    },
+    "dependencies": {
+        "aladin-lite": "^3.3.2",
+        "bootstrap": "^5.3.3",
+        "bootstrap-icons": "^1.11.3",
+        "pinia": "^2.1.7",
+        "uuid": "^9.0.1",
+        "vue": "^3.4.21",
+        "vue-indi": "file:../indi-vue",
+        "vue-router": "^4.3.0"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^5.0.4",
+        "sass": "^1.72.0",
+        "vite": "^5.2.7"
+    },
+    "author": "Jérôme Odier",
+    "license": "CeCILL",
+    "repository": {
+        "type": "git",
+        "url": "https://gitlab.in2p3.fr/lpsc-kid/kid-dashboard"
+    }
 }

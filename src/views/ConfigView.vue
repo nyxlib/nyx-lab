@@ -3,6 +3,8 @@
 
 import { reactive, onMounted, onUnmounted } from 'vue';
 
+import { IndiVariables } from 'vue-indi';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from '../stores/config';
@@ -83,6 +85,9 @@ onUnmounted(() => {
                 <button class="nav-link active" type="button" data-bs-toggle="tab" data-bs-target="#D15B3DA7" role="tab">
                     Services
                 </button>
+                <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#ADEE8F0A" role="tab">
+                    INDI
+                </button>
             </div>
         </nav>
 
@@ -156,6 +161,27 @@ onUnmounted(() => {
                         </div>
 
                         <!-- *************************************************************************************** -->
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- *************************************************************************************************** -->
+            <!-- VARIABLES                                                                                           -->
+            <!-- *************************************************************************************************** -->
+
+            <div class="tab-pane fade xxxx xxxxxx" id="ADEE8F0A" role="tabpanel" tabindex="0">
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        TODO
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <indi-variables />
 
                     </div>
                 </div>
