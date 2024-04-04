@@ -14,20 +14,11 @@ import useConfigStore from '../stores/config';
 const configStore = useConfigStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FUNCTIONS                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const connection = () => {
-
-    configStore.configGet();
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 </script>
 
 <template>
 
-    <form class="h-100 w-100 p-3" @submit.prevent="connection">
+    <form class="h-100 w-100 p-3" @submit.prevent="configStore.save">
 
         <!--*********************************************************************************************************-->
 
@@ -36,7 +27,7 @@ const connection = () => {
 
                 <div class="d-flex ms-auto">
 
-                    <button class="btn btn-sm btn-danger me-2" type="button">
+                    <button class="btn btn-sm btn-danger me-2" type="reset">
                         <i class="bi bi-x-lg"></i> Reset
                     </button>
 

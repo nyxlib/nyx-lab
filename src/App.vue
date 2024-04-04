@@ -49,7 +49,7 @@ const themeSet = (theme) => {
 
 onMounted(async () => {
 
-    configStore.setup();
+    configStore.load();
 
     themeSet('dark');
 });
