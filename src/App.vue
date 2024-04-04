@@ -7,6 +7,8 @@ import { useRouter, RouterView } from 'vue-router';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import { useIndiStore } from 'vue-indi';
+
 import useConfigStore from './stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -14,6 +16,8 @@ import useConfigStore from './stores/config';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const router = useRouter();
+
+const indiStore = useIndiStore();
 
 const configStore = useConfigStore();
 
@@ -69,6 +73,13 @@ onMounted(async () => {
             <!-- *************************************************************************************************** -->
 
             <div class="d-flex ms-auto py-1">
+
+                <button class="btn btn-sm btn-success" type="button" v-if="indiStore.isConnected">connected</button>
+                <button class="btn btn-sm btn-warning" type="button" v-if="!indiStore.isConnected">disconnected</button>
+
+            </div>
+
+            <div class="d-flex ms-2 py-1">
 
                 <label class="btn btn-sm btn-primary border" for="C2D68371">
                     <i class="bi bi-moon-stars"></i>

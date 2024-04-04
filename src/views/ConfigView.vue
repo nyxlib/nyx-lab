@@ -1,8 +1,6 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { reactive, onMounted, onUnmounted } from 'vue';
-
 import { IndiVariables } from 'vue-indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -16,12 +14,6 @@ import useConfigStore from '../stores/config';
 const configStore = useConfigStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-const state = reactive({
-    mqttConnected: false,
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -29,27 +21,6 @@ const connection = () => {
 
     configStore.configGet();
 }
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-onMounted(() => {
-
-    configStore.mqtt.setConnectionCallback((connected) => {
-
-        state.mqttConnected = connected;
-    });
-
-    /**/
-
-    state.mqttConnected = configStore.mqtt.connected();
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-onUnmounted(() => {
-
-    configStore.mqtt.setConnectionCallback(null);
-});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -111,8 +82,6 @@ onUnmounted(() => {
                                 <span class="me-auto">
                                     INDI
                                 </span>
-                                <button class="btn btn-xs btn-success" type="button" v-if="state.mqttConnected">connected</button>
-                                <button class="btn btn-xs btn-warning" type="button" v-if="!state.mqttConnected">disconnected</button>
                             </div>
                             <div class="card-body">
 
