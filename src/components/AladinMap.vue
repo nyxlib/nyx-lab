@@ -35,7 +35,6 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    /**/
     showGotoControl: {
         type: Boolean,
         default: false,
@@ -115,8 +114,42 @@ onMounted(async () => {
 
 .aladin-input.search {
 
-    padding-top: 2.5px;
-    padding-bottom: 2.5px;
+    padding-top: 2.4px;
+    padding-bottom: 2.4px;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.aladin-location {
+
+    left: 0.2rem;
+    right: auto;
+}
+
+.aladin-cooFrame {
+
+    left: auto;
+    right: 4.5rem;
+}
+
+.aladin-projection-control {
+
+    left: auto;
+    right: 0.2rem;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.aladin-stack-control {
+    top: 2.4rem;
+}
+
+.aladin-simbadPointer-control {
+    top: 5.0rem;
+}
+
+.aladin-grid-control {
+    top: 7.6rem;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
