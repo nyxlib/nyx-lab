@@ -61,9 +61,7 @@ const useConfigStore = defineStore('config', {
 
         save()
         {
-            const json = JSON.stringify(copyDict({}, this.globals));
-
-            localStorage.setItem('indi-dashboard-config', json);
+            localStorage.setItem('indi-dashboard-config', JSON.stringify(this.globals));
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
