@@ -20,7 +20,7 @@ const configStore = useConfigStore();
 const connection = () => {
 
     configStore.configGet();
-}
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
