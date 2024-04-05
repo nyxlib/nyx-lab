@@ -22,26 +22,6 @@ const configStore = useConfigStore();
 
         <!--*********************************************************************************************************-->
 
-        <nav class="navbar navbar-expand bg-transparent py-0 mb-2">
-            <div class="container-fluid px-0">
-
-                <div class="d-flex ms-auto">
-
-                    <button class="btn btn-sm btn-danger me-2" type="reset">
-                        <i class="bi bi-x-lg"></i> Reset
-                    </button>
-
-                    <button class="btn btn-sm btn-success me-0" type="submit">
-                        <i class="bi bi-check-lg"></i> Apply
-                    </button>
-
-                </div>
-
-            </div>
-        </nav>
-
-        <!--*********************************************************************************************************-->
-
         <nav class="mb-3">
             <div class="nav nav-tabs" role="tablist">
                 <button class="nav-link active" type="button" data-bs-toggle="tab" data-bs-target="#D15B3DA7" role="tab">
@@ -50,6 +30,14 @@ const configStore = useConfigStore();
                 <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#ADEE8F0A" role="tab">
                     INDI
                 </button>
+                <div class="ms-auto">
+                    <button class="btn btn-sm btn-danger me-2" type="reset">
+                        <i class="bi bi-x-lg"></i> Reset
+                    </button>
+                    <button class="btn btn-sm btn-success me-0" type="submit">
+                        <i class="bi bi-check-lg"></i> Apply
+                    </button>
+                </div>
             </div>
         </nav>
 
