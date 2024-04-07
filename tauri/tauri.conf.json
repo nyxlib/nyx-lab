@@ -8,21 +8,23 @@
         "devUrl": "http://localhost:5173/",
         "frontendDist": "../app/dist/"
     },
-    "app": {"windows": [
-        {
-            "label": "main",
-            "height": 768,
-            "width": 1024,
-            "minHeight": 600,
-            "minWidth": 800,
-            "title": "Pollux",
-            "titleBarStyle": "Overlay",
-            "hiddenTitle": true,
-            "url": "index.html"
-        }
-    ],
+    "app": {
+        "windows": [
+            {
+                "label": "main",
+                "height": 768,
+                "width": 1024,
+                "minHeight": 600,
+                "minWidth": 800,
+                "maximized": true,
+                "title": "Pollux",
+                "titleBarStyle": "Overlay",
+                "hiddenTitle": true,
+                "url": "index.html"
+            }
+        ],
         "security": {
-            "csp": null
+            "csp": "default-src *;"
         }
     },
     "bundle": {
