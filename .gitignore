@@ -2,6 +2,9 @@
 .DS_Store
 
 dist
+target
+tauri/icons
 node_modules
 
+Cargo.lock
 package-lock.json
