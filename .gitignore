@@ -3,6 +3,7 @@
 
 dist
 target
+tauri/gen
 tauri/icons
 node_modules
 
