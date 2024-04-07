@@ -14,10 +14,14 @@
         "aladin-lite": "^3.3.2",
         "bootstrap": "^5.3.3",
         "bootstrap-icons": "^1.11.3",
+        "pinia": "^2.1.7",
+        "uuid": "^9.0.1",
+        "vue": "^3.4.21",
         "vue-indi": "file:../indi-vue",
         "vue-router": "^4.3.0"
     },
     "devDependencies": {
+        "@tauri-apps/cli": "^2.0.0-beta.12",
         "@vitejs/plugin-vue": "^5.0.4",
         "@vue/eslint-config-prettier": "^9.0.0",
         "eslint": "^8.57.0",

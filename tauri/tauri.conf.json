@@ -1,0 +1,39 @@
+{
+    "productName": "pollux",
+    "version": "0.0.0",
+    "identifier": "io.odier.pollux",
+    "build": {
+        "beforeDevCommand": "npm run app-prod",
+        "beforeBuildCommand": "npm run app-prod",
+        "devUrl": "http://localhost:5173/",
+        "frontendDist": "../app/dist/"
+    },
+    "app": {"windows": [
+        {
+            "label": "main",
+            "height": 768,
+            "width": 1024,
+            "minHeight": 600,
+            "minWidth": 800,
+            "title": "Pollux",
+            "titleBarStyle": "Overlay",
+            "hiddenTitle": true,
+            "url": "index.html"
+        }
+    ],
+        "security": {
+            "csp": null
+        }
+    },
+    "bundle": {
+        "active": true,
+        "targets": "all",
+        "icon": [
+            "icons/32x32.png",
+            "icons/128x128.png",
+            "icons/128x128@2x.png",
+            "icons/icon.icns",
+            "icons/icon.ico"
+        ]
+    }
+}
