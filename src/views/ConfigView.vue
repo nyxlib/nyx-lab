@@ -59,7 +59,7 @@ const configStore = useConfigStore();
                         <div class="card">
                             <div class="card-header d-flex">
                                 <span class="me-auto">
-                                    INDI
+                                    MQTT Broker
                                 </span>
                             </div>
                             <div class="card-body">

@@ -1,6 +1,6 @@
 {
-    "name": "kid-dashboard",
-    "description": "KID Dashboard",
+    "name": "indi-dashboard",
+    "description": "INDI Dashboard",
     "version": "1.0.0",
     "private": true,
     "scripts": {
@@ -28,6 +28,6 @@
     "license": "CeCILL",
     "repository": {
         "type": "git",
-        "url": "https://gitlab.in2p3.fr/lpsc-kid/kid-dashboard"
+        "url": "https://gitlab.in2p3.fr/lpsc-kid/indi-dashboard"
     }
 }
