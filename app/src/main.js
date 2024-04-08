@@ -1,9 +1,10 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import { createPinia } from 'pinia';
+
 import { createApp } from 'vue';
 
-/*--------------------------------------------------------------------------------------------------------------------*/
+import { Tooltip } from 'bootstrap';
 
 import { setup } from 'vue-indi';
 
@@ -13,8 +14,6 @@ import App from './App.vue';
 import router from './router';
 
 import input from './plugins/input';
-
-import Tooltip from 'bootstrap/js/src/tooltip';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
