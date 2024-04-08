@@ -5,7 +5,7 @@
 
 import { ref, onMounted } from 'vue';
 
-import { v4 as uuid_v4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import A from 'aladin-lite';
 
@@ -104,52 +104,51 @@ onMounted(async () => {
 
 <template>
 
-    <div class="border-0" :id="`A${uuid_v4().substring(0, 8)}`" ref="map"></div>
+    <div class="border-0" :id="`A${uuid().substring(0, 8)}`" ref="map"></div>
 
 </template>
 
 <style>
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .aladin-input.search {
 
-    padding-top: 2.4px;
-    padding-bottom: 2.4px;
+    padding-top: 2.4px !important;
+    padding-bottom: 2.4px !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.aladin-location {
-
-    left: 0.2rem;
-    right: auto;
-}
-
 .aladin-cooFrame {
 
-    left: auto;
-    right: 4.5rem;
+    left: auto !important;
+    right: 4.5rem !important;
+}
+
+.aladin-location {
+
+    left: 0.2rem !important;
+    right: auto !important;
 }
 
 .aladin-projection-control {
 
-    left: auto;
-    right: 0.2rem;
+    left: auto !important;
+    right: 0.2rem !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+.aladin-grid-control {
+    top: 7.5rem !important;
+}
+
 .aladin-stack-control {
-    top: 2.3rem;
+    top: 2.3rem !important;
 }
 
 .aladin-simbadPointer-control {
-    top: 4.9rem;
-}
-
-.aladin-grid-control {
-    top: 7.5rem;
+    top: 4.9rem !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
