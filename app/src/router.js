@@ -13,6 +13,11 @@ const router = createRouter({
             component: () => import('./views/HomeView.vue'),
         },
         {
+            path: '/monitoring/',
+            name: 'monitoring',
+            component: () => import('./views/MonitoringView.vue'),
+        },
+        {
             path: '/sky-map/',
             name: 'sky-map',
             component: () => import('./views/SkyMapView.vue'),
