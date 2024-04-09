@@ -33,6 +33,7 @@ const useConfigStore = defineStore('config', {
                 mqttUsername: '',
                 mqttPassword: '',
                 /**/
+                grafanaURL: '',
                 nodeRedURL: '',
             },
         };

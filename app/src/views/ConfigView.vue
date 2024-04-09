@@ -94,6 +94,22 @@ const configStore = useConfigStore();
 
                         <!-- *************************************************************************************** -->
 
+                        <div class="card mb-3">
+                            <div class="card-header d-flex">
+                                Grafana
+                            </div>
+                            <div class="card-body">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="C1C5DFD3">Server URL<sup class="text-secondary">opt</sup></label>
+                                    <input class="form-control form-control-sm" type="text" id="C1C5DFD3" placeholder="Server URL" v-no-autocomplete v-model="configStore.globals.grafanaURL" />
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
                         <div class="card mb-0">
                             <div class="card-header d-flex">
                                 Node-RED
