@@ -76,6 +76,10 @@ const imageTab = ref(null);
 const spectrumTab = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+let spectrumDone = false;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -107,6 +111,11 @@ function degreesToDMS(degrees)
 
 function degreesToHMSString(degrees)
 {
+    if(degrees === -999.0)
+    {
+        return 'Ø';
+    }
+
     const hms = degreesToHMS(degrees);
 
     return `${hms.h.toString().padStart(2, '0')}h ${hms.m.toString().padStart(2, '0')}m ${hms.s.toString().padStart(2, '0')}s`;
@@ -116,6 +125,11 @@ function degreesToHMSString(degrees)
 
 function degreesToDMSString(degrees)
 {
+    if(degrees === -999.0)
+    {
+        return 'Ø';
+    }
+
     const dms = degreesToDMS(degrees);
 
     return `${dms.d.toString().padStart(2, '0')}° ${dms.m.toString().padStart(2, '0')}' ${dms.s.toString().padStart(2, '0')}"`;
@@ -312,6 +326,50 @@ const update = () => {
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    spectrumTab.value.addEventListener('shown.bs.tab', () => {
+
+        if(!spectrumDone)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            const scales = {};
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            new Chart(spectrum.value, {
+                type: 'line',
+                data: {
+                    //labels: labels,
+                    datasets: [{
+                        label: 'H I',
+                        //data: values,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        xAxisID: `spectrum_x_${uuid}`,
+                        yAxisID: `spectrum_y_${uuid}`,
+                    }],
+                },
+                options: {
+                    animation: {
+                        duration: 0,
+                    },
+                    scales: scales,
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1.75,
+                },
+            });
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            spectrumDone = true;
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -357,7 +415,7 @@ onMounted(() => {
 
                     <p>ℓ: {{degreesToDMSString(state.l)}}</p>
 
-                    <p>b: {{degreesToDMSString(state.b)}}</p>
+                    <p>𝑏: {{degreesToDMSString(state.b)}}</p>
 
                     <hr />
 
