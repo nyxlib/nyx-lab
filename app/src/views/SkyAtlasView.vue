@@ -64,8 +64,8 @@ const search = () => {
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label" for="D130FEEF">Observation date</label>
-                            <input class="form-control form-control-sm" type="date" id="D130FEEF" placeholder="Observation date" v-model="state.observationDate" @change="update()" />
+                            <label class="form-label" for="E279F652">Observation date</label>
+                            <input class="form-control form-control-sm" type="date" id="E279F652" placeholder="Observation date" v-model="state.observationDate" @change="update()" />
                         </div>
 
                         <div class="mb-0">
