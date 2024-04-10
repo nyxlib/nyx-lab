@@ -3,7 +3,7 @@
 
 import { ref, onMounted, reactive } from 'vue';
 
-import * as Astronomy from 'astronomy-engine';
+import * as ae from 'astronomy-engine';
 
 import Chart from 'chart.js/auto';
 
@@ -115,7 +115,7 @@ const update = () => {
 
     const timestamp = new Date(state.observationDate).getTime();
 
-    const observer = new Astronomy.Observer(
+    const observer = new ae.Observer(
         configStore.globals.lat,
         configStore.globals.lon,
         configStore.globals.height
@@ -130,11 +130,11 @@ const update = () => {
     {
         const date = new Date(timestamp + N_MS_PER_DAY * (i / 1000.0));
 
-        const sunPosition = Astronomy.Equator('Sun', date, observer, true, true);
-        const moonPosition = Astronomy.Equator('Moon', date, observer, true, true);
+        const sunPosition = ae.Equator('Sun', date, observer, true, true);
+        const moonPosition = ae.Equator('Moon', date, observer, true, true);
 
-        const sunAltAz = Astronomy.Horizon(date, observer, sunPosition.ra, sunPosition.dec, 'normal');
-        const moonAltAz = Astronomy.Horizon(date, observer, moonPosition.ra, moonPosition.dec, 'normal');
+        const sunAltAz = ae.Horizon(date, observer, sunPosition.ra, sunPosition.dec, 'normal');
+        const moonAltAz = ae.Horizon(date, observer, moonPosition.ra, moonPosition.dec, 'normal');
 
         sunAlt.push(sunAltAz.altitude);
         moonAlt.push(moonAltAz.altitude);

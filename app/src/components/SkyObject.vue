@@ -1,10 +1,10 @@
-<!--suppress JSUnresolvedReference -->
+<!--suppress JSUnresolvedReference, NonAsciiCharacters, JSNonASCIINames -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import { ref, onMounted, reactive } from 'vue';
 
-import * as Astronomy from 'astronomy-engine';
+import * as ae from 'astronomy-engine';
 
 import {v4 as uuid_v4} from 'uuid';
 
@@ -123,6 +123,49 @@ function degreesToDMSString(degrees)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const DEG_TO_RAD = Math.PI / 180.0;
+const RAD_TO_DEC = 180.0 / Math.PI;
+
+const A_NGP = 192.85948 * DEG_TO_RAD;
+const Δ_NGP = 27.12825 * DEG_TO_RAD;
+const L_NCP = 122.93314 * DEG_TO_RAD;
+
+const equatorialToGalactic = (α, ẟ) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    α *= DEG_TO_RAD;
+    ẟ *= DEG_TO_RAD;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const sinẟ = Math.sin(ẟ);
+    const cosẟ = Math.cos(ẟ);
+
+    const sinαNGP = Math.sin(Δ_NGP);
+    const cosαNGP = Math.cos(Δ_NGP);
+
+    const sinααNGP = Math.sin(α - A_NGP);
+    const cosααNGP = Math.cos(α - A_NGP);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const ℓ = L_NCP - Math.atan2(cosẟ * sinααNGP, sinẟ * cosαNGP - cosẟ * sinαNGP * cosααNGP);
+
+    const 𝑏 = Math.asin(sinẟ * sinαNGP + cosẟ * cosαNGP * cosααNGP);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return {
+        l: (ℓ * RAD_TO_DEC + 360) % 360,
+        b: (𝑏 * RAD_TO_DEC + 360) % 360,
+    };
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const N_MS_PER_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
 
 const update = () => {
@@ -135,7 +178,7 @@ const update = () => {
 
         const timestamp = new Date(props.observationDate).getTime();
 
-        const observer = new Astronomy.Observer(
+        const observer = new ae.Observer(
             configStore.globals.lat,
             configStore.globals.lon,
             configStore.globals.height
@@ -145,14 +188,19 @@ const update = () => {
 
         const index = NGC.table[props.objectName];
 
+        const lb = equatorialToGalactic(
+            NGC.ra[index],
+            NGC.dec[index]
+        );
+
         /*------------------------------------------------------------------------------------------------------------*/
 
         state.names = NGC.names[index].split(',');
         state.type = NGC.type[index];
         state.ra = NGC.ra[index];
         state.dec = NGC.dec[index];
-        state.l = 8888888;
-        state.b = 8888888;
+        state.l = lb.l;
+        state.b = lb.b;
         state.min_ax = NGC.min_ax[index];
         state.maj_ax = NGC.maj_ax[index];
         state.pos_ang = NGC.pos_ang[index];
@@ -173,7 +221,7 @@ const update = () => {
         {
             const date = new Date(timestamp + N_MS_PER_DAY * (i / 1000.0));
 
-            const objectAltAz = Astronomy.Horizon(date, observer, NGC.ra[index], NGC.dec[index], 'normal');
+            const objectAltAz = ae.Horizon(date, observer, NGC.ra[index], NGC.dec[index], 'normal');
 
             objectAlt.push(objectAltAz.altitude);
             objectAz.push(objectAltAz.azimuth);
@@ -307,9 +355,9 @@ onMounted(() => {
 
                     <p>Declination δ: {{degreesToDMSString(state.dec)}}</p>
 
-                    <p>ℓ: {{state.l}}</p>
+                    <p>ℓ: {{degreesToDMSString(state.l)}}</p>
 
-                    <p>b: {{state.b}}</p>
+                    <p>b: {{degreesToDMSString(state.b)}}</p>
 
                     <hr />
 
