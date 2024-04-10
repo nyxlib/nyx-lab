@@ -23,6 +23,11 @@ const router = createRouter({
             component: () => import('./views/SkyMapView.vue'),
         },
         {
+            path: '/sky-atlas/',
+            name: 'sky-atlas',
+            component: () => import('./views/SkyAtlasView.vue'),
+        },
+        {
             path: '/node-red/',
             name: 'node-red',
             component: () => import('./views/NodeRedView.vue'),

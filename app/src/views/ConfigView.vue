@@ -126,7 +126,7 @@ const configStore = useConfigStore();
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-0">
+                        <div class="card mb-3">
                             <div class="card-header d-flex">
                                 Sky map
                             </div>
@@ -145,6 +145,36 @@ const configStore = useConfigStore();
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="enable_sky_map" id="C9E3CBA5" v-model="configStore.globals.enableSkyMap" v-bind:value="false">
                                             <label class="form-check-label" for="C9E3CBA5">
+                                                Disable
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
+                        <div class="card mb-0">
+                            <div class="card-header d-flex">
+                                Sky atlas
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="enable_sky_atlas" id="FF3DAE50" v-model="configStore.globals.enableSkyAtlas" v-bind:value="true">
+                                            <label class="form-check-label" for="FF3DAE50">
+                                                Enable
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="enable_sky_atlas" id="DC0AB03E" v-model="configStore.globals.enableSkyAtlas" v-bind:value="false">
+                                            <label class="form-check-label" for="DC0AB03E">
                                                 Disable
                                             </label>
                                         </div>

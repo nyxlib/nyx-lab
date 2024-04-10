@@ -37,6 +37,7 @@ const useConfigStore = defineStore('config', {
                 nodeRedURL: '',
                 /**/
                 enableSkyMap: true,
+                enableSkyAtlas: true,
             },
         };
     },
