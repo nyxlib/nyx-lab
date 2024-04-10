@@ -12,8 +12,10 @@
     },
     "dependencies": {
         "aladin-lite": "^3.3.2",
+        "astronomy-engine": "^2.1.19",
         "bootstrap": "^5.3.3",
         "bootstrap-icons": "^1.11.3",
+        "chart.js": "^4.4.2",
         "pinia": "^2.1.7",
         "split.js": "^1.6.5",
         "uuid": "^9.0.1",
