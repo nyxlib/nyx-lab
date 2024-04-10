@@ -31,6 +31,10 @@ const props = defineProps({
         default: 'MOL',
     },
     /**/
+    showFrame: {
+        type: Boolean,
+        default: false,
+    },
     showCooGrid: {
         type: Boolean,
         default: false,
@@ -39,11 +43,31 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    showCooLocation: {
+        type: Boolean,
+        default: false,
+    },
+    showZoomControl: {
+        type: Boolean,
+        default: false,
+    },
     showLayersControl: {
         type: Boolean,
         default: false,
     },
     showCooGridControl: {
+        type: Boolean,
+        default: false,
+    },
+    showSettingsControl: {
+        type: Boolean,
+        default: false,
+    },
+    showFullscreenControl: {
+        type: Boolean,
+        default: false,
+    },
+    showProjectionControl: {
         type: Boolean,
         default: false,
     },
@@ -80,14 +104,18 @@ onMounted(async () => {
             cooFrame: props.cooFrame,
             projection: props.projection,
             /**/
+            showFrame: props.showFrame,
             showCooGrid: props.showCooGrid,
-            /**/
             showGotoControl: props.showGotoControl,
+            showCooLocation: props.showCooLocation,
+            showZoomControl: props.showZoomControl,
+            showShareControl: props.showShareControl,
             showLayersControl: props.showLayersControl,
             showCooGridControl: props.showCooGridControl,
+            showSettingsControl: props.showSettingsControl,
+            showFullscreenControl: props.showFullscreenControl,
+            showProjectionControl: props.showProjectionControl,
             showSimbadPointerControl: props.showSimbadPointerControl,
-            /**/
-            showFullscreenControl: false,
             /**/
             gridOptions: {
                 color: '#FF0000',
@@ -111,9 +139,14 @@ onMounted(async () => {
 <style>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+.aladin-cooFrame {
+
+    top: 1.5px !important;
+}
+
 .aladin-cooFrame > select {
 
-    height: 28px !important;
+    height: 31px !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -122,40 +155,6 @@ onMounted(async () => {
 
     padding-top: 2.4px !important;
     padding-bottom: 2.4px !important;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.aladin-cooFrame {
-
-    left: auto !important;
-    right: 4.5rem !important;
-}
-
-.aladin-location {
-
-    left: 0.2rem !important;
-    right: auto !important;
-}
-
-.aladin-projection-control {
-
-    left: auto !important;
-    right: 0.2rem !important;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.aladin-grid-control {
-    top: 7.5rem !important;
-}
-
-.aladin-stack-control {
-    top: 2.3rem !important;
-}
-
-.aladin-simbadPointer-control {
-    top: 4.9rem !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

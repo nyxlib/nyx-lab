@@ -171,14 +171,14 @@ const resize = () => {
 
 const search = () => {
 
-    state.objectName = state.objectName.trim();
+    const state_objectName = state.objectName.trim();
 
-    if(state.objectName
+    if(state_objectName
        &&
        state.observationDate
     ) {
         state.objects.push({
-            objectName: state.objectName,
+            objectName: state_objectName,
             observationDate: state.observationDate,
         });
     }

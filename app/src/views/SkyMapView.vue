@@ -8,6 +8,6 @@ import AladinMap from '../components/AladinMap.vue';
 
 <template>
 
-    <aladin-map class="h-100 w-100" :fov="2.8" :projection="'SIN'" :show-coo-grid="true" :show-goto-control="true" :show-layers-control="true" :show-coo-grid-control="true" :show-simbad-pointer-control="true" />
+    <aladin-map class="h-100 w-100" :fov="2.8" :projection="'SIN'" :show-frame="true" :show-coo-grid="true" :show-coo-location="true" :show-projection-control="true" :show-fullscreen-control="true" />
 
 </template>

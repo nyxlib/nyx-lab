@@ -481,7 +481,7 @@ onMounted(() => {
 
                         <div class="tab-pane fade xxxx xxxxxx" :id="`D91CE60F_${uuid}`" role="tabpanel" tabindex="0">
 
-                            <aladin-map class="w-100" :fov="10.0" :target="objectName" :projection="'SIN'" v-if="state.show_image" />
+                            <aladin-map class="w-100" :fov="10.0" :target="objectName" :projection="'SIN'" :show-zoom-control="true" v-if="state.show_image" />
 
                         </div>
 
