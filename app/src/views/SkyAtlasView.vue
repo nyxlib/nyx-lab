@@ -9,9 +9,10 @@ import Chart from 'chart.js/auto';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import Splitter from '../components/Splitter.vue';
-
 import useConfigStore from '../stores/config';
+
+import Splitter from '../components/Splitter.vue';
+import SkyObject from '../components/SkyObject.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -39,7 +40,7 @@ const init = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const labels = Array.from({length: 1000}, (_, i) => (i * 24.0 / 1000.0).toFixed(0));
+    const labels = Array.from({length: 1000}, (_, i) => (24.0 * (i / 1000.0)).toFixed(0));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -160,12 +161,27 @@ const update = () => {
 
 const resize = () => {
 
+    for(let id in Chart.instances)
+    {
+        Chart.instances[id].resize();
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const search = () => {
 
+    state.objectName = state.objectName.trim();
+
+    if(state.objectName
+       &&
+       state.observationDate
+    ) {
+        state.objects.push({
+            objectName: state.objectName,
+            observationDate: state.observationDate,
+        });
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -229,8 +245,8 @@ onMounted(() => {
 
                 <div>
                     <ul>
-                        <li>NGC/IC catalogs: <a href="https://github.com/mattiaverga/OpenNGC/" target="_blank">OpenNCG</a></li>
-                        <li>Sky map rendering: <a href="https://aladin.cds.unistra.fr/#AladinLite" target="_blank">Aladin Lite</a></li>
+                        <li>NGC/IC catalogs: <a class="badge rounded-pill text-bg-secondary" href="https://github.com/mattiaverga/OpenNGC/" target="_blank" style="text-decoration: none;">OpenNCG</a></li>
+                        <li>Sky map rendering: <a class="badge rounded-pill text-bg-secondary" href="https://aladin.cds.unistra.fr/#AladinLite" target="_blank" style="text-decoration: none;">Aladin Lite</a></li>
                     </ul>
                 </div>
 
@@ -246,7 +262,7 @@ onMounted(() => {
 
             <div class="p-3">
 
-                TODO
+                <sky-object v-for="(object, index) in state.objects" :key="index" :object-name="object.objectName" :observation-date="object.observationDate"></sky-object>
 
             </div>
 

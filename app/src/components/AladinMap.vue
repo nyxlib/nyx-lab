@@ -5,7 +5,7 @@
 
 import { ref, onMounted } from 'vue';
 
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid_v4 } from 'uuid';
 
 import A from 'aladin-lite';
 
@@ -104,7 +104,7 @@ onMounted(async () => {
 
 <template>
 
-    <div class="border-0" :id="`A${uuid().substring(0, 8)}`" ref="map"></div>
+    <div class="border-0" :id="`A${uuid_v4().substring(0, 8)}`" ref="map"></div>
 
 </template>
 
