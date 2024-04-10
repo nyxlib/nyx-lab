@@ -35,6 +35,8 @@ const useConfigStore = defineStore('config', {
                 /**/
                 grafanaURL: '',
                 nodeRedURL: '',
+                /**/
+                enableSkyMap: true,
             },
         };
     },

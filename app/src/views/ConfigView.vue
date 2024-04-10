@@ -56,7 +56,7 @@ const configStore = useConfigStore();
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card">
+                        <div class="card mb-3">
                             <div class="card-header d-flex">
                                 <span class="me-auto">
                                     MQTT Broker
@@ -89,11 +89,6 @@ const configStore = useConfigStore();
 
                         <!-- *************************************************************************************** -->
 
-                    </div>
-                    <div class="col-md-6">
-
-                        <!-- *************************************************************************************** -->
-
                         <div class="card mb-3">
                             <div class="card-header d-flex">
                                 Grafana
@@ -119,6 +114,41 @@ const configStore = useConfigStore();
                                 <div class="mb-3">
                                     <label class="form-label" for="DDBCAD3D">Server URL<sup class="text-secondary">opt</sup></label>
                                     <input class="form-control form-control-sm" type="text" id="DDBCAD3D" placeholder="Server URL" v-no-autocomplete v-model="configStore.globals.nodeRedURL" />
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <!-- *************************************************************************************** -->
+
+                        <div class="card mb-0">
+                            <div class="card-header d-flex">
+                                Sky map
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="enable_sky_map" id="CAC16985" v-model="configStore.globals.enableSkyMap" v-bind:value="true">
+                                            <label class="form-check-label" for="CAC16985">
+                                                Enable
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="enable_sky_map" id="C9E3CBA5" v-model="configStore.globals.enableSkyMap" v-bind:value="false">
+                                            <label class="form-check-label" for="C9E3CBA5">
+                                                Disable
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
