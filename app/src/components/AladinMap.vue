@@ -35,7 +35,23 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    showCatalog: {
+        type: Boolean,
+        default: false,
+    },
     showCooGrid: {
+        type: Boolean,
+        default: false,
+    },
+    showReticle: {
+        type: Boolean,
+        default: false,
+    },
+    showStatusBar: {
+        type: Boolean,
+        default: false,
+    },
+    showContextMenu: {
         type: Boolean,
         default: false,
     },
@@ -105,7 +121,11 @@ onMounted(async () => {
             projection: props.projection,
             /**/
             showFrame: props.showFrame,
+            showCatalog: props.showCatalog,
             showCooGrid: props.showCooGrid,
+            showReticle: props.showReticle,
+            showStatusBar: props.showStatusBar,
+            showContextMenu: props.showContextMenu,
             showGotoControl: props.showGotoControl,
             showCooLocation: props.showCooLocation,
             showZoomControl: props.showZoomControl,
@@ -137,6 +157,13 @@ onMounted(async () => {
 </template>
 
 <style>
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.aladin-tooltip {
+
+    display: none;
+}
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .aladin-cooFrame {

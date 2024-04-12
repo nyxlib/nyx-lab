@@ -66,18 +66,12 @@ const uuid = uuid_v4();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const position = ref(null);
-const spectrum = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const card = ref(null);
 const infoTab = ref(null);
 const imageTab = ref(null);
-const spectrumTab = ref(null);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-let spectrumDone = false;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -326,50 +320,6 @@ const update = () => {
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    spectrumTab.value.addEventListener('shown.bs.tab', () => {
-
-        if(!spectrumDone)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            const scales = {};
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            new Chart(spectrum.value, {
-                type: 'line',
-                data: {
-                    //labels: labels,
-                    datasets: [{
-                        label: 'H I',
-                        //data: values,
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        xAxisID: `spectrum_x_${uuid}`,
-                        yAxisID: `spectrum_y_${uuid}`,
-                    }],
-                },
-                options: {
-                    animation: {
-                        duration: 0,
-                    },
-                    scales: scales,
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    aspectRatio: 1.75,
-                },
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            spectrumDone = true;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-    });
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -403,19 +353,29 @@ onMounted(() => {
 
                     <!--*********************************************************************************************-->
 
-                    <p v-if="state.type === 'G'">Type: {{state.type}}, z: {{state.redshift}}</p>
+                    <p v-if="state.type === 'G'">Type: {{state.type}}, redshift: {{state.redshift}}</p>
 
                     <p v-if="state.type !== 'G'">Type: {{state.type}}</p>
 
                     <hr />
 
-                    <p>Right ascension α: {{degreesToHMSString(state.ra)}}</p>
+                    <div>
+                        Equatorial coordinate
+                        <p class="ms-3">
+                            α: <kbd>{{degreesToHMSString(state.ra)}}</kbd>
+                            <br />
+                            δ: <kbd>{{degreesToDMSString(state.dec)}}</kbd>
+                        </p>
+                    </div>
 
-                    <p>Declination δ: {{degreesToDMSString(state.dec)}}</p>
-
-                    <p>ℓ: {{degreesToDMSString(state.l)}}</p>
-
-                    <p>𝑏: {{degreesToDMSString(state.b)}}</p>
+                    <div>
+                        Galactic coordinate
+                        <p class="ms-3">
+                            ℓ: <kbd>{{degreesToDMSString(state.l)}}</kbd>
+                            <br />
+                            𝑏: <kbd>{{degreesToDMSString(state.b)}}</kbd>
+                        </p>
+                    </div>
 
                     <hr />
 
@@ -463,9 +423,6 @@ onMounted(() => {
                             <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" :data-bs-target="`#D91CE60F_${uuid}`" role="tab" ref="imageTab">
                                 Image
                             </button>
-                            <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" :data-bs-target="`#E3DB8E9E_${uuid}`" role="tab" ref="spectrumTab">
-                                H I
-                            </button>
                         </div>
                     </nav>
 
@@ -482,12 +439,6 @@ onMounted(() => {
                         <div class="tab-pane fade xxxx xxxxxx" :id="`D91CE60F_${uuid}`" role="tabpanel" tabindex="0">
 
                             <aladin-map class="w-100" :fov="10.0" :target="objectName" :projection="'SIN'" :show-zoom-control="true" v-if="state.show_image" />
-
-                        </div>
-
-                        <div class="tab-pane fade xxxx xxxxxx" :id="`E3DB8E9E_${uuid}`" role="tabpanel" tabindex="0">
-
-                            <canvas class="w-100" ref="spectrum"></canvas>
 
                         </div>
 

@@ -33,6 +33,7 @@ const useConfigStore = defineStore('config', {
                 lon: 2.34886,
                 height: 0.00000,
                 zoom: 18,
+                seeing: 0.0,
                 /**/
                 mqttURL: '',
                 mqttUsername: '',
@@ -59,11 +60,6 @@ const useConfigStore = defineStore('config', {
                 const config = JSON.parse(localStorage.getItem('indi-dashboard-config'));
 
                 copyDict(this.globals, config);
-
-                this.globals.lat = 48.8533;
-                this.globals.lon = 2.34886;
-                this.globals.height = 0.00000;
-                this.globals.zoom = 18;
             }
             catch(e)
             {
