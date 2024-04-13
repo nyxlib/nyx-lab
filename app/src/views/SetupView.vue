@@ -187,18 +187,18 @@ onMounted(async () => {
 
                                         <div class="mb-3">
                                             <label class="form-label" for="C198A370">Temperature [°C]</label>
-                                            <div class="input-group">
+                                            <div class="input-group input-group-sm">
                                                 <input class="form-control form-control-sm" type="number" min="-100" max="+1°°" step="0.1" id="C198A370" placeholder="Seeing" v-model="configStore.globals.temperature" />
-                                                <span class="input-group-text"><i class="bi bi-arrow-left-short"></i></span>
+                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" id="A53961FD" placeholder="${INDI variable}" v-model="configStore.globals.temperatureVariable" />
                                             </div>
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label" for="B10348DA">Wind [m/s]</label>
-                                            <div class="input-group">
+                                            <div class="input-group input-group-sm">
                                                 <input class="form-control form-control-sm" type="number" min="0" max="200" step="1.0" id="B10348DA" placeholder="Wind" v-model="configStore.globals.wind" />
-                                                <span class="input-group-text"><i class="bi bi-arrow-left-short"></i></span>
+                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" id="C374E9D7" placeholder="${INDI variable}" v-model="configStore.globals.windVariable" />
                                             </div>
                                         </div>
@@ -208,18 +208,18 @@ onMounted(async () => {
 
                                         <div class="mb-3">
                                             <label class="form-label" for="D5904A85">Humidity [%]</label>
-                                            <div class="input-group">
+                                            <div class="input-group input-group-sm">
                                                 <input class="form-control form-control-sm" type="number" min="0" max="100" step="1.0" id="D5904A85" placeholder="Seeing" v-model="configStore.globals.humidity" />
-                                                <span class="input-group-text"><i class="bi bi-arrow-left-short"></i></span>
+                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" id="A5DCC07C" placeholder="${INDI variable}" v-model="configStore.globals.humidityVariable" />
                                             </div>
                                         </div>
 
                                         <div class="mb-0">
                                             <label class="form-label" for="F6CEC4D4">Seeing [arcsec]</label>
-                                            <div class="input-group">
+                                            <div class="input-group input-group-sm">
                                                 <input class="form-control form-control-sm" type="number" min="0" max="5" step="0.01" id="F6CEC4D4" placeholder="Seeing" v-model="configStore.globals.seeing" />
-                                                <span class="input-group-text"><i class="bi bi-arrow-left-short"></i></span>
+                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" id="DD4A705A" placeholder="${INDI variable}" v-model="configStore.globals.seeingVariable" />
                                             </div>
                                         </div>

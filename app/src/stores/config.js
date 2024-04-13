@@ -57,9 +57,9 @@ const useConfigStore = defineStore('config', {
                 grafanaURL: '',
                 nodeRedURL: '',
                 /**/
-                enableSkyMap: true,
-                enableSkyAtlas: true,
-                enableAstroSetup: true,
+                enableSkyMap: false,
+                enableSkyAtlas: false,
+                enableAstroSetup: false,
             },
         };
     },

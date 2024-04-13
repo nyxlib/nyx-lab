@@ -152,7 +152,7 @@ const configStore = useConfigStore();
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-0">
+                        <div class="card mb-3">
                             <div class="card-header d-flex">
                                 Sky atlas
                             </div>
@@ -230,7 +230,7 @@ const configStore = useConfigStore();
 
                         <div class="card mb-3">
                             <div class="card-header">
-                                <i class="bi bi-cloud"></i> Weather widget HTML
+                                <i class="bi bi-cloud"></i> Weather widget
                             </div>
                             <div class="card-body">
 
@@ -249,7 +249,10 @@ const configStore = useConfigStore();
                                     </div>
                                 </div>
 
-                                <textarea class="form-control" rows="10" v-model="configStore.globals.weatherWidgetHTML"></textarea>
+                                <div class="mb-0">
+                                    <label class="form-label" for="F785A24A">HTML code</label>
+                                    <textarea class="form-control" rows="10" id="F785A24A" v-model="configStore.globals.weatherWidgetHTML"></textarea>
+                                </div>
 
                             </div>
                         </div>
@@ -263,7 +266,7 @@ const configStore = useConfigStore();
 
                         <div class="card mb-3">
                             <div class="card-header">
-                                <i class="bi bi-stars"></i> Seeing widget HTML
+                                <i class="bi bi-stars"></i> Seeing widget
                             </div>
                             <div class="card-body">
 
@@ -282,7 +285,10 @@ const configStore = useConfigStore();
                                     </div>
                                 </div>
 
-                                <textarea class="form-control" rows="10" v-model="configStore.globals.seeingWidgetHTML"></textarea>
+                                <div class="mb-0">
+                                    <label class="form-label" for="AD32C0D2">HTML code</label>
+                                    <textarea class="form-control" rows="10" id="AD32C0D2" v-model="configStore.globals.seeingWidgetHTML"></textarea>
+                                </div>
 
                             </div>
                         </div>
