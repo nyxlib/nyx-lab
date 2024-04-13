@@ -5,6 +5,8 @@ import { onMounted } from 'vue';
 
 import { useRouter, RouterView } from 'vue-router';
 
+import { Modal } from 'bootstrap';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import { useIndiStore } from 'vue-indi';
@@ -23,6 +25,27 @@ const configStore = useConfigStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    document.getElementById('F10F4898').textContent = widgetTitle;
+
+    document.getElementById('DC2D5B47').textContent = widgetName;
+
+    document.getElementById('E9F2EAA2').href = widgetURL;
+
+    document.getElementById('C7F2FB8E').innerHTML = widgetHTML;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    new Modal(document.getElementById('A7E11E2F')).show();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const themeSet = (theme) => {
@@ -74,19 +97,31 @@ onMounted(async () => {
 
             <div class="d-flex ms-auto py-1">
 
-                <button class="btn btn-sm btn-success" type="button" v-if="indiStore.isConnected">
+                <button class="btn btn-sm btn-success me-1" type="button" v-if="indiStore.isConnected">
                     <i class="bi bi-lightning-charge"></i>
                 </button>
 
-                <button class="btn btn-sm btn-secondary" type="button" v-if="!indiStore.isConnected">
+                <button class="btn btn-sm btn-primary me-1" type="button" v-if="!indiStore.isConnected">
                     <i class="bi bi-lightning-charge"></i>
                 </button>
 
             </div>
 
-            <div class="d-flex ms-2 py-1">
+            <div class="d-flex ms-1 py-1">
 
-                <label class="btn btn-sm btn-primary border" for="C2D68371">
+                <button class="btn btn-sm btn-primary border me-1" type="button" v-if="configStore.globals.weatherWidgetHTML" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)">
+                    <i class="bi bi-cloud"></i>
+                </button>
+
+                <button class="btn btn-sm btn-primary border me-0" type="button" v-if="configStore.globals.seeingWidgetHTML" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)">
+                    <i class="bi bi-stars"></i>
+                </button>
+
+            </div>
+
+            <div class="d-flex ms-1 py-1">
+
+                <label class="btn btn-sm btn-primary border me-0" for="C2D68371">
                     <i class="bi bi-moon-stars"></i>
                 </label>
 
@@ -184,6 +219,36 @@ onMounted(async () => {
         <!-- ******************************************************************************************************* -->
 
     </div>
+
+    <!-- *********************************************************************************************************** -->
+
+    <teleport to="body">
+
+        <div class="modal" tabindex="-1" id="A7E11E2F">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header px-3 py-2 d-flex">
+
+                        <span id="F10F4898"></span>
+
+                        <a class="btn btn-xs btn-primary ms-auto" target="_blank" id="E9F2EAA2">
+                            <i class="bi bi-link-45deg"></i> <span id="DC2D5B47"></span>
+                        </a>
+
+                    </div>
+
+                    <div class="modal-body px-3 py-2">
+
+                        <div class="text-center" id="C7F2FB8E"></div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </teleport>
 
     <!-- *********************************************************************************************************** -->
 

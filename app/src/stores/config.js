@@ -35,6 +35,13 @@ const useConfigStore = defineStore('config', {
                 zoom: 18,
                 seeing: 0.0,
                 /**/
+                weatherWidgetHTML: '',
+                weatherWidgetServiceName: '',
+                weatherWidgetServiceURL: '',
+                seeingWidgetHTML: '',
+                seeingWidgetServiceName: '',
+                seeingWidgetServiceURL: '',
+                /**/
                 mqttURL: '',
                 mqttUsername: '',
                 mqttPassword: '',
