@@ -181,6 +181,16 @@ onMounted(async () => {
                             <div class="card-body">
 
                                 <div class="mb-0">
+                                    <label class="form-label" for="C198A370">Temperature [°C]</label>
+                                    <input class="form-control form-control-sm" type="number" min="-100" max="+1°°" step="0.1" id="C198A370" placeholder="Seeing" v-model="configStore.globals.temperature" />
+                                </div>
+
+                                <div class="mb-0">
+                                    <label class="form-label" for="D5904A85">Humidity [%]</label>
+                                    <input class="form-control form-control-sm" type="number" min="0" max="100" step="1.0" id="D5904A85" placeholder="Seeing" v-model="configStore.globals.humidity" />
+                                </div>
+
+                                <div class="mb-0">
                                     <label class="form-label" for="F6CEC4D4">Seeing [arcsec]</label>
                                     <input class="form-control form-control-sm" type="number" min="0" max="5" step="0.01" id="F6CEC4D4" placeholder="Seeing" v-model="configStore.globals.seeing" />
                                 </div>

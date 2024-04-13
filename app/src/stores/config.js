@@ -33,6 +33,9 @@ const useConfigStore = defineStore('config', {
                 lon: 2.34886,
                 height: 0.00000,
                 zoom: 18,
+                /**/
+                temperature: 0.0,
+                humidity: 0.0,
                 seeing: 0.0,
                 /**/
                 weatherWidgetHTML: '',
