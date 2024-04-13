@@ -106,13 +106,13 @@ onMounted(async () => {
                     <i class="bi bi-lightning-charge"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary me-1" type="button" v-if="!indiStore.isConnected">
+                <button class="btn btn-sm btn-secondary me-1" type="button" v-if="!indiStore.isConnected">
                     <i class="bi bi-lightning-charge"></i>
                 </button>
 
             </div>
 
-            <div class="d-flex ms-1 py-1">
+            <div class="d-flex ms-2 py-1">
 
                 <button class="btn btn-sm btn-primary border me-1" type="button" v-if="configStore.globals.weatherWidgetHTML" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)">
                     <i class="bi bi-cloud"></i>
@@ -124,7 +124,7 @@ onMounted(async () => {
 
             </div>
 
-            <div class="d-flex ms-1 py-1">
+            <div class="d-flex ms-2 py-1">
 
                 <label class="btn btn-sm btn-primary border me-0" for="C2D68371">
                     <i class="bi bi-moon-stars"></i>
