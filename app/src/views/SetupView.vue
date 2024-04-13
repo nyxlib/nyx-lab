@@ -156,8 +156,8 @@ onMounted(async () => {
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="F951B22F">Height [m]</label>
-                                            <input class="form-control form-control-sm" type="number" step="0.100000" id="F951B22F" placeholder="Height" v-model="configStore.globals.height" />
+                                            <label class="form-label" for="F951B22F">Elevation [m]</label>
+                                            <input class="form-control form-control-sm" type="number" step="0.100000" id="F951B22F" placeholder="Elevation" v-model="configStore.globals.alt" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">

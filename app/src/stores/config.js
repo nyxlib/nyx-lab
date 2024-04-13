@@ -31,7 +31,7 @@ const useConfigStore = defineStore('config', {
             globals: {
                 lat: 48.8533,
                 lon: 2.34886,
-                height: 0.00000,
+                alt: 0.00000,
                 zoom: 18,
                 /**/
                 temperature: 0.0,
