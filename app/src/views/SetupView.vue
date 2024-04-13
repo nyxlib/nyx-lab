@@ -216,22 +216,22 @@ onMounted(async () => {
 
                                         <div class="mb-3">
                                             <label class="form-label" for="A53961FD">INDI variable<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="A53961FD" placeholder="INDI variable" v-model="configStore.globals.temperatureVariable" />
+                                            <input class="form-control form-control-sm" type="text" id="A53961FD" placeholder="${INDI variable}" v-model="configStore.globals.temperatureVariable" />
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label" for="A5DCC07C">INDI variable<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="A5DCC07C" placeholder="INDI variable" v-model="configStore.globals.humidityVariable" />
+                                            <input class="form-control form-control-sm" type="text" id="A5DCC07C" placeholder="${INDI variable}" v-model="configStore.globals.humidityVariable" />
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label" for="C374E9D7">INDI variable<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="C374E9D7" placeholder="INDI variable" v-model="configStore.globals.windVariable" />
+                                            <input class="form-control form-control-sm" type="text" id="C374E9D7" placeholder="${INDI variable}" v-model="configStore.globals.windVariable" />
                                         </div>
 
                                         <div class="mb-0">
                                             <label class="form-label" for="DD4A705A">INDI variable<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="DD4A705A" placeholder="INDI variable" v-model="configStore.globals.seeingVariable" />
+                                            <input class="form-control form-control-sm" type="text" id="DD4A705A" placeholder="${INDI variable}" v-model="configStore.globals.seeingVariable" />
                                         </div>
 
                                         <!-- *********************************************************************** -->
