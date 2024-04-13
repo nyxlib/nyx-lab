@@ -50,10 +50,12 @@ onMounted(async () => {
                 /*----------------------------------------------------------------------------------------------------*/
 
                 stel.core.dsos.addDataSource({ url: `${baseUrl}/dso` });
-
                 stel.core.stars.addDataSource({ url: `${baseUrl}/stars` });
 
                 stel.core.milkyway.addDataSource({ url: `${baseUrl}/surveys/milkyway` });
+
+                stel.core.planets.addDataSource({ url: `${baseUrl}/surveys/sso/sun`, key: 'sun' });
+                stel.core.planets.addDataSource({ url: `${baseUrl}/surveys/sso/moon`, key: 'moon' });
 
                 stel.core.landscapes.addDataSource({ url: `${baseUrl}/landscapes/guereins`, key: 'guereins' });
 
@@ -64,6 +66,7 @@ onMounted(async () => {
                 stel.core.landscapes.visible = true;
                 stel.core.atmosphere.visible = false;
 
+                stel.core.dss.visible = true;
                 stel.core.dsos.visible = true;
                 stel.core.milkyway.visible = false;
 
