@@ -102,11 +102,11 @@ onMounted(async () => {
 
             <div class="d-flex ms-auto py-1">
 
-                <button class="btn btn-sm btn-success me-1" type="button" v-if="indiStore.isConnected">
+                <button class="btn btn-sm btn-success me-0" type="button" v-if="indiStore.isConnected">
                     <i class="bi bi-lightning-charge"></i>
                 </button>
 
-                <button class="btn btn-sm btn-secondary me-1" type="button" v-if="!indiStore.isConnected">
+                <button class="btn btn-sm btn-secondary me-0" type="button" v-if="!indiStore.isConnected">
                     <i class="bi bi-lightning-charge"></i>
                 </button>
 
