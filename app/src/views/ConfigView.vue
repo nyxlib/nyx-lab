@@ -1,10 +1,6 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { IndiVariables } from 'vue-indi';
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 import useConfigStore from '../stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -27,8 +23,8 @@ const configStore = useConfigStore();
                 <button class="nav-link active" type="button" data-bs-toggle="tab" data-bs-target="#D15B3DA7" role="tab">
                     Services
                 </button>
-                <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#ADEE8F0A" role="tab">
-                    INDI
+                <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#A636E1C5" role="tab">
+                    Weather
                 </button>
                 <div class="ms-auto">
                     <button class="btn btn-sm btn-danger me-2" type="reset">
@@ -192,20 +188,76 @@ const configStore = useConfigStore();
             </div>
 
             <!-- *************************************************************************************************** -->
-            <!-- VARIABLES                                                                                           -->
+            <!-- WEATHER                                                                                             -->
             <!-- *************************************************************************************************** -->
 
-            <div class="tab-pane fade xxxx xxxxxx" id="ADEE8F0A" role="tabpanel" tabindex="0">
+            <div class="tab-pane fade xxxx xxxxxx" id="A636E1C5" role="tabpanel" tabindex="0">
 
                 <div class="row">
                     <div class="col-md-6">
 
-                        TODO
+                        <!-- *************************************************************************************** -->
+
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <i class="bi bi-cloud"></i> Weather widget HTML
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="B8D10E0E">Service name</label>
+                                            <input class="form-control form-control-sm" type="text" id="B8D10E0E" placeholder="Service name" v-model="configStore.globals.weatherWidgetServiceName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="DC65FA98">Service URL</label>
+                                            <input class="form-control form-control-sm" type="text" id="DC65FA98" placeholder="Service URL" v-model="configStore.globals.weatherWidgetServiceURL" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <textarea class="form-control" rows="10" v-model="configStore.globals.weatherWidgetHTML"></textarea>
+
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
 
                     </div>
                     <div class="col-md-6">
 
-                        <indi-variables />
+                        <!-- *************************************************************************************** -->
+
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <i class="bi bi-stars"></i> Seeing widget HTML
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="BCAF259C">Service name</label>
+                                            <input class="form-control form-control-sm" type="text" id="BCAF259C" placeholder="Service name" v-model="configStore.globals.seeingWidgetServiceName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="DC2D5B47">Service URL</label>
+                                            <input class="form-control form-control-sm" type="text" id="DC2D5B47" placeholder="Service URL" v-model="configStore.globals.seeingWidgetServiceURL" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <textarea class="form-control" rows="10" v-model="configStore.globals.seeingWidgetHTML"></textarea>
+
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
 
                     </div>
                 </div>

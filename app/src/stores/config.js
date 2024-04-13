@@ -35,8 +35,13 @@ const useConfigStore = defineStore('config', {
                 zoom: 18,
                 /**/
                 temperature: 0.0,
+                temperatureVariable: '',
                 humidity: 0.0,
+                humidityVariable: '',
+                wind: 0.0,
+                windVariable: '',
                 seeing: 0.0,
+                seeingVariable: '',
                 /**/
                 weatherWidgetHTML: '',
                 weatherWidgetServiceName: '',
