@@ -68,13 +68,13 @@ const configStore = useConfigStore();
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="A45F11A0">Username</label>
+                                            <label class="form-label" for="A45F11A0">Username<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="text" id="A45F11A0" placeholder="Username" v-no-autocomplete v-model="configStore.globals.mqttUsername" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="A4245C17">Password</label>
+                                            <label class="form-label" for="A4245C17">Password<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="password" id="A4245C17" placeholder="Password" v-password-toggle v-model="configStore.globals.mqttPassword" />
                                         </div>
                                     </div>
@@ -237,20 +237,20 @@ const configStore = useConfigStore();
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label" for="B8D10E0E">Service name</label>
+                                            <label class="form-label" for="B8D10E0E">Service name<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="text" id="B8D10E0E" placeholder="Service name" v-no-autocomplete v-model="configStore.globals.weatherWidgetServiceName" />
                                         </div>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="mb-3">
-                                            <label class="form-label" for="DC65FA98">Service URL</label>
+                                            <label class="form-label" for="DC65FA98">Service URL<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="text" id="DC65FA98" placeholder="Service URL" v-no-autocomplete v-model="configStore.globals.weatherWidgetServiceURL" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="mb-0">
-                                    <label class="form-label" for="F785A24A">HTML code</label>
+                                    <label class="form-label" for="F785A24A">HTML code<sup class="text-secondary">opt</sup></label>
                                     <textarea class="form-control" rows="10" id="F785A24A" v-no-autocomplete v-model="configStore.globals.weatherWidgetHTML"></textarea>
                                 </div>
 
@@ -273,20 +273,20 @@ const configStore = useConfigStore();
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label" for="BCAF259C">Service name</label>
+                                            <label class="form-label" for="BCAF259C">Service name<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="text" id="BCAF259C" placeholder="Service name" v-no-autocomplete v-model="configStore.globals.seeingWidgetServiceName" />
                                         </div>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="mb-3">
-                                            <label class="form-label" for="DC2D5B47">Service URL</label>
+                                            <label class="form-label" for="DC2D5B47">Service URL<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="text" id="DC2D5B47" placeholder="Service URL" v-no-autocomplete v-model="configStore.globals.seeingWidgetServiceURL" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="mb-0">
-                                    <label class="form-label" for="AD32C0D2">HTML code</label>
+                                    <label class="form-label" for="AD32C0D2">HTML code<sup class="text-secondary">opt</sup></label>
                                     <textarea class="form-control" rows="10" id="AD32C0D2" v-no-autocomplete v-model="configStore.globals.seeingWidgetHTML"></textarea>
                                 </div>
 
