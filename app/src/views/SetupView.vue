@@ -56,7 +56,7 @@ const setLocation = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const getSeeing = () => {
+const getConditions = () => {
 
 };
 
@@ -174,18 +174,18 @@ onMounted(async () => {
                         <div class="card mb-3">
                             <div class="card-header d-flex">
                                 Sky quality
-                                <button class="btn btn-xs btn-primary ms-auto" type="button" @click="getSeeing">
-                                    Get observatory seeing
+                                <button class="btn btn-xs btn-primary ms-auto" type="button" @click="getConditions">
+                                    Get observatory conditions
                                 </button>
                             </div>
                             <div class="card-body">
 
-                                <div class="mb-0">
+                                <div class="mb-3">
                                     <label class="form-label" for="C198A370">Temperature [°C]</label>
                                     <input class="form-control form-control-sm" type="number" min="-100" max="+1°°" step="0.1" id="C198A370" placeholder="Seeing" v-model="configStore.globals.temperature" />
                                 </div>
 
-                                <div class="mb-0">
+                                <div class="mb-3">
                                     <label class="form-label" for="D5904A85">Humidity [%]</label>
                                     <input class="form-control form-control-sm" type="number" min="0" max="100" step="1.0" id="D5904A85" placeholder="Seeing" v-model="configStore.globals.humidity" />
                                 </div>

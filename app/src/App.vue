@@ -31,13 +31,18 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    console.log(widgetTitle);
+    console.log(widgetName);
+    console.log(widgetURL);
+    console.log(widgetHTML);
+
     document.getElementById('F10F4898').textContent = widgetTitle;
 
     document.getElementById('DC2D5B47').textContent = widgetName;
 
-    document.getElementById('E9F2EAA2').href = widgetURL;
-
     document.getElementById('C7F2FB8E').innerHTML = widgetHTML;
+
+    document.getElementById('E9F2EAA2').href = widgetURL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -228,13 +233,18 @@ onMounted(async () => {
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
 
-                    <div class="modal-header px-3 py-2 d-flex">
+                    <div class="modal-header px-3 py-2">
 
-                        <span id="F10F4898"></span>
+                        <span>
+                            <span id="F10F4898"></span>
+                            [
+                                <a class="btn btn-xs btn-primary" target="_blank" id="E9F2EAA2">
+                                    <i class="bi bi-link-45deg"></i> <span id="DC2D5B47"></span>
+                                </a>
+                            ]
+                        </span>
 
-                        <a class="btn btn-xs btn-primary ms-auto" target="_blank" id="E9F2EAA2">
-                            <i class="bi bi-link-45deg"></i> <span id="DC2D5B47"></span>
-                        </a>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
 
                     </div>
 
