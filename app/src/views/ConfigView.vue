@@ -182,6 +182,36 @@ const configStore = useConfigStore();
 
                         <!-- *************************************************************************************** -->
 
+                        <div class="card mb-0">
+                            <div class="card-header d-flex">
+                                Astro setup
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="enable_astro_setup" id="FCEB8C30" v-model="configStore.globals.enableAstroSetup" v-bind:value="true">
+                                            <label class="form-check-label" for="FCEB8C30">
+                                                Enable
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="enable_astro_setup" id="FCEB8C30" v-model="configStore.globals.enableAstroSetup" v-bind:value="false">
+                                            <label class="form-check-label" for="FCEB8C30">
+                                                Disable
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
                     </div>
                 </div>
 

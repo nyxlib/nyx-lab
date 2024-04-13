@@ -59,6 +59,7 @@ const useConfigStore = defineStore('config', {
                 /**/
                 enableSkyMap: true,
                 enableSkyAtlas: true,
+                enableAstroSetup: true,
             },
         };
     },
