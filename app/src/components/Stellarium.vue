@@ -5,13 +5,13 @@ import { ref, onMounted } from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import StelWebEngine from '../stellarium-web-engine';
+import PolluxSkyMap from '../pollux-skymap';
 
 import useConfigStore from "../stores/config";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import StelWebWASM from '../assets/stellarium-web-engine.wasm?url';
+import PolluxSkyMapWASM from '../assets/pollux-skymap.wasm?url';
 
 import regularFont from '../assets/Roboto-Regular.ttf';
 import boldFont from '../assets/Roboto-Bold.ttf';
@@ -27,26 +27,42 @@ const canvas = ref(null);
 let stel = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const select = () => {
+
+    if(stel.core.selection)
+    {
+
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(async () => {
 
-    StelWebEngine({
-        wasmFile: StelWebWASM,
+    PolluxSkyMap({
+        wasmFile: PolluxSkyMapWASM,
         canvas: canvas.value,
         translateFn: (domain, str) => {
 
             return str;
         },
-        onReady: (_stel) => {
+        onReady: (x) => {
 
-            stel = _stel;
+            stel = x;
 
             const baseUrl = './resources';
 
             try
-            {
+            {   /*----------------------------------------------------------------------------------------------------*/
+
+                stel.setFont('regular', regularFont, 1.38);
+                stel.setFont('bold', boldFont, 1.38);
+
                 /*----------------------------------------------------------------------------------------------------*/
 
                 stel.core.dsos.addDataSource({ url: `${baseUrl}/dso` });
@@ -77,14 +93,11 @@ onMounted(async () => {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                stel.setFont('regular', regularFont, 1.38);
-                stel.setFont('bold', boldFont, 1.38);
-
-                /*----------------------------------------------------------------------------------------------------*/
-
                 stel.core.observer.longitude = configStore.globals.lon * Math.PI / 180.0;
                 stel.core.observer.latitude = configStore.globals.lat * Math.PI / 180.0;
                 stel.core.observer.elevation = configStore.globals.alt;
+
+                stel.core.time_speed = 1;
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -92,10 +105,6 @@ onMounted(async () => {
             {
                 console.log(e);
             }
-        },
-        methods: {
-
-
         },
     });
 });
@@ -105,7 +114,7 @@ onMounted(async () => {
 
 <template>
 
-    <canvas class="h-100 w-100" ref="canvas"></canvas>
+    <canvas class="h-100 w-100" ref="canvas" @click="select"></canvas>
 
 </template>
 
