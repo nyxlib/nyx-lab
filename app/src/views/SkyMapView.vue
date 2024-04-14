@@ -3,7 +3,7 @@
 
 import AladinMap from '../components/AladinMap.vue';
 
-import Stellarium from '../components/Stellarium.vue';
+import Stellarium from '../components/SkyMap.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>

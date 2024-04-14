@@ -49,7 +49,7 @@ Module['ready'] = new Promise(function(resolve, reject) {
 
 // Allow to set the memory file path in 'memFile' argument.
 Module['locateFile'] = function(path) {
-  if (path === "stellarium-web-engine.wasm") return Module.wasmFile;
+  if (path === "pollux-skymap.wasm") return Module.wasmFile;
   return path;
 }
 

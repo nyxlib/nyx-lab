@@ -7,7 +7,7 @@ import { ref, onMounted } from 'vue';
 
 import PolluxSkyMap from '../pollux-skymap';
 
-import useConfigStore from "../stores/config";
+import useConfigStore from '../stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -24,7 +24,7 @@ const configStore = useConfigStore();
 
 const canvas = ref(null);
 
-let stel = null;
+let skymap = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -32,7 +32,7 @@ let stel = null;
 
 const select = () => {
 
-    if(stel.core.selection)
+    if(skymap.core.selection)
     {
 
     }
@@ -44,7 +44,7 @@ const select = () => {
 
 onMounted(async () => {
 
-    PolluxSkyMap({
+    await PolluxSkyMap({
         wasmFile: PolluxSkyMapWASM,
         canvas: canvas.value,
         translateFn: (domain, str) => {
@@ -53,55 +53,54 @@ onMounted(async () => {
         },
         onReady: (x) => {
 
-            stel = x;
+            skymap = x;
 
             const baseUrl = './resources';
 
-            try
-            {   /*----------------------------------------------------------------------------------------------------*/
+            try {   /*----------------------------------------------------------------------------------------------------*/
 
-                stel.setFont('regular', regularFont, 1.38);
-                stel.setFont('bold', boldFont, 1.38);
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                stel.core.dsos.addDataSource({ url: `${baseUrl}/dso` });
-                stel.core.stars.addDataSource({ url: `${baseUrl}/stars` });
-
-                stel.core.milkyway.addDataSource({ url: `${baseUrl}/surveys/milkyway` });
-
-                stel.core.planets.addDataSource({ url: `${baseUrl}/surveys/sso/sun`, key: 'sun' });
-                stel.core.planets.addDataSource({ url: `${baseUrl}/surveys/sso/moon`, key: 'moon' });
-
-                stel.core.landscapes.addDataSource({ url: `${baseUrl}/landscapes/guereins`, key: 'guereins' });
-
-                stel.core.skycultures.addDataSource({ url: `${baseUrl}/skycultures/western`, key: 'western' });
+                skymap.setFont('regular', regularFont, 1.38);
+                skymap.setFont('bold', boldFont, 1.38);
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                stel.core.landscapes.visible = true;
-                stel.core.atmosphere.visible = false;
+                skymap.core.dsos.addDataSource({url: `${baseUrl}/dso`});
+                skymap.core.stars.addDataSource({url: `${baseUrl}/stars`});
 
-                stel.core.dss.visible = true;
-                stel.core.dsos.visible = true;
-                stel.core.milkyway.visible = false;
+                skymap.core.milkyway.addDataSource({url: `${baseUrl}/surveys/milkyway`});
 
-                stel.core.constellations.lines_visible = true;
-                stel.core.constellations.labels_visible = true;
-                stel.core.constellations.images_visible = false;
-                stel.core.constellations.show_only_pointed = false;
+                skymap.core.planets.addDataSource({url: `${baseUrl}/surveys/sso/sun`, key: 'sun'});
+                skymap.core.planets.addDataSource({url: `${baseUrl}/surveys/sso/moon`, key: 'moon'});
+
+                skymap.core.landscapes.addDataSource({url: `${baseUrl}/landscapes/guereins`, key: 'guereins'});
+
+                skymap.core.skycultures.addDataSource({url: `${baseUrl}/skycultures/western`, key: 'western'});
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                stel.core.observer.longitude = configStore.globals.lon * Math.PI / 180.0;
-                stel.core.observer.latitude = configStore.globals.lat * Math.PI / 180.0;
-                stel.core.observer.elevation = configStore.globals.alt;
+                skymap.core.landscapes.visible = true;
+                skymap.core.atmosphere.visible = false;
 
-                stel.core.time_speed = 1;
+                skymap.core.dss.visible = true;
+                skymap.core.dsos.visible = true;
+                skymap.core.milkyway.visible = false;
+
+                skymap.core.constellations.lines_visible = true;
+                skymap.core.constellations.labels_visible = true;
+                skymap.core.constellations.images_visible = false;
+                skymap.core.constellations.show_only_pointed = false;
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                skymap.core.observer.longitude = configStore.globals.lon * Math.PI / 180.0;
+                skymap.core.observer.latitude = configStore.globals.lat * Math.PI / 180.0;
+                skymap.core.observer.elevation = configStore.globals.alt;
+
+                skymap.core.time_speed = 1;
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            catch(e)
+            catch (e)
             {
                 console.log(e);
             }
