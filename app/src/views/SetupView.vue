@@ -56,20 +56,28 @@ const getLocation = () => {
 
     if(typeof navigator.geolocation === 'object')
     {
+        /*------------------------------------------------------------------------------------------------------------*/
+
         const success = (position) => {
 
             configStore.globals.lat = Number(position.coords.latitude.toFixed(4));
             configStore.globals.lon = Number(position.coords.longitude.toFixed(4));
         };
 
+        /*------------------------------------------------------------------------------------------------------------*/
+
         const error = (message) => {
 
         };
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         navigator.geolocation.getCurrentPosition(success, error, {
             enableHighAccuracy: true,
             timeout: 5000,
         });
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 };
 
@@ -117,8 +125,11 @@ onMounted(async () => {
                     INDI
                 </button>
                 <div class="ms-auto">
-                    <button class="btn btn-sm btn-danger me-2" type="reset">
-                        <i class="bi bi-x-lg"></i> Reset
+                    <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.import()">
+                        <i class="bi bi-upload"></i> Import
+                    </button>
+                    <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.export()">
+                        <i class="bi bi-download"></i> export
                     </button>
                     <button class="btn btn-sm btn-success me-0" type="submit">
                         <i class="bi bi-check-lg"></i> Apply
