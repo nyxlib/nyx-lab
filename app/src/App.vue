@@ -31,11 +31,6 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    console.log(widgetTitle);
-    console.log(widgetName);
-    console.log(widgetURL);
-    console.log(widgetHTML);
-
     document.getElementById('F10F4898').textContent = widgetTitle;
 
     document.getElementById('DC2D5B47').textContent = widgetName;
@@ -77,9 +72,55 @@ const themeSet = (theme) => {
 
 onMounted(async () => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     configStore.load();
 
     themeSet('dark');
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    setInterval(() => {
+
+        try
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(configStore.globals.latVariable) {
+                configStore.globals.lat = indiStore.resolve(null, configStore.globals.latVariable)['$'];
+            }
+            if(configStore.globals.lonVariable) {
+                configStore.globals.lon = indiStore.resolve(null, configStore.globals.lonVariable)['$'];
+            }
+            if(configStore.globals.altVariable) {
+                configStore.globals.alt = indiStore.resolve(null, configStore.globals.altVariable)['$'];
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(configStore.globals.temperatureVariable) {
+                configStore.globals.temperature = indiStore.resolve(null, configStore.globals.temperatureVariable)['$'];
+            }
+            if(configStore.globals.humidityVariable) {
+                configStore.globals.humidity = indiStore.resolve(null, configStore.globals.humidityVariable)['$'];
+            }
+            if(configStore.globals.windVariable) {
+                configStore.globals.wind = indiStore.resolve(null, configStore.globals.windVariable)['$'];
+            }
+            if(configStore.globals.seeingVariable) {
+                configStore.globals.seeing = indiStore.resolve(null, configStore.globals.seeingVariable)['$'];
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+        catch(e)
+        {
+            /* IGNORE */
+        }
+
+    }, 10 * 1000);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
