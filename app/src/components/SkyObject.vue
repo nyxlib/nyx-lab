@@ -359,23 +359,34 @@ onMounted(() => {
 
                     <hr />
 
-                    <div>
-                        Equatorial coordinate
-                        <p class="ms-3">
-                            α: <kbd>{{degreesToHMSString(state.ra)}}</kbd>
-                            <br />
-                            δ: <kbd>{{degreesToDMSString(state.dec)}}</kbd>
-                        </p>
-                    </div>
-
-                    <div>
-                        Galactic coordinate
-                        <p class="ms-3">
-                            ℓ: <kbd>{{degreesToDMSString(state.l)}}</kbd>
-                            <br />
-                            𝑏: <kbd>{{degreesToDMSString(state.b)}}</kbd>
-                        </p>
-                    </div>
+                    <table class="w-50">
+                        <tr>
+                            <td colspan="2">
+                                Equatorial coordinate
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>α:</td>
+                            <td><kbd class="d-block">{{degreesToHMSString(state.ra)}}</kbd></td>
+                        </tr>
+                        <tr>
+                            <td>δ:</td>
+                            <td><kbd class="d-block">{{degreesToDMSString(state.dec)}}</kbd></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                Galactic coordinate
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ℓ:</td>
+                            <td><kbd class="d-block">{{degreesToDMSString(state.l)}}</kbd></td>
+                        </tr>
+                        <tr>
+                            <td>𝑏:</td>
+                            <td><kbd class="d-block">{{degreesToDMSString(state.b)}}</kbd></td>
+                        </tr>
+                    </table>
 
                     <hr />
 
