@@ -70,6 +70,28 @@ const themeSet = (theme) => {
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const update = (name1, name2, fractionDigits) => {
+
+    try
+    {
+        if(configStore.globals[name2])
+        {
+            const v = indiStore.resolve(null, configStore.globals[name2])['$'];
+
+            if(v !== null)
+            {
+                configStore.globals[name1] = Number(Number(v).toFixed(fractionDigits));
+            }
+        }
+    }
+    catch(e)
+    {
+        /* IGNORE */
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 onMounted(async () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -82,41 +104,14 @@ onMounted(async () => {
 
     setInterval(() => {
 
-        try
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
+        update('lat', 'latVariable', 4);
+        update('lon', 'lonVariable', 4);
+        update('alt', 'altVariable', 1);
 
-            if(configStore.globals.latVariable) {
-                configStore.globals.lat = indiStore.resolve(null, configStore.globals.latVariable)['$'];
-            }
-            if(configStore.globals.lonVariable) {
-                configStore.globals.lon = indiStore.resolve(null, configStore.globals.lonVariable)['$'];
-            }
-            if(configStore.globals.altVariable) {
-                configStore.globals.alt = indiStore.resolve(null, configStore.globals.altVariable)['$'];
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            if(configStore.globals.temperatureVariable) {
-                configStore.globals.temperature = indiStore.resolve(null, configStore.globals.temperatureVariable)['$'];
-            }
-            if(configStore.globals.humidityVariable) {
-                configStore.globals.humidity = indiStore.resolve(null, configStore.globals.humidityVariable)['$'];
-            }
-            if(configStore.globals.windVariable) {
-                configStore.globals.wind = indiStore.resolve(null, configStore.globals.windVariable)['$'];
-            }
-            if(configStore.globals.seeingVariable) {
-                configStore.globals.seeing = indiStore.resolve(null, configStore.globals.seeingVariable)['$'];
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-        catch(e)
-        {
-            /* IGNORE */
-        }
+        update('temperature', 'temperatureVariable', 1);
+        update('humidity', 'humidityVariable', 1);
+        update('wind', 'windVariable', 1);
+        update('seeing', 'seeingVariable', 1);
 
     }, 10 * 1000);
 
