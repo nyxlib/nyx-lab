@@ -129,7 +129,11 @@ onMounted(async () => {
                         <i class="bi bi-upload"></i> Import
                     </button>
                     <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.export()">
-                        <i class="bi bi-download"></i> export
+                        <i class="bi bi-download"></i> Export
+                    </button>
+                    <span class="me-2">-</span>
+                    <button class="btn btn-sm btn-outline-secondary me-2" type="button" @click="configStore.load()">
+                        <i class="bi bi-x-lg"></i> Reload
                     </button>
                     <button class="btn btn-sm btn-success me-0" type="submit">
                         <i class="bi bi-check-lg"></i> Apply
