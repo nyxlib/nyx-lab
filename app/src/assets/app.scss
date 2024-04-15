@@ -11,6 +11,7 @@
 html,
 body,
 #indi_dashboard {
+
     height: 100%;
     width: 100%;
     margin: 0;
@@ -20,6 +21,7 @@ body,
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .form-label {
+
     margin-bottom: 0.25rem;
 }
 
@@ -28,7 +30,9 @@ body,
 .btn,
 .btn-group,
 .form-select,
-.form-control {
+.form-control,
+.input-group-sm > .form-control {
+
     border-radius: 0.75rem;
     -webkit-app-region: no-drag !important;
 }
@@ -36,6 +40,7 @@ body,
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .btn.btn-xs {
+
     line-height: 0.8;
     font-size: 0.875rem;
     padding: 0.25rem 0.4rem;
@@ -45,6 +50,7 @@ body,
 
 .aladin-logo-container,
 .leaflet-control-attribution {
+
     display: none !important;
 }
 

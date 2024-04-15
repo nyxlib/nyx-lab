@@ -14,6 +14,6 @@ const configStore = useConfigStore();
 
 <template>
 
-    <iframe :src="configStore.globals.nodeRedURL" style="width: 100%;" ref="iframe"></iframe>
+    <iframe class="w-100" :src="configStore.globals.nodeRedURL"></iframe>
 
 </template>
