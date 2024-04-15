@@ -23,6 +23,9 @@ const configStore = useConfigStore();
                 <button class="nav-link active" type="button" data-bs-toggle="tab" data-bs-target="#D15B3DA7" role="tab">
                     Services
                 </button>
+                <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#D1B9D18C" role="tab">
+                    Astro
+                </button>
                 <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#A636E1C5" role="tab">
                     Weather
                 </button>
@@ -85,6 +88,11 @@ const configStore = useConfigStore();
 
                         <!-- *************************************************************************************** -->
 
+                    </div>
+                    <div class="col-md-6">
+
+                        <!-- *************************************************************************************** -->
+
                         <div class="card mb-3">
                             <div class="card-header d-flex">
                                 Grafana
@@ -118,33 +126,54 @@ const configStore = useConfigStore();
                         <!-- *************************************************************************************** -->
 
                     </div>
+                </div>
+
+            </div>
+
+            <!-- *************************************************************************************************** -->
+            <!-- ASTRO                                                                                               -->
+            <!-- *************************************************************************************************** -->
+
+            <div class="tab-pane fade xxxx xxxxxx" id="D1B9D18C" role="tabpanel" tabindex="0">
+
+                <div class="row">
                     <div class="col-md-6">
 
                         <!-- *************************************************************************************** -->
 
                         <div class="card mb-3">
                             <div class="card-header d-flex">
-                                Sky map
+                                Features
                             </div>
                             <div class="card-body">
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="enable_sky_map" id="CAC16985" v-model="configStore.globals.enableSkyMap" v-bind:value="true">
-                                            <label class="form-check-label" for="CAC16985">
-                                                Enable
-                                            </label>
+
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableSkyMap" :true-value="true" :false-value="false">
+                                            <label class="form-check-label" for="A925CE04">Enable sky map</label>
                                         </div>
+
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="enable_sky_map" id="C9E3CBA5" v-model="configStore.globals.enableSkyMap" v-bind:value="false">
-                                            <label class="form-check-label" for="C9E3CBA5">
-                                                Disable
-                                            </label>
-                                        </div>
+
+                                        <select class="form-select form-select-sm" v-model="configStore.globals.skymap">
+                                            <option value="aladin">Aladin</option>
+                                            <option value="stellarium">Stellarium</option>
+                                        </select>
+
                                     </div>
+                                </div>
+
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="FF3DAE50" v-model="configStore.globals.enableSkyAtlas" :true-value="true" :false-value="false">
+                                    <label class="form-check-label" for="FF3DAE50">Enable sky atlas</label>
+                                </div>
+
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="FCEB8C30" v-model="configStore.globals.enableAstroSetup" :true-value="true" :false-value="false">
+                                    <label class="form-check-label" for="FCEB8C30">Enable astro setup</label>
                                 </div>
 
                             </div>
@@ -152,30 +181,18 @@ const configStore = useConfigStore();
 
                         <!-- *************************************************************************************** -->
 
+                    </div>
+                    <div class="col-md-6">
+
+                        <!-- *************************************************************************************** -->
+
                         <div class="card mb-3">
                             <div class="card-header d-flex">
-                                Sky atlas
+                                Astrometry
                             </div>
                             <div class="card-body">
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="enable_sky_atlas" id="FF3DAE50" v-model="configStore.globals.enableSkyAtlas" v-bind:value="true">
-                                            <label class="form-check-label" for="FF3DAE50">
-                                                Enable
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="enable_sky_atlas" id="DC0AB03E" v-model="configStore.globals.enableSkyAtlas" v-bind:value="false">
-                                            <label class="form-check-label" for="DC0AB03E">
-                                                Disable
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                                TODO
 
                             </div>
                         </div>
@@ -184,28 +201,11 @@ const configStore = useConfigStore();
 
                         <div class="card mb-0">
                             <div class="card-header d-flex">
-                                Astro setup
+                                Autoguiding
                             </div>
                             <div class="card-body">
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="enable_astro_setup" id="FCEB8C30" v-model="configStore.globals.enableAstroSetup" v-bind:value="true">
-                                            <label class="form-check-label" for="FCEB8C30">
-                                                Enable
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="enable_astro_setup" id="EDCFC73C" v-model="configStore.globals.enableAstroSetup" v-bind:value="false">
-                                            <label class="form-check-label" for="EDCFC73C">
-                                                Disable
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                                TODO
 
                             </div>
                         </div>

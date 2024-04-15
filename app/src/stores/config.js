@@ -60,6 +60,8 @@ const useConfigStore = defineStore('config', {
                 enableSkyMap: false,
                 enableSkyAtlas: false,
                 enableAstroSetup: false,
+                /**/
+                skymap: 'aladin',
             },
         };
     },
