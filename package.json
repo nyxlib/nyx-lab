@@ -11,6 +11,7 @@
         "tauri-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js build"
     },
     "dependencies": {
+        "@vueform/multiselect": "^2.6.7",
         "aladin-lite": "^3.3.2",
         "astronomy-engine": "^2.1.19",
         "bootstrap": "^5.3.3",

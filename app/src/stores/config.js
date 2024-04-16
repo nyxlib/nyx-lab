@@ -60,10 +60,12 @@ const useConfigStore = defineStore('config', {
                 grafanaURL: '',
                 nodeRedURL: '',
                 /**/
+                enableMonitoring: false,
                 enableSkyMap: false,
                 enableSkyAtlas: false,
                 enableAstroSetup: false,
                 /**/
+                monitoringGroups: [],
                 skymap: 'aladin',
             },
         };

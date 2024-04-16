@@ -1,6 +1,10 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import Multiselect from '@vueform/multiselect';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 import useConfigStore from '../stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -8,6 +12,13 @@ import useConfigStore from '../stores/config';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const configStore = useConfigStore();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const SKY_MAPS = [
+    {value: 'aladin', label: 'Aladin'},
+    {value: 'stellarium', label: 'Stellarium'},
+];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -157,7 +168,23 @@ const configStore = useConfigStore();
                             <div class="card-body">
 
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
+
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableMonitoring" :true-value="true" :false-value="false">
+                                            <label class="form-check-label" for="A925CE04">Enable monitoring</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-8">
+
+                                        <multiselect class="mb-3" mode="tags" :can-clear="true" :searchable="true" :create-option="true" :close-on-select="false" :options="[]" v-model="configStore.globals.monitoringGroups" />
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
 
                                         <div class="form-check form-switch mb-3">
                                             <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableSkyMap" :true-value="true" :false-value="false">
@@ -165,12 +192,9 @@ const configStore = useConfigStore();
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
 
-                                        <select class="form-select form-select-sm" v-model="configStore.globals.skymap">
-                                            <option value="aladin">Aladin</option>
-                                            <option value="stellarium">Stellarium</option>
-                                        </select>
+                                        <multiselect class="mb-3" mode="single" :can-clear="false" :searchable="true" :create-option="false" :close-on-select="true" :options="SKY_MAPS" v-model="configStore.globals.skymap" />
 
                                     </div>
                                 </div>
