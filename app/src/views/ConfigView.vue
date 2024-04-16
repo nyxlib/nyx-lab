@@ -178,7 +178,23 @@ const SKY_MAPS = [
                                     </div>
                                     <div class="col-md-8">
 
-                                        <multiselect class="mb-3" mode="tags" :can-clear="true" :searchable="true" :create-option="true" :close-on-select="false" :options="[]" v-model="configStore.globals.monitoringGroups" />
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C8206AA4">Groups</label>
+                                            <multiselect
+                                                mode="tags"
+                                                id="C8206AA4"
+                                                :can-clear="true"
+                                                :searchable="true"
+                                                :create-option="true"
+                                                :close-on-select="false"
+                                                :options="configStore.globals.monitoringGroups"
+                                                v-model="configStore.globals.monitoringGroups" />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C8206AA4">Refresh interval [ms]</label>
+                                            <input class="form-control form-control-sm" type="number" min="100" max="100000" step="1" v-model="configStore.globals.refreshInterval" />
+                                        </div>
 
                                     </div>
                                 </div>
@@ -194,7 +210,18 @@ const SKY_MAPS = [
                                     </div>
                                     <div class="col-md-8">
 
-                                        <multiselect class="mb-3" mode="single" :can-clear="false" :searchable="true" :create-option="false" :close-on-select="true" :options="SKY_MAPS" v-model="configStore.globals.skymap" />
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C88D31FB">Renderer</label>
+                                            <multiselect
+                                                mode="single"
+                                                id="C88D31FB"
+                                                :can-clear="false"
+                                                :searchable="true"
+                                                :create-option="false"
+                                                :close-on-select="true"
+                                                :options="/*-----*/SKY_MAPS/*-----*/"
+                                                v-model="configStore.globals.skymap" />
+                                        </div>
 
                                     </div>
                                 </div>
