@@ -33,7 +33,8 @@ body,
 .btn-group,
 .form-select,
 .form-control,
-.input-group-sm > .form-control {
+.input-group-sm > .form-control,
+.input-group-sm > .input-group-text {
 
     border-radius: 0.75rem;
     -webkit-app-region: no-drag !important;

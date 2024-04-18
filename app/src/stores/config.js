@@ -66,7 +66,7 @@ const useConfigStore = defineStore('config', {
                 enableAstroSetup: false,
                 /**/
                 monitoringGroups: [],
-                monitoringMetrics: [],
+                monitoringMetrics: {},
                 refreshInterval: 1000,
                 skymap: 'aladin',
             },
