@@ -37,7 +37,7 @@ const SKY_MAPS = [
                     Services
                 </button>
                 <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#D1B9D18C" role="tab">
-                    Astro
+                    Features
                 </button>
                 <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#A636E1C5" role="tab">
                     Weather

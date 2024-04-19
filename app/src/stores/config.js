@@ -4,21 +4,68 @@
 import { defineStore } from 'pinia';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FUNCTION                                                                                                           */
+/* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const copyDict = (dst, src) => {
+const DEFAULT_GLOBALS = {
+    lat: 48.8533,
+    latVariable: '',
+    lon: 2.34886,
+    lonVariable: '',
+    alt: 0.00000,
+    altVariable: '',
+    zoom: 18,
+    /**/
+    temperature: 0.0,
+    temperatureVariable: '',
+    humidity: 0.0,
+    humidityVariable: '',
+    wind: 0.0,
+    windVariable: '',
+    seeing: 0.0,
+    seeingVariable: '',
+    /**/
+    weatherWidgetHTML: '',
+    weatherWidgetServiceName: '',
+    weatherWidgetServiceURL: '',
+    seeingWidgetHTML: '',
+    seeingWidgetServiceName: '',
+    seeingWidgetServiceURL: '',
+    /**/
+    mqttURL: '',
+    mqttUsername: '',
+    mqttPassword: '',
+    /**/
+    grafanaURL: '',
+    nodeRedURL: '',
+    /**/
+    enableMonitoring: false,
+    enableSkyMap: false,
+    enableSkyAtlas: false,
+    enableAstroSetup: false,
+    /**/
+    monitoringGroups: [],
+    monitoringMetrics: {},
+    refreshInterval: 1000,
+    skymap: 'aladin',
+};
 
-    if(typeof dst === 'object'
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const confDup = (src, def) => {
+
+    const result = {};
+
+    if(typeof src === 'object'
        &&
-       typeof src === 'object'
+       typeof def === 'object'
     ) {
-        Object.keys(dst).forEach((key) => delete dst[key]);
-
-        Object.assign(dst, src);
+        Object.keys(def).forEach((key) => { result[key] = (key in src) ? src[key] : def[key]; });
     }
 
-    return dst;
+    return result;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -28,48 +75,7 @@ const copyDict = (dst, src) => {
 const useConfigStore = defineStore('config', {
     state: () => {
         return {
-            globals: {
-                lat: 48.8533,
-                latVariable: '',
-                lon: 2.34886,
-                lonVariable: '',
-                alt: 0.00000,
-                altVariable: '',
-                zoom: 18,
-                /**/
-                temperature: 0.0,
-                temperatureVariable: '',
-                humidity: 0.0,
-                humidityVariable: '',
-                wind: 0.0,
-                windVariable: '',
-                seeing: 0.0,
-                seeingVariable: '',
-                /**/
-                weatherWidgetHTML: '',
-                weatherWidgetServiceName: '',
-                weatherWidgetServiceURL: '',
-                seeingWidgetHTML: '',
-                seeingWidgetServiceName: '',
-                seeingWidgetServiceURL: '',
-                /**/
-                mqttURL: '',
-                mqttUsername: '',
-                mqttPassword: '',
-                /**/
-                grafanaURL: '',
-                nodeRedURL: '',
-                /**/
-                enableMonitoring: false,
-                enableSkyMap: false,
-                enableSkyAtlas: false,
-                enableAstroSetup: false,
-                /**/
-                monitoringGroups: [],
-                monitoringMetrics: {},
-                refreshInterval: 1000,
-                skymap: 'aladin',
-            },
+            globals: Object.assign({}, DEFAULT_GLOBALS),
         };
     },
     actions: {
@@ -98,7 +104,7 @@ const useConfigStore = defineStore('config', {
             {
                 const config = JSON.parse(localStorage.getItem('indi-dashboard-config'));
 
-                copyDict(this.globals, config);
+                this.globals = confDup(config, DEFAULT_GLOBALS);
             }
             catch(e)
             {
@@ -110,7 +116,16 @@ const useConfigStore = defineStore('config', {
 
         save()
         {
-            localStorage.setItem('indi-dashboard-config', JSON.stringify(this.globals));
+            try
+            {
+                const config = confDup(this.globals, DEFAULT_GLOBALS);
+
+                localStorage.setItem('indi-dashboard-config', JSON.stringify(config));
+            }
+            catch(e)
+            {
+                /* IGNORE */
+            }
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
