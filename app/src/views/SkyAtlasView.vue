@@ -118,7 +118,7 @@ const update = () => {
     const observer = new ae.Observer(
         configStore.globals.lat,
         configStore.globals.lon,
-        configStore.globals.height
+        configStore.globals.alt
     );
 
     /*----------------------------------------------------------------------------------------------------------------*/

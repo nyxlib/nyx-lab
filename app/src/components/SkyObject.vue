@@ -6,9 +6,9 @@ import { ref, onMounted, reactive } from 'vue';
 
 import * as ae from 'astronomy-engine';
 
-import {v4 as uuid_v4} from 'uuid';
-
 import Chart from 'chart.js/auto';
+
+import {v4} from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -61,7 +61,7 @@ const state = reactive({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const uuid = uuid_v4();
+const uuid = v4();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -189,7 +189,7 @@ const update = () => {
         const observer = new ae.Observer(
             configStore.globals.lat,
             configStore.globals.lon,
-            configStore.globals.height
+            configStore.globals.alt
         );
 
         /*------------------------------------------------------------------------------------------------------------*/
