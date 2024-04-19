@@ -3,7 +3,7 @@
 
 import { watch, onMounted } from 'vue';
 
-import { IndiVariables } from 'vue-indi';
+import { IndiDevices, IndiVariables } from 'vue-indi';
 
 import * as L from 'leaflet';
 
@@ -288,7 +288,7 @@ onMounted(async () => {
                 <div class="row">
                     <div class="col-md-6">
 
-                        TODO
+                        <indi-devices />
 
                     </div>
                     <div class="col-md-6">
