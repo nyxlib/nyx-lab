@@ -281,15 +281,15 @@ onMounted(async () => {
 
             <template v-slot:button>
 
-                <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.import()">
+                <button class="btn btn-sm btn-outline-primary me-2" type="button" @click="configStore.import()">
                     <i class="bi bi-upload"></i> Import
                 </button>
 
-                <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.export()">
+                <button class="btn btn-sm btn-outline-primary me-2" type="button" @click="configStore.export()">
                     <i class="bi bi-download"></i> Export
                 </button>
 
-                <button class="btn btn-sm btn-warning me-2" type="button" @click="configStore.load()">
+                <button class="btn btn-sm btn-outline-warning me-2" type="button" @click="configStore.load()">
                     <i class="bi bi-x-lg"></i> Reload
                 </button>
 
