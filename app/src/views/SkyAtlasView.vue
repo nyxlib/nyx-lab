@@ -1,3 +1,4 @@
+<!--suppress VueUnrecognizedDirective -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -224,12 +225,12 @@ onMounted(async () => {
 
                         <div class="mb-3">
                             <label class="form-label" for="A9856A65">Object name</label>
-                            <input class="form-control form-control-sm" type="text" id="A9856A65" placeholder="Messier or NGC name" v-model="state.objectName" @keyup.enter="search()" />
+                            <input class="form-control form-control-sm" type="text" id="A9856A65" placeholder="Messier or NGC name" v-model="state.objectName" v-no-autocomplete @keyup.enter="search()" />
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label" for="E279F652">Observation date</label>
-                            <input class="form-control form-control-sm" type="date" id="E279F652" placeholder="Observation date" v-model="state.observationDate" @change="update()" />
+                            <input class="form-control form-control-sm" type="date" id="E279F652" placeholder="Observation date" v-model="state.observationDate" v-no-autocomplete @change="update()" />
                         </div>
 
                         <div class="mb-0">

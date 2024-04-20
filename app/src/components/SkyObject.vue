@@ -425,7 +425,7 @@ onMounted(() => {
 
                         </tab-pane>
 
-                        <tab-pane title="Image" @shown="() => state.show_image = true">
+                        <tab-pane title="Image" @shown="state.show_image = true">
 
                             <aladin-map class="w-100" :fov="10.0" :target="objectName" :projection="'SIN'" :show-zoom-control="true" v-if="state.show_image" />
 
