@@ -4,14 +4,14 @@
 import { IndiMonitoring } from 'vue-indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+import useConfigStore from '../stores/config';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const configStore = useConfigStore();
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-import useConfigStore from '../stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -22,7 +22,13 @@ import useConfigStore from '../stores/config';
 
     <div class="h-100 w-100 p-3">
 
-        <indi-monitoring :groups="configStore.globals.monitoringGroups" :metrics="configStore.globals.monitoringMetrics" :refresh-interval="configStore.globals.refreshInterval" />
+        <indi-monitoring :groups="configStore.globals.monitoringGroups" :metrics="configStore.globals.monitoringMetrics" :refresh-interval="configStore.globals.refreshInterval">
+
+            <button class="btn btn-sm btn-success me-0" type="button" @click="configStore.save()">
+                <i class="bi bi-check-lg"></i> Save
+            </button>
+
+        </indi-monitoring>
 
     </div>
 

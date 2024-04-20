@@ -54,7 +54,7 @@ const SKY_MAPS = [
                         <i class="bi bi-x-lg"></i> Reload
                     </button>
                     <button class="btn btn-sm btn-success me-0" type="submit">
-                        <i class="bi bi-check-lg"></i> Apply
+                        <i class="bi bi-check-lg"></i> Save
                     </button>
                 </div>
             </div>
