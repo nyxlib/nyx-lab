@@ -263,7 +263,7 @@ onMounted(async () => {
                 <div class="row">
                     <div class="col-md-6">
 
-                        <indi-devices />
+                        <indi-devices :devices="configStore.globals.devices" />
 
                     </div>
                     <div class="col-md-6">

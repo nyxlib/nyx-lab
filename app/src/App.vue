@@ -85,11 +85,11 @@ const update = (name1, name2, fractionDigits) => {
     {
         if(configStore.globals[name2])
         {
-            const o = indiStore.resolve(null, configStore.globals[name2]);
+            const def = indiStore.resolve(configStore.globals[name2]);
 
-            if(o !== null)
+            if(def !== null)
             {
-                configStore.globals[name1] = Number(Number(o['$']).toFixed(fractionDigits));
+                configStore.globals[name1] = Number(Number(def['$']).toFixed(fractionDigits));
             }
         }
     }

@@ -44,6 +44,7 @@ const DEFAULT_GLOBALS = {
     enableSkyAtlas: false,
     enableAstroSetup: false,
     /**/
+    devices: {},
     monitoringGroups: [],
     monitoringMetrics: {},
     refreshInterval: 1000,
