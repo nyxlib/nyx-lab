@@ -1,7 +1,8 @@
+<!--suppress HtmlUnknownAttribute -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 import { useRouter, RouterView } from 'vue-router';
 
@@ -22,6 +23,10 @@ const router = useRouter();
 const indiStore = useIndiStore(window.pinia);
 
 const configStore = useConfigStore(window.pinia);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const theme = ref('dark');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -48,19 +53,25 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const themeSet = (theme) => {
-
-    document.documentElement.setAttribute('data-bs-theme', theme);
+const themeSet = () => {
 
     const label = document.querySelector('label[for="C2D68371"] i');
 
-    if(theme === 'dark')
+    if(theme.value === 'dark')
     {
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+
+        localStorage.setItem('indi-dashboard-theme', 'dark');
+
         label.classList.add   ('bi-moon-stars');
         label.classList.remove('bi-sun');
     }
     else
     {
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+
+        localStorage.setItem('indi-dashboard-theme', 'light');
+
         label.classList.remove('bi-moon-stars');
         label.classList.add   ('bi-sun');
     }
@@ -96,9 +107,13 @@ onMounted(async () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    theme.value = localStorage.getItem('indi-dashboard-theme') || 'dark';
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     configStore.load();
 
-    themeSet('dark');
+    themeSet();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -127,7 +142,7 @@ onMounted(async () => {
     <!-- HEADER                                                                                                      -->
     <!-- *********************************************************************************************************** -->
 
-    <input class="btn-check" type="checkbox" role="switch" id="C2D68371" checked="checked" @change="themeSet($event.target.checked ? 'dark' : 'light')" />
+    <input class="btn-check" type="checkbox" role="switch" id="C2D68371" v-model="theme" :true-value="'dark'" :false-value="'light'" @change="themeSet" />
 
     <!-- *********************************************************************************************************** -->
 
