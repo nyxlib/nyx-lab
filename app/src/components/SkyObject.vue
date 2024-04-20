@@ -10,7 +10,7 @@ import * as ae from 'astronomy-engine';
 
 import Chart from 'chart.js/auto';
 
-import {v4} from 'uuid';
+import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -63,7 +63,7 @@ const state = reactive({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const uuid = v4();
+const id = uuid.v4();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -239,14 +239,14 @@ const update = () => {
 
         const scales = {};
 
-        scales[`position_x_${uuid}`] = {
+        scales[`position_x_${id}`] = {
             title: {
                 display: true,
                 text: `Time (UTC+?) - ${props.observationDate}`,
             },
         };
 
-        scales[`position_y1_${uuid}`] = {
+        scales[`position_y1_${id}`] = {
             position: 'left',
             min: -90,
             max: +90,
@@ -259,7 +259,7 @@ const update = () => {
             },
         };
 
-        scales[`position_y2_${uuid}`] = {
+        scales[`position_y2_${id}`] = {
             position: 'right',
             min: 0,
             max: 360,
@@ -283,15 +283,15 @@ const update = () => {
                     borderWidth: 2,
                     pointRadius: 0,
                     data: objectAlt,
-                    xAxisID: `position_x_${uuid}`,
-                    yAxisID: `position_y1_${uuid}`,
+                    xAxisID: `position_x_${id}`,
+                    yAxisID: `position_y1_${id}`,
                 }, {
                     label: 'Az.',
                     borderWidth: 2,
                     pointRadius: 0,
                     data: objectAz,
-                    xAxisID: `position_x_${uuid}`,
-                    yAxisID: `position_y2_${uuid}`,
+                    xAxisID: `position_x_${id}`,
+                    yAxisID: `position_y2_${id}`,
                 }],
             },
             options: {
@@ -332,7 +332,7 @@ onMounted(() => {
 
             <span class="me-auto">{{state.names.join(', ')}}</span>
 
-            <button class="btn btn-xs btn-link ms-2" type="button" @click="$event.target.closest('.card').style.display = 'none';">
+            <button class="btn btn-xs btn-link ms-2" type="button" @click="$event.target.closest('.card').remove()">
                 <i class="bi bi-x-lg"></i>
             </button>
 

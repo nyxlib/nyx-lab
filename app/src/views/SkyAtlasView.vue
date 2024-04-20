@@ -234,7 +234,7 @@ onMounted(async () => {
                         </div>
 
                         <div class="mb-0">
-                            <button class="btn btn-sm btn-primary w-100" type="button" @click="search()">
+                            <button class="btn btn-sm btn-primary w-100" type="button" @click="search">
                                 Search
                             </button>
                         </div>
