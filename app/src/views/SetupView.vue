@@ -289,8 +289,6 @@ onMounted(async () => {
                     <i class="bi bi-download"></i> Export
                 </button>
 
-                <span class="me-2">-</span>
-
                 <button class="btn btn-sm btn-warning me-2" type="button" @click="configStore.load()">
                     <i class="bi bi-x-lg"></i> Reload
                 </button>
