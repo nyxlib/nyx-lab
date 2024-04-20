@@ -1,9 +1,10 @@
+<!--suppress VueUnrecognizedDirective -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import { watch, onMounted } from 'vue';
 
-import { IndiDevices, IndiVariables } from 'vue-indi';
+import {IndiDevices, IndiVariables, NavTabs, TabPane} from 'vue-indi';
 
 import * as L from 'leaflet';
 
@@ -68,6 +69,7 @@ const getLocation = () => {
 
         const error = (message) => {
 
+            alert(message);
         };
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -116,41 +118,14 @@ onMounted(async () => {
 
         <!--*********************************************************************************************************-->
 
-        <nav class="mb-3">
-            <div class="nav nav-tabs" role="tablist">
-                <button class="nav-link active" type="button" data-bs-toggle="tab" data-bs-target="#C787FFAE" role="tab">
-                    Observatory
-                </button>
-                <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#ADEE8F0A" role="tab">
-                    INDI
-                </button>
-                <div class="ms-auto">
-                    <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.import()">
-                        <i class="bi bi-upload"></i> Import
-                    </button>
-                    <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.export()">
-                        <i class="bi bi-download"></i> Export
-                    </button>
-                    <span class="me-2">-</span>
-                    <button class="btn btn-sm btn-outline-secondary me-2" type="button" @click="configStore.load()">
-                        <i class="bi bi-x-lg"></i> Reload
-                    </button>
-                    <button class="btn btn-sm btn-success me-0" type="submit">
-                        <i class="bi bi-check-lg"></i> Save
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <!--*********************************************************************************************************-->
-
-        <div class="tab-content">
+        <nav-tabs margin="mb-3">
 
             <!-- *************************************************************************************************** -->
             <!-- OBSERVATORY                                                                                         -->
             <!-- *************************************************************************************************** -->
 
-            <div class="tab-pane fade show active" id="C787FFAE" role="tabpanel" tabindex="0">
+            <tab-pane title="Observatory">
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -277,13 +252,13 @@ onMounted(async () => {
                     </div>
                 </div>
 
-            </div>
+            </tab-pane>
 
             <!-- *************************************************************************************************** -->
-            <!-- VARIABLES                                                                                           -->
+            <!-- INDI                                                                                                -->
             <!-- *************************************************************************************************** -->
 
-            <div class="tab-pane fade xxxx xxxxxx" id="ADEE8F0A" role="tabpanel" tabindex="0">
+            <tab-pane title="INDI">
 
                 <div class="row">
                     <div class="col-md-6">
@@ -298,11 +273,37 @@ onMounted(async () => {
                     </div>
                 </div>
 
-            </div>
+            </tab-pane>
+
+            <!-- *************************************************************************************************** -->
+            <!-- BUTTONS                                                                                            -->
+            <!-- *************************************************************************************************** -->
+
+            <template v-slot:button>
+
+                <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.import()">
+                    <i class="bi bi-upload"></i> Import
+                </button>
+
+                <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.export()">
+                    <i class="bi bi-download"></i> Export
+                </button>
+
+                <span class="me-2">-</span>
+
+                <button class="btn btn-sm btn-warning me-2" type="button" @click="configStore.load()">
+                    <i class="bi bi-x-lg"></i> Reload
+                </button>
+
+                <button class="btn btn-sm btn-success me-0" type="submit">
+                    <i class="bi bi-check-lg"></i> Save
+                </button>
+
+            </template>
 
             <!-- *************************************************************************************************** -->
 
-        </div>
+        </nav-tabs>
 
         <!--*********************************************************************************************************-->
 

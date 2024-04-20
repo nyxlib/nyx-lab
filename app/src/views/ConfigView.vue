@@ -1,7 +1,10 @@
+<!--suppress HtmlUnknownAttribute, VueUnrecognizedDirective -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import Multiselect from '@vueform/multiselect';
+
+import {NavTabs, TabPane} from 'vue-indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -31,44 +34,13 @@ const SKY_MAPS = [
 
         <!--*********************************************************************************************************-->
 
-        <nav class="mb-3">
-            <div class="nav nav-tabs" role="tablist">
-                <button class="nav-link active" type="button" data-bs-toggle="tab" data-bs-target="#D15B3DA7" role="tab">
-                    Services
-                </button>
-                <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#D1B9D18C" role="tab">
-                    Features
-                </button>
-                <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" data-bs-target="#A636E1C5" role="tab">
-                    Weather
-                </button>
-                <div class="ms-auto">
-                    <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.import()">
-                        <i class="bi bi-upload"></i> Import
-                    </button>
-                    <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.export()">
-                        <i class="bi bi-download"></i> Export
-                    </button>
-                    <span class="me-2">-</span>
-                    <button class="btn btn-sm btn-outline-secondary me-2" type="button" @click="configStore.load()">
-                        <i class="bi bi-x-lg"></i> Reload
-                    </button>
-                    <button class="btn btn-sm btn-success me-0" type="submit">
-                        <i class="bi bi-check-lg"></i> Save
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <!--*********************************************************************************************************-->
-
-        <div class="tab-content">
+        <nav-tabs margin="mb-3">
 
             <!-- *************************************************************************************************** -->
             <!-- SERVICES                                                                                            -->
             <!-- *************************************************************************************************** -->
 
-            <div class="tab-pane fade show active" id="D15B3DA7" role="tabpanel" tabindex="0">
+            <tab-pane title="Services">
 
                 <div class="row">
                     <div class="col-md-6">
@@ -136,8 +108,8 @@ const SKY_MAPS = [
                             <div class="card-body">
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="DDBCAD3D">Server URL<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" id="DDBCAD3D" placeholder="Server URL" v-no-autocomplete v-model="configStore.globals.nodeRedURL" />
+                                    <label class="form-label" for="A508D199">Server URL<sup class="text-secondary">opt</sup></label>
+                                    <input class="form-control form-control-sm" type="text" id="A508D199" placeholder="Server URL" v-no-autocomplete v-model="configStore.globals.nodeRedURL" />
                                 </div>
 
                             </div>
@@ -148,13 +120,13 @@ const SKY_MAPS = [
                     </div>
                 </div>
 
-            </div>
+            </tab-pane>
 
             <!-- *************************************************************************************************** -->
-            <!-- ASTRO                                                                                               -->
+            <!-- FEATURES                                                                                            -->
             <!-- *************************************************************************************************** -->
 
-            <div class="tab-pane fade xxxx xxxxxx" id="D1B9D18C" role="tabpanel" tabindex="0">
+            <tab-pane title="Features">
 
                 <div class="row">
                     <div class="col-md-6">
@@ -232,8 +204,8 @@ const SKY_MAPS = [
                                 </div>
 
                                 <div class="form-check form-switch mb-0">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="FCEB8C30" v-model="configStore.globals.enableAstroSetup" :true-value="true" :false-value="false">
-                                    <label class="form-check-label" for="FCEB8C30">Enable astro setup</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="A36C9DF3" v-model="configStore.globals.enableAstroSetup" :true-value="true" :false-value="false">
+                                    <label class="form-check-label" for="A36C9DF3">Enable astro setup</label>
                                 </div>
 
                             </div>
@@ -275,13 +247,13 @@ const SKY_MAPS = [
                     </div>
                 </div>
 
-            </div>
+            </tab-pane>
 
             <!-- *************************************************************************************************** -->
-            <!-- WEATHER                                                                                             -->
+            <!-- WEATHER                                                                                            -->
             <!-- *************************************************************************************************** -->
 
-            <div class="tab-pane fade xxxx xxxxxx" id="A636E1C5" role="tabpanel" tabindex="0">
+            <tab-pane title="Weather">
 
                 <div class="row">
                     <div class="col-md-6">
@@ -333,8 +305,8 @@ const SKY_MAPS = [
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label" for="BCAF259C">Service name<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="BCAF259C" placeholder="Service name" v-no-autocomplete v-model="configStore.globals.seeingWidgetServiceName" />
+                                            <label class="form-label" for="E4616FC6">Service name<sup class="text-secondary">opt</sup></label>
+                                            <input class="form-control form-control-sm" type="text" id="E4616FC6" placeholder="Service name" v-no-autocomplete v-model="configStore.globals.seeingWidgetServiceName" />
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -358,13 +330,39 @@ const SKY_MAPS = [
                     </div>
                 </div>
 
-            </div>
+            </tab-pane>
+
+            <!-- *************************************************************************************************** -->
+            <!-- BUTTONS                                                                                            -->
+            <!-- *************************************************************************************************** -->
+
+            <template v-slot:button>
+
+                <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.import()">
+                    <i class="bi bi-upload"></i> Import
+                </button>
+
+                <button class="btn btn-sm btn-primary me-2" type="button" @click="configStore.export()">
+                    <i class="bi bi-download"></i> Export
+                </button>
+
+                <span class="me-2">-</span>
+
+                <button class="btn btn-sm btn-warning me-2" type="button" @click="configStore.load()">
+                    <i class="bi bi-x-lg"></i> Reload
+                </button>
+
+                <button class="btn btn-sm btn-success me-0" type="submit">
+                    <i class="bi bi-check-lg"></i> Save
+                </button>
+
+            </template>
 
             <!-- *************************************************************************************************** -->
 
-        </div>
+        </nav-tabs>
 
-        <!-- ******************************************************************************************************* -->
+        <!--*********************************************************************************************************-->
 
     </form>
 
