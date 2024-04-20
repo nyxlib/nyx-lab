@@ -20,7 +20,11 @@ import useConfigStore from '../stores/config';
 
     <!-- *********************************************************************************************************** -->
 
-    <indi-monitoring :groups="configStore.globals.monitoringGroups" :metrics="configStore.globals.monitoringMetrics" :refresh-interval="configStore.globals.refreshInterval" />
+    <div class="h-100 w-100 p-3">
+
+        <indi-monitoring :groups="configStore.globals.monitoringGroups" :metrics="configStore.globals.monitoringMetrics" :refresh-interval="configStore.globals.refreshInterval" />
+
+    </div>
 
     <!-- *********************************************************************************************************** -->
 

@@ -4,6 +4,8 @@
 
 import { ref, onMounted, reactive } from 'vue';
 
+import {NavTabs, TabPane} from 'vue-indi';
+
 import * as ae from 'astronomy-engine';
 
 import Chart from 'chart.js/auto';
@@ -66,12 +68,6 @@ const uuid = v4();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const position = ref(null);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const card = ref(null);
-const infoTab = ref(null);
-const imageTab = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -313,13 +309,6 @@ const update = () => {
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    imageTab.value.addEventListener('shown.bs.tab', () => {
-
-        state.show_image = true;
-    });
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -428,34 +417,21 @@ onMounted(() => {
 
                     <!--*********************************************************************************************-->
 
-                    <nav>
-                        <div class="nav nav-tabs" role="tablist">
-                            <button class="nav-link active" type="button" data-bs-toggle="tab" :data-bs-target="`#CE950DAA_${uuid}`" role="tab" ref="infoTab">
-                                Position
-                            </button>
-                            <button class="nav-link xxxxxx" type="button" data-bs-toggle="tab" :data-bs-target="`#D91CE60F_${uuid}`" role="tab" ref="imageTab">
-                                Image
-                            </button>
-                        </div>
-                    </nav>
+                    <nav-tabs margin="mb-1">
 
-                    <!--*********************************************************************************************-->
-
-                    <div class="tab-content mt-1">
-
-                        <div class="tab-pane fade show active" :id="`CE950DAA_${uuid}`" role="tabpanel" tabindex="0">
+                        <tab-pane title="Position">
 
                             <canvas class="w-100" ref="position"></canvas>
 
-                        </div>
+                        </tab-pane>
 
-                        <div class="tab-pane fade xxxx xxxxxx" :id="`D91CE60F_${uuid}`" role="tabpanel" tabindex="0">
+                        <tab-pane title="Image" @shown="() => state.show_image = true">
 
                             <aladin-map class="w-100" :fov="10.0" :target="objectName" :projection="'SIN'" :show-zoom-control="true" v-if="state.show_image" />
 
-                        </div>
+                        </tab-pane>
 
-                    </div>
+                    </nav-tabs>
 
                     <!--*********************************************************************************************-->
 
