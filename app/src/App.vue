@@ -166,7 +166,7 @@ onMounted(async () => {
             <div class="d-flex ms-2 py-1">
 
                 <button class="btn btn-sm btn-primary border me-1" type="button" v-if="configStore.globals.weatherWidgetHTML" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)">
-                    <i class="bi bi-cloud"></i>
+                    <i class="bi bi-cloud-moon-fill"></i>
                 </button>
 
                 <button class="btn btn-sm btn-primary border me-0" type="button" v-if="configStore.globals.seeingWidgetHTML" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)">

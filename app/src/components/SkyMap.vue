@@ -74,7 +74,7 @@ onMounted(async () => {
                 skymap.core.planets.addDataSource({url: `${baseUrl}/surveys/sso/sun`, key: 'sun'});
                 skymap.core.planets.addDataSource({url: `${baseUrl}/surveys/sso/moon`, key: 'moon'});
 
-                skymap.core.landscapes.addDataSource({url: `${baseUrl}/landscapes/guereins`, key: 'guereins'});
+                skymap.core.landscapes.addDataSource({url: `${baseUrl}/landscapes/zero`, key: 'zero'});
 
                 skymap.core.skycultures.addDataSource({url: `${baseUrl}/skycultures/western`, key: 'western'});
 

@@ -262,7 +262,7 @@ const SKY_MAPS = [
 
                         <div class="card mb-3">
                             <div class="card-header">
-                                <i class="bi bi-cloud"></i> Weather widget
+                                <i class="bi bi-cloud-moon"></i> Weather widget
                             </div>
                             <div class="card-body">
 
