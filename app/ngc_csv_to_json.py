@@ -133,13 +133,13 @@ def generate(src_fname):
 
     with open(dst_fname, 'wt') as f:
 
-        f.write(json.dumps(result))
+        f.write(json.dumps(result, separators = (',', ':')))
 
 ########################################################################################################################
 
 def main():
 
-    parser = argparse.ArgumentParser(description = 'Generate the FITS file of the NGC catalog')
+    parser = argparse.ArgumentParser(description = 'Generate the JSON file of the NGC catalog')
 
     parser.add_argument('--csv', help = 'The CSV of the NGC catalog')
 
