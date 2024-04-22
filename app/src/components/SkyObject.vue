@@ -415,7 +415,7 @@ onUnmounted(() => {
 
                             <!--*************************************************************************************-->
 
-                            <table class="w-50">
+                            <table class="w-100">
                                 <tr>
                                     <td colspan="2">
                                         Equatorial coordinate
@@ -452,7 +452,7 @@ onUnmounted(() => {
 
                             <!--*************************************************************************************-->
 
-                            <table class="w-50">
+                            <table class="w-100">
                                 <tr>
                                     <td colspan="2">
                                         Equatorial coordinate
@@ -497,22 +497,22 @@ onUnmounted(() => {
 
                     <table class="table table-sm w-100">
                         <thead>
-                        <tr>
-                            <th style="width: 20%;">B</th>
-                            <th style="width: 20%;">V</th>
-                            <th style="width: 20%;">J</th>
-                            <th style="width: 20%;">H</th>
-                            <th style="width: 20%;">K</th>
-                        </tr>
+                            <tr>
+                                <th style="width: 20%;">B</th>
+                                <th style="width: 20%;">V</th>
+                                <th style="width: 20%;">J</th>
+                                <th style="width: 20%;">H</th>
+                                <th style="width: 20%;">K</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td v-if="state.b_mag !== -999.0">{{state.b_mag}}</td><td v-else>Ø</td>
-                            <td v-if="state.v_mag !== -999.0">{{state.v_mag}}</td><td v-else>Ø</td>
-                            <td v-if="state.j_mag !== -999.0">{{state.j_mag}}</td><td v-else>Ø</td>
-                            <td v-if="state.h_mag !== -999.0">{{state.h_mag}}</td><td v-else>Ø</td>
-                            <td v-if="state.k_mag !== -999.0">{{state.k_mag}}</td><td v-else>Ø</td>
-                        </tr>
+                            <tr>
+                                <td v-if="state.b_mag !== -999.0">{{state.b_mag}}</td><td v-else>Ø</td>
+                                <td v-if="state.v_mag !== -999.0">{{state.v_mag}}</td><td v-else>Ø</td>
+                                <td v-if="state.j_mag !== -999.0">{{state.j_mag}}</td><td v-else>Ø</td>
+                                <td v-if="state.h_mag !== -999.0">{{state.h_mag}}</td><td v-else>Ø</td>
+                                <td v-if="state.k_mag !== -999.0">{{state.k_mag}}</td><td v-else>Ø</td>
+                            </tr>
                         </tbody>
                     </table>
 
