@@ -58,7 +58,6 @@ const state = reactive({
     j_mag: -999.0,
     h_mag: -999.0,
     k_mag: -999.0,
-    surf_br: -999.0,
     show_image: false,
 });
 
@@ -201,7 +200,6 @@ const loadNGC = () => {
         state.j_mag = NGC.j_mag[index];
         state.h_mag = NGC.h_mag[index];
         state.k_mag = NGC.k_mag[index];
-        state.surf_br = NGC.surf_br[index];
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -215,12 +213,27 @@ const loadNGC = () => {
 
 const loadHIP = () => {
 
-    if(props.objectName.toLowerCase().startsWith('hip'))
+    if(props.objectName in HIP.table)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
+        const index = HIP.table[props.objectName];
+
+        const lb = equatorialToGalactic(
+            HIP.ra[index],
+            HIP.dec[index]
+        );
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         state.names = [props.objectName];
-        state.type = 'Star';
+        state.type = HIP.type[index];
+        state.ra = HIP.ra[index];
+        state.dec = HIP.dec[index];
+        state.l = lb.l;
+        state.b = lb.b;
+        state.b_mag = HIP.b_mag[index];
+        state.v_mag = HIP.v_mag[index];
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -384,34 +397,83 @@ onMounted(() => {
 
                     <hr />
 
-                    <table class="w-50">
-                        <tr>
-                            <td colspan="2">
-                                Equatorial coordinate
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>α:</td>
-                            <td><kbd class="d-block">{{degreesToHMSString(state.ra)}}</kbd></td>
-                        </tr>
-                        <tr>
-                            <td>δ:</td>
-                            <td><kbd class="d-block">{{degreesToDMSString(state.dec)}}</kbd></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                Galactic coordinate
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>ℓ:</td>
-                            <td><kbd class="d-block">{{degreesToDMSString(state.l)}}</kbd></td>
-                        </tr>
-                        <tr>
-                            <td>𝑏:</td>
-                            <td><kbd class="d-block">{{degreesToDMSString(state.b)}}</kbd></td>
-                        </tr>
-                    </table>
+                    <nav-tabs margin="mb-1">
+
+                        <tab-pane title="J2000">
+
+                            <!--*************************************************************************************-->
+
+                            <table class="w-50">
+                                <tr>
+                                    <td colspan="2">
+                                        Equatorial coordinate
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>α:</td>
+                                    <td><kbd class="d-block">{{degreesToHMSString(state.ra)}}</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td>δ:</td>
+                                    <td><kbd class="d-block">{{degreesToDMSString(state.dec)}}</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        Galactic coordinate
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ℓ:</td>
+                                    <td><kbd class="d-block">{{degreesToDMSString(state.l)}}</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td>𝑏:</td>
+                                    <td><kbd class="d-block">{{degreesToDMSString(state.b)}}</kbd></td>
+                                </tr>
+                            </table>
+
+                            <!--*************************************************************************************-->
+
+                        </tab-pane>
+
+                        <tab-pane title="J2000d">
+
+                            <!--*************************************************************************************-->
+
+                            <table class="w-50">
+                                <tr>
+                                    <td colspan="2">
+                                        Equatorial coordinate
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>α:</td>
+                                    <td><kbd class="d-block">{{ state.ra.toFixed(7) }}°</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td>δ:</td>
+                                    <td><kbd class="d-block">{{ state.dec.toFixed(7) }}°</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        Galactic coordinate
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ℓ:</td>
+                                    <td><kbd class="d-block">{{ state.l.toFixed(7) }}°</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td>𝑏:</td>
+                                    <td><kbd class="d-block">{{ state.b.toFixed(7) }}°</kbd></td>
+                                </tr>
+                            </table>
+
+                            <!--*************************************************************************************-->
+
+                        </tab-pane>
+
+                    </nav-tabs>
 
                     <hr />
 
@@ -419,7 +481,7 @@ onMounted(() => {
 
                     <hr />
 
-                    Apparent total magnitudes / photometric band:
+                    Apparent total magnitudes per bands:
 
                     <table class="table table-sm w-100">
                         <thead>
@@ -441,8 +503,6 @@ onMounted(() => {
                         </tr>
                         </tbody>
                     </table>
-
-                    <p>Surface brightness: <span v-if="state.surf_br !== -999.0">{{state.surf_br}}</span><span v-else>Ø</span> mag / arcsec<sup>2</sup></p>
 
                     <!--*********************************************************************************************-->
 
