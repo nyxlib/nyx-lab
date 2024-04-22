@@ -269,7 +269,7 @@ onMounted(async () => {
 
         <template v-slot:right>
 
-            <div class="p-3">
+            <div class="p-3 d-flex flex-column-reverse">
 
                 <sky-object v-for="(object, index) in state.objects" :key="index" :object-name="object.objectName" :observation-date="object.observationDate"></sky-object>
 
