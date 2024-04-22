@@ -422,11 +422,11 @@ onUnmounted(() => {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>α:</td>
+                                    <td style="width: 10%; text-align: center;">α:</td>
                                     <td><kbd class="d-block">{{degreesToHMSString(state.ra)}}</kbd></td>
                                 </tr>
                                 <tr>
-                                    <td>δ:</td>
+                                    <td style="width: 10%; text-align: center;">δ:</td>
                                     <td><kbd class="d-block">{{degreesToDMSString(state.dec)}}</kbd></td>
                                 </tr>
                                 <tr>
@@ -435,11 +435,11 @@ onUnmounted(() => {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>ℓ:</td>
+                                    <td style="width: 10%; text-align: center;">ℓ:</td>
                                     <td><kbd class="d-block">{{degreesToDMSString(state.l)}}</kbd></td>
                                 </tr>
                                 <tr>
-                                    <td>𝑏:</td>
+                                    <td style="width: 10%; text-align: center;">𝑏:</td>
                                     <td><kbd class="d-block">{{degreesToDMSString(state.b)}}</kbd></td>
                                 </tr>
                             </table>
@@ -459,11 +459,11 @@ onUnmounted(() => {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>α:</td>
+                                    <td style="width: 10%; text-align: center;">α:</td>
                                     <td><kbd class="d-block">{{ state.ra.toFixed(7) }}°</kbd></td>
                                 </tr>
                                 <tr>
-                                    <td>δ:</td>
+                                    <td style="width: 10%; text-align: center;">δ:</td>
                                     <td><kbd class="d-block">{{ state.dec.toFixed(7) }}°</kbd></td>
                                 </tr>
                                 <tr>
@@ -472,11 +472,11 @@ onUnmounted(() => {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>ℓ:</td>
+                                    <td style="width: 10%; text-align: center;">ℓ:</td>
                                     <td><kbd class="d-block">{{ state.l.toFixed(7) }}°</kbd></td>
                                 </tr>
                                 <tr>
-                                    <td>𝑏:</td>
+                                    <td style="width: 10%; text-align: center;">𝑏:</td>
                                     <td><kbd class="d-block">{{ state.b.toFixed(7) }}°</kbd></td>
                                 </tr>
                             </table>
