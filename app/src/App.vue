@@ -2,15 +2,15 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 
-import { useRouter, RouterView } from 'vue-router';
+import {useRouter, RouterView} from 'vue-router';
 
-import { Modal } from 'bootstrap';
+import {Modal} from 'bootstrap';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { useIndiStore } from 'vue-indi';
+import {useIndiStore} from 'vue-indi';
 
 import useConfigStore from './stores/config';
 

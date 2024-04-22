@@ -2,9 +2,9 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { ref, reactive, onMounted, onUnmounted } from 'vue';
+import {ref, reactive, onMounted, onUnmounted} from 'vue';
 
-import { NavTabs, TabPane } from 'vue-indi';
+import {NavTabs, TabPane} from 'vue-indi';
 
 import * as ae from 'astronomy-engine';
 

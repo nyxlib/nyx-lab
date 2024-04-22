@@ -1,12 +1,12 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { createPinia } from 'pinia';
+import {createPinia} from 'pinia';
 
-import { createApp } from 'vue';
+import {createApp} from 'vue';
 
-import { Tooltip } from 'bootstrap';
+import {Tooltip} from 'bootstrap';
 
-import { setup } from 'vue-indi';
+import {setup} from 'vue-indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

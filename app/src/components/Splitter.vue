@@ -1,9 +1,8 @@
 <!--suppress CssUnusedSymbol, CssUnknownTarget -->
-
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { onMounted } from 'vue';
+import {onMounted} from 'vue';
 
 import Split from 'split.js';
 

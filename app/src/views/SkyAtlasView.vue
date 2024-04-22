@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { ref, reactive, onMounted, onUnmounted } from 'vue';
+import {ref, reactive, onMounted, onUnmounted} from 'vue';
 
 import * as ae from 'astronomy-engine';
 

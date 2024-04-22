@@ -29,14 +29,16 @@ body,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.btn,
-.btn-group,
-.form-select,
-.form-control,
-.input-group-sm > .form-control,
-.input-group-sm > .input-group-text {
+:root {
 
-    border-radius: 0.75rem;
+    --bs-border-radius: 0.75rem;
+    --bs-border-radius-sm: 0.75rem;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.btn {
+
     -webkit-app-region: no-drag !important;
 }
 

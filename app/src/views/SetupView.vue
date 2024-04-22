@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { watch, onMounted } from 'vue';
+import {watch, onMounted} from 'vue';
 
 import {IndiDevices, IndiVariables, NavTabs, TabPane} from 'vue-indi';
 
