@@ -33,9 +33,9 @@ const router = createRouter({
             component: () => import('./views/NodeRedView.vue'),
         },
         {
-            path: '/setup/',
-            name: 'setup',
-            component: () => import('./views/SetupView.vue'),
+            path: '/astro/',
+            name: 'astro',
+            component: () => import('./views/AstroView.vue'),
         },
         {
             path: '/config/',

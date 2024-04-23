@@ -258,20 +258,9 @@ onMounted(async () => {
             <!-- INDI                                                                                                -->
             <!-- *************************************************************************************************** -->
 
-            <tab-pane title="INDI">
+            <tab-pane title="Devices">
 
-                <div class="row">
-                    <div class="col-md-6">
-
-                        <indi-devices :devices="configStore.globals.devices" />
-
-                    </div>
-                    <div class="col-md-6">
-
-                        <indi-variables />
-
-                    </div>
-                </div>
+                <indi-devices :devices="configStore.globals.devices" />
 
             </tab-pane>
 

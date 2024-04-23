@@ -4,7 +4,7 @@
 
 import Multiselect from '@vueform/multiselect';
 
-import {NavTabs, TabPane} from 'vue-indi';
+import {IndiVariables, NavTabs, TabPane} from 'vue-indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -220,20 +220,7 @@ const SKY_MAPS = [
 
                         <div class="card mb-3">
                             <div class="card-header d-flex">
-                                Astrometry
-                            </div>
-                            <div class="card-body">
-
-                                TODO
-
-                            </div>
-                        </div>
-
-                        <!-- *************************************************************************************** -->
-
-                        <div class="card mb-0">
-                            <div class="card-header d-flex">
-                                Autoguiding
+                                Extensions
                             </div>
                             <div class="card-body">
 
@@ -262,7 +249,7 @@ const SKY_MAPS = [
 
                         <div class="card mb-3">
                             <div class="card-header">
-                                <i class="bi bi-cloud-moon"></i> Weather widget
+                                <i class="bi bi-cloud-moon-fill"></i> Weather widget
                             </div>
                             <div class="card-body">
 
@@ -329,6 +316,16 @@ const SKY_MAPS = [
 
                     </div>
                 </div>
+
+            </tab-pane>
+
+            <!-- *************************************************************************************************** -->
+            <!-- INDI                                                                                                -->
+            <!-- *************************************************************************************************** -->
+
+            <tab-pane title="INDI">
+
+                <indi-variables />
 
             </tab-pane>
 
