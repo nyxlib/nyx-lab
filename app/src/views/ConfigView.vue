@@ -2,9 +2,11 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import {reactive} from 'vue';
+
 import Multiselect from '@vueform/multiselect';
 
-import {IndiVariables, NavTabs, TabPane} from 'vue-indi';
+import {IndiVariables, IndiTopology, NavTabs, TabPane} from 'vue-indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -15,6 +17,12 @@ import useConfigStore from '../stores/config';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const configStore = useConfigStore();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const state = reactive({
+    show_indi: false,
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -323,9 +331,20 @@ const SKY_MAPS = [
             <!-- INDI                                                                                                -->
             <!-- *************************************************************************************************** -->
 
-            <tab-pane title="INDI">
+            <tab-pane title="INDI" @shown="state.show_indi = true">
 
-                <indi-variables />
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <indi-variables v-if="state.show_indi" />
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <indi-topology v-if="state.show_indi" />
+
+                    </div>
+                </div>
 
             </tab-pane>
 

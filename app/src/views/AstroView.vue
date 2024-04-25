@@ -4,7 +4,7 @@
 
 import {watch, onMounted} from 'vue';
 
-import {IndiDevices, IndiVariables, NavTabs, TabPane} from 'vue-indi';
+import {IndiDevices, NavTabs, TabPane} from 'vue-indi';
 
 import * as L from 'leaflet';
 
@@ -260,7 +260,18 @@ onMounted(async () => {
 
             <tab-pane title="Devices">
 
-                <indi-devices :devices="configStore.globals.devices" />
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <indi-devices :devices="configStore.globals.devices" />
+
+                    </div>
+                    <div class="col-md-6">
+
+                        ???
+
+                    </div>
+                </div>
 
             </tab-pane>
 
