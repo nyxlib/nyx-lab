@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {watch, onMounted} from 'vue';
+import {ref, watch, onMounted} from 'vue';
 
 import {IndiDevices, NavTabs, TabPane} from 'vue-indi';
 
@@ -23,16 +23,22 @@ const configStore = useConfigStore();
 const TILES_URL = 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FUNCTIONS                                                                                                          */
+
+const mapEl = ref(null);
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 let map = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 const mapSetup = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    map = L.map('BC002C3F', {zoomControl: false, doubleClickZoom: false, scrollWheelZoom: false}).setView([configStore.globals.lat, configStore.globals.lon], configStore.globals.zoom);
+    map = L.map(mapEl.value, {zoomControl: false, doubleClickZoom: false, scrollWheelZoom: false}).setView([configStore.globals.lat, configStore.globals.lon], configStore.globals.zoom);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -47,6 +53,10 @@ const mapSetup = () => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     L.tileLayer(TILES_URL, {attribution: '', minZoom: 1, maxZoom: 20}).addTo(map);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    setTimeout(() => map.invalidateSize(), 500);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -87,7 +97,7 @@ const getLocation = () => {
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onMounted(async () => {
+onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -125,7 +135,6 @@ onMounted(async () => {
             <!-- *************************************************************************************************** -->
 
             <tab-pane title="Observatory">
-
 
                 <div class="row">
                     <div class="col-md-6">
@@ -240,7 +249,7 @@ onMounted(async () => {
                     </div>
                     <div class="col-md-6">
 
-                        <div class="rounded" id="BC002C3F" style="height: 450px; width: 100%;"></div>
+                        <div class="rounded" style="height: 450px; width: 100%;" ref="mapEl"></div>
 
                     </div>
                 </div>
