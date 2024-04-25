@@ -36,7 +36,6 @@ const DEFAULT_GLOBALS = {
     mqttUsername: '',
     mqttPassword: '',
     /**/
-    grafanaURL: '',
     nodeRedURL: '',
     /**/
     enableMonitoring: false,

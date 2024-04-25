@@ -145,9 +145,8 @@ onMounted(async () => {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="F779821A">Latitude [°]</label>
-                                            <div class="input-group input-group-sm">
+                                            <div class="input-group input-group-sm" v-indi-group>
                                                 <input class="form-control form-control-sm" type="number" step="0.0001" id="F779821A" v-model="configStore.globals.lat" :disabled="!!configStore.globals.latVariable" />
-                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" placeholder="INDI variable" v-no-autocomplete v-model="configStore.globals.latVariable" />
                                             </div>
                                         </div>
@@ -155,9 +154,8 @@ onMounted(async () => {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="B120D62A">Longitude [°]</label>
-                                            <div class="input-group input-group-sm">
+                                            <div class="input-group input-group-sm" v-indi-group>
                                                 <input class="form-control form-control-sm" type="number" step="0.0001" id="B120D62A" v-model="configStore.globals.lon" :disabled="!!configStore.globals.lonVariable" />
-                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" placeholder="INDI variable" v-no-autocomplete v-model="configStore.globals.lonVariable" />
                                             </div>
                                         </div>
@@ -168,9 +166,8 @@ onMounted(async () => {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="F951B22F">Elevation [m]</label>
-                                            <div class="input-group input-group-sm">
+                                            <div class="input-group input-group-sm" v-indi-group>
                                                 <input class="form-control form-control-sm" type="number" step="0.100000" id="F951B22F" v-model="configStore.globals.alt" :disabled="!!configStore.globals.altVariable" />
-                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" placeholder="INDI variable" v-no-autocomplete v-model="configStore.globals.altVariable" />
                                             </div>
                                         </div>
@@ -199,18 +196,16 @@ onMounted(async () => {
 
                                         <div class="mb-3">
                                             <label class="form-label" for="C198A370">Temperature [°C]</label>
-                                            <div class="input-group input-group-sm">
+                                            <div class="input-group input-group-sm" v-indi-group>
                                                 <input class="form-control form-control-sm" type="number" min="-100" max="+100" step="0.1" id="C198A370" v-model="configStore.globals.temperature" :disabled="!!configStore.globals.temperatureVariable" />
-                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" placeholder="INDI variable" v-no-autocomplete v-model="configStore.globals.temperatureVariable" />
                                             </div>
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label" for="B10348DA">Wind speed [m/s]</label>
-                                            <div class="input-group input-group-sm">
+                                            <div class="input-group input-group-sm" v-indi-group>
                                                 <input class="form-control form-control-sm" type="number" min="0" max="200" step="0.1" id="B10348DA" v-model="configStore.globals.wind" :disabled="!!configStore.globals.windVariable" />
-                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" placeholder="INDI variable" v-no-autocomplete v-model="configStore.globals.windVariable" />
                                             </div>
                                         </div>
@@ -220,18 +215,16 @@ onMounted(async () => {
 
                                         <div class="mb-3">
                                             <label class="form-label" for="D5904A85">Humidity [%]</label>
-                                            <div class="input-group input-group-sm">
+                                            <div class="input-group input-group-sm" v-indi-group>
                                                 <input class="form-control form-control-sm" type="number" min="0" max="100" step="0.1" id="D5904A85" v-model="configStore.globals.humidity" :disabled="!!configStore.globals.humidityVariable" />
-                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" placeholder="INDI variable" v-no-autocomplete v-model="configStore.globals.humidityVariable" />
                                             </div>
                                         </div>
 
                                         <div class="mb-0">
                                             <label class="form-label" for="F6CEC4D4">Seeing [arcsec]</label>
-                                            <div class="input-group input-group-sm">
+                                            <div class="input-group input-group-sm" v-indi-group>
                                                 <input class="form-control form-control-sm" type="number" min="0" max="5" step="0.1" id="F6CEC4D4" v-model="configStore.globals.seeing" :disabled="!!configStore.globals.seeingVariable" />
-                                                <span class="input-group-text px-1"><i class="bi bi-arrow-left-short"></i></span>
                                                 <input class="form-control form-control-sm" type="text" placeholder="INDI variable" v-no-autocomplete v-model="configStore.globals.seeingVariable" />
                                             </div>
                                         </div>

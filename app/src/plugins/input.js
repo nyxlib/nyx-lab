@@ -1,3 +1,4 @@
+// noinspection JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 export default {
@@ -54,6 +55,74 @@ export default {
                 inputEl.parentElement.appendChild(toggleEl);
 
                 inputEl.type = 'password';
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        app.directive('indi-group', {
+
+            mounted(divEl) {
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                const span = document.createElement('span');
+
+                span.innerHTML = '<i class="bi bi-currency-dollar"></i>'
+                                 +
+                                 '<i class="bi bi-braces"></i>'
+                ;
+
+                span.className = 'input-group-text';
+
+                divEl.append(span);
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                const inputs = divEl.querySelectorAll('input');
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                const showInputs = () => {
+
+                    const length = inputs.length;
+
+                    if(length > 0)
+                    {
+                        inputs[0].style.display = 'none';
+
+                        for(let i = 1; i < length; i++) {
+                            inputs[i].style.display = ((''));
+                        }
+                    }
+                };
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                const hideInputs = () => {
+
+                    const length = inputs.length;
+
+                    if(length > 0)
+                    {
+                        inputs[0].style.display = ((''));
+
+                        for(let i = 1; i < length; i++) {
+                            inputs[i].style.display = 'none';
+                        }
+                    }
+                };
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                divEl.addEventListener('mouseenter', showInputs);
+                divEl.addEventListener('mouseleave', hideInputs);
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                hideInputs();
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
