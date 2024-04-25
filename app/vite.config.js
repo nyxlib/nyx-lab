@@ -16,12 +16,12 @@ export default defineConfig({
                 entryFileNames: 'dashboard.js',
                 chunkFileNames: 'chunks/[hash].js',
                 assetFileNames: 'assets/[hash].[ext]',
-            },
+            }
         },
     },
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url)),
+            '@': fileURLToPath(new URL('./src', import.meta.url))
         },
     }
 });

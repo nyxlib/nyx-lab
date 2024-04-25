@@ -26,6 +26,8 @@ const configStore = useConfigStore();
 
 const canvas = ref(null);
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 let skymap = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -44,22 +46,24 @@ const select = () => {
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onMounted(async () => {
+onMounted(() => {
 
-    await PolluxSkyMap({
-        wasmFile: PolluxSkyMapWASM,
-        canvas: canvas.value,
-        translateFn: (domain, str) => {
+    try
+        {
+        PolluxSkyMap({
+            wasmFile: PolluxSkyMapWASM,
+            canvas: canvas.value,
+            translateFn: (domain, str) => {
 
-            return str;
-        },
-        onReady: (x) => {
+                return str;
+            },
+            onReady: (x) => {
 
-            skymap = x;
+                skymap = x;
 
-            const baseUrl = './resources';
+                const baseUrl = './resources';
 
-            try {   /*----------------------------------------------------------------------------------------------------*/
+                /*----------------------------------------------------------------------------------------------------*/
 
                 skymap.setFont('regular', regularFont, 1.38);
                 skymap.setFont('bold', boldFont, 1.38);
@@ -101,13 +105,17 @@ onMounted(async () => {
                 skymap.core.time_speed = 1;
 
                 /*----------------------------------------------------------------------------------------------------*/
-            }
-            catch(e)
-            {
-                console.log(e);
-            }
-        },
-    });
+            },
+
+        }).catch((e) => {
+
+            /* IGNORE */
+        });
+    }
+    catch(e)
+    {
+        /* IGNORE */
+    }
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
