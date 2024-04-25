@@ -70,10 +70,7 @@ export default {
 
                 const button = document.createElement('button');
 
-                button.innerHTML = '<i class="bi bi-currency-dollar"></i>'
-                                   +
-                                   '<i class="bi bi-braces"></i>'
-                ;
+                button.innerHTML = '<i class="bi bi-braces"></i>';
 
                 button.className = 'btn';
 
