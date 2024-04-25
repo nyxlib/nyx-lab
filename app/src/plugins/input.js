@@ -68,16 +68,33 @@ export default {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                const span = document.createElement('span');
+                const button = document.createElement('button');
 
-                span.innerHTML = '<i class="bi bi-currency-dollar"></i>'
-                                 +
-                                 '<i class="bi bi-braces"></i>'
+                button.innerHTML = '<i class="bi bi-currency-dollar"></i>'
+                                   +
+                                   '<i class="bi bi-braces"></i>'
                 ;
 
-                span.className = 'input-group-text';
+                button.className = 'btn';
 
-                divEl.append(span);
+                divEl.append(button);
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                button.addEventListener('click', () => {
+
+                    const length = inputs.length;
+
+                    if(length > 0)
+                    {
+                        if(inputs[0].style.display === 'none') {
+                            hideInputs();
+                        }
+                        else {
+                            showInputs();
+                        }
+                    }
+                });
 
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -91,6 +108,9 @@ export default {
 
                     if(length > 0)
                     {
+                        button.classList.add('btn-outline-primary');
+                        button.classList.remove('btn-outline-secondary');
+
                         inputs[0].style.display = 'none';
 
                         for(let i = 1; i < length; i++) {
@@ -107,6 +127,9 @@ export default {
 
                     if(length > 0)
                     {
+                        button.classList.add('btn-outline-secondary');
+                        button.classList.remove('btn-outline-primary');
+
                         inputs[0].style.display = ((''));
 
                         for(let i = 1; i < length; i++) {
@@ -114,11 +137,6 @@ export default {
                         }
                     }
                 };
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                divEl.addEventListener('mouseenter', showInputs);
-                divEl.addEventListener('mouseleave', hideInputs);
 
                 /*----------------------------------------------------------------------------------------------------*/
 
