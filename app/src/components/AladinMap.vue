@@ -66,6 +66,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    showShareControl: {
+        type: Boolean,
+        default: false,
+    },
     showLayersControl: {
         type: Boolean,
         default: false,
@@ -172,19 +176,6 @@ onMounted(async () => {
 .aladin-cooFrame {
 
     top: 1.5px !important;
-}
-
-.aladin-cooFrame > select {
-
-    height: 30.5px !important;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.aladin-input.search {
-
-    padding-top: 2.4px !important;
-    padding-bottom: 2.4px !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
