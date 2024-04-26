@@ -99,14 +99,38 @@ const useConfigStore = defineStore('config', {
 
         import()
         {
-            this.dialog.show('import TODO');
+            try
+            {
+                this.dialog.open('config.json', 'text/plain;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then((json) => {
+
+                    this.globals = confDup(JSON.parse(json), DEFAULT_GLOBALS);
+
+                    this.dialog.success();
+                });
+            }
+            catch(e)
+            {
+                this.dialog.error(e);
+            }
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         export()
         {
-            this.dialog.show('export TODO');
+            try
+            {
+                const config = confDup(this.globals, DEFAULT_GLOBALS);
+
+                this.dialog.save(JSON.stringify(config, null, 2), 'config.json', 'text/plain;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then(() => {
+
+                    this.dialog.success();
+                });
+            }
+            catch(e)
+            {
+                this.dialog.error(e);
+            }
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -115,9 +139,9 @@ const useConfigStore = defineStore('config', {
         {
             try
             {
-                const config = JSON.parse(localStorage.getItem('indi-dashboard-config'));
+                const config = localStorage.getItem('indi-dashboard-config');
 
-                this.globals = confDup(config, DEFAULT_GLOBALS);
+                this.globals = confDup(JSON.parse(config), DEFAULT_GLOBALS);
 
                 this.dialog.success();
             }
