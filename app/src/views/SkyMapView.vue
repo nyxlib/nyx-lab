@@ -103,12 +103,16 @@ onMounted(() => {
                     </div>
                 </div>
 
-
                 <!-- *********************************************************************************************** -->
 
                 <hr />
 
                 <!-- *********************************************************************************************** -->
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" role="switch" id="D603EB7C" v-model="state.showMilkyWay" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
+                    <label class="form-check-label" for="D603EB7C">Show Milky Way</label>
+                </div>
 
                 <div class="form-check form-switch mb-3">
                     <input class="form-check-input" type="checkbox" role="switch" id="F8890F0C" v-model="state.showAtmosphere" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
@@ -123,18 +127,6 @@ onMounted(() => {
                 <!-- *********************************************************************************************** -->
 
                 <hr />
-
-                <!-- *********************************************************************************************** -->
-
-                <div class="form-check form-switch mb-0">
-                    <input class="form-check-input" type="checkbox" role="switch" id="D603EB7C" v-model="state.showMilkyWay" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
-                    <label class="form-check-label" for="D603EB7C">Show Milky Way</label>
-                </div>
-
-                <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" role="switch" id="FFDC77D0" v-model="state.showDeepSpaceObjects" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
-                    <label class="form-check-label" for="FFDC77D0">Show deep space objects</label>
-                </div>
 
                 <!-- *********************************************************************************************** -->
 
