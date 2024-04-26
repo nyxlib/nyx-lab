@@ -20,7 +20,7 @@ def generate(src_fname):
 
     src_fname = os.path.abspath(src_fname)
 
-    dst_fname = os.path.join(os.path.dirname(src_fname), 'NGC.json')
+    dst_fname = os.path.join('../src/catalogs', 'NGC.json')
 
     ####################################################################################################################
 
