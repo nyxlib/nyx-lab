@@ -8,6 +8,11 @@
         "dialog:allow-message",
         "dialog:allow-open",
         "dialog:allow-save",
+        "notification:allow-notify",
+        "notification:allow-request-permission",
+        "notification:allow-is-permission-granted",
+        "fs:allow-app-read",
+        "fs:allow-app-write",
         "shell:allow-open"
     ]
 }
