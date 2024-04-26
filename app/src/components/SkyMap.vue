@@ -25,9 +25,21 @@ const configStore = useConfigStore();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    cooFrame: {
+    frame: {
         type: String,
         default: 'j2000',
+    },
+    showMilkyway: {
+        type: Boolean,
+        default: false,
+    },
+    showAtmosphere: {
+        type: Boolean,
+        default: false,
+    },
+    showConstellations: {
+        type: Boolean,
+        default: true,
     },
 });
 
@@ -59,7 +71,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    watch(() => props.cooFrame, (value) => {
+    watch(() => props.frame, (value) => {
 
         if(value === 'j2000')
         {
@@ -71,6 +83,28 @@ onMounted(() => {
             skymap.core.lines.equatorial_jnow.visible = false;
             skymap.core.lines.azimuthal.visible = false;
         }
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    watch(() => props.showMilkyway, (value) => {
+
+        skymap.core.milkyway.visible = value;
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    watch(() => props.showAtmosphere, (value) => {
+
+        skymap.core.atmosphere.visible = value
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    watch(() => props.showConstellations, (value) => {
+
+        skymap.core.constellations.lines_visible = value;
+        skymap.core.constellations.labels_visible = value;
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -137,7 +171,7 @@ onMounted(() => {
                 /*----------------------------------------------------------------------------------------------------*/
             },
 
-        }).catch((e) => {
+        }).catch(() => {
 
             /* IGNORE */
         });

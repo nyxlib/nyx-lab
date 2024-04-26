@@ -23,7 +23,10 @@ const configStore = useConfigStore();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const state = reactive({
-    gridType: 'j2000',
+    frameType: 'j2000',
+    showMilkyWay: false,
+    showAtmosphere: false,
+    showConstellations: true,
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -44,11 +47,11 @@ onMounted(() => {
     <!--                                                                                                             -->
     <!-- *********************************************************************************************************** -->
 
-    <aladin-map class="h-100 w-100" :fov="2.8" :projection="'SIN'" :showLayersControl="true" :showCooGrid="state.gridType !== 'off'" :cooFrame="state.gridType" v-if="configStore.globals.skymap === 'aladin'" />
+    <aladin-map class="h-100 w-100" :fov="2.8" :projection="'SIN'" :showLayersControl="true" :showCooGrid="state.frameType !== 'off'" :cooFrame="state.frameType" v-if="configStore.globals.skymap === 'aladin'" />
 
     <!-- *********************************************************************************************************** -->
 
-    <sky-map :cooFrame="state.gridType" v-if="configStore.globals.skymap === 'stellarium'" />
+    <sky-map :frame="state.frameType"  :show-milkyway="state.showMilkyWay"  :show-atmosphere="state.showAtmosphere" :show-constellations="state.showConstellations" v-if="configStore.globals.skymap === 'stellarium'" />
 
     <!-- *********************************************************************************************************** -->
 
@@ -87,29 +90,50 @@ onMounted(() => {
                 <!-- *********************************************************************************************** -->
 
                 <div class="mb-3">
-                    <label class="form-label">Grid</label>
+                    <label class="form-label">Frame</label>
                     <div class="btn-group btn-group-sm w-100" role="group">
-                        <input class="btn-check" type="radio" name="B1F6FEA6" value="off" id="E8449C32" v-model="state.gridType" xxxxxxx="xxxxxxx" />
+                        <input class="btn-check" type="radio" name="B1F6FEA6" value="off" id="E8449C32" v-model="state.frameType" xxxxxxx="xxxxxxx" />
                         <label class="btn btn-outline-primary" for="E8449C32">Off</label>
 
-                        <input class="btn-check" type="radio" name="B1F6FEA6" value="j2000" id="A4D9F5DC" v-model="state.gridType" checked="checked" />
+                        <input class="btn-check" type="radio" name="B1F6FEA6" value="j2000" id="A4D9F5DC" v-model="state.frameType" checked="checked" />
                         <label class="btn btn-outline-primary" for="A4D9F5DC">J2000</label>
 
-                        <input class="btn-check" type="radio" name="B1F6FEA6" value="galactic" id="F2E74046" v-model="state.gridType" xxxxxxx="xxxxxxx" />
+                        <input class="btn-check" type="radio" name="B1F6FEA6" value="galactic" id="F2E74046" v-model="state.frameType" xxxxxxx="xxxxxxx" />
                         <label class="btn btn-outline-primary" for="F2E74046">Galactic</label>
                     </div>
                 </div>
 
+
+                <!-- *********************************************************************************************** -->
+
+                <hr />
+
                 <!-- *********************************************************************************************** -->
 
                 <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" role="switch" id="F8890F0C" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
+                    <input class="form-check-input" type="checkbox" role="switch" id="F8890F0C" v-model="state.showAtmosphere" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
                     <label class="form-check-label" for="F8890F0C">Show atmosphere</label>
                 </div>
 
                 <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" role="switch" id="D4841581" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
+                    <input class="form-check-input" type="checkbox" role="switch" id="D4841581" v-model="state.showConstellations" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
                     <label class="form-check-label" for="D4841581">Show constellations</label>
+                </div>
+
+                <!-- *********************************************************************************************** -->
+
+                <hr />
+
+                <!-- *********************************************************************************************** -->
+
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="D603EB7C" v-model="state.showMilkyWay" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
+                    <label class="form-check-label" for="D603EB7C">Show Milky Way</label>
+                </div>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" role="switch" id="FFDC77D0" v-model="state.showDeepSpaceObjects" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
+                    <label class="form-check-label" for="FFDC77D0">Show deep space objects</label>
                 </div>
 
                 <!-- *********************************************************************************************** -->
