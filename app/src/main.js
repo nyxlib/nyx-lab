@@ -13,6 +13,7 @@ import {setup} from 'vue-indi';
 import App from './App.vue';
 import router from './router';
 
+import dialog from './plugins/dialog';
 import input from './plugins/input';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -28,6 +29,7 @@ app.use(window.pinia);
 setup(app);
 
 app.use(router);
+app.use(dialog);
 app.use(input);
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -1,6 +1,8 @@
 // noinspection JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import {inject} from 'vue';
+
 import {defineStore} from 'pinia';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -84,16 +86,27 @@ const useConfigStore = defineStore('config', {
         /* CONFIG                                                                                                     */
         /*------------------------------------------------------------------------------------------------------------*/
 
+        init()
+        {
+            this.dialog = inject('dialog');
+
+            this.load();
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* CONFIG                                                                                                     */
+        /*------------------------------------------------------------------------------------------------------------*/
+
         import()
         {
-            alert('import TODO');
+            this.dialog.show('import TODO');
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         export()
         {
-            alert('export TODO');
+            this.dialog.show('export TODO');
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -105,10 +118,12 @@ const useConfigStore = defineStore('config', {
                 const config = JSON.parse(localStorage.getItem('indi-dashboard-config'));
 
                 this.globals = confDup(config, DEFAULT_GLOBALS);
+
+                this.dialog.success();
             }
             catch(e)
             {
-                /* IGNORE */
+                this.dialog.error(e);
             }
         },
 
@@ -121,10 +136,12 @@ const useConfigStore = defineStore('config', {
                 const config = confDup(this.globals, DEFAULT_GLOBALS);
 
                 localStorage.setItem('indi-dashboard-config', JSON.stringify(config));
+
+                this.dialog.success();
             }
             catch(e)
             {
-                /* IGNORE */
+                this.dialog.error(e);
             }
         },
 

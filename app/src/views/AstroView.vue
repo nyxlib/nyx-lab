@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, watch, onMounted} from 'vue';
+import {ref, watch, inject, onMounted} from 'vue';
 
 import {IndiDevices, NavTabs, TabPane} from 'vue-indi';
 
@@ -17,6 +17,10 @@ import useConfigStore from '../stores/config';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const configStore = useConfigStore();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const dialog = inject('dialog');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -43,9 +47,11 @@ const getLocation = () => {
             configStore.globals.lat = Number(position.coords.latitude.toFixed(4));
             configStore.globals.lon = Number(position.coords.longitude.toFixed(4));
 
+            dialog.success();
+
         }, (message) => {
 
-            alert(message);
+            dialog.error(message);
 
         }, {
             enableHighAccuracy: true,
