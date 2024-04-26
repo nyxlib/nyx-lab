@@ -51,7 +51,7 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <sky-map :frame="state.frameType"  :show-milkyway="state.showMilkyWay"  :show-atmosphere="state.showAtmosphere" :show-constellations="state.showConstellations" v-if="configStore.globals.skymap === 'stellarium'" />
+    <sky-map :frame="state.frameType" :show-milkyway="state.showMilkyWay" :show-atmosphere="state.showAtmosphere" :show-constellations="state.showConstellations" v-if="configStore.globals.skymap === 'stellarium'" />
 
     <!-- *********************************************************************************************************** -->
 
