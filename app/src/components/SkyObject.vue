@@ -386,7 +386,7 @@ onUnmounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="card mb-3">
+    <div class="shadow card mb-3">
         <div class="card-header d-flex">
 
             <span class="me-auto">{{state.names.join(', ')}}</span>

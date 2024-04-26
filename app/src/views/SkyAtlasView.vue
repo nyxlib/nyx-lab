@@ -266,12 +266,9 @@ onUnmounted(() => {
 
                 <!-- *********************************************************************************************** -->
 
-                <div>
-                    <ul>
-                        <li>NGC/IC catalogs: <a class="badge rounded-pill text-bg-secondary" href="https://github.com/mattiaverga/OpenNGC/" target="_blank" style="text-decoration: none;">OpenNCG</a></li>
-                        <li>Sky map rendering: <a class="badge rounded-pill text-bg-secondary" href="https://aladin.cds.unistra.fr/#AladinLite" target="_blank" style="text-decoration: none;">Aladin Lite</a></li>
-                    </ul>
-                </div>
+                <p>NGC/IC catalogs: <a class="badge rounded-pill text-bg-secondary" href="https://github.com/mattiaverga/OpenNGC/" target="_blank" style="text-decoration: none;">OpenNCG</a></p>
+
+                <p>Sky map rendering: <a class="badge rounded-pill text-bg-secondary" href="https://aladin.cds.unistra.fr/#AladinLite" target="_blank" style="text-decoration: none;">Aladin Lite</a></p>
 
                 <!-- *********************************************************************************************** -->
 

@@ -133,7 +133,7 @@ onMounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-3">
+                        <div class="shadow card mb-3">
                             <div class="card-header d-flex">
                                 Observatory
                                 <button class="btn btn-xs btn-primary ms-auto" type="button" @click="getLocation" v-if="!configStore.globals.latVariable && !configStore.globals.lonVariable">
@@ -186,7 +186,7 @@ onMounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-3">
+                        <div class="shadow card mb-0">
                             <div class="card-header">
                                 Sky quality
                             </div>
@@ -241,7 +241,7 @@ onMounted(() => {
                     </div>
                     <div class="col-md-6">
 
-                        <div class="rounded" style="height: 450px; width: 100%;" ref="mapEl"></div>
+                        <div class="rounded shadow" style="height: 450px; width: 100%;" ref="mapEl"></div>
 
                     </div>
                 </div>
@@ -257,7 +257,7 @@ onMounted(() => {
                 <div class="row">
                     <div class="col-md-6">
 
-                        <indi-devices :devices="configStore.globals.devices" />
+                        <indi-devices class="shadow" :devices="configStore.globals.devices" />
 
                     </div>
                     <div class="col-md-6">

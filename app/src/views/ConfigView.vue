@@ -55,7 +55,7 @@ const SKY_MAPS = [
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-3">
+                        <div class="shadow card">
                             <div class="card-header d-flex">
                                 <span class="me-auto">
                                     MQTT Broker
@@ -93,7 +93,7 @@ const SKY_MAPS = [
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-0">
+                        <div class="shadow card">
                             <div class="card-header d-flex">
                                 Node-RED
                             </div>
@@ -125,8 +125,8 @@ const SKY_MAPS = [
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-3">
-                            <div class="card-header d-flex">
+                        <div class="shadow card">
+                            <div class="card-header">
                                 Features
                             </div>
                             <div class="card-body">
@@ -210,8 +210,8 @@ const SKY_MAPS = [
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-3">
-                            <div class="card-header d-flex">
+                        <div class="shadow card">
+                            <div class="card-header">
                                 Extensions
                             </div>
                             <div class="card-body">
@@ -239,7 +239,7 @@ const SKY_MAPS = [
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-3">
+                        <div class="shadow card">
                             <div class="card-header">
                                 <i class="bi bi-cloud-moon-fill"></i> Weather widget
                             </div>
@@ -275,7 +275,7 @@ const SKY_MAPS = [
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="card mb-3">
+                        <div class="shadow card">
                             <div class="card-header">
                                 <i class="bi bi-stars"></i> Seeing widget
                             </div>
@@ -320,12 +320,12 @@ const SKY_MAPS = [
                 <div class="row">
                     <div class="col-md-6">
 
-                        <indi-variables v-if="state.show_indi" />
+                        <indi-variables class="shadow" v-if="state.show_indi" />
 
                     </div>
                     <div class="col-md-6">
 
-                        <indi-topology v-if="state.show_indi" />
+                        <indi-topology class="shadow" v-if="state.show_indi" />
 
                     </div>
                 </div>
