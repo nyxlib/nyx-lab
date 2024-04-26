@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, watch} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -21,6 +21,15 @@ import boldFont from '../assets/Roboto-Bold.ttf';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const configStore = useConfigStore();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const props = defineProps({
+    cooFrame: {
+        type: String,
+        default: 'j2000',
+    },
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -48,8 +57,26 @@ const select = () => {
 
 onMounted(() => {
 
-    try
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    watch(() => props.cooFrame, (value) => {
+
+        if(value === 'j2000')
         {
+            skymap.core.lines.equatorial_jnow.visible = true;
+            skymap.core.lines.azimuthal.visible = false;
+        }
+        else
+        {
+            skymap.core.lines.equatorial_jnow.visible = false;
+            skymap.core.lines.azimuthal.visible = false;
+        }
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    try
+    {
         PolluxSkyMap({
             wasmFile: PolluxSkyMapWASM,
             canvas: canvas.value,
@@ -91,6 +118,9 @@ onMounted(() => {
                 skymap.core.dsos.visible = true;
                 skymap.core.milkyway.visible = false;
 
+                skymap.core.lines.equatorial_jnow.visible = true;
+                skymap.core.lines.azimuthal.visible = false;
+
                 skymap.core.constellations.lines_visible = true;
                 skymap.core.constellations.labels_visible = true;
                 skymap.core.constellations.images_visible = false;
@@ -116,6 +146,8 @@ onMounted(() => {
     {
         /* IGNORE */
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
