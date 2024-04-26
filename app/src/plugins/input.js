@@ -74,6 +74,8 @@ export default {
 
                 button.className = 'btn';
 
+                button.type = 'button';
+
                 divEl.append(button);
 
                 /*----------------------------------------------------------------------------------------------------*/
