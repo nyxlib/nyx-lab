@@ -135,7 +135,7 @@ const SKY_MAPS = [
                                     <div class="col-md-4">
 
                                         <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableMonitoring" :true-value="true" :false-value="false">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableMonitoring" :true-value="true" :false-value="false" />
                                             <label class="form-check-label" for="A925CE04">Enable monitoring</label>
                                         </div>
 
@@ -167,7 +167,7 @@ const SKY_MAPS = [
                                     <div class="col-md-4">
 
                                         <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableSkyMap" :true-value="true" :false-value="false">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableSkyMap" :true-value="true" :false-value="false" />
                                             <label class="form-check-label" for="A925CE04">Enable sky map</label>
                                         </div>
 
@@ -191,12 +191,12 @@ const SKY_MAPS = [
                                 </div>
 
                                 <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="FF3DAE50" v-model="configStore.globals.enableSkyAtlas" :true-value="true" :false-value="false">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="FF3DAE50" v-model="configStore.globals.enableSkyAtlas" :true-value="true" :false-value="false" />
                                     <label class="form-check-label" for="FF3DAE50">Enable sky atlas</label>
                                 </div>
 
                                 <div class="form-check form-switch mb-0">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="A36C9DF3" v-model="configStore.globals.enableAstroSetup" :true-value="true" :false-value="false">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="A36C9DF3" v-model="configStore.globals.enableAstroSetup" :true-value="true" :false-value="false" />
                                     <label class="form-check-label" for="A36C9DF3">Enable astro setup</label>
                                 </div>
 

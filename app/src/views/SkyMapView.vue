@@ -1,11 +1,9 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {reactive, onMounted} from 'vue';
+import {ref, reactive} from 'vue';
 
-import {Offcanvas} from 'bootstrap';
-
-import 'bootstrap/js/src/offcanvas';
+import {Offcanvas} from 'bootstrap/dist/js/bootstrap.esm';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -23,6 +21,7 @@ const configStore = useConfigStore();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const state = reactive({
+    target: 'M45',
     frameType: 'j2000',
     showMilkyWay: false,
     showAtmosphere: false,
@@ -30,13 +29,19 @@ const state = reactive({
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* INITIALIZATION                                                                                                     */
+
+const offCanvasEl = ref(null);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onMounted(() => {
+const goto = (target) => {
 
-    new Offcanvas(document.getElementById('CD57B0D9'));
-});
+    state.target = target;
+
+    Offcanvas.getInstance(offCanvasEl.value).hide();
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -44,14 +49,14 @@ onMounted(() => {
 <template>
 
     <!-- *********************************************************************************************************** -->
-    <!--                                                                                                             -->
+    <!-- SKY MAP                                                                                                     -->
     <!-- *********************************************************************************************************** -->
 
-    <aladin-map class="h-100 w-100" :fov="2.8" :projection="'SIN'" :showLayersControl="true" :showCooGrid="state.frameType !== 'off'" :cooFrame="state.frameType" v-if="configStore.globals.skymap === 'aladin'" />
+    <aladin-map :fov="2.8" :target="state.target" :frame="state.frameType" v-if="configStore.globals.skymap === 'aladin'" />
 
     <!-- *********************************************************************************************************** -->
 
-    <sky-map :frame="state.frameType" :show-milkyway="state.showMilkyWay" :show-atmosphere="state.showAtmosphere" :show-constellations="state.showConstellations" v-if="configStore.globals.skymap === 'stellarium'" />
+    <sky-map :fov="2.8" :target="state.target" :frame="state.frameType" :show-milkyway="state.showMilkyWay" :show-atmosphere="state.showAtmosphere" :show-constellations="state.showConstellations" v-if="configStore.globals.skymap === 'stellarium'" />
 
     <!-- *********************************************************************************************************** -->
 
@@ -64,12 +69,22 @@ onMounted(() => {
     </div>
 
     <!-- *********************************************************************************************************** -->
-    <!--                                                                                                             -->
+    <!-- TOOLBAR                                                                                                     -->
+    <!-- *********************************************************************************************************** -->
+
+    <teleport to="#indi_toolbar">
+
+        <input class="form-control form-control-sm" type="text" placeholder="Object, coordinates" v-no-autocomplete @keyup.enter="(e) => goto(e.target.value)" />
+
+    </teleport>
+
+    <!-- *********************************************************************************************************** -->
+    <!-- OFF CANVAS                                                                                                  -->
     <!-- *********************************************************************************************************** -->
 
     <teleport to="body">
 
-        <div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="CD57B0D9">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="CD57B0D9" ref="offCanvasEl">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title">Sky map</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
@@ -78,14 +93,7 @@ onMounted(() => {
 
                 <!-- *********************************************************************************************** -->
 
-                <div class="mb-3">
-                    <label class="form-label" for="E005392A">Object name, coordinates</label>
-                    <input class="form-control form-control-sm" type="text" id="E005392A" placeholder="Object, coordinates" v-no-autocomplete />
-                </div>
-
-                <!-- *********************************************************************************************** -->
-
-                <br /><br />
+                <hr />
 
                 <!-- *********************************************************************************************** -->
 
@@ -97,6 +105,9 @@ onMounted(() => {
 
                         <input class="btn-check" type="radio" name="B1F6FEA6" value="j2000" id="A4D9F5DC" v-model="state.frameType" checked="checked" />
                         <label class="btn btn-outline-primary" for="A4D9F5DC">J2000</label>
+
+                        <input class="btn-check" type="radio" name="B1F6FEA6" value="j2000d" id="FB10046C" v-model="state.frameType" xxxxxxx="xxxxxxx" />
+                        <label class="btn btn-outline-primary" for="FB10046C">J2000d</label>
 
                         <input class="btn-check" type="radio" name="B1F6FEA6" value="galactic" id="F2E74046" v-model="state.frameType" xxxxxxx="xxxxxxx" />
                         <label class="btn btn-outline-primary" for="F2E74046">Galactic</label>
@@ -110,17 +121,17 @@ onMounted(() => {
                 <!-- *********************************************************************************************** -->
 
                 <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" role="switch" id="D603EB7C" v-model="state.showMilkyWay" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
+                    <input class="form-check-input" type="checkbox" role="switch" id="D603EB7C" v-model="state.showMilkyWay" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'" />
                     <label class="form-check-label" for="D603EB7C">Show Milky Way</label>
                 </div>
 
                 <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" role="switch" id="F8890F0C" v-model="state.showAtmosphere" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
+                    <input class="form-check-input" type="checkbox" role="switch" id="F8890F0C" v-model="state.showAtmosphere" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'" />
                     <label class="form-check-label" for="F8890F0C">Show atmosphere</label>
                 </div>
 
                 <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" role="switch" id="D4841581" v-model="state.showConstellations" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'">
+                    <input class="form-check-input" type="checkbox" role="switch" id="D4841581" v-model="state.showConstellations" :true-value="true" :false-value="false" :disabled="configStore.globals.skymap === 'aladin'" />
                     <label class="form-check-label" for="D4841581">Show constellations</label>
                 </div>
 

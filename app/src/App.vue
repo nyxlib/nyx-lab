@@ -6,7 +6,7 @@ import {ref, onMounted, onUnmounted} from 'vue';
 
 import {RouterView} from 'vue-router';
 
-import {Modal} from 'bootstrap';
+import {Modal} from 'bootstrap/dist/js/bootstrap.esm';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -160,7 +160,15 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <div class="d-flex ms-auto py-1">
+            <div class="d-flex ms-auto py-1" id="indi_toolbar">
+
+                <!-- DYNAMIC -->
+
+            </div>
+
+            <!-- *************************************************************************************************** -->
+
+            <div class="d-flex ms-2 py-1">
 
                 <button class="btn btn-sm btn-success me-0" type="button" v-if="indiStore.isConnected">
                     <i class="bi bi-lightning-charge"></i> connected
@@ -171,6 +179,8 @@ onUnmounted(() => {
                 </button>
 
             </div>
+
+            <!-- *************************************************************************************************** -->
 
             <div class="d-flex ms-2 py-1">
 
@@ -183,6 +193,8 @@ onUnmounted(() => {
                 </button>
 
             </div>
+
+            <!-- *************************************************************************************************** -->
 
             <div class="d-flex ms-2 py-1">
 
@@ -327,7 +339,7 @@ onUnmounted(() => {
 <style>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-@import url(./assets/app.scss);
+@import url(assets/app.css);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </style>

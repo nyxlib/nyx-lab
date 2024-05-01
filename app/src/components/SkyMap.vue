@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, onMounted, watch} from 'vue';
+import {ref, watch, onMounted} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -25,9 +25,20 @@ const configStore = useConfigStore();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
+    fov: {
+        type: Number,
+        default: 360,
+    },
+    target: {
+        type: String,
+        default: 'M45',
+    },
     frame: {
         type: String,
         default: 'j2000',
+        validator: (value) => {
+            return ['off', 'j2000', 'j2000d', 'galactic'].includes(value)
+        }
     },
     showMilkyway: {
         type: Boolean,
@@ -45,7 +56,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const canvas = ref(null);
+const canvasEl = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -71,17 +82,38 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    watch(() => props.target, (value) => {
+
+        alert(JSON.stringify(skymap.getObj(value)));
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     watch(() => props.frame, (value) => {
 
-        if(value === 'j2000')
+        /**/ if(value === 'j2000')
         {
-            skymap.core.lines.equatorial_jnow.visible = true;
-            skymap.core.lines.azimuthal.visible = false;
+            skymap.core.lines.j2000.visible = true;
+            skymap.core.lines.j2000d.visible = false;
+            skymap.core.lines.galactic.visible = false;
+        }
+        else if(value === 'j2000d')
+        {
+            skymap.core.lines.j2000.visible = false;
+            skymap.core.lines.j2000d.visible = true;
+            skymap.core.lines.galactic.visible = false;
+        }
+        else if(value === 'galactic')
+        {
+            skymap.core.lines.j2000.visible = false;
+            skymap.core.lines.j2000d.visible = false;
+            skymap.core.lines.galactic.visible = true;
         }
         else
         {
-            skymap.core.lines.equatorial_jnow.visible = false;
-            skymap.core.lines.azimuthal.visible = false;
+            skymap.core.lines.j2000.visible = false;
+            skymap.core.lines.j2000d.visible = false;
+            skymap.core.lines.galactic.visible = false;
         }
     });
 
@@ -113,7 +145,7 @@ onMounted(() => {
     {
         PolluxSkyMap({
             wasmFile: PolluxSkyMapWASM,
-            canvas: canvas.value,
+            canvas: canvasEl.value,
             translateFn: (domain, str) => {
 
                 return str;
@@ -152,8 +184,9 @@ onMounted(() => {
                 skymap.core.dsos.visible = true;
                 skymap.core.milkyway.visible = false;
 
-                skymap.core.lines.equatorial_jnow.visible = true;
-                skymap.core.lines.azimuthal.visible = false;
+                skymap.core.lines.j2000.visible = true;
+                skymap.core.lines.j2000d.visible = false;
+                skymap.core.lines.galactic.visible = false;
 
                 skymap.core.constellations.lines_visible = true;
                 skymap.core.constellations.labels_visible = true;
@@ -191,7 +224,7 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <canvas class="h-100 w-100" ref="canvas" @click="select"></canvas>
+    <canvas class="h-100 w-100" ref="canvasEl" @click="select"></canvas>
 
     <!-- *********************************************************************************************************** -->
 

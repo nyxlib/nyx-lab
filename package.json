@@ -4,9 +4,9 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "app-dev": "npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js dev",
-        "app-prod": "npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js build",
-        "app-preview": "npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js preview",
+        "app-dev": "npm i --update vue-indi && cd ./app/ && ../node_modules/vite/bin/vite.js dev",
+        "app-prod": "npm i --update vue-indi && cd ./app/ && ../node_modules/vite/bin/vite.js build",
+        "app-preview": "npm i --update vue-indi && cd ./app/ && ../node_modules/vite/bin/vite.js preview",
         "tauri-dev": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js dev",
         "tauri-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js build"
     },

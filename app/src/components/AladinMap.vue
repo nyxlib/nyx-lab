@@ -4,8 +4,6 @@
 
 import {ref, watch, onMounted} from 'vue';
 
-import * as uuid from 'uuid';
-
 import A from 'aladin-lite';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -21,147 +19,82 @@ const props = defineProps({
         type: String,
         default: 'M45',
     },
-    cooFrame: {
+    frame: {
         type: String,
-        default: 'equatorial',
-    },
-    projection: {
-        type: String,
-        default: 'MOL',
-    },
-    /**/
-    showFrame: {
-        type: Boolean,
-        default: false,
-    },
-    showCatalog: {
-        type: Boolean,
-        default: false,
-    },
-    showCooGrid: {
-        type: Boolean,
-        default: false,
-    },
-    showReticle: {
-        type: Boolean,
-        default: false,
-    },
-    showStatusBar: {
-        type: Boolean,
-        default: false,
-    },
-    showContextMenu: {
-        type: Boolean,
-        default: false,
-    },
-    showGotoControl: {
-        type: Boolean,
-        default: false,
-    },
-    showCooLocation: {
-        type: Boolean,
-        default: false,
-    },
-    showZoomControl: {
-        type: Boolean,
-        default: false,
-    },
-    showShareControl: {
-        type: Boolean,
-        default: false,
-    },
-    showLayersControl: {
-        type: Boolean,
-        default: false,
-    },
-    showCooGridControl: {
-        type: Boolean,
-        default: false,
-    },
-    showSettingsControl: {
-        type: Boolean,
-        default: false,
-    },
-    showFullscreenControl: {
-        type: Boolean,
-        default: false,
-    },
-    showProjectionControl: {
-        type: Boolean,
-        default: false,
-    },
-    showSimbadPointerControl: {
-        type: Boolean,
-        default: false,
+        default: 'j2000',
+        validator: (value) => {
+            return ['off', 'j2000', 'j2000d', 'galactic'].includes(value)
+        }
     },
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const mapEl = ref(null);
+const divEl = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let map = null;
+let skymap = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onMounted(async () => {
+onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    watch(() => props.showCooGrid, (value) => {
+    watch(() => props.target, (value) => {
 
-        if(value) {
-            map.showCooGrid();
+        skymap.gotoObject(value);
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    watch(() => props.frame, (value) => {
+
+        if(value !== 'off')
+        {
+            skymap.setFrame(value);
+
+            skymap.showCooGrid();
         }
-        else {
-            map.hideCooGrid();
+        else
+        {
+            skymap.hideCooGrid();
         }
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    watch(() => props.cooFrame, (value) => {
-
-        map.setFrame(value);
-    });
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(mapEl.value.clientHeight === 0)
+    if(divEl.value.clientHeight === 0)
     {
-        mapEl.value.style.height = `${3.0 * mapEl.value.clientWidth / 4.0}px`;
+        divEl.value.style.height = `${3.0 * divEl.value.clientWidth / 4.0}px`;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     A.init.then(() => {
 
-        map = A.aladin(`#${mapEl.value.id}`, {
+        skymap = A.aladin(divEl.value, {
+            log: false,
             fov: props.fov,
-            target: props.target,
-            cooFrame: props.cooFrame,
-            projection: props.projection,
+            projection: 'SIN',
+            cooFrame: props.frame,
             /**/
-            showFrame: props.showFrame,
-            showCatalog: props.showCatalog,
-            showCooGrid: props.showCooGrid,
-            showReticle: props.showReticle,
-            showStatusBar: props.showStatusBar,
-            showContextMenu: props.showContextMenu,
-            showGotoControl: props.showGotoControl,
-            showCooLocation: props.showCooLocation,
-            showZoomControl: props.showZoomControl,
-            showShareControl: props.showShareControl,
-            showLayersControl: props.showLayersControl,
-            showCooGridControl: props.showCooGridControl,
-            showSettingsControl: props.showSettingsControl,
-            showFullscreenControl: props.showFullscreenControl,
-            showProjectionControl: props.showProjectionControl,
-            showSimbadPointerControl: props.showSimbadPointerControl,
+            target: props.target,
+            /**/
+            showFov: false,
+            showFrame: false,
+            showReticle: false,
+            showStatusBar: false,
+            showCooLocation: false,
+            showZoomControl: false,
+            showFullscreenControl: false,
+            showProjectionControl: false,
+            /**/
+            showCooGrid: true,
+            showLayersControl: true,
             /**/
             gridOptions: {
                 color: '#FF0000',
@@ -180,19 +113,8 @@ onMounted(async () => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="border-0" :id="`A${uuid.v4().substring(0, 8)}`" ref="mapEl"></div>
+    <div class="h-100 w-100" ref="divEl"></div>
 
     <!-- *********************************************************************************************************** -->
 
 </template>
-
-<style>
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.aladin-tooltip {
-
-    display: none;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-</style>

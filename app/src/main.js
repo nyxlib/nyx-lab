@@ -4,7 +4,7 @@ import {createPinia} from 'pinia';
 
 import {createApp} from 'vue';
 
-import {Tooltip} from 'bootstrap';
+import {Tooltip} from 'bootstrap/dist/js/bootstrap.esm';
 
 import {setup} from 'vue-indi';
 

@@ -17,11 +17,16 @@ export default defineConfig({
                 chunkFileNames: 'chunks/[hash].js',
                 assetFileNames: 'assets/[hash].[ext]',
             }
-        },
+        }
     },
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
-        },
+        }
+    },
+    server: {
+        fs: {
+            allow: ['../..']
+        }
     }
 });
