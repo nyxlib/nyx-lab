@@ -13,7 +13,7 @@ import Chart from 'chart.js/auto';
 import useConfigStore from '../stores/config';
 
 import Splitter from '../components/Splitter.vue';
-import SkyObject from '../components/SkyObject.vue';
+import ObjectInfo from '../components/ObjectInfo.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -282,7 +282,7 @@ onUnmounted(() => {
 
             <div class="p-3 d-flex flex-column-reverse">
 
-                <sky-object v-for="(object, index) in state.objects" :key="index" :object-name="object.objectName" :observation-date="object.observationDate"></sky-object>
+                <object-info v-for="(object, index) in state.objects" :key="index" :object-name="object.objectName" :observation-date="object.observationDate"></object-info>
 
             </div>
 

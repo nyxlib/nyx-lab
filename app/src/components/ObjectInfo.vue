@@ -16,7 +16,7 @@ import * as uuid from 'uuid';
 
 import useConfigStore from '../stores/config';
 
-import AladinMap from './AladinMap.vue';
+import ObjectPic from './ObjectPic.vue';
 
 import NGC from '../catalogs/NGC.json';
 import HIP from '../catalogs/HIP.json';
@@ -533,7 +533,7 @@ onUnmounted(() => {
 
                         <tab-pane title="Image" @shown="state.show_image = true">
 
-                            <aladin-map class="w-100" :fov="10.0" :target="objectName" :projection="'SIN'" :show-zoom-control="true" v-if="state.show_image" />
+                            <object-pic class="w-100" :target="objectName" v-if="state.show_image" />
 
                         </tab-pane>
 
