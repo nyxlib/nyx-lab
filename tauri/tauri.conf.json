@@ -36,8 +36,8 @@
     "bundle": {
         "active": true,
         "targets": [
-            "deb",
             "app",
+            "appimage",
             "updater"
         ],
         "icon": [
