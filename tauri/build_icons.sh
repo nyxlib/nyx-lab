@@ -8,14 +8,6 @@ insvg=icon.svg
 
 ########################################################################################################################
 
-rm -rf ./icons/
-mkdir ./icons/
-
-rm -rf ./tmp.iconset/
-mkdir ./tmp.iconset/
-
-########################################################################################################################
-
 inkscape --export-filename=./icons/icon.png -w 512 -h 512 $insvg
 
 inkscape --export-filename=./icons/StoreLogo.png -w 50 -h 50 $insvg
@@ -39,6 +31,9 @@ inkscape --export-filename=./icons/Square310x310Logo.png -w 310 -h 310 $insvg
 convert ./icons/128x128.png ./icons/icon.ico
 
 ########################################################################################################################
+
+rm -rf ./tmp.iconset/
+mkdir ./tmp.iconset/
 
 for sz in 16 32 128 256 512
 do
