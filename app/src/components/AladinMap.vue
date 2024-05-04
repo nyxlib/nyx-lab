@@ -89,12 +89,13 @@ onMounted(() => {
             showReticle: false,
             showStatusBar: false,
             showCooLocation: false,
-            showZoomControl: false,
             showFullscreenControl: false,
             showProjectionControl: false,
             /**/
             showCooGrid: true,
+            showZoomControl: true,
             showLayersControl: true,
+            showSimbadPointerControl: true,
             /**/
             gridOptions: {
                 color: '#FF0000',
@@ -118,3 +119,23 @@ onMounted(() => {
     <!-- *********************************************************************************************************** -->
 
 </template>
+
+<style>
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.aladin-stack-control {
+
+    top: 0.2rem;
+    left: 0.2rem;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.aladin-simbadPointer-control {
+
+    top: 0.2rem;
+    left: 2.6rem;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+</style>

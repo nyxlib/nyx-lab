@@ -62,7 +62,7 @@ const goto = (target) => {
 
     <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
 
-        <button class="btn btn-dark opacity-75" type="button" data-bs-toggle="offcanvas" data-bs-target="#CD57B0D9">
+        <button class="btn btn-dark border border-primary opacity-75" type="button" data-bs-toggle="offcanvas" data-bs-target="#CD57B0D9">
             <i class="bi bi-three-dots"></i>
         </button>
 
@@ -149,21 +149,3 @@ const goto = (target) => {
     <!-- *********************************************************************************************************** -->
 
 </template>
-
-<style>
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.aladin-btn {
-
-    border: none;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.aladin-stack-control {
-
-    top: 0.2rem;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-</style>

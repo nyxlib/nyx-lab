@@ -23,7 +23,7 @@ const router = createRouter({
             component: () => import('./views/SkyMapView.vue'),
         },
         {
-            path: '/sky-atlas/',
+            path: '/sky-atlas/:target?',
             name: 'sky-atlas',
             component: () => import('./views/SkyAtlasView.vue'),
         },

@@ -55,6 +55,8 @@ const state = reactive({
     redshift: -999.0,
     b_mag: -999.0,
     v_mag: -999.0,
+    r_mag: -999.0,
+    i_mag: -999.0,
     j_mag: -999.0,
     h_mag: -999.0,
     k_mag: -999.0,
@@ -170,6 +172,114 @@ const equatorialToGalactic = (α, ẟ) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const SIMBAD_REGEXPS = {
+    redshift: /Redshift:\s*([+-]?\d*\.?\d+)/,
+    coords: /Coordinates\(ICRS,ep=J2000,eq=2000\):\s*(\d+)\s+(\d+)\s+(\d+(?:\.\d+)?)\s+([+-]?\d+)\s+(\d+)\s+(\d+(?:\.\d+)?)/,
+    galCoord: /Coordinates\(Gal,ep=J2000,eq=2000\):\s*([+-]?\d+(?:\.\d+)?)\s+([+-]?\d+(?:\.\d+)?)/,
+    angularSize: /Angular size:\s*(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)/,
+    fluxB: /Flux B :\s*(\d+(?:\.\d+)?)/,
+    fluxV: /Flux V :\s*(\d+(?:\.\d+)?)/,
+    fluxR: /Flux R :\s*(\d+(?:\.\d+)?)/,
+    fluxI: /Flux I :\s*(\d+(?:\.\d+)?)/,
+    fluxJ: /Flux J :\s*(\d+(?:\.\d+)?)/,
+    fluxH: /Flux H :\s*(\d+(?:\.\d+)?)/,
+    fluxK: /Flux K :\s*(\d+(?:\.\d+)?)/,
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const loadSIMBAD = () => {
+
+    fetch(`http://simbad.u-strasbg.fr/simbad/sim-id?Ident=${encodeURIComponent(props.objectName)}&output.format=ASCII`).then(response => response.text())
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        .then((data) => {
+
+            //console.log(data);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            state.names = [props.objectName];
+
+            const redshift = data.match(SIMBAD_REGEXPS.redshift);
+            if(redshift) {
+                state.redshift = Number(Number(redshift[1]).toFixed(2));
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            const coords = data.match(SIMBAD_REGEXPS.coords);
+            if(coords) {
+                state.ra = Number(coords[1]) * 15.0 + Number(coords[2]) * 15.0 / 60.0 + Number(coords[2]) * 15.0 / 3600.0;
+                state.dec = Number(coords[3]) * 1.00 + Number(coords[4]) * 1.00 / 60.0 + Number(coords[5]) * 1.00 / 3600.0;
+            }
+
+            const galCoords = data.match(SIMBAD_REGEXPS.galCoord);
+            if(galCoords) {
+                state.l = Number(galCoords[1]);
+                state.b = Number(galCoords[2]);
+            }
+
+            const angularSize = data.match(SIMBAD_REGEXPS.angularSize);
+            if(angularSize) {
+                state.min_ax = Number(Number(angularSize[2]).toFixed(2));
+                state.maj_ax = Number(Number(angularSize[1]).toFixed(2));
+                state.pos_ang = Number(Number(angularSize[3]).toFixed(2));
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            const fluxB = data.match(SIMBAD_REGEXPS.fluxB);
+            if(fluxB) {
+                state.b_mag = Number(Number(fluxB[1]).toFixed(2));
+            }
+
+            const fluxV = data.match(SIMBAD_REGEXPS.fluxV);
+            if(fluxV) {
+                state.v_mag = Number(Number(fluxV[1]).toFixed(2));
+            }
+
+            const fluxR = data.match(SIMBAD_REGEXPS.fluxR);
+            if(fluxR) {
+                state.r_mag = Number(Number(fluxR[1]).toFixed(2));
+            }
+
+            const fluxI = data.match(SIMBAD_REGEXPS.fluxI);
+            if(fluxI) {
+                state.i_mag = Number(Number(fluxI[1]).toFixed(2));
+            }
+
+            const fluxJ = data.match(SIMBAD_REGEXPS.fluxJ);
+            if(fluxJ) {
+                state.j_mag = Number(Number(fluxJ[1]).toFixed(2));
+            }
+
+            const fluxH = data.match(SIMBAD_REGEXPS.fluxH);
+            if(fluxH) {
+                state.h_mag = Number(Number(fluxH[1]).toFixed(2));
+            }
+
+            const fluxK = data.match(SIMBAD_REGEXPS.fluxK);
+            if(fluxK) {
+                state.k_mag = Number(Number(fluxK[1]).toFixed(2));
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        })
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        .catch(() => {
+
+        })
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    ;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const loadNGC = () => {
 
     if(props.objectName in NGC.table)
@@ -251,7 +361,7 @@ const update = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(loadNGC() || loadHIP())
+    if(loadNGC() || loadHIP() || loadSIMBAD())
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -497,22 +607,26 @@ onUnmounted(() => {
 
                     <table class="table table-sm w-100">
                         <thead>
-                            <tr>
-                                <th style="width: 20%;">B</th>
-                                <th style="width: 20%;">V</th>
-                                <th style="width: 20%;">J</th>
-                                <th style="width: 20%;">H</th>
-                                <th style="width: 20%;">K</th>
-                            </tr>
+                        <tr>
+                            <th style="width: 14.2857%;">B <i class="bi bi-circle-fill" style="color: rgb(0,0,255);"></i></th>
+                            <th style="width: 14.2857%;">V <i class="bi bi-circle-fill" style="color: rgb(0,128,255);"></i></th>
+                            <th style="width: 14.2857%;">R <i class="bi bi-circle-fill" style="color: rgb(132,198,41);"></i></th>
+                            <th style="width: 14.2857%;">I <i class="bi bi-circle-fill" style="color: rgb(255,222,0);"></i></th>
+                            <th style="width: 14.2857%;">J <i class="bi bi-circle-fill" style="color: rgb(255,0,0);"></i></th>
+                            <th style="width: 14.2857%;">H <i class="bi bi-circle-fill" style="color: rgb(220,0,0);"></i></th>
+                            <th style="width: 14.2857%;">K <i class="bi bi-circle-fill" style="color: rgb(165,0,8);"></i></th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td v-if="state.b_mag !== -999.0">{{state.b_mag}}</td><td v-else>Ø</td>
-                                <td v-if="state.v_mag !== -999.0">{{state.v_mag}}</td><td v-else>Ø</td>
-                                <td v-if="state.j_mag !== -999.0">{{state.j_mag}}</td><td v-else>Ø</td>
-                                <td v-if="state.h_mag !== -999.0">{{state.h_mag}}</td><td v-else>Ø</td>
-                                <td v-if="state.k_mag !== -999.0">{{state.k_mag}}</td><td v-else>Ø</td>
-                            </tr>
+                        <tr>
+                            <td v-if="state.b_mag !== -999.0">{{state.b_mag}}</td><td v-else>Ø</td>
+                            <td v-if="state.v_mag !== -999.0">{{state.v_mag}}</td><td v-else>Ø</td>
+                            <td v-if="state.r_mag !== -999.0">{{state.r_mag}}</td><td v-else>Ø</td>
+                            <td v-if="state.i_mag !== -999.0">{{state.i_mag}}</td><td v-else>Ø</td>
+                            <td v-if="state.j_mag !== -999.0">{{state.j_mag}}</td><td v-else>Ø</td>
+                            <td v-if="state.h_mag !== -999.0">{{state.h_mag}}</td><td v-else>Ø</td>
+                            <td v-if="state.k_mag !== -999.0">{{state.k_mag}}</td><td v-else>Ø</td>
+                        </tr>
                         </tbody>
                     </table>
 
