@@ -130,7 +130,9 @@ function degreesToDMSString(degrees)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const N_MS_PER_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
+const N_POINTS = 24 * 20;
+
+const N_MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -153,9 +155,9 @@ const update_step2 = () => {
     const objectAlt = [];
     const objectAz = [];
 
-    for(let i = 0; i < 24 * 20; i++)
+    for(let i = 0; i < N_POINTS; i++)
     {
-        const date = new Date(timestamp + (i * N_MS_PER_DAY) / (24.0 * 20.0 - 1.0));
+        const date = new Date(timestamp + (i * N_MS_PER_DAY) / (N_POINTS - 1.0));
 
         const objectAltAz = ae.Horizon(date, observer, state.ra, state.dec, 'normal');
 
@@ -168,8 +170,9 @@ const update_step2 = () => {
     const scales = {};
 
     scales[`position_x_${id}`] = {
-        min: 0,
-        max: 24 * 20,
+        ticks: {
+            maxTicksLimit: 25,
+        },
         title: {
             display: true,
             text: `Time (UTC+?) - ${props.observationDate}`,
@@ -207,7 +210,7 @@ const update_step2 = () => {
     chart = new Chart(position.value, {
         type: 'line',
         data: {
-            labels: Array.from({ length: 24 * 20}, (_, i) => ((24.0 * i) / (24.0 * 20.0 - 1.0)).toFixed(0)),
+            labels: Array.from({ length: N_POINTS}, (_, i) => ((24.0 * i) / (N_POINTS - 1.0)).toFixed(0)),
             datasets: [{
                 label: 'Alt.',
                 borderWidth: 2,
