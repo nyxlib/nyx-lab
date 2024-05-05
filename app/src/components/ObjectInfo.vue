@@ -1,4 +1,4 @@
-<!--suppress JSUnresolvedReference, NonAsciiCharacters, JSNonASCIINames -->
+
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -16,10 +16,11 @@ import * as uuid from 'uuid';
 
 import useConfigStore from '../stores/config';
 
-import ObjectPic from './ObjectPic.vue';
+import getHIP from '../catalogs/catalog_hip';
+import getNGC from '../catalogs/catalog_ngc';
+import getSIM from '../catalogs/catalog_sim';
 
-import NGC from '../catalogs/NGC.json';
-import HIP from '../catalogs/HIP.json';
+import ObjectPic from './ObjectPic.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -129,345 +130,126 @@ function degreesToDMSString(degrees)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const DEG_TO_RAD = Math.PI / 180.0;
-const RAD_TO_DEC = 180.0 / Math.PI;
+const N_MS_PER_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
 
-const A_NGP = 192.85948 * DEG_TO_RAD;
-const Δ_NGP = 27.12825 * DEG_TO_RAD;
-const L_NCP = 122.93314 * DEG_TO_RAD;
-
-const equatorialToGalactic = (α, ẟ) => {
+const update_step2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    α *= DEG_TO_RAD;
-    ẟ *= DEG_TO_RAD;
+    const id = uuid.v4();
+
+    const timestamp = new Date(props.observationDate).getTime();
+
+    const observer = new ae.Observer(
+        configStore.globals.lat,
+        configStore.globals.lon,
+        configStore.globals.alt
+    );
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const sinẟ = Math.sin(ẟ);
-    const cosẟ = Math.cos(ẟ);
+    const objectAlt = [];
+    const objectAz = [];
 
-    const sinαNGP = Math.sin(Δ_NGP);
-    const cosαNGP = Math.cos(Δ_NGP);
+    for(let i = 0; i < 1000; i++)
+    {
+        const date = new Date(timestamp + N_MS_PER_DAY * (i / 1000.0));
 
-    const sinααNGP = Math.sin(α - A_NGP);
-    const cosααNGP = Math.cos(α - A_NGP);
+        const objectAltAz = ae.Horizon(date, observer, state.ra, state.dec, 'normal');
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const ℓ = L_NCP - Math.atan2(cosẟ * sinααNGP, sinẟ * cosαNGP - cosẟ * sinαNGP * cosααNGP);
-
-    const 𝑏 = Math.asin(sinẟ * sinαNGP + cosẟ * cosαNGP * cosααNGP);
+        objectAlt.push(objectAltAz.altitude);
+        objectAz.push(objectAltAz.azimuth);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return {
-        l: (ℓ * RAD_TO_DEC + 360) % 360,
-        b: (𝑏 * RAD_TO_DEC + 360) % 360,
+    const labels = Array.from({length: 1000}, (_, i) => (24.0 * (i / 1000.0)).toFixed(0));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const scales = {};
+
+    scales[`position_x_${id}`] = {
+        title: {
+            display: true,
+            text: `Time (UTC+?) - ${props.observationDate}`,
+        },
+    };
+
+    scales[`position_y1_${id}`] = {
+        position: 'left',
+        min: -90,
+        max: +90,
+        ticks: {
+            stepSize: 10,
+        },
+        title: {
+            display: true,
+            text: 'Alt. (deg)',
+        },
+    };
+
+    scales[`position_y2_${id}`] = {
+        position: 'right',
+        min: 0,
+        max: 360,
+        ticks: {
+            stepSize: 20,
+        },
+        title: {
+            display: true,
+            text: 'Az. (deg)',
+        },
     };
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    chart = new Chart(position.value, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Alt.',
+                borderWidth: 2,
+                pointRadius: 0,
+                data: objectAlt,
+                xAxisID: `position_x_${id}`,
+                yAxisID: `position_y1_${id}`,
+            }, {
+                label: 'Az.',
+                borderWidth: 2,
+                pointRadius: 0,
+                data: objectAz,
+                xAxisID: `position_x_${id}`,
+                yAxisID: `position_y2_${id}`,
+            }],
+        },
+        options: {
+            animation: {
+                duration: 0,
+            },
+            scales: scales,
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 1.75,
+        },
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-const SIMBAD_REGEXPS = {
-    redshift: /Redshift:\s*([+-]?\d*\.?\d+)/,
-    coords: /Coordinates\(ICRS,ep=J2000,eq=2000\):\s*(\d+)\s+(\d+)\s+(\d+(?:\.\d+)?)\s+([+-]?\d+)\s+(\d+)\s+(\d+(?:\.\d+)?)/,
-    galCoord: /Coordinates\(Gal,ep=J2000,eq=2000\):\s*([+-]?\d+(?:\.\d+)?)\s+([+-]?\d+(?:\.\d+)?)/,
-    angularSize: /Angular size:\s*(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)/,
-    fluxB: /Flux B :\s*(\d+(?:\.\d+)?)/,
-    fluxV: /Flux V :\s*(\d+(?:\.\d+)?)/,
-    fluxR: /Flux R :\s*(\d+(?:\.\d+)?)/,
-    fluxI: /Flux I :\s*(\d+(?:\.\d+)?)/,
-    fluxJ: /Flux J :\s*(\d+(?:\.\d+)?)/,
-    fluxH: /Flux H :\s*(\d+(?:\.\d+)?)/,
-    fluxK: /Flux K :\s*(\d+(?:\.\d+)?)/,
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const loadSIMBAD = () => {
-
-    fetch(`http://simbad.u-strasbg.fr/simbad/sim-id?Ident=${encodeURIComponent(props.objectName)}&output.format=ASCII`).then(response => response.text())
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        .then((data) => {
-
-            //console.log(data);
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            state.names = [props.objectName];
-
-            const redshift = data.match(SIMBAD_REGEXPS.redshift);
-            if(redshift) {
-                state.redshift = Number(Number(redshift[1]).toFixed(2));
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            const coords = data.match(SIMBAD_REGEXPS.coords);
-            if(coords) {
-                state.ra = Number(coords[1]) * 15.0 + Number(coords[2]) * 15.0 / 60.0 + Number(coords[2]) * 15.0 / 3600.0;
-                state.dec = Number(coords[3]) * 1.00 + Number(coords[4]) * 1.00 / 60.0 + Number(coords[5]) * 1.00 / 3600.0;
-            }
-
-            const galCoords = data.match(SIMBAD_REGEXPS.galCoord);
-            if(galCoords) {
-                state.l = Number(galCoords[1]);
-                state.b = Number(galCoords[2]);
-            }
-
-            const angularSize = data.match(SIMBAD_REGEXPS.angularSize);
-            if(angularSize) {
-                state.min_ax = Number(Number(angularSize[2]).toFixed(2));
-                state.maj_ax = Number(Number(angularSize[1]).toFixed(2));
-                state.pos_ang = Number(Number(angularSize[3]).toFixed(2));
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            const fluxB = data.match(SIMBAD_REGEXPS.fluxB);
-            if(fluxB) {
-                state.b_mag = Number(Number(fluxB[1]).toFixed(2));
-            }
-
-            const fluxV = data.match(SIMBAD_REGEXPS.fluxV);
-            if(fluxV) {
-                state.v_mag = Number(Number(fluxV[1]).toFixed(2));
-            }
-
-            const fluxR = data.match(SIMBAD_REGEXPS.fluxR);
-            if(fluxR) {
-                state.r_mag = Number(Number(fluxR[1]).toFixed(2));
-            }
-
-            const fluxI = data.match(SIMBAD_REGEXPS.fluxI);
-            if(fluxI) {
-                state.i_mag = Number(Number(fluxI[1]).toFixed(2));
-            }
-
-            const fluxJ = data.match(SIMBAD_REGEXPS.fluxJ);
-            if(fluxJ) {
-                state.j_mag = Number(Number(fluxJ[1]).toFixed(2));
-            }
-
-            const fluxH = data.match(SIMBAD_REGEXPS.fluxH);
-            if(fluxH) {
-                state.h_mag = Number(Number(fluxH[1]).toFixed(2));
-            }
-
-            const fluxK = data.match(SIMBAD_REGEXPS.fluxK);
-            if(fluxK) {
-                state.k_mag = Number(Number(fluxK[1]).toFixed(2));
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        })
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        .catch(() => {
-
-        })
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    ;
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const loadNGC = () => {
-
-    if(props.objectName in NGC.table)
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        const index = NGC.table[props.objectName];
-
-        const lb = equatorialToGalactic(
-            NGC.ra[index],
-            NGC.dec[index]
-        );
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        state.names = NGC.names[index].split(',');
-        state.type = NGC.type[index];
-        state.ra = NGC.ra[index];
-        state.dec = NGC.dec[index];
-        state.l = lb.l;
-        state.b = lb.b;
-        state.min_ax = NGC.min_ax[index];
-        state.maj_ax = NGC.maj_ax[index];
-        state.pos_ang = NGC.pos_ang[index];
-        state.redshift = NGC.redshift[index];
-        state.b_mag = NGC.b_mag[index];
-        state.v_mag = NGC.v_mag[index];
-        state.j_mag = NGC.j_mag[index];
-        state.h_mag = NGC.h_mag[index];
-        state.k_mag = NGC.k_mag[index];
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        return true;
-    }
-
-    return false;
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const loadHIP = () => {
-
-    if(props.objectName in HIP.table)
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        const index = HIP.table[props.objectName];
-
-        const lb = equatorialToGalactic(
-            HIP.ra[index],
-            HIP.dec[index]
-        );
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        state.names = [props.objectName];
-        state.type = HIP.type[index];
-        state.ra = HIP.ra[index];
-        state.dec = HIP.dec[index];
-        state.l = lb.l;
-        state.b = lb.b;
-        state.b_mag = HIP.b_mag[index];
-        state.v_mag = HIP.v_mag[index];
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        return true;
-    }
-
-    return false;
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const N_MS_PER_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
 
 const update = () => {
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+    getNGC(props.objectName, state).then(update_step2).catch(() => {
+        getHIP(props.objectName, state).then(update_step2).catch(() => {
+            getSIM(props.objectName, state).then(update_step2).catch(() => {
 
-    if(loadNGC() || loadHIP() || loadSIMBAD())
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        const id = uuid.v4();
-
-        const timestamp = new Date(props.observationDate).getTime();
-
-        const observer = new ae.Observer(
-            configStore.globals.lat,
-            configStore.globals.lon,
-            configStore.globals.alt
-        );
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        const objectAlt = [];
-        const objectAz = [];
-
-        for(let i = 0; i < 1000; i++)
-        {
-            const date = new Date(timestamp + N_MS_PER_DAY * (i / 1000.0));
-
-            const objectAltAz = ae.Horizon(date, observer, state.ra, state.dec, 'normal');
-
-            objectAlt.push(objectAltAz.altitude);
-            objectAz.push(objectAltAz.azimuth);
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        const labels = Array.from({length: 1000}, (_, i) => (24.0 * (i / 1000.0)).toFixed(0));
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        const scales = {};
-
-        scales[`position_x_${id}`] = {
-            title: {
-                display: true,
-                text: `Time (UTC+?) - ${props.observationDate}`,
-            },
-        };
-
-        scales[`position_y1_${id}`] = {
-            position: 'left',
-            min: -90,
-            max: +90,
-            ticks: {
-                stepSize: 10,
-            },
-            title: {
-                display: true,
-                text: 'Alt. (deg)',
-            },
-        };
-
-        scales[`position_y2_${id}`] = {
-            position: 'right',
-            min: 0,
-            max: 360,
-            ticks: {
-                stepSize: 20,
-            },
-            title: {
-                display: true,
-                text: 'Az. (deg)',
-            },
-        };
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        chart = new Chart(position.value, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Alt.',
-                    borderWidth: 2,
-                    pointRadius: 0,
-                    data: objectAlt,
-                    xAxisID: `position_x_${id}`,
-                    yAxisID: `position_y1_${id}`,
-                }, {
-                    label: 'Az.',
-                    borderWidth: 2,
-                    pointRadius: 0,
-                    data: objectAz,
-                    xAxisID: `position_x_${id}`,
-                    yAxisID: `position_y2_${id}`,
-                }],
-            },
-            options: {
-                animation: {
-                    duration: 0,
-                },
-                scales: scales,
-                responsive: true,
-                maintainAspectRatio: true,
-                aspectRatio: 1.75,
-            },
-        });
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
+                /* TODO */
+            })
+        })
+    });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -513,9 +295,7 @@ onUnmounted(() => {
 
                     <!--*********************************************************************************************-->
 
-                    <p v-if="state.type === 'G'">Type: {{state.type}}, redshift: {{state.redshift}}</p>
-
-                    <p v-if="state.type !== 'G'">Type: {{state.type}}</p>
+                    <p>Type: {{state.type}}, redshift: {{state.redshift}}</p>
 
                     <hr />
 
