@@ -23,6 +23,11 @@ const getSIM = (objectName, data) => {
 
     return new Promise((resolve, reject) => {
 
+        if(objectName.startsWith('@'))
+        {
+            objectName = objectName.substring(1);
+        }
+
         fetch(`https://simbad.u-strasbg.fr/simbad/sim-id?Ident=${encodeURIComponent(objectName)}&output.format=ASCII`).then(response => response.text())
 
             /*--------------------------------------------------------------------------------------------------------*/

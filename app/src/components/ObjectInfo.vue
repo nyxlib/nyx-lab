@@ -323,7 +323,7 @@ onUnmounted(() => {
 
                     <!--*********************************************************************************************-->
 
-                    <p>Type: <span class="badge rounded-pill bg-primary" v-for="type in state.types">{{type}}</span>, redshift: {{state.redshift}}</p>
+                    <p>Type: <span class="badge rounded-pill bg-secondary" v-for="type in state.types">{{type}}</span>, redshift: {{state.redshift}}</p>
 
                     <hr />
 

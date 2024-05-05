@@ -2,6 +2,7 @@
 ########################################################################################################################
 
 import os
+import re
 import sys
 import json
 import math
@@ -41,6 +42,9 @@ def generate(src_fname):
     k_mag_list = []
     surf_br_list = []
 
+    IC_RE = re.compile('^IC0*')
+    NGC_RE = re.compile('^NGC0*')
+
     for i, obj in tqdm.tqdm(pd.read_csv(src_fname, sep = ';', dtype = {'Name': str, 'Type': str, 'M': 'Int32'}).iterrows()):
 
         ####################################################################################################################
@@ -57,12 +61,22 @@ def generate(src_fname):
         ##
 
         if f'M{obj["M"]}' != 'M<NA>':
+            name = f'M{obj["M"]}'
+            table[name] = i
+            names.append(name)
 
-            table[f'M{obj["M"]}'] = i
-            names.append(f'M{obj["M"]}')
+        if   obj['Name'].startswith('IC'):
+            name = IC_RE.sub('IC', obj['Name'])
+            table[name] = i
+            names.append(name)
 
-        table[obj['Name']] = i
-        names.append(obj['Name'])
+        elif obj['Name'].startswith('NGC'):
+            name = NGC_RE.sub('NGC', obj['Name'])
+            table[name] = i
+            names.append(name)
+
+        else:
+            continue
 
         ##
 
@@ -141,7 +155,7 @@ def main():
 
     parser = argparse.ArgumentParser(description = 'Generate the JSON file of the NGC catalog')
 
-    parser.add_argument('--csv', help = 'The CSV of the NGC catalog')
+    parser.add_argument('--csv', required = True, help = 'The CSV of the NGC catalog')
 
     args = parser.parse_args()
 

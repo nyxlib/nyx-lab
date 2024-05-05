@@ -242,7 +242,7 @@ onUnmounted(() => {
 
                         <div class="mb-3">
                             <label class="form-label" for="A9856A65">Object name</label>
-                            <input class="form-control form-control-sm" type="text" id="A9856A65" placeholder="Messier, NGC/IC or HIP object" v-no-autocomplete v-model="state.objectName" @keyup.enter="search()" />
+                            <input class="form-control form-control-sm" type="text" id="A9856A65" placeholder="Messier, NGC, HIP, ... object" v-no-autocomplete v-model="state.objectName" @keyup.enter="search()" />
                         </div>
 
                         <div class="mb-3">
