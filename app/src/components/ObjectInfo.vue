@@ -472,7 +472,7 @@ onUnmounted(() => {
 
                         <tab-pane title="C.D.S." @shown="updateSIMBAD">
 
-                            <textarea class="form-control font-monospace" rows="16" ref="description" v-if="state.show_simbad"></textarea>
+                            <textarea class="font-monospace form-control fs-6" rows="20" ref="description" v-if="state.show_simbad"></textarea>
 
                         </tab-pane>
 
