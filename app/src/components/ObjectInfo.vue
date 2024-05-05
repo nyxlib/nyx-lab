@@ -62,11 +62,14 @@ const state = reactive({
     h_mag: -999.0,
     k_mag: -999.0,
     show_image: false,
+    show_simbad: false,
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const position = ref(null);
+
+const description = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -243,16 +246,38 @@ const update_step2 = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const update = () => {
+const updateInfo = () => {
 
     getNGC(props.objectName, state).then(update_step2).catch(() => {
         getHIP(props.objectName, state).then(update_step2).catch(() => {
             getSIM(props.objectName, state).then(update_step2).catch(() => {
 
-                /* TODO */
+                /* DO NOTHING  */
             })
         })
     });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const updateImage = () => {
+
+    state.show_image = true;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const updateSIMBAD = () => {
+
+    state.show_simbad = true;
+
+    fetch(`https://simbad.u-strasbg.fr/simbad/sim-id?Ident=${encodeURIComponent(props.objectName)}&output.format=ASCII`).then(response => response.text())
+
+        .then((text) => {
+
+            description.value.value = text;
+        })
+    ;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -261,7 +286,7 @@ const update = () => {
 
 onMounted(() => {
 
-    update();
+    updateInfo();
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -383,7 +408,17 @@ onUnmounted(() => {
 
                     <hr />
 
-                    <p>Dimensions: R(<span v-if="state.pos_ang !== -999.0">{{state.pos_ang}}</span><span v-else>Ø</span>°; <span v-if="state.maj_ax !== -999.0">{{state.maj_ax}}</span><span v-else>Ø</span>' × <span v-if="state.min_ax !== -999.0">{{state.min_ax}}</span><span v-else>Ø</span>')</p>
+                    <p>
+                        Angular size:
+                        R<sub>
+                            <span v-if="state.pos_ang !== -999.0">{{state.pos_ang}}</span><span v-else>Ø</span>°
+                        </sub>
+                        (
+                            <span v-if="state.maj_ax !== -999.0">{{state.maj_ax}}</span><span v-else>Ø</span>'
+                            ×
+                            <span v-if="state.min_ax !== -999.0">{{state.min_ax}}</span><span v-else>Ø</span>'
+                        )
+                    </p>
 
                     <hr />
 
@@ -429,9 +464,15 @@ onUnmounted(() => {
 
                         </tab-pane>
 
-                        <tab-pane title="Image" @shown="state.show_image = true">
+                        <tab-pane title="Image" @shown="updateImage">
 
-                            <object-pic class="w-100" :target="objectName" v-if="state.show_image" />
+                            <object-pic class="w-100" :target="objectName" v-if="state.show_image"></object-pic>
+
+                        </tab-pane>
+
+                        <tab-pane title="C.D.S." @shown="updateSIMBAD">
+
+                            <textarea class="form-control font-monospace" rows="16" ref="description" v-if="state.show_simbad"></textarea>
 
                         </tab-pane>
 
