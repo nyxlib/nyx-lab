@@ -1,6 +1,6 @@
 {
     "productName": "pollux",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "identifier": "io.odier.pollux",
     "build": {
         "beforeDevCommand": "npm run app-prod",
@@ -19,6 +19,7 @@
                 "maximized": true,
                 "title": "Pollux",
                 "titleBarStyle": "Overlay",
+                "decorations": false,
                 "hiddenTitle": true,
                 "url": "index.html"
             }

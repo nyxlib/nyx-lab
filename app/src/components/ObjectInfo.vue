@@ -16,9 +16,9 @@ import * as uuid from 'uuid';
 
 import useConfigStore from '../stores/config';
 
+import getCDS from '../catalogs/catalog_cds';
 import getHIP from '../catalogs/catalog_hip';
 import getNGC from '../catalogs/catalog_ngc';
-import getSIM from '../catalogs/catalog_sim';
 
 import ObjectPic from './ObjectPic.vue';
 
@@ -250,7 +250,7 @@ const updateInfo = () => {
 
     getNGC(props.objectName, state).then(update_step2).catch(() => {
         getHIP(props.objectName, state).then(update_step2).catch(() => {
-            getSIM(props.objectName, state).then(update_step2).catch(() => {
+            getCDS(props.objectName, state).then(update_step2).catch(() => {
 
                 /* DO NOTHING  */
             })
@@ -267,7 +267,7 @@ const updateImage = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const updateSIMBAD = () => {
+const updateCDS = () => {
 
     state.show_simbad = true;
 
@@ -469,7 +469,7 @@ onUnmounted(() => {
 
                         </tab-pane>
 
-                        <tab-pane title="C.D.S." @shown="updateSIMBAD">
+                        <tab-pane title="CDS" @shown="updateCDS">
 
                             <textarea class="font-monospace form-control fs-6" rows="20" ref="description" v-if="state.show_simbad"></textarea>
 

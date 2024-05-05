@@ -11,6 +11,7 @@
         "tauri-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js build"
     },
     "dependencies": {
+        "@mapbox/timespace": "^2.0.4",
         "@tauri-apps/api": "^2.0.0-beta.11",
         "@tauri-apps/plugin-dialog": "^2.0.0-beta.3",
         "@tauri-apps/plugin-fs": "^2.0.0-beta.3",
