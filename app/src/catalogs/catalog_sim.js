@@ -27,6 +27,13 @@ const getSIM = (objectName, data) => {
 
             .then((text) => {
 
+                if(text.includes('No known catalog could be found'))
+                {
+                    reject();
+
+                    return;
+                }
+
                 /*----------------------------------------------------------------------------------------------------*/
 
                 data.names = [objectName];
@@ -48,8 +55,8 @@ const getSIM = (objectName, data) => {
 
                 const galCoords = text.match(SIMBAD_REGEXPS.galCoords);
                 if(galCoords) {
-                    data.l = Number(galCoords[1]);
-                    data.b = Number(galCoords[2]);
+                    data.l = (Number(galCoords[1]) + 360) % 360;
+                    data.b = (Number(galCoords[2]) + 360) % 360;
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/

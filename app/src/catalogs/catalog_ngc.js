@@ -1,6 +1,10 @@
 // noinspection JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import * as ae from 'astronomy-engine';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 import NGC from './NGC.json';
 
 import {equatorialToGalactic} from './utilities';

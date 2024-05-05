@@ -44,7 +44,7 @@ const props = defineProps({
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const state = reactive({
-    names: [],
+    names: ['Unknown'],
     type: '',
     ra: -999.0,
     dec: -999.0,
@@ -295,7 +295,8 @@ onUnmounted(() => {
 
                     <!--*********************************************************************************************-->
 
-                    <p>Type: {{state.type}}, redshift: {{state.redshift}}</p>
+                    <p v-if="state.redshift !== -999.0">Type: {{state.type}}, redshift: {{state.redshift}}</p>
+                    <p v-else>Type: {{state.type}}</p>
 
                     <hr />
 
