@@ -168,6 +168,8 @@ const update_step2 = () => {
     const scales = {};
 
     scales[`position_x_${id}`] = {
+        min: 0,
+        max: 24 * 20,
         title: {
             display: true,
             text: `Time (UTC+?) - ${props.observationDate}`,

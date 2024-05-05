@@ -47,6 +47,8 @@ const init = () => {
 
     const scales = {
         position_x_sun_moon: {
+            min: 0,
+            max: 24 * 20,
             title: {
                 display: true,
                 text: `Time (UTC+?) - ${state.observationDate}`,
