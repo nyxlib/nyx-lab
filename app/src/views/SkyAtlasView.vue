@@ -45,10 +45,6 @@ const init = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const labels = Array.from({length: 1000}, (_, i) => (24.0 * (i / 1000.0)).toFixed(0));
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     const scales = {
         position_x_sun_moon: {
             title: {
@@ -75,7 +71,7 @@ const init = () => {
     chart = new Chart(position.value, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: Array.from({ length: 24 * 20}, (_, i) => ((24.0 * i) / (24.0 * 20.0 - 1.0)).toFixed(0)),
             datasets: [{
                 label: 'Sun',
                 borderWidth: 2,
@@ -131,9 +127,9 @@ const update = () => {
     const sunAlt = [];
     const moonAlt = [];
 
-    for(let i = 0; i < 1000; i++)
+    for(let i = 0; i < 24 * 20; i++)
     {
-        const date = new Date(timestamp + N_MS_PER_DAY * (i / 1000.0));
+        const date = new Date(timestamp + (i * N_MS_PER_DAY) / (24.0 * 20.0 - 1.0));
 
         const sunPosition = ae.Equator('Sun', date, observer, true, true);
         const moonPosition = ae.Equator('Moon', date, observer, true, true);

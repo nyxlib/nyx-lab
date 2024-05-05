@@ -132,6 +132,8 @@ function degreesToDMSString(degrees)
 
 const N_MS_PER_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const update_step2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -151,19 +153,15 @@ const update_step2 = () => {
     const objectAlt = [];
     const objectAz = [];
 
-    for(let i = 0; i < 1000; i++)
+    for(let i = 0; i < 24 * 20; i++)
     {
-        const date = new Date(timestamp + N_MS_PER_DAY * (i / 1000.0));
+        const date = new Date(timestamp + (i * N_MS_PER_DAY) / (24.0 * 20.0 - 1.0));
 
         const objectAltAz = ae.Horizon(date, observer, state.ra, state.dec, 'normal');
 
         objectAlt.push(objectAltAz.altitude);
         objectAz.push(objectAltAz.azimuth);
     }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const labels = Array.from({length: 1000}, (_, i) => (24.0 * (i / 1000.0)).toFixed(0));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -207,7 +205,7 @@ const update_step2 = () => {
     chart = new Chart(position.value, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: Array.from({ length: 24 * 20}, (_, i) => ((24.0 * i) / (24.0 * 20.0 - 1.0)).toFixed(0)),
             datasets: [{
                 label: 'Alt.',
                 borderWidth: 2,
