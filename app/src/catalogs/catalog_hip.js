@@ -24,8 +24,8 @@ const getHIP = (objectName, data) => {
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            data.names = [objectName];
-            data.type = HIP.type[index];
+            data.names = objectName.split(',');
+            data.types = [HIP.type[index]];
             data.ra = HIP.ra[index];
             data.dec = HIP.dec[index];
             data.l = lb.l;

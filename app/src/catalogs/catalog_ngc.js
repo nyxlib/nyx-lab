@@ -29,7 +29,7 @@ const getNGC = (objectName, data) => {
             /*--------------------------------------------------------------------------------------------------------*/
 
             data.names = NGC.names[index].split(',');
-            data.type = NGC.type[index];
+            data.types = [NGC.type[index]];
             data.ra = NGC.ra[index];
             data.dec = NGC.dec[index];
             data.l = lb.l;

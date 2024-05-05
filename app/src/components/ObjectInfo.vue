@@ -45,7 +45,7 @@ const props = defineProps({
 
 const state = reactive({
     names: ['Unknown'],
-    type: '',
+    types: ['unknown'],
     ra: -999.0,
     dec: -999.0,
     l: -999.0,
@@ -323,8 +323,7 @@ onUnmounted(() => {
 
                     <!--*********************************************************************************************-->
 
-                    <p v-if="state.redshift !== -999.0">Type: {{state.type}}, redshift: {{state.redshift}}</p>
-                    <p v-else>Type: {{state.type}}</p>
+                    <p>Type: <span class="badge rounded-pill bg-primary" v-for="type in state.types">{{type}}</span>, redshift: {{state.redshift}}</p>
 
                     <hr />
 
@@ -337,7 +336,7 @@ onUnmounted(() => {
                             <table class="w-100">
                                 <tr>
                                     <td colspan="2">
-                                        Equatorial coordinate
+                                        Equatorial coordinates
                                     </td>
                                 </tr>
                                 <tr>
@@ -350,7 +349,7 @@ onUnmounted(() => {
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        Galactic coordinate
+                                        Galactic coordinates
                                     </td>
                                 </tr>
                                 <tr>
@@ -374,7 +373,7 @@ onUnmounted(() => {
                             <table class="w-100">
                                 <tr>
                                     <td colspan="2">
-                                        Equatorial coordinate
+                                        Equatorial coordinates
                                     </td>
                                 </tr>
                                 <tr>
@@ -387,7 +386,7 @@ onUnmounted(() => {
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        Galactic coordinate
+                                        Galactic coordinates
                                     </td>
                                 </tr>
                                 <tr>

@@ -2,6 +2,8 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const SIMBAD_REGEXPS = {
+    type1: /Spectral type\s*:\s*(\S+)/,
+    type2: /Morphological type\s*:\s*(\S+)/,
     redshift: /Redshift\s*:\s*([-+]?\d+(?:\.\d+)?)/,
     equCoords: /Coordinates\(ICRS,ep=J2000,eq=2000\)\s*:\s*(\d+)\s+(\d+)\s+(\d+(?:\.\d+)?)\s+([+-]?\d+)\s+(\d+)\s+(\d+(?:\.\d+)?)/,
     galCoords: /Coordinates\(Gal,ep=J2000,eq=2000\)\s*:\s*([+-]?\d+(?:\.\d+)?)\s+([+-]?\d+(?:\.\d+)?)/,
@@ -37,6 +39,20 @@ const getSIM = (objectName, data) => {
                 /*----------------------------------------------------------------------------------------------------*/
 
                 data.names = [objectName];
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                data.types.length = 0;
+
+                const type1 = text.match(SIMBAD_REGEXPS.type1);
+                if(type1 && type1[1] !== '~') {
+                    data.types.push(type1[1]);
+                }
+
+                const type2 = text.match(SIMBAD_REGEXPS.type2);
+                if(type2 && type2[1] !== '~') {
+                    data.types.push(type2[1]);
+                }
 
                 /*----------------------------------------------------------------------------------------------------*/
 
