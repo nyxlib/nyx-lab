@@ -26,8 +26,8 @@
         ],
         "security": {
             "csp": {
-                "default-src": "'self' https: http: ipc: data:",
-                "connect-src": "'self' https: http: wss: ws: data:",
+                "default-src": "'self' https: http: data:",
+                "connect-src": "'self' https: http: wss: ws: ipc: data:",
                 "script-src": "'self' 'unsafe-eval' https: http:",
                 "style-src": "'self' 'unsafe-inline' https: http:"
             }
