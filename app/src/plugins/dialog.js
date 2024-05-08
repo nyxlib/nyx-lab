@@ -1,4 +1,4 @@
-// noinspection JSUnresolvedReference, JSUnusedGlobalSymbols
+// noinspection JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import * as notification from '@tauri-apps/plugin-notification';
