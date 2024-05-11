@@ -10,6 +10,8 @@ import {defineStore} from 'pinia';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const DEFAULT_GLOBALS = {
+    addons: {},
+    /**/
     lat: 48.8533,
     latVariable: '',
     lon: 2.34886,
@@ -78,6 +80,7 @@ const useConfigStore = defineStore('config', {
     state: () => {
         return {
             globals: Object.assign({}, DEFAULT_GLOBALS),
+            subapps: {},
         };
     },
     actions: {
@@ -89,6 +92,7 @@ const useConfigStore = defineStore('config', {
         init()
         {
             this.dialog = inject('dialog');
+            this.addon = inject('addon');
 
             this.load();
         },
@@ -97,13 +101,77 @@ const useConfigStore = defineStore('config', {
         /* CONFIG                                                                                                     */
         /*------------------------------------------------------------------------------------------------------------*/
 
+        initializeAddons()
+        {
+            for(const addonDescr of Object.values(this.globals.addons))
+            {
+                addonDescr.started = false;
+
+                if(addonDescr.enabled)
+                {
+                    this.addon.load(addonDescr.path, addonDescr.name).then((addon) => {
+
+                        try
+                        {
+                            addon.addonInitialize(this.addon.app(), this.addon.router(), DEFAULT_GLOBALS, this.globals, this.subapps);
+
+                            addonDescr.started = true;
+                        }
+                        catch(e)
+                        {
+                            console.error(e);
+                        }
+
+                    }).catch((e) => {
+
+                        console.error(e);
+                    });
+                }
+            }
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        finalizeAddons()
+        {
+            for(const addonDescr of Object.values(this.globals.addons))
+            {
+                addonDescr.started = false;
+
+                if(addonDescr.enabled)
+                {
+                    this.addon.load(addonDescr.path, addonDescr.name).then((addon) => {
+
+                        try
+                        {
+                            addon.addonFinalize(this.addon.app(), this.addon.router(), DEFAULT_GLOBALS, this.globals, this.subapps);
+
+                            //////////.started = false;
+                        }
+                        catch(e)
+                        {
+                            console.error(e);
+                        }
+
+                    }).catch((e) => {
+
+                        console.error(e);
+                    });
+                }
+            }
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         import()
         {
             try
             {
                 this.dialog.open('config.json', 'text/plain;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then((json) => {
 
+                    this.finalizeAddons();
                     this.globals = confDup(JSON.parse(json), DEFAULT_GLOBALS);
+                    this.initializeAddons();
 
                     this.dialog.success();
                 });
@@ -141,7 +209,9 @@ const useConfigStore = defineStore('config', {
             {
                 const config = localStorage.getItem('indi-dashboard-config');
 
+                this.finalizeAddons();
                 this.globals = confDup(JSON.parse(config), DEFAULT_GLOBALS);
+                this.initializeAddons();
 
                 this.dialog.success();
             }

@@ -12,6 +12,8 @@ import {IndiVariables, IndiTopology, NavTabs, TabPane} from 'vue-indi';
 
 import useConfigStore from '../stores/config';
 
+import Addons from '../components/Addons.vue';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -55,7 +57,7 @@ const SKY_MAPS = [
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="shadow card">
+                        <div class="shadow card mb-3">
                             <div class="card-header d-flex">
                                 <span class="me-auto">
                                     MQTT Broker
@@ -88,12 +90,7 @@ const SKY_MAPS = [
 
                         <!-- *************************************************************************************** -->
 
-                    </div>
-                    <div class="col-md-6">
-
-                        <!-- *************************************************************************************** -->
-
-                        <div class="shadow card">
+                        <div class="shadow card mb-0">
                             <div class="card-header d-flex">
                                 Node-RED
                             </div>
@@ -106,6 +103,15 @@ const SKY_MAPS = [
 
                             </div>
                         </div>
+
+                        <!-- *************************************************************************************** -->
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <!-- *************************************************************************************** -->
+
+                        <addons :addons="configStore.globals.addons" />
 
                         <!-- *************************************************************************************** -->
 
@@ -199,24 +205,6 @@ const SKY_MAPS = [
                                     <input class="form-check-input" type="checkbox" role="switch" id="A36C9DF3" v-model="configStore.globals.enableAstroSetup" :true-value="true" :false-value="false" />
                                     <label class="form-check-label" for="A36C9DF3">Enable astro setup</label>
                                 </div>
-
-                            </div>
-                        </div>
-
-                        <!-- *************************************************************************************** -->
-
-                    </div>
-                    <div class="col-md-6">
-
-                        <!-- *************************************************************************************** -->
-
-                        <div class="shadow card">
-                            <div class="card-header">
-                                Extensions
-                            </div>
-                            <div class="card-body">
-
-                                TODO
 
                             </div>
                         </div>

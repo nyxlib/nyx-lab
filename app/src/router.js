@@ -8,38 +8,38 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes: [
         {
-            path: '/',
             name: 'home',
+            path: '/',
             component: () => import('./views/HomeView.vue'),
         },
         {
-            path: '/monitoring/',
             name: 'monitoring',
+            path: '/monitoring/',
             component: () => import('./views/MonitoringView.vue'),
         },
         {
-            path: '/sky-map/',
             name: 'sky-map',
+            path: '/sky-map/',
             component: () => import('./views/SkyMapView.vue'),
         },
         {
-            path: '/sky-atlas/:target?',
             name: 'sky-atlas',
+            path: '/sky-atlas/:target?',
             component: () => import('./views/SkyAtlasView.vue'),
         },
         {
-            path: '/node-red/',
             name: 'node-red',
+            path: '/node-red/',
             component: () => import('./views/NodeRedView.vue'),
         },
         {
-            path: '/astro/',
             name: 'astro',
+            path: '/astro/',
             component: () => import('./views/AstroView.vue'),
         },
         {
-            path: '/config/',
             name: 'config',
+            path: '/config/',
             component: () => import('./views/ConfigView.vue'),
         },
     ],

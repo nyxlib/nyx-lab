@@ -1,8 +1,8 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {createPinia} from 'pinia';
+import * as Vue from 'vue/dist/vue.esm-bundler';
 
-import {createApp} from 'vue';
+import {createPinia} from 'pinia';
 
 import {Tooltip} from 'bootstrap/dist/js/bootstrap.esm';
 
@@ -13,14 +13,19 @@ import {setup} from 'vue-indi';
 import App from './App.vue';
 import router from './router';
 
+import addon from './plugins/addon';
 import dialog from './plugins/dialog';
 import input from './plugins/input';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+window.Vue = Vue;
+
 window.pinia = createPinia();
 
-const app = createApp(App);
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const app = Vue.createApp(App);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -31,6 +36,7 @@ setup(app);
 app.use(router);
 app.use(dialog);
 app.use(input);
+app.use(addon);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
