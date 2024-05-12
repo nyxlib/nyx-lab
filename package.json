@@ -4,23 +4,20 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "app-dev": "./patch_aladin.sh && npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js dev",
-        "app-prod": "./patch_aladin.sh && npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js build",
-        "app-preview": "./patch_aladin.sh && npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js preview",
+        "app-dev": "npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js dev",
+        "app-prod": "npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js build",
+        "app-preview": "npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js preview",
         "tauri-dev": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js dev",
         "tauri-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js build"
     },
     "dependencies": {
-        "@mapbox/timespace": "^2.0.4",
         "@tauri-apps/api": "^2.0.0-beta.11",
         "@tauri-apps/plugin-dialog": "^2.0.0-beta.3",
         "@tauri-apps/plugin-fs": "^2.0.0-beta.3",
         "@tauri-apps/plugin-notification": "^2.0.0-beta.3",
         "@tauri-apps/plugin-shell": "^2.0.0-beta.3",
-        "aladin-lite": "^3.4.0-beta",
-        "astronomy-engine": "^2.1.19",
-        "leaflet": "^1.9.4",
         "split.js": "^1.6.5",
+        "vue": "^3.4.27",
         "vue-indi": "file:../indi-vue",
         "vue-router": "^4.3.2"
     },

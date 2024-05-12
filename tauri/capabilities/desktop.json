@@ -5,7 +5,11 @@
     "windows": ["main"],
     "permissions": [
         "window:allow-start-dragging",
+        "window:allow-toggle-maximize",
+        "window:allow-minimize",
+        "window:allow-close",
         "dialog:allow-message",
+        "dialog:allow-confirm",
         "dialog:allow-open",
         "dialog:allow-save",
         "notification:allow-notify",

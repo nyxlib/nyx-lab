@@ -23,15 +23,9 @@ const configStore = useConfigStore();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const state = reactive({
-    show_indi: false,
+    shownTabs: new Set(),
+    showIndi: false,
 });
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const SKY_MAPS = [
-    {value: 'aladin', label: 'Aladin'},
-    {value: 'stellarium', label: 'Stellarium'},
-];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -164,165 +158,31 @@ const SKY_MAPS = [
             </tab-pane>
 
             <!-- *************************************************************************************************** -->
-            <!-- FEATURES                                                                                            -->
-            <!-- *************************************************************************************************** -->
-
-            <tab-pane title="Features">
-
-                <div class="row">
-                    <div class="col-md-6">
-
-                        <!-- *************************************************************************************** -->
-
-                        <div class="shadow card">
-                            <div class="card-header">
-                                Features
-                            </div>
-                            <div class="card-body">
-
-                                <div class="row">
-                                    <div class="col-md-4">
-
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableSkyMap" :true-value="true" :false-value="false" />
-                                            <label class="form-check-label" for="A925CE04">Enable sky map</label>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-8">
-
-                                        <div class="mb-3">
-                                            <label class="form-label" for="C88D31FB">Renderer</label>
-                                            <multiselect
-                                                mode="single"
-                                                id="C88D31FB"
-                                                :can-clear="false"
-                                                :searchable="true"
-                                                :create-option="false"
-                                                :close-on-select="true"
-                                                :options="/*-----*/SKY_MAPS/*-----*/"
-                                                v-model="configStore.globals.skymap" />
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="form-check form-switch mb-0">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="A36C9DF3" v-model="configStore.globals.enableAstroSetup" :true-value="true" :false-value="false" />
-                                    <label class="form-check-label" for="A36C9DF3">Enable astro setup</label>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- *************************************************************************************** -->
-
-                    </div>
-                </div>
-
-            </tab-pane>
-
-            <!-- *************************************************************************************************** -->
-            <!-- WEATHER                                                                                             -->
-            <!-- *************************************************************************************************** -->
-
-            <tab-pane title="Weather">
-
-                <div class="row">
-                    <div class="col-md-6">
-
-                        <!-- *************************************************************************************** -->
-
-                        <div class="shadow card">
-                            <div class="card-header">
-                                <i class="bi bi-cloud-moon-fill"></i> Weather widget
-                            </div>
-                            <div class="card-body">
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="B8D10E0E">Service name<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="B8D10E0E" placeholder="Service name" v-no-autocomplete v-model="configStore.globals.weatherWidgetServiceName" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="DC65FA98">Service URL<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="DC65FA98" placeholder="Service URL" v-no-autocomplete v-model="configStore.globals.weatherWidgetServiceURL" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-0">
-                                    <label class="form-label" for="F785A24A">HTML code<sup class="text-secondary">opt</sup></label>
-                                    <textarea class="form-control" rows="10" id="F785A24A" v-no-autocomplete v-model="configStore.globals.weatherWidgetHTML"></textarea>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- *************************************************************************************** -->
-
-                    </div>
-                    <div class="col-md-6">
-
-                        <!-- *************************************************************************************** -->
-
-                        <div class="shadow card">
-                            <div class="card-header">
-                                <i class="bi bi-stars"></i> Seeing widget
-                            </div>
-                            <div class="card-body">
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="E4616FC6">Service name<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="E4616FC6" placeholder="Service name" v-no-autocomplete v-model="configStore.globals.seeingWidgetServiceName" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="DC2D5B47">Service URL<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="DC2D5B47" placeholder="Service URL" v-no-autocomplete v-model="configStore.globals.seeingWidgetServiceURL" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-0">
-                                    <label class="form-label" for="AD32C0D2">HTML code<sup class="text-secondary">opt</sup></label>
-                                    <textarea class="form-control" rows="10" id="AD32C0D2" v-no-autocomplete v-model="configStore.globals.seeingWidgetHTML"></textarea>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- *************************************************************************************** -->
-
-                    </div>
-                </div>
-
-            </tab-pane>
-
-            <!-- *************************************************************************************************** -->
             <!-- INDI                                                                                                -->
             <!-- *************************************************************************************************** -->
 
-            <tab-pane title="INDI" @shown="state.show_indi = true">
+            <tab-pane title="INDI" @shown="state.showIndi = true">
 
                 <div class="row">
                     <div class="col-md-6">
 
-                        <indi-variables class="shadow" v-if="state.show_indi" />
+                        <indi-topology class="shadow" v-if="state.showIndi" />
 
                     </div>
                     <div class="col-md-6">
 
-                        <indi-topology class="shadow" v-if="state.show_indi" />
+                        <indi-variables class="shadow" v-if="state.showIndi" />
 
                     </div>
                 </div>
+
+            </tab-pane>
+
+            <!-- *************************************************************************************************** -->
+
+            <tab-pane :title="panel.title" v-for="(panel, id) in configStore.confPanels" :key="id" @shown="() => state.shownTabs.add(id)">
+
+                <component :is="panel.component" v-if="state.shownTabs.has(id)" />
 
             </tab-pane>
 

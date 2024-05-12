@@ -140,7 +140,7 @@ const addonUp = (addon1) => {
                 <!-- *********************************************************************************************** -->
 
                 <tbody>
-                    <tr v-for="addon in addons">
+                    <tr v-for="(addon, idx) in addons" :key="idx">
                         <td class="text-center">
                             <button class="btn btn-sm btn-link" type="button" @click="addonDw(addon)">
                                 <i class="bi bi-caret-up-fill"></i>
@@ -159,7 +159,7 @@ const addonUp = (addon1) => {
                             <input class="form-control form-control-sm" type="text" v-model="addon.name" />
                         </td>
                         <td class="text-center">
-                            <input class="btn-check" type="checkbox" role="switch" id="CEA1455E" v-model="addon.enabled" :true-value="true" :false-value="false" /><label class="btn btn-sm btn-outline-success" for="CEA1455E">Enabled</label>
+                            <input class="btn-check" type="checkbox" role="switch" :id="`CEA1455E_${idx}`" v-model="addon.enabled" :true-value="true" :false-value="false" /><label class="btn btn-sm btn-outline-success" :for="`CEA1455E_${idx}`">Enabled</label>
                         </td>
                         <td class="text-center">
                             <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': addon.enabled && addon.started, 'text-secondary': addon.enabled && !addon.started}]"></i>

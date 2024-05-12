@@ -2,20 +2,22 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, onMounted, onUnmounted, inject} from 'vue';
+import {inject, reactive, onMounted, onUnmounted} from 'vue';
 
-import {RouterView} from 'vue-router';
-
-import {Modal} from 'bootstrap/dist/js/bootstrap.esm';
-
-/*--------------------------------------------------------------------------------------------------------------------*/
+import {getCurrent} from '@tauri-apps/api/window';
 
 import {useIndiStore} from 'vue-indi';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from './stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const dialog = inject('dialog');
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const indiStore = useIndiStore(window.pinia);
@@ -24,7 +26,9 @@ const configStore = useConfigStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const theme = ref('dark');
+const state = reactive({
+    theme: 'light',
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -32,6 +36,39 @@ let timer = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const about = () => {
+
+    dialog.show('INDI Dashboard\n\nAuthor: Jérôme ODIER\nEmail: jerome.odier@lpsc.in2p3.fr', 'About', 'success');
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const themeSet = () => {
+
+    const label = document.querySelector('label[for="C2D68371"] i');
+
+    if(state.theme === 'dark')
+    {
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+
+        localStorage.setItem('indi-dashboard-theme', 'dark');
+
+        label.classList.add   ('bi-moon-stars');
+        label.classList.remove('bi-sun');
+    }
+    else
+    {
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+
+        localStorage.setItem('indi-dashboard-theme', 'light');
+
+        label.classList.remove('bi-moon-stars');
+        label.classList.add   ('bi-sun');
+    }
+};
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
@@ -51,32 +88,6 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
     new Modal(document.getElementById('A7E11E2F')).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const themeSet = () => {
-
-    const label = document.querySelector('label[for="C2D68371"] i');
-
-    if(theme.value === 'dark')
-    {
-        document.documentElement.setAttribute('data-bs-theme', 'dark');
-
-        localStorage.setItem('indi-dashboard-theme', 'dark');
-
-        label.classList.add   ('bi-moon-stars');
-        label.classList.remove('bi-sun');
-    }
-    else
-    {
-        document.documentElement.setAttribute('data-bs-theme', 'light');
-
-        localStorage.setItem('indi-dashboard-theme', 'light');
-
-        label.classList.remove('bi-moon-stars');
-        label.classList.add   ('bi-sun');
-    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -109,7 +120,9 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    theme.value = localStorage.getItem('indi-dashboard-theme') || 'dark';
+    state.theme = localStorage.getItem('indi-dashboard-theme') || 'dark';
+
+    themeSet();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -121,9 +134,14 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    configStore.init();
+    document.querySelector('[data-tauri-drag-region]').addEventListener('dblclick', () => {
 
-    themeSet();
+        getCurrent().toggleMaximize();
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    configStore.init();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -159,7 +177,7 @@ onUnmounted(() => {
     <!-- HEADER                                                                                                      -->
     <!-- *********************************************************************************************************** -->
 
-    <input class="btn-check" type="checkbox" role="switch" id="C2D68371" v-model="theme" :true-value="'dark'" :false-value="'light'" @change="themeSet" />
+    <input class="btn-check" type="checkbox" role="switch" id="C2D68371" v-model="state.theme" :true-value="'dark'" :false-value="'light'" @change="themeSet" />
 
     <!-- *********************************************************************************************************** -->
 
@@ -190,13 +208,13 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <div class="d-flex ms-2 py-1">
+            <div class="d-flex ms-2 py-1" v-if="configStore.globals.weatherWidgetHTML || configStore.globals.seeingWidgetHTML">
 
-                <button class="btn btn-sm btn-primary border me-1" type="button" v-if="configStore.globals.weatherWidgetHTML" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)">
+                <button class="btn btn-sm btn-primary me-1" type="button" v-if="configStore.globals.weatherWidgetHTML" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)">
                     <i class="bi bi-cloud-moon-fill"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary border me-0" type="button" v-if="configStore.globals.seeingWidgetHTML" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)">
+                <button class="btn btn-sm btn-primary me-0" type="button" v-if="configStore.globals.seeingWidgetHTML" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)">
                     <i class="bi bi-stars"></i>
                 </button>
 
@@ -206,9 +224,31 @@ onUnmounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <label class="btn btn-sm btn-primary border me-0" for="C2D68371">
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="about">
+                    <i class="bi bi-question-circle"></i>
+                </button>
+
+                <label class="btn btn-sm btn-primary me-0" for="C2D68371">
                     <i class="bi bi-moon-stars"></i>
                 </label>
+
+            </div>
+
+            <!-- *************************************************************************************************** -->
+
+            <div class="d-flex ms-2 py-1">
+
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrent().minimize()">
+                    <i class="bi bi-dash-lg"></i>
+                </button>
+
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrent().toggleMaximize()">
+                    <i class="bi bi-collection"></i>
+                </button>
+
+                <button class="btn btn-sm btn-primary me-0" type="button" @click="() => getCurrent().close()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
 
             </div>
 
@@ -221,7 +261,7 @@ onUnmounted(() => {
     <!-- BODY                                                                                                        -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="d-flex" style="height: calc(100% - 2.5rem - 1px);">
+    <div class="d-flex border border-top-0" style="background-color: var(--bs-body-bg); height: calc(100% - 2.5rem - 1px);">
 
         <!-- ******************************************************************************************************* -->
 
@@ -251,22 +291,6 @@ onUnmounted(() => {
                     <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" to="/node-red">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" /><path d="m13.004 12.48c-0.45967-0.13763-0.83526-0.64749-0.83526-1.1339v-0.27919l-0.41293-6.31e-4c-0.5602-8.06e-4 -1.3308-0.1324-1.8557-0.31686-0.59073-0.20762-1.1047-0.53142-1.9162-1.2072-0.3766-0.31357-0.86064-0.6659-1.0756-0.78291-0.54067-0.29427-1.4785-0.52135-2.3886-0.57833l-0.76687-0.048023v0.40906c0 0.45544-0.11804 0.73751-0.43121 1.0305-0.19913 0.18628-0.26581 0.19799-1.2659 0.2224l-1.0557 0.025803v-0.72012h0.89232c1.1411 0 1.1527-0.010037 1.1527-1.0046 0-0.9375-0.030203-0.96178-1.1973-0.96178h-0.84769v-0.70788l1.0028 2.891e-4c0.84239 2.453e-4 1.0416 0.023924 1.2451 0.14802 0.24293 0.14814 0.50495 0.58266 0.50495 0.83737 0 0.11256 0.049456 0.12803 0.28632 0.089588 0.48193-0.078206 0.82416-0.37378 1.2338-1.0656 0.20879-0.35262 0.46701-0.745 0.57385-0.87196 0.24112-0.28656 0.8945-0.60661 1.3771-0.67456 0.36406-0.05126 0.36425-0.051449 0.40429-0.40669 0.047948-0.42539 0.24784-0.72109 0.61353-0.90755 0.24038-0.12257 0.54755-0.13752 2.8259-0.13752 2.8129 0 2.9041 0.013903 3.2585 0.49711 0.14451 0.19701 0.1629 0.33458 0.1629 1.2191 0 0.90544-0.01614 1.0197-0.17542 1.243-0.34665 0.48597-0.44566 0.50128-3.2408 0.50128-2.7849 0-2.9066-0.01772-3.2288-0.47021-0.098708-0.13862-0.19706-0.40808-0.21856-0.5988-0.036243-0.32127-0.055876-0.34676-0.26734-0.34676-0.29276 0-0.75912 0.19503-0.99637 0.41669-0.10198 0.095269-0.3236 0.40932-0.49248 0.69788-0.16889 0.28856-0.39564 0.62992-0.50388 0.75857-0.24384 0.28978-0.24493 0.32917-0.0094444 0.32917 0.3511 0 1.4249 0.35788 1.9369 0.64552 0.28064 0.15767 0.82319 0.55089 1.2057 0.87382 1.0987 0.92767 1.669 1.1715 2.9911 1.2787l0.6561 0.05324 0.042-0.37282c0.0498-0.44193 0.24579-0.73645 0.61549-0.92497 0.21325-0.10874 0.47135-0.13755 1.2332-0.13764l0.96351-1.228e-4v0.70788h-0.87035c-0.4787 0-0.93883 0.036661-1.0225 0.081446-0.13557 0.072525-0.15214 0.17127-0.15214 0.90646 0 0.81326 0.0032 0.82614 0.20176 0.90176 0.11094 0.04223 0.57108 0.07667 1.0225 0.07667h0.82075v0.78654l-0.88486-0.0069c-0.48666-0.0035-0.9868-0.03728-1.1114-0.07461zm0.64344-6.4626c0.12856-0.12856 0.12856-1.5704 0-1.6989-0.06946-0.069449-0.75383-0.094386-2.59-0.094386-2.1638 0-2.512 0.016434-2.6192 0.1236-0.093158 0.093198-0.1236 0.28996-0.1236 0.80001 0 1.0372-0.20837 0.96408 2.7493 0.96408 1.831 0 2.5139-0.024956 2.5834-0.094384z" />
-                        </svg>
-                    </router-link>
-                </li>
-
-                <li class="nav-item" title="Sky map" v-tooltip v-if="configStore.globals.enableSkyMap">
-                    <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" to="/sky-map">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8v12.98zm-6-.8V1.11l-4 .8v12.98l4-.8z" /><path d="m2.8625 9.76c0.04507-0.13 0.22893-0.13 0.274 0l0.258 0.774c0.115 0.346 0.386 0.617 0.732 0.732l0.774 0.258c0.13 0.04507 0.13 0.22893 0 0.274l-0.774 0.258c-0.34572 0.11501-0.61699 0.38628-0.732 0.732l-0.258 0.774c-0.04507 0.13-0.22893 0.13-0.274 0l-0.258-0.774c-0.11501-0.34572-0.38628-0.61699-0.732-0.732l-0.773-0.258c-0.13-0.04507-0.13-0.22893 0-0.274l0.774-0.258c0.346-0.115 0.617-0.386 0.732-0.732l0.257-0.773z" /><path d="m11.786 3.7327c0.06569-0.19838 0.34631-0.19838 0.412 0l0.387 1.162c0.173 0.518 0.579 0.924 1.097 1.097l1.162 0.387c0.19838 0.065691 0.19838 0.34631 0 0.412l-1.162 0.387c-0.51798 0.17257-0.92443 0.57902-1.097 1.097l-0.387 1.162c-0.06569 0.19838-0.34631 0.19838-0.412 0l-0.387-1.162c-0.17257-0.51798-0.57902-0.92443-1.097-1.097l-1.162-0.387c-0.19838-0.065691-0.19838-0.34631 0-0.412l1.162-0.387c0.51798-0.17257 0.92443-0.57902 1.097-1.097z" />
-                        </svg>
-                    </router-link>
-                </li>
-
-                <li class="nav-item" title="Setup" v-tooltip v-if="configStore.globals.enableAstroSetup">
-                    <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" to="/astro">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" /><path d="m11.342 3.418c-0.061234 0.0011321-0.12247 0.016918-0.17774 0.048828l-1.1074 0.64062c-0.17688 0.10204-0.24074 0.34086-0.13867 0.51758l0.074219 0.12891-4.7617 2.75c-0.17106 0.098978-0.2358 0.32841-0.13672 0.5l0.072266 0.12695-1.3711 0.79102c-0.11141-0.074194-0.26235-0.087124-0.38281-0.017578l-0.78711 0.45508c-0.16805 0.096933-0.22963 0.3244-0.13281 0.49219l0.22852 0.39453-0.55078 0.31836c-0.15948 0.09157-0.21682 0.30715-0.12695 0.46484l0.67773 1.1738c0.091082 0.15863 0.30777 0.21734 0.4668 0.125l0.55273-0.31836 0.22656 0.39258c0.096887 0.16791 0.32241 0.22974 0.49023 0.13281l0.78711-0.45312c0.12022-0.069309 0.18569-0.20621 0.17773-0.33984l1.373-0.79492 0.072266 0.125c0.098788 0.17142 0.33094 0.23548 0.50195 0.13672l4.7637-2.75 0.054688 0.095703c0.10212 0.17685 0.34069 0.24081 0.51758 0.13867l1.1074-0.63867c0.17688-0.102 0.2407-0.34091 0.13867-0.51758l-2.2695-3.9316c-0.070191-0.1216-0.20513-0.18999-0.33984-0.1875zm-0.087891 0.75 1.9961 3.457-0.63672 0.36719-0.10156-0.17773-1.7715-3.0703c-7.32e-4 -0.0012693-0.001206-0.002649-0.001953-0.0039062l-0.11914-0.20508 0.63476-0.36719zm-0.93555 1.1484 0.60938 1.0586 0.87695 1.5195-4.5156 2.6055-1.4863-2.5742 4.5156-2.6094zm-4.8301 3.3809 0.97656 1.6895-1.3379 0.77148-0.97461-1.6895 1.3359-0.77148zm-2.0039 0.91992 1.1816 2.0469-0.28125 0.16211-0.24805-0.42969-0.0039063-0.007812-0.67773-1.1719-0.25195-0.4375 0.28125-0.16211zm-0.4375 1.1934 0.0625 0.10938 0.30273 0.52539-0.2832 0.16406-0.36523-0.63477 0.2832-0.16406z" />
                         </svg>
                     </router-link>
                 </li>
@@ -309,6 +333,8 @@ onUnmounted(() => {
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
 
+                    <!-- ******************************************************************************************* -->
+
                     <div class="modal-header px-3 py-2">
 
                         <span>
@@ -324,11 +350,15 @@ onUnmounted(() => {
 
                     </div>
 
+                    <!-- ******************************************************************************************* -->
+
                     <div class="modal-body px-3 py-2">
 
                         <div class="text-center" id="C7F2FB8E"></div>
 
                     </div>
+
+                    <!-- ******************************************************************************************* -->
 
                 </div>
             </div>
@@ -344,14 +374,6 @@ onUnmounted(() => {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 @import url(assets/app.css);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-body[data-environment="tauri"] > div > nav {
-
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </style>

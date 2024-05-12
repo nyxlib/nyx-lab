@@ -12,46 +12,40 @@ import {defineStore} from 'pinia';
 const DEFAULT_GLOBALS = {
     addons: {},
     /**/
-    lat: 48.8533,
-    latVariable: '',
-    lon: 2.34886,
-    lonVariable: '',
-    alt: 0.00000,
-    altVariable: '',
-    zoom: 18,
-    /**/
-    temperature: 0.0,
-    temperatureVariable: '',
-    humidity: 0.0,
-    humidityVariable: '',
-    wind: 0.0,
-    windVariable: '',
-    seeing: 0.0,
-    seeingVariable: '',
-    /**/
-    weatherWidgetHTML: '',
-    weatherWidgetServiceName: '',
-    weatherWidgetServiceURL: '',
-    seeingWidgetHTML: '',
-    seeingWidgetServiceName: '',
-    seeingWidgetServiceURL: '',
-    /**/
     mqttURL: '',
     mqttUsername: '',
     mqttPassword: '',
     /**/
+    enableMonitoring: false,
+    monitoringGroups: [],
+    monitoringMetrics: {},
+    refreshInterval: 1000,
+    /**/
     nodeRedURL: '',
     /**/
-    enableMonitoring: false,
     enableSkyMap: false,
     enableAstroSetup: false,
     /**/
     devices: {},
-    monitoringGroups: [],
-    monitoringMetrics: {},
-    refreshInterval: 1000,
     skymap: 'aladin',
 };
+
+DEFAULT_GLOBALS.lat = 48.8533;
+DEFAULT_GLOBALS.latVariable = '';
+DEFAULT_GLOBALS.lon = 2.34886;
+DEFAULT_GLOBALS.lonVariable = '';
+DEFAULT_GLOBALS.alt = 0.00000;
+DEFAULT_GLOBALS.altVariable = '';
+DEFAULT_GLOBALS.zoom = 18;
+
+DEFAULT_GLOBALS.temperature = 0.0;
+DEFAULT_GLOBALS.temperatureVariable = '';
+DEFAULT_GLOBALS.humidity = 0.0;
+DEFAULT_GLOBALS.humidityVariable = '';
+DEFAULT_GLOBALS.wind = 0.0;
+DEFAULT_GLOBALS.windVariable = '';
+DEFAULT_GLOBALS.seeing = 0.0;
+DEFAULT_GLOBALS.seeingVariable = '';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -113,7 +107,9 @@ const useConfigStore = defineStore('config', {
 
                         try
                         {
-                            addon.addonInitialize(this.addon.app(), this.addon.router(), DEFAULT_GLOBALS, this.confPanels, this.appPanels);
+                            addon.globalsInitialize(DEFAULT_GLOBALS);
+
+                            addon.addonInitialize(this.addon.app(), this.addon.router(), this.confPanels, this.appPanels);
 
                             addonDescr.started = true;
                         }
@@ -144,7 +140,9 @@ const useConfigStore = defineStore('config', {
 
                         try
                         {
-                            addon.addonFinalize(this.addon.app(), this.addon.router(), DEFAULT_GLOBALS, this.confPanels, this.appPanels);
+                            addon.globalsInitialize(DEFAULT_GLOBALS);
+
+                            addon.addonFinalize(this.addon.app(), this.addon.router(), this.confPanels, this.appPanels);
 
                             //////////.started = false;
                         }

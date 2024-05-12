@@ -12,15 +12,14 @@
         "windows": [
             {
                 "label": "main",
-                "height": 768,
-                "width": 1024,
-                "minHeight": 600,
-                "minWidth": 800,
+                "height": 750,
+                "width": 1280,
+                "minHeight": 700,
+                "minWidth": 1280,
                 "maximized": true,
                 "title": "Pollux",
-                "titleBarStyle": "Overlay",
                 "decorations": false,
-                "hiddenTitle": true,
+                "transparent": true,
                 "url": "index.html"
             }
         ],
