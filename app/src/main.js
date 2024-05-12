@@ -2,11 +2,15 @@
 
 import * as Vue from 'vue/dist/vue.esm-bundler';
 
+import * as VueRouter from 'vue-router/dist/vue-router.esm-bundler';
+
+import * as Bootstrap from 'bootstrap/dist/js/bootstrap.esm';
+
 import {createPinia} from 'pinia';
 
-import {Tooltip} from 'bootstrap/dist/js/bootstrap.esm';
+import Chart from 'chart.js/auto';
 
-import {setup} from 'vue-indi';
+import {setup, NavTabs, TabPane} from 'vue-indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -17,9 +21,14 @@ import addon from './plugins/addon';
 import dialog from './plugins/dialog';
 import input from './plugins/input';
 
+import Splitter from './components/Splitter.vue';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-window.Vue = Vue;
+window.Vue       = Vue      ;
+window.Chart     = Chart    ;
+window.VueRouter = VueRouter;
+window.Bootstrap = Bootstrap;
 
 window.pinia = createPinia();
 
@@ -40,6 +49,12 @@ app.use(addon);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+app.component('NavTabs', NavTabs);
+app.component('TabPane', TabPane);
+app.component('Splitter', Splitter);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 app.directive('tooltip', {
 
     mounted(el)
@@ -48,7 +63,7 @@ app.directive('tooltip', {
 
         if(title)
         {
-            new Tooltip(el, {
+            new Bootstrap.Tooltip(el, {
                 fallbackPlacements: ['right'],
                 placement: 'right',
                 trigger: 'hover',

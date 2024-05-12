@@ -90,6 +90,49 @@ const SKY_MAPS = [
 
                         <!-- *************************************************************************************** -->
 
+                        <div class="shadow card mb-3">
+                            <div class="card-header">
+                                Monitoring
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-md-4">
+
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableMonitoring" :true-value="true" :false-value="false" />
+                                            <label class="form-check-label" for="A925CE04">Enable monitoring</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-8">
+
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C8206AA4">Groups</label>
+                                            <multiselect
+                                                mode="tags"
+                                                id="C8206AA4"
+                                                :can-clear="true"
+                                                :searchable="true"
+                                                :create-option="true"
+                                                :close-on-select="false"
+                                                :options="configStore.globals.monitoringGroups"
+                                                v-model="configStore.globals.monitoringGroups" />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C8206AA4">Refresh interval [ms]</label>
+                                            <input class="form-control form-control-sm" type="number" min="100" max="100000" step="1" v-model="configStore.globals.refreshInterval" />
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
                         <div class="shadow card mb-0">
                             <div class="card-header d-flex">
                                 Node-RED
@@ -141,38 +184,6 @@ const SKY_MAPS = [
                                     <div class="col-md-4">
 
                                         <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableMonitoring" :true-value="true" :false-value="false" />
-                                            <label class="form-check-label" for="A925CE04">Enable monitoring</label>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-8">
-
-                                        <div class="mb-3">
-                                            <label class="form-label" for="C8206AA4">Groups</label>
-                                            <multiselect
-                                                mode="tags"
-                                                id="C8206AA4"
-                                                :can-clear="true"
-                                                :searchable="true"
-                                                :create-option="true"
-                                                :close-on-select="false"
-                                                :options="configStore.globals.monitoringGroups"
-                                                v-model="configStore.globals.monitoringGroups" />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label" for="C8206AA4">Refresh interval [ms]</label>
-                                            <input class="form-control form-control-sm" type="number" min="100" max="100000" step="1" v-model="configStore.globals.refreshInterval" />
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-4">
-
-                                        <div class="form-check form-switch mb-3">
                                             <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableSkyMap" :true-value="true" :false-value="false" />
                                             <label class="form-check-label" for="A925CE04">Enable sky map</label>
                                         </div>
@@ -194,11 +205,6 @@ const SKY_MAPS = [
                                         </div>
 
                                     </div>
-                                </div>
-
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="FF3DAE50" v-model="configStore.globals.enableSkyAtlas" :true-value="true" :false-value="false" />
-                                    <label class="form-check-label" for="FF3DAE50">Enable sky atlas</label>
                                 </div>
 
                                 <div class="form-check form-switch mb-0">

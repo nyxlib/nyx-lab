@@ -1,6 +1,12 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import * as uuid from 'uuid';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 import router from '../router';
+
+import useConfigStore from '../stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -53,8 +59,12 @@ export default {
     install(app)
     {
         app.provide('addon', {
+            /**/
             app: () => app,
             router: () => router,
+            configStore: () => useConfigStore(),
+            newId: () => uuid.v4(),
+            /**/
             load: (addonPath, addonName) => _load(app, addonPath, addonName),
         });
     }

@@ -44,7 +44,6 @@ const DEFAULT_GLOBALS = {
     /**/
     enableMonitoring: false,
     enableSkyMap: false,
-    enableSkyAtlas: false,
     enableAstroSetup: false,
     /**/
     devices: {},
@@ -80,7 +79,8 @@ const useConfigStore = defineStore('config', {
     state: () => {
         return {
             globals: Object.assign({}, DEFAULT_GLOBALS),
-            subapps: {},
+            confPanels: {},
+            appPanels: {},
         };
     },
     actions: {
@@ -113,7 +113,7 @@ const useConfigStore = defineStore('config', {
 
                         try
                         {
-                            addon.addonInitialize(this.addon.app(), this.addon.router(), DEFAULT_GLOBALS, this.globals, this.subapps);
+                            addon.addonInitialize(this.addon.app(), this.addon.router(), DEFAULT_GLOBALS, this.confPanels, this.appPanels);
 
                             addonDescr.started = true;
                         }
@@ -144,7 +144,7 @@ const useConfigStore = defineStore('config', {
 
                         try
                         {
-                            addon.addonFinalize(this.addon.app(), this.addon.router(), DEFAULT_GLOBALS, this.globals, this.subapps);
+                            addon.addonFinalize(this.addon.app(), this.addon.router(), DEFAULT_GLOBALS, this.confPanels, this.appPanels);
 
                             //////////.started = false;
                         }
