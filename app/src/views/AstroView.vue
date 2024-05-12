@@ -4,7 +4,7 @@
 
 import {ref, watch, inject, onMounted} from 'vue';
 
-import {IndiDevices, NavTabs, TabPane} from 'vue-indi';
+import {IndiDevices} from 'vue-indi';
 
 import * as L from 'leaflet';
 

@@ -6,7 +6,7 @@ import {reactive} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
-import {IndiVariables, IndiTopology, NavTabs, TabPane} from 'vue-indi';
+import {IndiVariables, IndiTopology} from 'vue-indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -50,7 +50,7 @@ const SKY_MAPS = [
             <!-- SERVICES                                                                                            -->
             <!-- *************************************************************************************************** -->
 
-            <tab-pane title="Services">
+            <tab-pane title="Main">
 
                 <div class="row">
                     <div class="col-md-6">

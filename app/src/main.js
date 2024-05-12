@@ -10,7 +10,7 @@ import {createPinia} from 'pinia';
 
 import Chart from 'chart.js/auto';
 
-import {setup, NavTabs, TabPane} from 'vue-indi';
+import {setup} from 'vue-indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -49,8 +49,6 @@ app.use(addon);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-app.component('NavTabs', NavTabs);
-app.component('TabPane', TabPane);
 app.component('Splitter', Splitter);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
