@@ -107,9 +107,15 @@ const useConfigStore = defineStore('config', {
 
                         try
                         {
-                            addon.globalsInitialize(DEFAULT_GLOBALS);
+                            if(typeof addon.initialize === 'function')
+                            {
+                                addon.initialize(DEFAULT_GLOBALS);
+                            }
 
-                            addon.addonInitialize(this.addon.app(), this.addon.router(), this.confPanels, this.appPanels);
+                            if(typeof addon.start === 'function')
+                            {
+                                addon.start(this.addon.app(), this.addon.router(), this.confPanels, this.appPanels);
+                            }
 
                             addonDescr.started = true;
                         }
@@ -140,9 +146,15 @@ const useConfigStore = defineStore('config', {
 
                         try
                         {
-                            addon.globalsInitialize(DEFAULT_GLOBALS);
+                            if(typeof addon.initialize === 'function')
+                            {
+                                addon.initialize(DEFAULT_GLOBALS);
+                            }
 
-                            addon.addonFinalize(this.addon.app(), this.addon.router(), this.confPanels, this.appPanels);
+                            if(typeof addon.stop === 'function')
+                            {
+                                addon.stop(this.addon.app(), this.addon.router(), this.confPanels, this.appPanels);
+                            }
 
                             //////////.started = false;
                         }

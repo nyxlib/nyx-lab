@@ -1,6 +1,8 @@
 // noinspection JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import {useIndiStore} from 'vue-indi';
+
 import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -29,9 +31,9 @@ function _load(app, addonPath, addonName)
 
         script.addEventListener('load', () => {
 
-            const module = typeof window[addonName].default;
+            const module = window[addonName].default;
 
-            if(module.install === 'function')
+            if(typeof module.install === 'function')
             {
                 app.use(module);
             }
@@ -66,6 +68,37 @@ function _load(app, addonPath, addonName)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _updateVariables = (name1, name2, fractionDigits) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const indiStore = useIndiStore();
+    const configStore = useConfigStore();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    try
+    {
+        if(configStore.globals[name2])
+        {
+            const def = indiStore.resolve(configStore.globals[name2]);
+
+            if(def !== null)
+            {
+                configStore.globals[name1] = Number(Number(def['$']).toFixed(fractionDigits));
+            }
+        }
+    }
+    catch(e)
+    {
+        /* IGNORE */
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 export default {
 
     install(app)
@@ -74,13 +107,14 @@ export default {
             /**/
             app: () => app,
             router: () => router,
+            indiStore: () => useIndiStore(),
             configStore: () => useConfigStore(),
             newId: () => uuid.v4().substring(0, 13),
             /**/
             load: (addonPath, addonName) => _load(app, addonPath, addonName),
+            updateVariables: _updateVariables,
         });
     }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-// noinspection JSUnusedGlobalSymbols

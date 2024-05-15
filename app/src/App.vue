@@ -16,6 +16,7 @@ import useConfigStore from './stores/config';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const addon = inject('addon');
 const dialog = inject('dialog');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -91,28 +92,6 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-const update = (name1, name2, fractionDigits) => {
-
-    try
-    {
-        if(configStore.globals[name2])
-        {
-            const def = indiStore.resolve(configStore.globals[name2]);
-
-            if(def !== null)
-            {
-                configStore.globals[name1] = Number(Number(def['$']).toFixed(fractionDigits));
-            }
-        }
-    }
-    catch(e)
-    {
-        /* IGNORE */
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -147,14 +126,14 @@ onMounted(() => {
 
     timer = setInterval(() => {
 
-        update('lat', 'latVariable', 4);
-        update('lon', 'lonVariable', 4);
-        update('alt', 'altVariable', 1);
+        addon.updateVariables('lat', 'latVariable', 4);
+        addon.updateVariables('lon', 'lonVariable', 4);
+        addon.updateVariables('alt', 'altVariable', 1);
 
-        update('temperature', 'temperatureVariable', 1);
-        update('humidity', 'humidityVariable', 1);
-        update('wind', 'windVariable', 1);
-        update('seeing', 'seeingVariable', 1);
+        addon.updateVariables('temperature', 'temperatureVariable', 1);
+        addon.updateVariables('humidity', 'humidityVariable', 1);
+        addon.updateVariables('wind', 'windVariable', 1);
+        addon.updateVariables('seeing', 'seeingVariable', 1);
 
     }, 10 * 1000);
 
