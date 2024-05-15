@@ -105,13 +105,14 @@ export default {
     {
         app.provide('addon', {
             /**/
+            load: (addonPath, addonName) => _load(app, addonPath, addonName),
+            /**/
             app: () => app,
             router: () => router,
             indiStore: () => useIndiStore(),
             configStore: () => useConfigStore(),
             newId: () => uuid.v4().substring(0, 13),
             /**/
-            load: (addonPath, addonName) => _load(app, addonPath, addonName),
             updateVariables: _updateVariables,
         });
     }

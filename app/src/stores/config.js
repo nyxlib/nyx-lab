@@ -109,12 +109,12 @@ const useConfigStore = defineStore('config', {
                         {
                             if(typeof addon.initialize === 'function')
                             {
-                                addon.initialize(DEFAULT_GLOBALS);
+                                addon.initialize(DEFAULT_GLOBALS, this.addon);
                             }
 
                             if(typeof addon.start === 'function')
                             {
-                                addon.start(this.addon.app(), this.addon.router(), this.confPanels, this.appPanels);
+                                addon.start(this.addon.app(), this.addon.router(), this.addon, this.confPanels, this.appPanels);
                             }
 
                             addonDescr.started = true;
@@ -148,12 +148,12 @@ const useConfigStore = defineStore('config', {
                         {
                             if(typeof addon.initialize === 'function')
                             {
-                                addon.initialize(DEFAULT_GLOBALS);
+                                addon.initialize(DEFAULT_GLOBALS, this.addon);
                             }
 
                             if(typeof addon.stop === 'function')
                             {
-                                addon.stop(this.addon.app(), this.addon.router(), this.confPanels, this.appPanels);
+                                addon.stop(this.addon.app(), this.addon.router(), this.addon, this.confPanels, this.appPanels);
                             }
 
                             //////////.started = false;

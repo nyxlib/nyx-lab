@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject, reactive, onMounted, onUnmounted} from 'vue';
+import {inject, reactive, onMounted} from 'vue';
 
 import {getCurrent} from '@tauri-apps/api/window';
 
@@ -123,28 +123,6 @@ onMounted(() => {
     configStore.init();
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    timer = setInterval(() => {
-
-        addon.updateVariables('lat', 'latVariable', 4);
-        addon.updateVariables('lon', 'lonVariable', 4);
-        addon.updateVariables('alt', 'altVariable', 1);
-
-        addon.updateVariables('temperature', 'temperatureVariable', 1);
-        addon.updateVariables('humidity', 'humidityVariable', 1);
-        addon.updateVariables('wind', 'windVariable', 1);
-        addon.updateVariables('seeing', 'seeingVariable', 1);
-
-    }, 10 * 1000);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-onUnmounted(() => {
-
-    clearTimeout(timer);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
