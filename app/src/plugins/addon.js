@@ -1,3 +1,4 @@
+// noinspection JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import * as uuid from 'uuid';
@@ -24,19 +25,30 @@ function _load(app, addonPath, addonName)
 
         const script = document.createElement('script');
 
+        /*------------------------------------------------------------------------------------------------------------*/
+
         script.addEventListener('load', () => {
 
-            app.use(window[addonName].default);
+            const module = typeof window[addonName].default;
 
-            resolve(window[addonName].default);
+            if(module.install === 'function')
+            {
+                app.use(module);
+            }
+
+            resolve(module);
         });
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         script.addEventListener('error', () => {
 
             console.error(`Error loading addon ${addonName}`);
 
-            reject(/*--------------*/ null /*--------------*/);
+            reject(null);
         });
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         script.src = addonPath;
 
@@ -63,7 +75,7 @@ export default {
             app: () => app,
             router: () => router,
             configStore: () => useConfigStore(),
-            newId: () => uuid.v4(),
+            newId: () => uuid.v4().substring(0, 13),
             /**/
             load: (addonPath, addonName) => _load(app, addonPath, addonName),
         });
@@ -71,3 +83,4 @@ export default {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+// noinspection JSUnusedGlobalSymbols
