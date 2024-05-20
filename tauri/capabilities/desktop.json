@@ -4,19 +4,20 @@
     "description": "Capability for the main window",
     "windows": ["main"],
     "permissions": [
-        "window:allow-start-dragging",
-        "window:allow-toggle-maximize",
-        "window:allow-minimize",
-        "window:allow-close",
-        "dialog:allow-message",
-        "dialog:allow-confirm",
+        "fs:allow-app-read",
+        "fs:allow-app-write",
         "dialog:allow-open",
         "dialog:allow-save",
+        "dialog:allow-message",
+        "dialog:allow-confirm",
         "notification:allow-notify",
         "notification:allow-request-permission",
         "notification:allow-is-permission-granted",
-        "fs:allow-app-read",
-        "fs:allow-app-write",
-        "shell:allow-open"
+        "shell:allow-open",
+        "window:allow-close",
+        "window:allow-minimize",
+        "window:allow-is-maximized",
+        "window:allow-start-dragging",
+        "window:allow-toggle-maximize"
     ]
 }

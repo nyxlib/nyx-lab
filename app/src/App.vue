@@ -5,6 +5,7 @@
 import {inject, reactive, onMounted} from 'vue';
 
 import {getCurrent} from '@tauri-apps/api/window';
+import {listen} from '@tauri-apps/api/event';
 
 import {useIndiStore} from 'vue-indi';
 
@@ -96,9 +97,10 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    state.theme = localStorage.getItem('indi-dashboard-theme') || 'dark';
+    document.querySelector('[data-tauri-drag-region]').addEventListener('dblclick', () => {
 
-    themeSet();
+        getCurrent().toggleMaximize();
+    });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -108,16 +110,29 @@ onMounted(() => {
         document.body.setAttribute('data-environment', 'browser');
     }
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+    window.addEventListener('resize', () => {
 
-    document.querySelector('[data-tauri-drag-region]').addEventListener('dblclick', () => {
+        getCurrent().isMaximized().then((maximized) => {
 
-        getCurrent().toggleMaximize();
+            if(maximized) {
+                document.body.setAttribute('data-maximized', 'true');
+            } else {
+                document.body.setAttribute('data-maximized', 'false');
+            }
+
+        }).catch(() => {
+
+            /* IGNORE */
+        });
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    state.theme = localStorage.getItem('indi-dashboard-theme') || 'dark';
+
     configStore.init();
+
+    themeSet();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 });

@@ -26,7 +26,7 @@ html, body,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-body[data-environment="tauri"] > div > nav {
+body[data-environment="tauri"][data-maximized="false"] > div > nav {
 
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
