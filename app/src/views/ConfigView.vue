@@ -1,4 +1,4 @@
-<!--suppress HtmlUnknownAttribute, VueUnrecognizedDirective -->
+<!--suppress VueUnrecognizedSlot, HtmlUnknownAttribute, VueUnrecognizedDirective -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 

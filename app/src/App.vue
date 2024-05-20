@@ -18,7 +18,6 @@ import useConfigStore from './stores/config';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addon = inject('addon');
 const dialog = inject('dialog');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -250,7 +249,7 @@ onMounted(() => {
                     </router-link>
                 </li>
 
-                <template v-for="(addon, key) in configStore.appPanels" :key="key">
+                <template v-for="(addon) in configStore.appPanels">
                     <li class="nav-item" :title="panel.title" v-tooltip v-for="(panel, idx) in addon" :key="idx">
                         <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="panel.path" v-html="panel.logo" />
                     </li>
@@ -282,6 +281,8 @@ onMounted(() => {
 
     </div>
 
+    <!-- *********************************************************************************************************** -->
+    <!-- MODAL                                                                                                       -->
     <!-- *********************************************************************************************************** -->
 
     <teleport to="body">
