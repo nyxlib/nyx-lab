@@ -3,8 +3,6 @@
 
 import {inject} from 'vue';
 
-import {IndiDashboard} from 'vue-indi';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from '../stores/config';
@@ -46,7 +44,7 @@ const disconnect = () => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="h-100 w-100 p-3">
+    <div class="h-100 w-100 overflow-y-auto p-3">
 
         <indi-dashboard @connect="connect" @disconnect="disconnect" />
 

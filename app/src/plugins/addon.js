@@ -17,7 +17,7 @@ function _load(app, addonPath, addonName)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof window[addonName] === 'function') return Promise.resolve([app, addonName]);
+    if(typeof window[addonName] !== 'undefined') return Promise.resolve([window[addonName].default, false]);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -38,7 +38,7 @@ function _load(app, addonPath, addonName)
                 app.use(module);
             }
 
-            resolve(module);
+            resolve([module, true]);
         });
 
         /*------------------------------------------------------------------------------------------------------------*/

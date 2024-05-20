@@ -10,8 +10,6 @@ import {defineStore} from 'pinia';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const DEFAULT_GLOBALS = {
-    addons: {},
-    /**/
     mqttURL: '',
     mqttUsername: '',
     mqttPassword: '',
@@ -23,29 +21,8 @@ const DEFAULT_GLOBALS = {
     /**/
     nodeRedURL: '',
     /**/
-    enableSkyMap: false,
-    enableAstroSetup: false,
-    /**/
-    devices: {},
-    skymap: 'aladin',
+    addons: {},
 };
-
-DEFAULT_GLOBALS.lat = 48.8533;
-DEFAULT_GLOBALS.latVariable = '';
-DEFAULT_GLOBALS.lon = 2.34886;
-DEFAULT_GLOBALS.lonVariable = '';
-DEFAULT_GLOBALS.alt = 0.00000;
-DEFAULT_GLOBALS.altVariable = '';
-DEFAULT_GLOBALS.zoom = 18;
-
-DEFAULT_GLOBALS.temperature = 0.0;
-DEFAULT_GLOBALS.temperatureVariable = '';
-DEFAULT_GLOBALS.humidity = 0.0;
-DEFAULT_GLOBALS.humidityVariable = '';
-DEFAULT_GLOBALS.wind = 0.0;
-DEFAULT_GLOBALS.windVariable = '';
-DEFAULT_GLOBALS.seeing = 0.0;
-DEFAULT_GLOBALS.seeingVariable = '';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -59,7 +36,7 @@ const confDup = (src, def) => {
        &&
        typeof def === 'object'
     ) {
-        Object.keys(def).forEach((key) => { result[key] = (key in src) ? src[key] : def[key]; });
+        for(const key of Object.keys(def)) result[key] = (key in src) ? src[key] : def[key];
     }
 
     return result;
@@ -85,6 +62,8 @@ const useConfigStore = defineStore('config', {
 
         init()
         {
+            this.globals.addons = JSON.parse(localStorage.getItem('indi-dashboard-config') || '{}').addons || {};
+
             this.dialog = inject('dialog');
             this.addon = inject('addon');
 
@@ -95,80 +74,109 @@ const useConfigStore = defineStore('config', {
         /* CONFIG                                                                                                     */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        initializeAddons()
+        _startStop(addon, name, do_init, do_start)
         {
-            for(const addonDescr of Object.values(this.globals.addons))
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* INIT                                                                                                   */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(do_init && typeof addon.init === 'function')
             {
-                addonDescr.started = false;
+                /*----------------------------------------------------------------------------------------------------*/
 
-                if(addonDescr.enabled)
+                const TEMP_GLOBALS = {};
+
+                addon.init(TEMP_GLOBALS, this.addon, name);
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                for(const key of Object.keys(TEMP_GLOBALS))
                 {
-                    this.addon.load(addonDescr.path, addonDescr.name).then((addon) => {
+                    if(!(key in this.globals)) this.globals[key] = TEMP_GLOBALS[key];
 
-                        try
-                        {
-                            if(typeof addon.initialize === 'function')
-                            {
-                                addon.initialize(DEFAULT_GLOBALS, this.addon);
-                            }
+                    if(!(key in DEFAULT_GLOBALS)) DEFAULT_GLOBALS[key] = TEMP_GLOBALS[key];
+                }
 
-                            if(typeof addon.start === 'function')
-                            {
-                                addon.start(this.addon.app(), this.addon.router(), this.addon, this.confPanels, this.appPanels);
-                            }
+                /*----------------------------------------------------------------------------------------------------*/
 
-                            addonDescr.started = true;
-                        }
-                        catch(e)
-                        {
-                            console.error(e);
-                        }
+                console.error(`Loading addon '${name}': [OKAY]`);
 
-                    }).catch((e) => {
+                /*----------------------------------------------------------------------------------------------------*/
+            }
 
-                        console.error(e);
-                    });
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* START / STOP                                                                                           */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(do_start)
+            {
+                if(typeof addon.start === 'function')
+                {
+                    this.confPanels[name] = [];
+                    this.appPanels[name] = [];
+
+                    addon.start(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name], this.appPanels[name]);
                 }
             }
+            else
+            {
+                if(typeof addon.stop === 'function')
+                {
+                    addon.stop(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name], this.appPanels[name]);
+
+                    delete this.confPanels[name];
+                    delete this.appPanels[name];
+                }
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        finalizeAddons()
+        startStopAddons()
         {
-            for(const addonDescr of Object.values(this.globals.addons))
-            {
-                addonDescr.started = false;
+            return new Promise((resolve) => {
 
-                if(addonDescr.enabled)
+                let n = 0;
+
+                for(const addonDescr of Object.values(this.globals.addons))
                 {
-                    this.addon.load(addonDescr.path, addonDescr.name).then((addon) => {
+                    addonDescr.started = false;
 
-                        try
-                        {
-                            if(typeof addon.initialize === 'function')
-                            {
-                                addon.initialize(DEFAULT_GLOBALS, this.addon);
+                    n++;
+
+                    try
+                    {
+                        this.addon.load(addonDescr.path, addonDescr.name).then(([addon, do_init]) => {
+
+                            addonDescr.started = addonDescr.enabled;
+
+                            this._startStop(addon, addonDescr.name, do_init, addonDescr.enabled);
+
+                            if(--n === 0) {
+                                resolve();
                             }
 
-                            if(typeof addon.stop === 'function')
-                            {
-                                addon.stop(this.addon.app(), this.addon.router(), this.addon, this.confPanels, this.appPanels);
+                        }).catch((e) => {
+
+                            console.error(`Loading addon '${addonDescr.name}': [ERROR]\n${e}`);
+
+                            if(--n === 0) {
+                                resolve();
                             }
+                        });
+                    }
+                    catch(e)
+                    {
+                        console.error(`Loading addon '${addonDescr.name}': [ERROR]\n${e}`);
 
-                            //////////.started = false;
+                        if(--n === 0) {
+                            resolve();
                         }
-                        catch(e)
-                        {
-                            console.error(e);
-                        }
-
-                    }).catch((e) => {
-
-                        console.error(e);
-                    });
+                    }
                 }
-            }
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -179,11 +187,12 @@ const useConfigStore = defineStore('config', {
             {
                 this.dialog.open('config.json', 'text/plain;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then((json) => {
 
-                    this.finalizeAddons();
                     this.globals = confDup(JSON.parse(json), DEFAULT_GLOBALS);
-                    this.initializeAddons();
 
-                    this.dialog.success();
+                    this.startStopAddons().then(() => {
+
+                        this.dialog.success();
+                    });
                 });
             }
             catch(e)
@@ -202,7 +211,10 @@ const useConfigStore = defineStore('config', {
 
                 this.dialog.save(JSON.stringify(config, null, 2), 'config.json', 'text/plain;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then(() => {
 
-                    this.dialog.success();
+                    this.startStopAddons().then(() => {
+
+                        this.dialog.success();
+                    });
                 });
             }
             catch(e)
@@ -217,13 +229,14 @@ const useConfigStore = defineStore('config', {
         {
             try
             {
-                const config = localStorage.getItem('indi-dashboard-config');
+                const config = localStorage.getItem('indi-dashboard-config') || {};
 
-                this.finalizeAddons();
                 this.globals = confDup(JSON.parse(config), DEFAULT_GLOBALS);
-                this.initializeAddons();
 
-                this.dialog.success();
+                this.startStopAddons().then(() => {
+
+                    this.dialog.success();
+                });
             }
             catch(e)
             {
@@ -241,7 +254,10 @@ const useConfigStore = defineStore('config', {
 
                 localStorage.setItem('indi-dashboard-config', JSON.stringify(config));
 
-                this.dialog.success();
+                this.startStopAddons().then(() => {
+
+                    this.dialog.success();
+                });
             }
             catch(e)
             {

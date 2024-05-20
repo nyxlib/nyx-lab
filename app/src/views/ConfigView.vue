@@ -6,8 +6,6 @@ import {reactive} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
-import {IndiVariables, IndiTopology} from 'vue-indi';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from '../stores/config';
@@ -34,7 +32,7 @@ const state = reactive({
 
     <!-- *********************************************************************************************************** -->
 
-    <form class="h-100 w-100 p-3" @submit.prevent="configStore.save">
+    <div class="h-100 w-100 overflow-y-auto p-3">
 
         <!--*********************************************************************************************************-->
 
@@ -180,11 +178,15 @@ const state = reactive({
 
             <!-- *************************************************************************************************** -->
 
-            <tab-pane :title="panel.title" v-for="(panel, id) in configStore.confPanels" :key="id" @shown="() => state.shownTabs.add(id)">
+            <template v-for="(addon, key) in configStore.confPanels" :key="key">
 
-                <component :is="panel.component" v-if="state.shownTabs.has(id)" />
+                <tab-pane :title="panel.title" v-for="(panel, idx) in addon" :key="idx" @shown="() => state.shownTabs.add(`${key}_${idx}`)">
 
-            </tab-pane>
+                    <component :is="panel.component" v-if="state.shownTabs.has(`${key}_${idx}`)" />
+
+                </tab-pane>
+
+            </template>
 
             <!-- *************************************************************************************************** -->
             <!-- BUTTONS                                                                                             -->
@@ -204,7 +206,7 @@ const state = reactive({
                     <i class="bi bi-x-lg"></i> Reload
                 </button>
 
-                <button class="btn btn-sm btn-success me-0" type="submit">
+                <button class="btn btn-sm btn-success me-0" type="button" @click="configStore.save">
                     <i class="bi bi-check-lg"></i> Save
                 </button>
 
@@ -216,7 +218,7 @@ const state = reactive({
 
         <!--*********************************************************************************************************-->
 
-    </form>
+    </div>
 
     <!-- *********************************************************************************************************** -->
 

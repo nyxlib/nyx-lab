@@ -10,7 +10,7 @@ export default defineConfig({
     base: './',
     build: {
         chunkSizeWarningLimit: 1250,
-        minify: true,
+        minify: false,
         rollupOptions: {
             output: {
                 entryFileNames: 'dashboard.js',

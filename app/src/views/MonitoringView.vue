@@ -1,10 +1,6 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {IndiMonitoring} from 'vue-indi';
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 import useConfigStore from '../stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -20,7 +16,7 @@ const configStore = useConfigStore();
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="h-100 w-100 p-3">
+    <div class="h-100 w-100 overflow-y-auto p-3">
 
         <indi-monitoring :groups="configStore.globals.monitoringGroups" :metrics="configStore.globals.monitoringMetrics" :refresh-interval="configStore.globals.refreshInterval">
 

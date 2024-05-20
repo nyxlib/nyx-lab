@@ -6,6 +6,8 @@ import * as VueRouter from 'vue-router/dist/vue-router.esm-bundler';
 
 import * as Bootstrap from 'bootstrap/dist/js/bootstrap.esm';
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 import {createPinia} from 'pinia';
 
 import Chart from 'chart.js/auto';
@@ -20,8 +22,6 @@ import router from './router';
 import addon from './plugins/addon';
 import dialog from './plugins/dialog';
 import input from './plugins/input';
-
-import Splitter from './components/Splitter.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -46,10 +46,6 @@ app.use(router);
 app.use(dialog);
 app.use(input);
 app.use(addon);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-app.component('Splitter', Splitter);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

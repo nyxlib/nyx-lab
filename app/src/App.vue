@@ -8,6 +8,8 @@ import {getCurrent} from '@tauri-apps/api/window';
 
 import {useIndiStore} from 'vue-indi';
 
+import {Modal} from 'bootstrap';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from './stores/config';
@@ -30,10 +32,6 @@ const configStore = useConfigStore(window.pinia);
 const state = reactive({
     theme: 'light',
 });
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-let timer = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -222,7 +220,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="d-flex flex-column" style="height: 100%; width: 4.5rem; overflow-y: scroll;">
+        <div class="d-flex flex-column" style="height: 100%; width: 4.5rem; overflow-y: hidden;">
 
             <ul class="nav nav-pills flex-grow-1 flex-column justify-content-start text-center border-end">
 
@@ -252,9 +250,11 @@ onMounted(() => {
                     </router-link>
                 </li>
 
-                <li class="nav-item" :title="panel.title" v-tooltip v-for="(panel, id) in configStore.appPanels" :key="id">
-                    <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="panel.path" v-html="panel.logo" />
-                </li>
+                <template v-for="(addon, key) in configStore.appPanels" :key="key">
+                    <li class="nav-item" :title="panel.title" v-tooltip v-for="(panel, idx) in addon" :key="idx">
+                        <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="panel.path" v-html="panel.logo" />
+                    </li>
+                </template>
 
                 <li class="nav-item" title="Config" v-tooltip>
                     <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" to="/config">
@@ -272,7 +272,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="d-flex" style="height: 100%; width: calc(100% - 4.5rem); overflow-y: scroll;">
+        <div class="d-flex" style="height: 100%; width: calc(100% - 4.5rem); overflow-y: hidden;">
 
             <router-view :key="$route.path" />
 

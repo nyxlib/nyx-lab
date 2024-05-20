@@ -4,9 +4,8 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "app-dev": "npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js dev",
-        "app-prod": "npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js build",
-        "app-preview": "npm i --update vue-indi && cp -R ../indi-vue/node_modules/* ./node_modules/ && cd ./app/ && ../node_modules/vite/bin/vite.js preview",
+        "app-dev": "npm i --update vue-indi && cd ./app/ && ../node_modules/vite/bin/vite.js dev",
+        "app-prod": "npm i --update vue-indi && cd ./app/ && ../node_modules/vite/bin/vite.js build",
         "tauri-dev": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js dev",
         "tauri-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js build"
     },
@@ -15,7 +14,12 @@
         "@tauri-apps/plugin-dialog": "^2.0.0-beta.3",
         "@tauri-apps/plugin-fs": "^2.0.0-beta.3",
         "@tauri-apps/plugin-notification": "^2.0.0-beta.3",
-        "@tauri-apps/plugin-shell": "^2.0.0-beta.3",
+        "@tauri-apps/plugin-shell": "^2.0.0-beta.4",
+        "@vueform/multiselect": "^2.6.7",
+        "bootstrap": "^5.3.3",
+        "bootstrap-icons": "^1.11.3",
+        "chart.js": "^4.4.3",
+        "pinia": "^2.1.7",
         "split.js": "^1.6.5",
         "uuid": "^9.0.1",
         "vue": "^3.4.27",
@@ -23,13 +27,13 @@
         "vue-router": "^4.3.2"
     },
     "devDependencies": {
-        "@tauri-apps/cli": "^2.0.0-beta.15",
+        "@tauri-apps/cli": "^2.0.0-beta.17",
         "@vitejs/plugin-vue": "^5.0.4",
         "@vue/eslint-config-prettier": "^9.0.0",
-        "eslint": "^9.1.1",
-        "eslint-plugin-vue": "^9.25.0",
-        "sass": "^1.76.0",
-        "vite": "^5.2.10"
+        "eslint": "^9.3.0",
+        "eslint-plugin-vue": "^9.26.0",
+        "sass": "^1.77.2",
+        "vite": "^5.2.11"
     },
     "author": "Jérôme Odier",
     "license": "CeCILL",
