@@ -5,7 +5,6 @@
 import {inject, reactive, onMounted} from 'vue';
 
 import {getCurrent} from '@tauri-apps/api/window';
-import {listen} from '@tauri-apps/api/event';
 
 import {useIndiStore} from 'vue-indi';
 
@@ -110,21 +109,25 @@ onMounted(() => {
         document.body.setAttribute('data-environment', 'browser');
     }
 
+    const updateWindow = () => getCurrent().isMaximized().then((maximized) => {
+
+        if(maximized) {
+            document.body.setAttribute('data-maximized', 'true');
+        } else {
+            document.body.setAttribute('data-maximized', 'false');
+        }
+
+    }).catch(() => {
+
+        /* IGNORE */
+    });
+
     window.addEventListener('resize', () => {
 
-        getCurrent().isMaximized().then((maximized) => {
-
-            if(maximized) {
-                document.body.setAttribute('data-maximized', 'true');
-            } else {
-                document.body.setAttribute('data-maximized', 'false');
-            }
-
-        }).catch(() => {
-
-            /* IGNORE */
-        });
+        updateWindow();
     });
+
+    updateWindow();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

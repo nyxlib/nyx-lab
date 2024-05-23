@@ -185,7 +185,7 @@ const useConfigStore = defineStore('config', {
         {
             try
             {
-                this.dialog.open('config.json', 'text/plain;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then((json) => {
+                this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then((json) => {
 
                     this.globals = confDup(JSON.parse(json), DEFAULT_GLOBALS);
 
@@ -209,7 +209,7 @@ const useConfigStore = defineStore('config', {
             {
                 const config = confDup(this.globals, DEFAULT_GLOBALS);
 
-                this.dialog.save(JSON.stringify(config, null, 2), 'config.json', 'text/plain;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then(() => {
+                this.dialog.save(JSON.stringify(config, null, 2), 'config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then(() => {
 
                     this.startStopAddons().then(() => {
 
