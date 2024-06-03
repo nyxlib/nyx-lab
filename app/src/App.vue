@@ -109,18 +109,20 @@ onMounted(() => {
         document.body.setAttribute('data-environment', 'browser');
     }
 
-    const updateWindow = () => getCurrent().isMaximized().then((maximized) => {
+    const updateWindow = () => {
 
-        if(maximized) {
-            document.body.setAttribute('data-maximized', 'true');
-        } else {
-            document.body.setAttribute('data-maximized', 'false');
+        if(typeof window.__TAURI__ !== 'undefined')
+        {
+            getCurrent().isMaximized().catch(() => {}).then((maximized) => {
+
+                if(maximized) {
+                    document.body.setAttribute('data-maximized', 'true');
+                } else {
+                    document.body.setAttribute('data-maximized', 'false');
+                }
+            });
         }
-
-    }).catch(() => {
-
-        /* IGNORE */
-    });
+    };
 
     window.addEventListener('resize', () => {
 
