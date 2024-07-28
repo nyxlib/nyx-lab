@@ -26,7 +26,20 @@ html, body,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-body[data-environment="tauri"][data-maximized="false"] > div > nav {
+body[data-environment="tauri"][data-maximized="false"] > #indi_dashboard {
+
+    border: 1px var(--bs-secondary-border-subtle) solid;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+body[data-environment="tauri"][data-maximized="false"] > #indi_dashboard {
+
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+body[data-environment="tauri"][data-maximized="false"] > #indi_dashboard > nav {
 
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -37,6 +50,15 @@ body[data-environment="tauri"][data-maximized="false"] > div > nav {
 .form-label {
 
     margin-bottom: 0.25rem;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.btn.btn-xs {
+
+    line-height: 0.8;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.4rem;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

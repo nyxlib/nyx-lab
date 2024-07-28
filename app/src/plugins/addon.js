@@ -45,9 +45,7 @@ function _load(app, addonPath, addonName)
 
         script.addEventListener('error', () => {
 
-            console.error(`Error loading addon ${addonName}`);
-
-            reject(null);
+            reject(`Error loading addon ${addonName}`);
         });
 
         /*------------------------------------------------------------------------------------------------------------*/

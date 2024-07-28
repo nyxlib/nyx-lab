@@ -37,8 +37,7 @@
         "active": true,
         "targets": [
             "app",
-            "appimage",
-            "updater"
+            "appimage"
         ],
         "icon": [
             "icons/32x32.png",
