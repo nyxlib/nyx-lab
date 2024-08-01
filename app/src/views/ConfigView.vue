@@ -109,7 +109,8 @@ const state = reactive({
                                                 :create-option="true"
                                                 :close-on-select="false"
                                                 :options="configStore.globals.monitoringGroups"
-                                                v-model="configStore.globals.monitoringGroups" />
+                                                v-model="configStore.globals.monitoringGroups"
+                                            />
                                         </div>
 
                                         <div class="mb-3">

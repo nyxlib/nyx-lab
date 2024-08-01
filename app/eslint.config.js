@@ -8,9 +8,12 @@ import pluginVue from 'eslint-plugin-vue';
 export default [
     ...pluginVue.configs['flat/recommended'],
     {
-        files: ['src/**/*.js', 'src/**/*.vue'],
+        ignores: ['dist/**', 'public/**', 'node_modules/**'],
+    },
+    {
         rules: {
             'vue/html-indent': 'off',
+            'vue/v-slot-style': 'off',
             'vue/attributes-order': 'off',
             'vue/html-self-closing': 'off',
             'vue/no-mutating-props': 'off',

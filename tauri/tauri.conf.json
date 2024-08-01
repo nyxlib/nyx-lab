@@ -24,12 +24,7 @@
             }
         ],
         "security": {
-            "csp": {
-                "default-src": "'self' https: http: data:",
-                "connect-src": "'self' https: http: wss: ws: ipc: tauri: data:",
-                "script-src": "'self' 'unsafe-eval' https: http:",
-                "style-src": "'self' 'unsafe-inline' https: http:"
-            }
+            "csp": null
         },
         "withGlobalTauri": true
     },

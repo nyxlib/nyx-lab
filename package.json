@@ -2,6 +2,7 @@
     "name": "indi-dashboard",
     "description": "INDI Dashboard",
     "version": "1.0.0",
+    "type": "module",
     "private": true,
     "scripts": {
         "app-dev": "npm i --update vue-indi && cd ./app/ && ../node_modules/vite/bin/vite.js dev",

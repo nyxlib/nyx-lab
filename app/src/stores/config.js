@@ -74,7 +74,7 @@ const useConfigStore = defineStore('config', {
         /* CONFIG                                                                                                     */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        _startStop(addon, name, do_init, do_start)
+        _init(addon, name, do_init)
         {
             /*--------------------------------------------------------------------------------------------------------*/
             /* INIT                                                                                                   */
@@ -105,6 +105,13 @@ const useConfigStore = defineStore('config', {
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        _startStop(addon, name, do_start)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
             /* START / STOP                                                                                           */
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -134,7 +141,7 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        startStopAddons()
+        initAddons()
         {
             return new Promise((resolve) => {
 
@@ -142,17 +149,13 @@ const useConfigStore = defineStore('config', {
 
                 for(const addonDescr of Object.values(this.globals.addons))
                 {
-                    addonDescr.started = false;
-
                     n++;
 
                     try
                     {
                         this.addon.load(addonDescr.path, addonDescr.name).then(([addon, do_init]) => {
 
-                            addonDescr.started = addonDescr.enabled;
-
-                            this._startStop(addon, addonDescr.name, do_init, addonDescr.enabled);
+                            this._init(addon, addonDescr.name, do_init);
 
                             if(--n === 0) {
                                 resolve();
@@ -181,17 +184,67 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
+        startStopAddons()
+        {
+            return new Promise((resolve) => {
+
+                let n = 0;
+
+                for(const addonDescr of Object.values(this.globals.addons))
+                {
+                    addonDescr.started = false;
+
+                    n++;
+
+                    try
+                    {
+                        this.addon.load(addonDescr.path, addonDescr.name).then(([addon, _]) => {
+
+                            addonDescr.started = addonDescr.enabled;
+
+                            this._startStop(addon, addonDescr.name, addonDescr.enabled);
+
+                            if(--n === 0) {
+                                resolve();
+                            }
+
+                        }).catch((e) => {
+
+                            console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.name}': [ERROR]\n${e}`);
+
+                            if(--n === 0) {
+                                resolve();
+                            }
+                        });
+                    }
+                    catch(e)
+                    {
+                        console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.name}': [ERROR]\n${e}`);
+
+                        if(--n === 0) {
+                            resolve();
+                        }
+                    }
+                }
+            });
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         import()
         {
             try
             {
                 this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then((json) => {
 
-                    this.globals = confDup(JSON.parse(json), DEFAULT_GLOBALS);
+                    this.initAddons().finally(() => {
 
-                    this.startStopAddons().then(() => {
+                        this.globals = confDup(JSON.parse(json), DEFAULT_GLOBALS);
 
-                        this.dialog.success();
+                        this.startStopAddons().then(() => {
+
+                            this.dialog.success();
+                        });
                     });
                 });
             }
@@ -231,11 +284,14 @@ const useConfigStore = defineStore('config', {
             {
                 const config = localStorage.getItem('indi-dashboard-config') || {};
 
-                this.globals = confDup(JSON.parse(config), DEFAULT_GLOBALS);
+                this.initAddons().finally(() => {
 
-                this.startStopAddons().then(() => {
+                    this.globals = confDup(JSON.parse(config), DEFAULT_GLOBALS);
 
-                    this.dialog.success();
+                    this.startStopAddons().then(() => {
+
+                        this.dialog.success();
+                    });
                 });
             }
             catch(e)
