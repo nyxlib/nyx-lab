@@ -239,7 +239,7 @@ const useConfigStore = defineStore('config', {
 
                     this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then((json) => {
 
-                        this.globals = confDup(JSON.parse(json), DEFAULT_GLOBALS);
+                        this.globals = confDup(JSON.parse(json.toString()), DEFAULT_GLOBALS);
 
                         this.startStopAddons().then(() => {
 
@@ -284,7 +284,7 @@ const useConfigStore = defineStore('config', {
             {
                 this.initAddons().finally(() => {
 
-                    const config = localStorage.getItem('indi-dashboard-config') || {};
+                    const config = localStorage.getItem('indi-dashboard-config') || '{}';
 
                     this.globals = confDup(JSON.parse(config), DEFAULT_GLOBALS);
 
