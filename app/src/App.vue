@@ -73,6 +73,10 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    widgetURL = widgetURL || 'javascript:void(0);';
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     document.getElementById('F10F4898').textContent = widgetTitle;
 
     document.getElementById('DC2D5B47').textContent = widgetName;
@@ -269,8 +273,8 @@ onMounted(() => {
                     </router-link>
                 </li>
 
-                <template v-for="(addon) in configStore.appPanels">
-                    <li class="nav-item" :title="panel.title" v-tooltip v-for="(panel, idx) in addon" :key="idx">
+                <template v-for="addon in configStore.appPanels" :key="addon">
+                    <li class="nav-item" :title="panel.title" v-tooltip v-for="panel in addon" :key="panel">
                         <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="panel.path" v-html="panel.logo" />
                     </li>
                 </template>
