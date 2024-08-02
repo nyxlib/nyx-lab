@@ -2,7 +2,9 @@
 
 use mime;
 
-use tauri::{http};
+use tauri::http;
+
+use mime_guess::from_path;
 
 use std::{fs, env, path::PathBuf};
 
@@ -11,47 +13,59 @@ use std::{fs, env, path::PathBuf};
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run()
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    let addons_dir = env::var("HOME").map(PathBuf::from)
+                                     .map(|home_dir| home_dir.join(".local/indi-dashboard/addons"))
+                                     .expect("Error determining the addon directory")
+    ;
+
+    fs::create_dir_all(&addons_dir).expect("Error creating the addons directory");
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     tauri::Builder::default()
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* ADDON PROTOCOL                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        .register_uri_scheme_protocol("addon", |_, req| {
+        .register_uri_scheme_protocol("addon", move |_, req| {
 
-            let full_path = match env::var("HOME").map(PathBuf::from) {
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* GET FILE PATH                                                                                          */
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                /*----------------------------------------------------------------------------------------------------*/
+            let file_path = addons_dir.join(req.uri().to_string().replace("addon://", "").trim());
 
-                Err(_) => return http::Response::builder()
-                    .status(http::StatusCode::BAD_REQUEST)
-                    .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
-                    .body("addon dir not found".to_string().into_bytes())
-                    .unwrap(),
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* GET FILE MIME                                                                                          */
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                /*----------------------------------------------------------------------------------------------------*/
+            let file_mime = from_path(&file_path).first_or_octet_stream();
 
-                Ok(home_dir) => home_dir.join(".local/indi-dashboard/addons/").join(req.uri().to_string().trim().replace("addon://localhost/", "")),
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* SERVE FILE                                                                                             */
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                /*----------------------------------------------------------------------------------------------------*/
-            };
-
-            match fs::read_to_string(full_path) {
+            match fs::read(file_path) {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
                 Ok(content) => return http::Response::builder()
-                    .status(http::StatusCode::BAD_REQUEST)
-                    .header("Content-Type", mime::TEXT_PLAIN.essence_str())
-                    .body(content.into_bytes())
+                    .status(http::StatusCode::OK)
+                    .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                    .header(http::header::CONTENT_TYPE, file_mime.essence_str())
+                    .body(content)
                     .unwrap(),
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                Err(_) => return http::Response::builder()
-                    .status(http::StatusCode::BAD_REQUEST)
+                Err(e) => return http::Response::builder()
+                    .status(http::StatusCode::NOT_FOUND)
+                    .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                     .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
-                    .body("file not found".to_string().into_bytes())
+                    .body(e.to_string().into_bytes())
                     .unwrap(),
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -75,6 +89,8 @@ pub fn run()
 
         /*------------------------------------------------------------------------------------------------------------*/
     ;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
