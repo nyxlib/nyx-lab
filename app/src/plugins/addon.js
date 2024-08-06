@@ -41,7 +41,7 @@ function _load(app, path)
 
                     if(typeof window[addonName] !== 'undefined')
                     {
-                        resolve([window[addonName].default, false]);
+                        resolve([window[addonName].default, addonName, false]);
                     }
                     else
                     {
@@ -60,7 +60,7 @@ function _load(app, path)
                                 app.use(module);
                             }
 
-                            resolve([module, true]);
+                            resolve([module, addonName, true]);
                         });
 
                         /*--------------------------------------------------------------------------------------------*/
@@ -87,15 +87,19 @@ function _load(app, path)
 
                     /*------------------------------------------------------------------------------------------------*/
                 }
+                else {
+
+                    reject('not an addon');
+                }
 
             }).catch((e) => {
 
-                reject(`Error loading addon ${path}: ${e}`);
+                reject(e);
             });
 
         }).catch((e) => {
 
-            reject(`Error loading addon ${path}: ${e}`);
+            reject(e);
         });
     });
 

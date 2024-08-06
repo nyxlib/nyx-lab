@@ -47,13 +47,11 @@ const confDup = (src, def) => {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const useConfigStore = defineStore('config', {
-    state: () => {
-        return {
-            globals: Object.assign({}, DEFAULT_GLOBALS),
-            confPanels: {},
-            appPanels: {},
-        };
-    },
+    state: () => ({
+        globals: Object.assign({}, DEFAULT_GLOBALS),
+        confPanels: {},
+        appPanels: {},
+    }),
     actions: {
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -62,8 +60,6 @@ const useConfigStore = defineStore('config', {
 
         init()
         {
-            this.globals.addons = JSON.parse(localStorage.getItem('indi-dashboard-config') || '{}').addons || {};
-
             this.dialog = inject('dialog');
             this.addon = inject('addon');
 
@@ -96,10 +92,6 @@ const useConfigStore = defineStore('config', {
 
                     if(!(key in DEFAULT_GLOBALS)) DEFAULT_GLOBALS[key] = TEMP_GLOBALS[key];
                 }
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                console.error(`Loading addon '${name}': [OKAY]`);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -141,21 +133,36 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        initAddons()
+        initAddons(addonDescrs)
         {
             return new Promise((resolve) => {
 
+                /*----------------------------------------------------------------------------------------------------*/
+
+                if(!addonDescrs || Object.keys(addonDescrs).length === 0)
+                {
+                    resolve();
+
+                    return;
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
                 let n = 0;
 
-                for(const addonDescr of Object.values(this.globals.addons))
+                /*----------------------------------------------------------------------------------------------------*/
+
+                for(const addonDescr of Object.values(addonDescrs))
                 {
                     n++;
 
                     try
                     {
-                        this.addon.load(addonDescr.path, addonDescr.name).then(([addon, do_init]) => {
+                        this.addon.load(addonDescr.path).then(([addon, name, do_init]) => {
 
-                            this._init(addon, addonDescr.name, do_init);
+                            this._init(addon, name, do_init);
+
+                            console.info(`Loading addon '${addonDescr.path}': [OKAY]`);
 
                             if(--n === 0) {
                                 resolve();
@@ -163,7 +170,7 @@ const useConfigStore = defineStore('config', {
 
                         }).catch((e) => {
 
-                            console.error(`Loading addon '${addonDescr.name}': [ERROR]\n${e}`);
+                            console.error(`Loading addon '${addonDescr.path}': [ERROR]\n${e}`);
 
                             if(--n === 0) {
                                 resolve();
@@ -172,25 +179,38 @@ const useConfigStore = defineStore('config', {
                     }
                     catch(e)
                     {
-                        console.error(`Loading addon '${addonDescr.name}': [ERROR]\n${e}`);
+                        console.error(`Loading addon '${addonDescr.path}': [ERROR]\n${e}`);
 
                         if(--n === 0) {
                             resolve();
                         }
                     }
                 }
+
+                /*----------------------------------------------------------------------------------------------------*/
             });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        startStopAddons()
+        startStopAddons(addonDescrs)
         {
             return new Promise((resolve) => {
 
+                /*----------------------------------------------------------------------------------------------------*/
+
+                if(!addonDescrs || Object.keys(addonDescrs).length === 0)
+                {
+                    resolve();
+
+                    return;
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
                 let n = 0;
 
-                for(const addonDescr of Object.values(this.globals.addons))
+                for(const addonDescr of Object.values(addonDescrs))
                 {
                     addonDescr.started = false;
 
@@ -198,11 +218,11 @@ const useConfigStore = defineStore('config', {
 
                     try
                     {
-                        this.addon.load(addonDescr.path).then(([addon, _]) => {
+                        this.addon.load(addonDescr.path).then(([addon, name, _]) => {
 
                             addonDescr.started = addonDescr.enabled;
 
-                            this._startStop(addon, addonDescr.name, addonDescr.enabled);
+                            this._startStop(addon, name, addonDescr.enabled);
 
                             if(--n === 0) {
                                 resolve();
@@ -210,7 +230,7 @@ const useConfigStore = defineStore('config', {
 
                         }).catch((e) => {
 
-                            console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.name}': [ERROR]\n${e}`);
+                            console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.path}': [ERROR]\n${e}`);
 
                             if(--n === 0) {
                                 resolve();
@@ -219,106 +239,83 @@ const useConfigStore = defineStore('config', {
                     }
                     catch(e)
                     {
-                        console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.name}': [ERROR]\n${e}`);
+                        console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.path}': [ERROR]\n${e}`);
 
                         if(--n === 0) {
                             resolve();
                         }
                     }
                 }
+
+                /*----------------------------------------------------------------------------------------------------*/
             });
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        _loadConfig(json)
+        {
+            try
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+
+                const globals = JSON.parse(json.toString())
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                this.initAddons(globals.addons || {}).then(() => {
+
+                    this.globals = confDup(globals, DEFAULT_GLOBALS);
+
+                    this.startStopAddons(globals.addons || {}).then(() => {
+
+                        this.dialog.success();
+                    });
+                });
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+            catch(e)
+            {
+                this.dialog.error(e);
+            }
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        _saveConfig(indent)
+        {
+            const globals = confDup(this.globals, DEFAULT_GLOBALS);
+
+            const json = JSON.stringify(globals, null, indent ? 2 : 0);
+
+            this.startStopAddons(globals.addons).then(this.dialog.success);
+
+            return json;
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         import()
         {
-            try
-            {
-                this.initAddons().finally(() => {
+            this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).then((json) => this._loadConfig(json)).catch(this.dialog.error);
+        },
 
-                    this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then((json) => {
-
-                        this.globals = confDup(JSON.parse(json.toString()), DEFAULT_GLOBALS);
-
-                        this.startStopAddons().then(() => {
-
-                            this.dialog.success();
-                        });
-                    });
-                });
-            }
-            catch(e)
-            {
-                this.dialog.error(e);
-            }
+        load()
+        {
+            this._loadConfig(localStorage.getItem('indi-dashboard-config'));
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         export()
         {
-            try
-            {
-                const config = confDup(this.globals, DEFAULT_GLOBALS);
-
-                this.dialog.save(JSON.stringify(config, null, 2), 'config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then(() => {
-
-                    this.startStopAddons().then(() => {
-
-                        this.dialog.success();
-                    });
-                });
-            }
-            catch(e)
-            {
-                this.dialog.error(e);
-            }
+            this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], this._saveConfig(true)).catch(this.dialog.error);
         },
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        load()
-        {
-            try
-            {
-                this.initAddons().finally(() => {
-
-                    const config = localStorage.getItem('indi-dashboard-config') || '{}';
-
-                    this.globals = confDup(JSON.parse(config), DEFAULT_GLOBALS);
-
-                    this.startStopAddons().then(() => {
-
-                        this.dialog.success();
-                    });
-                });
-            }
-            catch(e)
-            {
-                this.dialog.error(e);
-            }
-        },
-
-        /*------------------------------------------------------------------------------------------------------------*/
 
         save()
         {
-            try
-            {
-                const config = confDup(this.globals, DEFAULT_GLOBALS);
-
-                localStorage.setItem('indi-dashboard-config', JSON.stringify(config));
-
-                this.startStopAddons().then(() => {
-
-                    this.dialog.success();
-                });
-            }
-            catch(e)
-            {
-                this.dialog.error(e);
-            }
+            localStorage.setItem('indi-dashboard-config', this._saveConfig(false));
         },
 
         /*------------------------------------------------------------------------------------------------------------*/

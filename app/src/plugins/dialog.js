@@ -250,7 +250,7 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _save = (contents, defaultPath, typeMime, typeName, typeExts) => {
+const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
 
     return new Promise((resolve, reject) => {
 
