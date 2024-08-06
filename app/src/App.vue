@@ -4,7 +4,7 @@
 
 import {inject, reactive, onMounted} from 'vue';
 
-import {Window} from '@tauri-apps/api/window';
+import {Window, getCurrentWindow} from '@tauri-apps/api/window';
 
 import {useIndiStore} from 'vue-indi';
 
@@ -232,15 +232,15 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => Window.getByLabel('main').minimize()">
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrentWindow().minimize()">
                     <i class="bi bi-dash-lg"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => Window.getByLabel('main').toggleMaximize()">
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrentWindow().toggleMaximize()">
                     <i class="bi bi-collection"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary me-0" type="button" @click="() => Window.getByLabel('main').close()">
+                <button class="btn btn-sm btn-primary me-0" type="button" @click="() => getCurrentWindow().close()">
                     <i class="bi bi-x-lg"></i>
                 </button>
 
