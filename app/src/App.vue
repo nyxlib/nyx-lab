@@ -4,9 +4,7 @@
 
 import {inject, reactive, onMounted} from 'vue';
 
-import {getCurrentWindow} from '@tauri-apps/api/window';
-
-import {WebviewWindow} from '@tauri-apps/api/webviewWindow';
+import {Window} from '@tauri-apps/api/window';
 
 import {useIndiStore} from 'vue-indi';
 
@@ -102,24 +100,24 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    document.querySelector('[data-tauri-drag-region]').addEventListener('dblclick', () => {
-
-        getCurrentWindow().toggleMaximize();
-    });
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(typeof window.__TAURI__ !== 'undefined') {
-        document.body.setAttribute('data-environment', 'tauri');
-    } else {
+    if(typeof window.__TAURI__ === 'undefined')
+    {
         document.body.setAttribute('data-environment', 'browser');
     }
+    else
+    {
+        document.body.setAttribute('data-environment', 'tauri');
 
-    const updateWindow = () => {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        if(typeof window.__TAURI__ !== 'undefined')
-        {
-            getCurrentWindow().isMaximized().catch(() => {}).then((maximized) => {
+        const mainWindow = Window.getByLabel('main');
+        const addonWindow = Window.getByLabel('addons');
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const updateWindow = () => {
+
+            mainWindow.isMaximized().catch(() => {}).then((maximized) => {
 
                 if(maximized) {
                     document.body.setAttribute('data-maximized', 'true');
@@ -127,15 +125,31 @@ onMounted(() => {
                     document.body.setAttribute('data-maximized', 'false');
                 }
             });
-        }
-    };
+        };
 
-    window.addEventListener('resize', () => {
+        window.addEventListener('resize', () => {
+
+            updateWindow();
+        });
 
         updateWindow();
-    });
 
-    updateWindow();
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        document.querySelector('[data-tauri-drag-region]').addEventListener('dblclick', () => {
+
+            mainWindow.toggleMaximize();
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        addonWindow.listen('tauri://close-requested', () => {
+
+            addonWindow.hide();
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -144,21 +158,6 @@ onMounted(() => {
     configStore.init();
 
     themeSet();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(typeof window['__TAURI__'] !== 'undefined')
-    {
-        const addonWindow = WebviewWindow.getByLabel('addons');
-
-        if(addonWindow)
-        {
-            addonWindow.listen('tauri://close-requested', () => {
-
-                addonWindow.hide();
-            });
-        }
-    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 });
@@ -233,15 +232,15 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrentWindow().minimize()">
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => Window.getByLabel('main').minimize()">
                     <i class="bi bi-dash-lg"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrentWindow().toggleMaximize()">
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => Window.getByLabel('main').toggleMaximize()">
                     <i class="bi bi-collection"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary me-0" type="button" @click="() => getCurrentWindow().close()">
+                <button class="btn btn-sm btn-primary me-0" type="button" @click="() => Window.getByLabel('main').close()">
                     <i class="bi bi-x-lg"></i>
                 </button>
 
