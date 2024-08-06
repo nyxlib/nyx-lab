@@ -100,7 +100,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof window.__TAURI__ === 'undefined')
+    if(typeof window['__TAURI__'] === 'undefined')
     {
         document.body.setAttribute('data-environment', 'browser');
     }

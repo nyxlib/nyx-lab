@@ -112,9 +112,9 @@ const addonUp = (addon1) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const tauriMessageHandler = (e) => addonAppend(e.payload.url, e.payload.id);
+const tauriMessageHandler = (e) => addonAppend(e.payload);
 
-const htmlMessageHandler = (e) => addonAppend(e.data.url, e.data.id);
+const htmlMessageHandler = (e) => addonAppend(e.data);
 
 let unlisten = null;
 
