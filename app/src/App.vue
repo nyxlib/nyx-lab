@@ -6,6 +6,8 @@ import {inject, reactive, onMounted} from 'vue';
 
 import {getCurrentWindow} from '@tauri-apps/api/window';
 
+import {WebviewWindow} from '@tauri-apps/api/webviewWindow';
+
 import {useIndiStore} from 'vue-indi';
 
 import {Modal} from 'bootstrap';
@@ -142,6 +144,21 @@ onMounted(() => {
     configStore.init();
 
     themeSet();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(typeof window['__TAURI__'] !== 'undefined')
+    {
+        const addonWindow = WebviewWindow.getByLabel('addons');
+
+        if(addonWindow)
+        {
+            addonWindow.listen('tauri://close-requested', () => {
+
+                addonWindow.hide();
+            });
+        }
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 });

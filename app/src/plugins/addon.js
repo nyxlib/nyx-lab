@@ -13,52 +13,90 @@ import useConfigStore from '../stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-function _load(app, addonPath, addonName)
+const ADDON_REGEX = /window\s*\.\s*(addon_[a-zA-Z_][a-zA-Z0-9_]*)\s*=/;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+function _load(app, path)
 {
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(typeof window[addonName] !== 'undefined') return Promise.resolve([window[addonName].default, false]);
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     return new Promise((resolve, reject) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const script = document.createElement('script');
+        fetch(path).then((response) => {
 
-        /*------------------------------------------------------------------------------------------------------------*/
+            response.text().then((sourcecode) =>  {
 
-        script.addEventListener('load', () => {
+                const m = sourcecode.match(ADDON_REGEX);
 
-            const module = window[addonName].default;
+                if(m)
+                {
+                    /*------------------------------------------------------------------------------------------------*/
 
-            if(typeof module.install === 'function')
-            {
-                app.use(module);
-            }
+                    const addonName = m[1];
 
-            resolve([module, true]);
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    if(typeof window[addonName] !== 'undefined')
+                    {
+                        resolve([window[addonName].default, false]);
+                    }
+                    else
+                    {
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        const script = document.createElement('script');
+
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        script.addEventListener('load', () => {
+
+                            const module = window[addonName].default;
+
+                            if(typeof module.install === 'function')
+                            {
+                                app.use(module);
+                            }
+
+                            resolve([module, true]);
+                        });
+
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        script.addEventListener('error', () => {
+
+                            reject(`Error loading addon ${path}`);
+                        });
+
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        script.type = 'text/javascript';
+
+                        script.src = path;
+
+                        script.async = true;
+
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        document.head.appendChild(script);
+
+                        /*--------------------------------------------------------------------------------------------*/
+                    }
+
+                    /*------------------------------------------------------------------------------------------------*/
+                }
+
+            }).catch((e) => {
+
+                reject(`Error loading addon ${path}: ${e}`);
+            });
+
+        }).catch((e) => {
+
+            reject(`Error loading addon ${path}: ${e}`);
         });
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        script.addEventListener('error', () => {
-
-            reject(`Error loading addon ${addonName}`);
-        });
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        script.src = addonPath;
-
-        script.async = true;
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        document.head.appendChild(script);
-
-        /*------------------------------------------------------------------------------------------------------------*/
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -103,7 +141,7 @@ export default {
     {
         app.provide('addon', {
             /**/
-            load: (addonPath, addonName) => _load(app, addonPath, addonName),
+            load: (path) => _load(app, path),
             /**/
             app: () => app,
             router: () => router,

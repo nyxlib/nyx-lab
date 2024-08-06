@@ -1,8 +1,10 @@
-<!--suppress HtmlUnknownAttribute -->
+<!--suppress HtmlUnknownAttribute, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {computed} from 'vue';
+import {computed, onMounted, onUnmounted} from 'vue';
+
+import {listen} from '@tauri-apps/api/event';
 
 import * as uuid from 'uuid';
 
@@ -21,6 +23,10 @@ const props = defineProps({
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+let rank = 0;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const addons = computed(() => {
 
     const result = Object.values(props.addons);
@@ -32,19 +38,30 @@ const addons = computed(() => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let rank = 0;
+const addonSearch = () => {
+
+    if(typeof window['__TAURI__'] !== 'undefined')
+    {
+        window['__TAURI__'].webviewWindow.WebviewWindow.getByLabel('addons')?.show();
+    }
+    else
+    {
+        window.open('http://localhost:3000/', 'Addon Index', 'width=1200,height=800,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
+    }
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addonAppend = () => {
+const addonAppend = (path = null) => {
+
+    path = (path || '').trim();
 
     const id = uuid.v4();
 
     props.addons[id] = {
         id: id,
         rank: rank,
-        path: '',
-        name: '',
+        path: path,
         enabled: false,
         started: false,
     };
@@ -94,6 +111,42 @@ const addonUp = (addon1) => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const tauriMessageHandler = (e) => addonAppend(e.payload.url, e.payload.id);
+
+const htmlMessageHandler = (e) => addonAppend(e.data.url, e.data.id);
+
+let unlisten = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onMounted(async () => {
+
+    if(typeof window['__TAURI__'] !== 'undefined')
+    {
+        unlisten = await listen('new-addon', tauriMessageHandler);
+    }
+    else
+    {
+        window.addEventListener('message', htmlMessageHandler);
+    }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onUnmounted(() => {
+
+    if(typeof window['__TAURI__'] !== 'undefined')
+    {
+        if(unlisten) unlisten(/*- 'new-addon', tauriMessageHandler -*/);
+    }
+    else
+    {
+        window.removeEventListener('message', htmlMessageHandler);
+    }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 </script>
 
 <template>
@@ -104,7 +157,11 @@ const addonUp = (addon1) => {
         <div class="card-header px-3 py-2">
             Addons
             [
-            <button class="btn btn-xs btn-primary" type="button" @click="addonAppend">
+            <button class="btn btn-xs btn-primary me-1" type="button" @click="() => addonSearch()">
+                <i class="bi bi-search"></i>
+                Search addons
+            </button>
+            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => addonAppend()">
                 <i class="bi bi-plus-lg"></i>
                 Add addon
             </button>
@@ -125,9 +182,6 @@ const addonUp = (addon1) => {
                         </th>
                         <th class="text-center" style="width: auto;">
                             Addon path
-                        </th>
-                        <th class="text-center" style="width: auto;">
-                            Addon name
                         </th>
                         <th class="text-center" style="width: 105px;">
                             Enabled
@@ -155,9 +209,6 @@ const addonUp = (addon1) => {
                         </td>
                         <td class="text-start">
                             <input class="form-control form-control-sm" type="text" v-model="addon.path" />
-                        </td>
-                        <td class="text-start">
-                            <input class="form-control form-control-sm" type="text" v-model="addon.name" />
                         </td>
                         <td class="text-center">
                             <input class="btn-check" type="checkbox" role="switch" :id="`CEA1455E_${idx}`" v-model="addon.enabled" :true-value="true" :false-value="false" /><label class="btn btn-sm btn-outline-success" :for="`CEA1455E_${idx}`">Enabled</label>

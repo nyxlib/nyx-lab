@@ -198,7 +198,7 @@ const useConfigStore = defineStore('config', {
 
                     try
                     {
-                        this.addon.load(addonDescr.path, addonDescr.name).then(([addon, _]) => {
+                        this.addon.load(addonDescr.path).then(([addon, _]) => {
 
                             addonDescr.started = addonDescr.enabled;
 

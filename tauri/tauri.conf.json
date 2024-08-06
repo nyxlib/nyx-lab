@@ -12,15 +12,29 @@
         "windows": [
             {
                 "label": "main",
-                "height": 750,
-                "width": 1280,
-                "minHeight": 700,
-                "minWidth": 1280,
+                "height": 800,
+                "width": 1200,
+                "minHeight": 800,
+                "minWidth": 1200,
+                "visible": true,
                 "maximized": true,
                 "title": "Pollux",
                 "decorations": false,
                 "transparent": true,
                 "url": "index.html"
+            },
+            {
+                "label": "addons",
+                "height": 800,
+                "width": 1200,
+                "minHeight": 800,
+                "minWidth": 1200,
+                "visible": false,
+                "maximized": false,
+                "title": "Addon Index",
+                "decorations": true,
+                "transparent": false,
+                "url": "http://localhost:3000/"
             }
         ],
         "security": {
