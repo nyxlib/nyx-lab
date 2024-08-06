@@ -208,7 +208,23 @@ const useConfigStore = defineStore('config', {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
+                const zombies = [];
+
+                const cleanup = () => {
+
+                    for(const zombie of zombies)
+                    {
+                        delete addonDescrs[zombie.id];
+                    }
+
+                    resolve();
+                };
+
+                /*----------------------------------------------------------------------------------------------------*/
+
                 let n = 0;
+
+                /*----------------------------------------------------------------------------------------------------*/
 
                 for(const addonDescr of Object.values(addonDescrs))
                 {
@@ -220,12 +236,19 @@ const useConfigStore = defineStore('config', {
                     {
                         this.addon.load(addonDescr.path).then(([addon, name, _]) => {
 
+                            if(addonDescr.zombie)
+                            {
+                                zombies.push(addonDescr);
+
+                                addonDescr.enabled = false;
+                            }
+
                             addonDescr.started = addonDescr.enabled;
 
-                            this._startStop(addon, name, addonDescr.enabled);
+                            this._startStop(addon, name, addonDescr.started);
 
                             if(--n === 0) {
-                                resolve();
+                                cleanup();
                             }
 
                         }).catch((e) => {
@@ -233,7 +256,7 @@ const useConfigStore = defineStore('config', {
                             console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.path}': [ERROR]\n${e}`);
 
                             if(--n === 0) {
-                                resolve();
+                                cleanup();
                             }
                         });
                     }
@@ -242,7 +265,7 @@ const useConfigStore = defineStore('config', {
                         console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.path}': [ERROR]\n${e}`);
 
                         if(--n === 0) {
-                            resolve();
+                            cleanup();
                         }
                     }
                 }
@@ -259,15 +282,15 @@ const useConfigStore = defineStore('config', {
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                const globals = JSON.parse(json.toString())
+                const globals = JSON.parse(json || '{}');
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                this.initAddons(globals.addons || {}).then(() => {
+                this.initAddons(globals.addons).then(() => {
 
                     this.globals = confDup(globals, DEFAULT_GLOBALS);
 
-                    this.startStopAddons(globals.addons || {}).then(() => {
+                    this.startStopAddons(this.globals.addons).then(() => {
 
                         this.dialog.success();
                     });
@@ -285,13 +308,13 @@ const useConfigStore = defineStore('config', {
 
         _saveConfig(indent)
         {
-            const globals = confDup(this.globals, DEFAULT_GLOBALS);
+            this.startStopAddons(this.globals.addons).then(this.dialog.success);
 
-            const json = JSON.stringify(globals, null, indent ? 2 : 0);
+            this.globals = confDup(this.globals, DEFAULT_GLOBALS);
 
-            this.startStopAddons(globals.addons).then(this.dialog.success);
-
-            return json;
+            return indent ? JSON.stringify(this.globals, null, 2)
+                          : JSON.stringify(this.globals, null, 0)
+            ;
         },
 
         /*------------------------------------------------------------------------------------------------------------*/

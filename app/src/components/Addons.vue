@@ -20,8 +20,6 @@ const props = defineProps({
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FUNCTIONS                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
 
 let rank = 0;
 
@@ -29,13 +27,15 @@ let rank = 0;
 
 const addons = computed(() => {
 
-    const result = Object.values(props.addons);
+    const result = Object.values(props.addons).filter((addon) => !addon.zombie);
 
     result.sort((x, y) => x.rank - y.rank);
 
     return result;
 });
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const addonSearch = () => {
@@ -62,6 +62,7 @@ const addonAppend = (path = null) => {
         id: id,
         rank: rank,
         path: path,
+        zombie: false,
         enabled: false,
         started: false,
     };
@@ -73,7 +74,7 @@ const addonAppend = (path = null) => {
 
 const addonRm = (addon) => {
 
-    delete props.addons[addon.id];
+    addon.zombie = true;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
