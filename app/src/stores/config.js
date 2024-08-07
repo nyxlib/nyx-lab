@@ -324,6 +324,8 @@ const useConfigStore = defineStore('config', {
             this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).then((json) => this._loadConfig(json)).catch(this.dialog.error);
         },
 
+        /*------------------------------------------------------------------------------------------------------------*/
+
         load()
         {
             this._loadConfig(localStorage.getItem('indi-dashboard-config'));
@@ -335,6 +337,8 @@ const useConfigStore = defineStore('config', {
         {
             this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], this._saveConfig(true)).catch(this.dialog.error);
         },
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         save()
         {
