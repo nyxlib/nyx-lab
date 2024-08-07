@@ -21,18 +21,18 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let rank = 0;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const addons = computed(() => {
 
-    const result = Object.values(props.addons).filter((addon) => !addon.zombie);
+    const result = Object.values(props.addons);
 
     result.sort((x, y) => x.rank - y.rank);
 
     return result;
 });
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+let rank = 0;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -72,9 +72,16 @@ const addonAppend = (path = null) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addonRm = (addon) => {
+const addonZombie = (addon) => {
 
-    addon.zombie = true;
+    addon.zombie = !addon.zombie;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const addonEnabled = (addon) => {
+
+    addon.enabled = !addon.enabled;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -204,15 +211,16 @@ onUnmounted(() => {
                             <button class="btn btn-sm btn-link" type="button" @click="addonUp(addon)">
                                 <i class="bi bi-caret-down-fill"></i>
                             </button>
-                            <button class="btn btn-sm btn-link" type="button" @click="addonRm(addon)">
-                                <i class="bi bi-trash2 text-danger"></i>
+                            <button class="btn btn-sm btn-link" type="button" @click="addonZombie(addon)">
+                                <i class="bi bi-trash2 text-danger" v-if="!addon.zombie"></i>
+                                <i class="bi bi-recycle text-primary" v-if="addon.zombie"></i>
                             </button>
                         </td>
                         <td class="text-start">
-                            <input class="form-control form-control-sm" type="text" v-model="addon.path" />
+                            <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" v-model="addon.path" />
                         </td>
                         <td class="text-center">
-                            <input class="btn-check" type="checkbox" role="switch" :id="`CEA1455E_${idx}`" v-model="addon.enabled" :true-value="true" :false-value="false" /><label class="btn btn-sm btn-outline-success" :for="`CEA1455E_${idx}`">Enabled</label>
+                            <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>
                         </td>
                         <td class="text-center">
                             <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': addon.started, 'text-secondary': !addon.started}]"></i>
