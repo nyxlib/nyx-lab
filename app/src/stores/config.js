@@ -228,19 +228,19 @@ const useConfigStore = defineStore('config', {
 
                 for(const addonDescr of Object.values(addonDescrs))
                 {
+                    if(addonDescr.zombie)
+                    {
+                        zombies.push(addonDescr);
+
+                        addonDescr.enabled = false;
+                    }
+
                     addonDescr.started = false;
 
                     n++;
 
                     try
                     {
-                        if(addonDescr.zombie)
-                        {
-                            zombies.push(addonDescr);
-
-                            addonDescr.enabled = false;
-                        }
-
                         this.addon.load(addonDescr.path).then(([addon, name, _]) => {
 
                             addonDescr.started = addonDescr.enabled;
