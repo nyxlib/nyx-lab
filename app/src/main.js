@@ -21,6 +21,7 @@ import router from './router';
 
 import addon from './plugins/addon';
 import dialog from './plugins/dialog';
+import locker from './plugins/locker';
 import input from './plugins/input';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -44,6 +45,7 @@ setup(app);
 
 app.use(router);
 app.use(dialog);
+app.use(locker)
 app.use(input);
 app.use(addon);
 

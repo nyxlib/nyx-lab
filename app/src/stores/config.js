@@ -63,6 +63,7 @@ const useConfigStore = defineStore('config', {
         init()
         {
             this.dialog = inject('dialog');
+            this.locker = inject('locker');
             this.addon = inject('addon');
 
             this.load();
@@ -280,6 +281,8 @@ const useConfigStore = defineStore('config', {
 
         _loadConfig(json)
         {
+            this.locker.lock();
+
             try
             {
                 /*----------------------------------------------------------------------------------------------------*/
@@ -305,6 +308,8 @@ const useConfigStore = defineStore('config', {
                     this.startStopAddons(this.globals.addons).then(() => {
 
                         this.dialog.success();
+
+                        this.locker.unlock();
                     });
                 });
 
@@ -313,6 +318,8 @@ const useConfigStore = defineStore('config', {
             catch(e)
             {
                 this.dialog.error(e);
+
+                this.locker.unlock();
             }
         },
 
@@ -320,13 +327,26 @@ const useConfigStore = defineStore('config', {
 
         _saveConfig(indent)
         {
-            this.startStopAddons(this.globals.addons).then(this.dialog.success);
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            this.locker.lock();
+
+            this.startStopAddons(this.globals.addons).then(() => {
+
+                this.dialog.success();
+
+                this.locker.unlock();
+            });
+
+            /*--------------------------------------------------------------------------------------------------------*/
 
             this.globals = confDup(this.globals, DEFAULT_GLOBALS);
 
             return indent ? JSON.stringify(this.globals, null, 2)
                           : JSON.stringify(this.globals, null, 0)
             ;
+
+            /*--------------------------------------------------------------------------------------------------------*/
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
