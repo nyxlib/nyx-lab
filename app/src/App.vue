@@ -371,7 +371,7 @@ onMounted(() => {
     <teleport to="body">
 
         <div id="A8820355">
-            <div class="align-self-center spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+            <div class="align-self-center spinner-border" role="status" style="width: 4rem; height: 4rem;">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
