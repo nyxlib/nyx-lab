@@ -55,7 +55,7 @@ const _lock = () => {
 
     if(_curLockCnt <= 0)
     {
-        document.getElementById('A8820355').style.display = 'flex';
+        document.getElementById('nyx_locker').style.display = 'flex';
 
         _curLockCnt = 1;
     }
@@ -71,7 +71,7 @@ const _unlock = () => {
 
     if(_curLockCnt <= 1)
     {
-        document.getElementById('A8820355').style.display = 'none';
+        document.getElementById('nyx_locker').style.display = 'none';
 
         _curLockCnt = 0;
     }
