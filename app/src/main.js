@@ -12,7 +12,7 @@ import {createPinia} from 'pinia';
 
 import Chart from 'chart.js/auto';
 
-import {setup} from 'vue-indi';
+import {setup} from 'vue-nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

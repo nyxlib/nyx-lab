@@ -1,7 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {useIndiStore} from 'vue-indi';
+import {useIndiStore} from 'vue-nyx';
 
 import * as uuid from 'uuid';
 

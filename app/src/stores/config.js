@@ -360,7 +360,7 @@ const useConfigStore = defineStore('config', {
 
         load()
         {
-            this._loadConfig(localStorage.getItem('indi-dashboard-config'));
+            this._loadConfig(localStorage.getItem('nyx-dashboard-config'));
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -374,7 +374,7 @@ const useConfigStore = defineStore('config', {
 
         save()
         {
-            localStorage.setItem('indi-dashboard-config', this._saveConfig(false));
+            localStorage.setItem('nyx-dashboard-config', this._saveConfig(false));
         },
 
         /*------------------------------------------------------------------------------------------------------------*/

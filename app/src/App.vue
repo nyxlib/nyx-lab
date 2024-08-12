@@ -6,7 +6,7 @@ import {inject, reactive, onMounted} from 'vue';
 
 import {Window, getCurrentWindow} from '@tauri-apps/api/window';
 
-import {useIndiStore} from 'vue-indi';
+import {useIndiStore} from 'vue-nyx';
 
 import {Modal} from 'bootstrap';
 
@@ -51,7 +51,7 @@ const themeSet = () => {
     {
         document.documentElement.setAttribute('data-bs-theme', 'dark');
 
-        localStorage.setItem('indi-dashboard-theme', 'dark');
+        localStorage.setItem('nyx-dashboard-theme', 'dark');
 
         label.classList.add   ('bi-moon-stars');
         label.classList.remove('bi-sun');
@@ -60,7 +60,7 @@ const themeSet = () => {
     {
         document.documentElement.setAttribute('data-bs-theme', 'light');
 
-        localStorage.setItem('indi-dashboard-theme', 'light');
+        localStorage.setItem('nyx-dashboard-theme', 'light');
 
         label.classList.remove('bi-moon-stars');
         label.classList.add   ('bi-sun');
@@ -153,7 +153,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    state.theme = localStorage.getItem('indi-dashboard-theme') || 'dark';
+    state.theme = localStorage.getItem('nyx-dashboard-theme') || 'dark';
 
     configStore.init();
 

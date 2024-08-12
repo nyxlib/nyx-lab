@@ -1,12 +1,12 @@
 {
-    "name": "indi-dashboard",
-    "description": "INDI Dashboard",
+    "name": "nyx-dashboard",
+    "description": "Nyx Dashboard",
     "version": "1.0.0",
     "type": "module",
     "private": true,
     "scripts": {
-        "app-dev": "npm i --update vue-indi && cd ./app/ && ../node_modules/vite/bin/vite.js dev",
-        "app-prod": "npm i --update vue-indi && cd ./app/ && ../node_modules/vite/bin/vite.js build",
+        "app-dev": "npm i --update vue-nyx && cd ./app/ && ../node_modules/vite/bin/vite.js dev",
+        "app-prod": "npm i --update vue-nyx && cd ./app/ && ../node_modules/vite/bin/vite.js build",
         "tauri-dev": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js dev",
         "tauri-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js build",
         "lint": "cd ./app/ && ../node_modules/eslint/bin/eslint.js"
@@ -25,7 +25,7 @@
         "split.js": "^1.6.5",
         "uuid": "^10.0.0",
         "vue": "^3.4.35",
-        "vue-indi": "file:../indi-vue",
+        "vue-nyx": "file:../nyx-vue",
         "vue-router": "^4.4.2"
     },
     "devDependencies": {

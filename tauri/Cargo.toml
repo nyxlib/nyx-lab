@@ -1,10 +1,10 @@
 [package]
-name = "pollux"
+name = "nyx-dashboard"
 version = "1.0.0"
-description = "Pollux"
+description = "Nyx Dashboard"
 authors = ["Jérôme ODIER"]
 license = "AGPL"
-repository = "https://gitlab.in2p3.fr/lpsc-kid/indi-dashboard"
+repository = "https://gitlab.in2p3.fr/lpsc-kid/nyx-dashboard"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
