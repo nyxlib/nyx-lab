@@ -34,7 +34,7 @@
                 "title": "Addon Index",
                 "decorations": true,
                 "transparent": false,
-                "url": "http://localhost:3000/"
+                "url": "https://addons.nyxlib.org/"
             }
         ],
         "security": {

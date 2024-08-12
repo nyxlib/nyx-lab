@@ -11,7 +11,7 @@
     ],
     "remote": {
         "urls": [
-            "http://localhost:3000/"
+            "https://addons.nyxlib.org/"
         ]
     },
     "permissions": [

@@ -62,14 +62,21 @@ function _load(app, path)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        fetch(path).then((response) => {
+        if(typeof window['__TAURI__'] === 'undefined')
+        {
+            path = path.replace('addon://', 'https://addons.nyxlib.org/repo/');
+        }
 
-            response.text().then((sourcecode) =>  {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-                const m = sourcecode.match(ADDON_REGEX);
+        fetch(`${path}/package.json`, {method: 'GET', mode: 'cors'}).then((response) => {
 
-                if(m)
-                {
+            response.json().then((json) =>  {
+
+                if(json.main
+                   &&
+                   json.entry
+                ) {
                     /*------------------------------------------------------------------------------------------------*/
 
                     const script = document.createElement('script');
@@ -78,7 +85,7 @@ function _load(app, path)
 
                     script.addEventListener('load', () => {
 
-                        resolve([_register(app, path, m[1]), m[1], true]);
+                        resolve([_register(app, path, json.entry), json.entry, true]);
                     });
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -90,9 +97,9 @@ function _load(app, path)
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    script.type = 'text/javascript';
+                    script.src = `${path}/${json.main}`;
 
-                    script.src = path;
+                    script.type = 'text/javascript';
 
                     script.async = true;
 
@@ -104,7 +111,7 @@ function _load(app, path)
                 }
                 else {
 
-                    reject('not an addon');
+                    reject('missing metadata');
                 }
 
             }).catch((e) => {

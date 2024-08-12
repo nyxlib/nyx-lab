@@ -46,7 +46,7 @@ const addonSearch = () => {
     }
     else
     {
-        window.open('http://localhost:3000/', 'Addon Index', 'width=1200,height=800,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
+        window.open('https://addons.nyxlib.org/', 'Nyx Addon Index', 'width=1200,height=800,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
     }
 };
 
