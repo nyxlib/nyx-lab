@@ -2,11 +2,53 @@
 
 use mime;
 
-use tauri::http;
+use mime_guess;
 
-use mime_guess::from_path;
+use tauri::{http, Manager};
 
-use std::{fs, env, path::PathBuf};
+use std::{fs, io, env, path};
+
+use reqwest::blocking::Client;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+fn _download_file(uri_without_query: &str, file_path: &path::PathBuf) -> Result<(), io::Error>
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* CREATE DIRECTORY                                                                                               */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if let Some(parent_dir) = file_path.parent()
+    {
+        fs::create_dir_all(parent_dir)?;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* DOWNLOAD FILE                                                                                                  */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    let client = Client::new();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    let content = client.get(uri_without_query.replace("addon://", "https://addons.nyxlib.org/repo/").trim())
+                        .send()
+                        .and_then(|response| response.error_for_status())
+                        .and_then(|response| response.bytes())
+                        .map_err(|e| io::Error::new(
+                            io::ErrorKind::Other,
+                            e.to_string()
+                        ))?
+    ;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    fs::write(file_path, &content)?;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    Ok(())
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -15,48 +57,71 @@ pub fn run()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    let addons_dir = env::var("HOME").map(PathBuf::from)
-                                     .map(|home_dir| home_dir.join(".local/nyx-dashboard/addons"))
-                                     .expect("Error determining the addon directory")
-    ;
-
-    fs::create_dir_all(&addons_dir).expect("Error creating the addons directory");
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     tauri::Builder::default()
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        .setup(|app| {
+
+            let addons_dir = app.path()
+                .app_config_dir()
+                .map(|dir| dir.join("addons"))
+                .expect("Error determining the addon directory")
+            ;
+
+            fs::create_dir_all(&addons_dir).expect("Error creating the addons directory");
+
+            Ok(())
+        })
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* ADDON PROTOCOL                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        .register_uri_scheme_protocol("addon", move |_, req| {
+        .register_uri_scheme_protocol("addon", move |app, req| {
 
             /*--------------------------------------------------------------------------------------------------------*/
-            /* GET FILE PATH                                                                                          */
+            /* EXTRACT FILE PATH FROM URL                                                                             */
             /*--------------------------------------------------------------------------------------------------------*/
 
             let uri = req.uri().to_string();
 
             let uri_without_query = uri.split('?').next().unwrap_or(&uri);
 
-            let file_path = addons_dir.join(uri_without_query.replace("addon://", "").trim());
+            let file_path = app.path().app_config_dir().unwrap().join("addons").join(uri_without_query.replace("addon://", "").trim());
+
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* DOWNLOAD FILE IF NEEDED                                                                                */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if !file_path.exists()
+            {
+                if let Err(e) = _download_file(&uri_without_query, &file_path)
+                {
+                    return http::Response::builder()
+                        .status(http::StatusCode::INTERNAL_SERVER_ERROR)
+                        .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                        .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
+                        .body(e.to_string().into_bytes())
+                        .unwrap()
+                    ;
+                }
+            }
 
             /*--------------------------------------------------------------------------------------------------------*/
             /* GET FILE MIME                                                                                          */
             /*--------------------------------------------------------------------------------------------------------*/
 
-            let file_mime = from_path(&file_path).first_or_octet_stream();
+            let file_mime = mime_guess::from_path(&file_path).first_or_octet_stream();
 
             /*--------------------------------------------------------------------------------------------------------*/
             /* SERVE FILE                                                                                             */
             /*--------------------------------------------------------------------------------------------------------*/
 
-            match fs::read(file_path) {
-
+            return match fs::read(file_path) {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                Ok(content) => return http::Response::builder()
+                Ok(content) => http::Response::builder()
                     .status(http::StatusCode::OK)
                     .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                     .header(http::header::CONTENT_TYPE, file_mime.essence_str())
@@ -65,7 +130,7 @@ pub fn run()
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                Err(e) => return http::Response::builder()
+                Err(e) => http::Response::builder()
                     .status(http::StatusCode::NOT_FOUND)
                     .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                     .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
@@ -89,7 +154,7 @@ pub fn run()
         /* APP                                                                                                        */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        .run(tauri::generate_context!()).expect("error while running tauri application")
+        .run(tauri::generate_context!()).expect("Error while running tauri application")
 
         /*------------------------------------------------------------------------------------------------------------*/
     ;
