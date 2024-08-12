@@ -5,8 +5,6 @@ import {inject} from 'vue';
 
 import {defineStore} from 'pinia';
 
-import {invoke} from '@tauri-apps/api/core';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -294,17 +292,7 @@ const useConfigStore = defineStore('config', {
                 this.initAddons(globals.addons).then(() => {
 
                     this.globals = confDup(globals, DEFAULT_GLOBALS);
-/*
-                    if(typeof window['__TAURI__'] !== 'undefined')
-                    {
-                        const url = 'https://addons.nyxlib.org/'
-                        invoke('add_remote_url', { url }).then(() => {
-                            console.log('URL ajoutée avec succès:', url);
-                        }).catch((error) => {
-                            console.error('Erreur lors de l\'ajout de l\'URL:', error);
-                        });
-                    }
-*/
+
                     this.startStopAddons(this.globals.addons).then(() => {
 
                         this.dialog.success();

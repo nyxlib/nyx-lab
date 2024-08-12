@@ -97,7 +97,7 @@ function _load(app, path)
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    script.src = `${path}/${json.main}`;
+                    script.src = `${path}/${json.main}?_=${new Date().getTime()}`;
 
                     script.type = 'text/javascript';
 

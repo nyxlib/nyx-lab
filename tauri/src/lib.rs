@@ -2,33 +2,11 @@
 
 use mime;
 
-use tauri::{http, State};
+use tauri::http;
 
 use mime_guess::from_path;
 
-use std::{fs, env, sync::Mutex, path::PathBuf};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-struct RemoteUrls
-{
-    urls: Mutex<Vec<String>>,
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#[tauri::command]
-fn add_remote_url(state: State<RemoteUrls>, url: String) -> Result<(), String>
-{
-    let mut urls = state.urls.lock().map_err(|_| "Failed to acquire lock".to_string())?;
-
-    if !urls.contains(&url)
-    {
-        urls.push(url);
-    }
-
-    Ok(())
-}
+use std::{fs, env, path::PathBuf};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -58,7 +36,11 @@ pub fn run()
             /* GET FILE PATH                                                                                          */
             /*--------------------------------------------------------------------------------------------------------*/
 
-            let file_path = addons_dir.join(req.uri().to_string().replace("addon://", "").trim());
+            let uri = req.uri().to_string();
+
+            let uri_without_query = uri.split('?').next().unwrap_or(&uri);
+
+            let file_path = addons_dir.join(uri_without_query.replace("addon://", "").trim());
 
             /*--------------------------------------------------------------------------------------------------------*/
             /* GET FILE MIME                                                                                          */
