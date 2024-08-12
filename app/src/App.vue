@@ -6,7 +6,7 @@ import {inject, reactive, onMounted} from 'vue';
 
 import {Window, getCurrentWindow} from '@tauri-apps/api/window';
 
-import {useIndiStore} from 'vue-nyx';
+import {useNyxStore} from 'vue-nyx';
 
 import {Modal} from 'bootstrap';
 
@@ -22,7 +22,7 @@ const dialog = inject('dialog');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indiStore = useIndiStore(window.pinia);
+const nyxStore = useNyxStore(window.pinia);
 
 const configStore = useConfigStore(window.pinia);
 
@@ -38,7 +38,7 @@ const state = reactive({
 
 const about = () => {
 
-    dialog.show('INDI Dashboard\n\nAuthor: Jérôme ODIER\nEmail: jerome.odier@lpsc.in2p3.fr', 'About', 'success');
+    dialog.show('Nyx Dashboard\n\nAuthor: Jérôme ODIER\nEmail: jerome.odier@lpsc.in2p3.fr', 'About', 'success');
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -180,7 +180,7 @@ onMounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <div class="d-flex ms-auto py-1" id="indi_toolbar">
+            <div class="d-flex ms-auto py-1" id="nyx_toolbar">
 
                 <!-- DYNAMIC -->
 
@@ -190,11 +190,11 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <button class="btn btn-sm btn-success me-0" type="button" v-if="indiStore.isConnected">
+                <button class="btn btn-sm btn-success me-0" type="button" v-if="nyxStore.isConnected">
                     <i class="bi bi-lightning-charge"></i> connected
                 </button>
 
-                <button class="btn btn-sm btn-secondary me-0" type="button" v-if="!indiStore.isConnected">
+                <button class="btn btn-sm btn-secondary me-0" type="button" v-if="!nyxStore.isConnected">
                     <i class="bi bi-lightning-charge"></i> disconnected
                 </button>
 

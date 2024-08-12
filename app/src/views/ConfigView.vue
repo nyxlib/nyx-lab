@@ -22,7 +22,7 @@ const configStore = useConfigStore();
 
 const state = reactive({
     shownTabs: new Set(),
-    showIndi: false,
+    showNyx: false,
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -157,20 +157,20 @@ const state = reactive({
             </tab-pane>
 
             <!-- *************************************************************************************************** -->
-            <!-- INDI                                                                                                -->
+            <!-- NYX                                                                                                 -->
             <!-- *************************************************************************************************** -->
 
-            <tab-pane title="INDI" @shown="state.showIndi = true">
+            <tab-pane title="Nyx" @shown="state.showNyx = true">
 
                 <div class="row">
                     <div class="col-md-6">
 
-                        <indi-topology class="shadow" v-if="state.showIndi" />
+                        <nyx-topology class="shadow" v-if="state.showNyx" />
 
                     </div>
                     <div class="col-md-6">
 
-                        <indi-variables class="shadow" v-if="state.showIndi" />
+                        <nyx-variables class="shadow" v-if="state.showNyx" />
 
                     </div>
                 </div>

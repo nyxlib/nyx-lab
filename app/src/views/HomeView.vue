@@ -47,7 +47,7 @@ const disconnect = () => {
 
     <div class="h-100 w-100 overflow-y-auto p-3">
 
-        <indi-dashboard @connect="connect" @disconnect="disconnect" />
+        <nyx-dashboard @connect="connect" @disconnect="disconnect" />
 
     </div>
 

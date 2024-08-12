@@ -62,7 +62,7 @@ export default {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        app.directive('indi-group', {
+        app.directive('nyx-group', {
 
             mounted(divEl) {
 

@@ -38,7 +38,7 @@ pub fn run()
     /*----------------------------------------------------------------------------------------------------------------*/
 
     let addons_dir = env::var("HOME").map(PathBuf::from)
-                                     .map(|home_dir| home_dir.join(".local/indi-dashboard/addons"))
+                                     .map(|home_dir| home_dir.join(".local/nyx-dashboard/addons"))
                                      .expect("Error determining the addon directory")
     ;
 

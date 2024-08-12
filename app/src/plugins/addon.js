@@ -1,7 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {useIndiStore} from 'vue-nyx';
+import {useNyxStore} from 'vue-nyx';
 
 import * as uuid from 'uuid';
 
@@ -134,7 +134,7 @@ const _updateVariables = (name1, name2, fractionDigits) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const indiStore = useIndiStore();
+    const nyxStore = useNyxStore();
     const configStore = useConfigStore();
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -143,7 +143,7 @@ const _updateVariables = (name1, name2, fractionDigits) => {
     {
         if(configStore.globals[name2])
         {
-            const def = indiStore.resolve(configStore.globals[name2]);
+            const def = nyxStore.resolve(configStore.globals[name2]);
 
             if(def !== null)
             {
@@ -171,7 +171,7 @@ export default {
             /**/
             app: () => app,
             router: () => router,
-            indiStore: () => useIndiStore(),
+            nyxStore: () => useNyxStore(),
             configStore: () => useConfigStore(),
             newId: () => uuid.v4().substring(0, 13),
             /**/
