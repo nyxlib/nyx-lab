@@ -31,7 +31,7 @@
                 "minWidth": 1200,
                 "visible": false,
                 "maximized": false,
-                "title": "Addon Index",
+                "title": "Nyx Addon Index",
                 "decorations": true,
                 "transparent": false,
                 "url": "https://addons.nyxlib.org/"
