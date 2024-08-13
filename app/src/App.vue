@@ -2,9 +2,9 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject, reactive, onMounted} from 'vue';
-
 import {Window, getCurrentWindow} from '@tauri-apps/api/window';
+
+import {inject, reactive, onMounted} from 'vue';
 
 import {useNyxStore} from 'vue-nyx';
 
@@ -136,9 +136,12 @@ onMounted(() => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        document.querySelector('[data-tauri-drag-region]').addEventListener('dblclick', () => {
+        document.querySelector('[data-tauri-drag-region]').addEventListener('dblclick', (e) => {
 
-            mainWindow.toggleMaximize();
+            if(e.target.tagName.toLowerCase() === 'div')
+            {
+                mainWindow.toggleMaximize();
+            }
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
