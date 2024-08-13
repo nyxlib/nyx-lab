@@ -315,26 +315,28 @@ const useConfigStore = defineStore('config', {
 
         _saveConfig(indent)
         {
-            /*--------------------------------------------------------------------------------------------------------*/
-
             this.locker.lock();
 
-            this.startStopAddons(this.globals.addons).then(() => {
+            return new Promise((resolve) => {
 
-                this.dialog.success();
+                /*----------------------------------------------------------------------------------------------------*/
 
-                this.locker.unlock();
+                this.initAddons(this.globals.addons).then(() => {
+
+                    this.globals = confDup(this.globals, DEFAULT_GLOBALS);
+
+                    this.startStopAddons(this.globals.addons).then(() => {
+
+                        resolve(JSON.stringify(this.globals, null, indent ? 2 : 0));
+
+                        this.dialog.success();
+
+                        this.locker.unlock();
+                    });
+                });
+
+                /*----------------------------------------------------------------------------------------------------*/
             });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            this.globals = confDup(this.globals, DEFAULT_GLOBALS);
-
-            return indent ? JSON.stringify(this.globals, null, 2)
-                          : JSON.stringify(this.globals, null, 0)
-            ;
-
-            /*--------------------------------------------------------------------------------------------------------*/
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -355,14 +357,20 @@ const useConfigStore = defineStore('config', {
 
         export()
         {
-            this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], this._saveConfig(true)).catch(this.dialog.error);
+            this._saveConfig(true).then((json) => {
+
+                this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], json).catch(this.dialog.error);
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         save()
         {
-            localStorage.setItem('nyx-dashboard-config', this._saveConfig(false));
+            this._saveConfig(false).then((json) => {
+
+                localStorage.setItem('nyx-dashboard-config', json);
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
