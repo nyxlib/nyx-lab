@@ -374,8 +374,9 @@ onMounted(() => {
     <teleport to="body">
 
         <div id="nyx_locker">
-            <div class="align-self-center spinner-border" role="status" style="width: 4rem; height: 4rem;">
-                <span class="visually-hidden">Loading...</span>
+            <div class="align-self-center text-center">
+                <div class="spinner-border" role="status" style="width: 4rem; height: 4rem;"></div>
+                <div class="display-4" role="status">loading…</div>
             </div>
         </div>
 
