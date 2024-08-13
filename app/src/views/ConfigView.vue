@@ -126,7 +126,7 @@ const state = reactive({
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="shadow card mb-0">
+                        <div class="shadow card mb-3">
                             <div class="card-header d-flex">
                                 Node-RED
                             </div>
@@ -165,12 +165,12 @@ const state = reactive({
                 <div class="row">
                     <div class="col-md-6">
 
-                        <nyx-topology class="shadow" v-if="state.showNyx" />
+                        <nyx-topology class="shadow mb-3" v-if="state.showNyx" />
 
                     </div>
                     <div class="col-md-6">
 
-                        <nyx-variables class="shadow" v-if="state.showNyx" />
+                        <nyx-variables class="shadow mb-3" v-if="state.showNyx" />
 
                     </div>
                 </div>
@@ -195,19 +195,19 @@ const state = reactive({
 
             <template v-slot:button>
 
-                <button class="btn btn-sm btn-outline-primary me-2" type="button" @click="configStore.import">
+                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.import" style="width: 80px;">
                     <i class="bi bi-upload"></i> Import
                 </button>
 
-                <button class="btn btn-sm btn-outline-primary me-2" type="button" @click="configStore.export">
+                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.export" style="width: 80px;">
                     <i class="bi bi-download"></i> Export
                 </button>
 
-                <button class="btn btn-sm btn-outline-warning me-2" type="button" @click="configStore.load">
+                <button class="btn btn-sm btn-outline-warning my-1 me-2" type="button" @click="configStore.load" style="width: 80px;">
                     <i class="bi bi-x-lg"></i> Reload
                 </button>
 
-                <button class="btn btn-sm btn-success me-0" type="button" @click="configStore.save">
+                <button class="btn btn-sm btn-success xxxxxxx my-1 me-0" type="button" @click="configStore.save" style="width: 80px;">
                     <i class="bi bi-check-lg"></i> Save
                 </button>
 
