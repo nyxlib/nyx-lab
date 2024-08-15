@@ -110,14 +110,9 @@ onMounted(() => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const mainWindow = Window.getByLabel('main');
-        const addonWindow = Window.getByLabel('addons');
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
         const updateWindow = () => {
 
-            mainWindow.isMaximized().catch(() => {}).then((maximized) => {
+            getCurrentWindow().isMaximized().catch(() => {}).then((maximized) => {
 
                 if(maximized) {
                     document.body.setAttribute('data-maximized', 'true');
@@ -140,11 +135,13 @@ onMounted(() => {
 
             if(e.target.tagName.toLowerCase() === 'div')
             {
-                mainWindow.toggleMaximize();
+                getCurrentWindow().toggleMaximize();
             }
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
+
+        const addonWindow = Window.getByLabel('addons');
 
         addonWindow.listen('tauri://close-requested', () => {
 
