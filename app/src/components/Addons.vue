@@ -52,16 +52,16 @@ const addonSearch = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addonAppend = (path = null) => {
+const addonAppend = (url = null) => {
 
-    path = (path || '').trim();
+    url = (url || '').trim();
 
     const id = uuid.v4();
 
     props.addons[id] = {
         id: id,
         rank: rank,
-        path: path,
+        url: url,
         zombie: false,
         enabled: false,
         started: false,
@@ -219,7 +219,7 @@ onUnmounted(() => {
                             </button>
                         </td>
                         <td class="text-start">
-                            <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" v-model="addon.path" />
+                            <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" v-model="addon.url" />
                         </td>
                         <td class="text-center">
                             <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>
