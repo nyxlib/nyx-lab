@@ -159,11 +159,11 @@ const useConfigStore = defineStore('config', {
 
                     try
                     {
-                        this.addon.load(addonDescr.path).then(([addon, name, do_init]) => {
+                        this.addon.load(addonDescr.url).then(([addon, name, do_init]) => {
 
                             this._init(addon, name, do_init);
 
-                            console.info(`Loading addon '${addonDescr.path}': [OKAY]`);
+                            console.info(`Loading addon '${addonDescr.url}': [OKAY]`);
 
                             if(--n === 0) {
                                 resolve();
@@ -171,7 +171,7 @@ const useConfigStore = defineStore('config', {
 
                         }).catch((e) => {
 
-                            console.error(`Loading addon '${addonDescr.path}': [ERROR]\n${e}`);
+                            console.error(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
 
                             if(--n === 0) {
                                 resolve();
@@ -180,7 +180,7 @@ const useConfigStore = defineStore('config', {
                     }
                     catch(e)
                     {
-                        console.error(`Loading addon '${addonDescr.path}': [ERROR]\n${e}`);
+                        console.error(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
 
                         if(--n === 0) {
                             resolve();
@@ -242,7 +242,7 @@ const useConfigStore = defineStore('config', {
 
                     try
                     {
-                        this.addon.load(addonDescr.path).then(([addon, name, _]) => {
+                        this.addon.load(addonDescr.url).then(([addon, name, _]) => {
 
                             addonDescr.started = addonDescr.enabled;
 
@@ -254,7 +254,7 @@ const useConfigStore = defineStore('config', {
 
                         }).catch((e) => {
 
-                            console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.path}': [ERROR]\n${e}`);
+                            console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
 
                             if(--n === 0) {
                                 cleanup();
@@ -263,7 +263,7 @@ const useConfigStore = defineStore('config', {
                     }
                     catch(e)
                     {
-                        console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.path}': [ERROR]\n${e}`);
+                        console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
 
                         if(--n === 0) {
                             cleanup();
@@ -359,7 +359,7 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], json).catch(this.dialog.error);
+                this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], json.toString()).catch(this.dialog.error);
             });
         },
 
@@ -369,7 +369,7 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(false).then((json) => {
 
-                localStorage.setItem('nyx-dashboard-config', json);
+                localStorage.setItem('nyx-dashboard-config', json.toString());
             });
         },
 

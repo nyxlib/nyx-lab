@@ -48,7 +48,7 @@ const _lock = () => {
 
     if(lines.length > 3)
     {
-        console.log(`lock[${_curLockCnt}] :: ${lines[3]}`); // eslint-disable-line no-console
+        console.log(`lock[${_curLockCnt}] :: ${lines[3]}`);
     }
 
     /**/
@@ -86,7 +86,7 @@ const _unlock = () => {
 
     if(lines.length > 3)
     {
-        console.log(`unlock[${_curLockCnt}] :: ${lines[3]}`); // eslint-disable-line no-console
+        console.log(`unlock[${_curLockCnt}] :: ${lines[3]}`);
     }
 };
 

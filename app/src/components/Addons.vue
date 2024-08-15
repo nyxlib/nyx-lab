@@ -63,7 +63,7 @@ const addonAppend = (url = null) => {
         rank: rank,
         url: url,
         zombie: false,
-        enabled: false,
+        enabled: !!url,
         started: false,
     };
 
