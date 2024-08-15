@@ -314,7 +314,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="d-flex" style="height: 100%; width: calc(100% - 4.5rem); overflow-y: hidden;">
+        <div class="overflow-hidden" style="height: 100%; width: calc(100% - 4.5rem);">
 
             <router-view :key="$route.path" />
 

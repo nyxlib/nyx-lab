@@ -42,7 +42,7 @@ const addonSearch = () => {
 
     if(typeof window['__TAURI__'] !== 'undefined')
     {
-        window['__TAURI__'].webviewWindow.WebviewWindow.getByLabel('addons')?.show();
+        __TAURI__.window.Window.getByLabel('addons')?.show();
     }
     else
     {
@@ -118,6 +118,8 @@ const addonUp = (addon1) => {
     }
 };
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const tauriMessageHandler = (e) => addonAppend(e.payload);

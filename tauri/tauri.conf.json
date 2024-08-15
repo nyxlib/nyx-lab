@@ -5,7 +5,7 @@
     "build": {
         "beforeDevCommand": "npm run app-prod",
         "beforeBuildCommand": "npm run app-prod",
-        "devUrl": "http://localhost:5173/",
+        "devUrl": "http://localhost:1234/",
         "frontendDist": "../app/dist/"
     },
     "app": {
