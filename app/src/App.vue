@@ -232,15 +232,15 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrentWindow().minimize()">
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrentWindow().minimize()" :disabled="typeof window['__TAURI__'] === 'undefined'">
                     <i class="bi bi-dash-lg"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrentWindow().toggleMaximize()">
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="() => getCurrentWindow().toggleMaximize()" :disabled="typeof window['__TAURI__'] === 'undefined'">
                     <i class="bi bi-collection"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary me-0" type="button" @click="() => getCurrentWindow().close()">
+                <button class="btn btn-sm btn-primary me-0" type="button" @click="() => getCurrentWindow().close()" :disabled="typeof window['__TAURI__'] === 'undefined'">
                     <i class="bi bi-x-lg"></i>
                 </button>
 
