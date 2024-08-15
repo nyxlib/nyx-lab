@@ -191,7 +191,7 @@ onUnmounted(() => {
                             Tools
                         </th>
                         <th class="text-center" style="width: auto;">
-                            Addon path
+                            URL
                         </th>
                         <th class="text-center" style="width: 105px;">
                             Enabled
