@@ -13,9 +13,9 @@
             {
                 "label": "main",
                 "height": 800,
-                "width": 1200,
+                "width": 1300,
                 "minHeight": 800,
-                "minWidth": 1200,
+                "minWidth": 1300,
                 "visible": true,
                 "maximized": true,
                 "title": "Nyx Dashboard",
@@ -26,9 +26,9 @@
             {
                 "label": "addons",
                 "height": 800,
-                "width": 1200,
+                "width": 1300,
                 "minHeight": 800,
-                "minWidth": 1200,
+                "minWidth": 1300,
                 "visible": false,
                 "maximized": false,
                 "title": "Nyx Addon Index",
