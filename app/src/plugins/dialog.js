@@ -272,7 +272,7 @@ const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
                 {
                     fs.writeTextFile(path, contents).then(() => {
 
-                        resolve();
+                        resolve(path);
 
                     }).catch(() => {
 
@@ -307,7 +307,7 @@ const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
             el.click();
             document.body.removeChild(el);
 
-            resolve();
+            resolve(null);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
