@@ -3,8 +3,6 @@
 
 import {useNyxStore} from 'vue-nyx';
 
-import * as uuid from 'uuid';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import router from '../router';
@@ -172,7 +170,7 @@ export default {
             router: () => router,
             nyxStore: () => useNyxStore(),
             configStore: () => useConfigStore(),
-            newId: () => uuid.v4().substring(0, 13),
+            newId: () => __NYX_UUID__.v4().substring(0, 13),
             /**/
             updateVariables: _updateVariables,
         });

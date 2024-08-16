@@ -24,9 +24,9 @@ const dialog = inject('dialog');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const nyxStore = useNyxStore(window.pinia);
+const nyxStore = useNyxStore();
 
-const configStore = useConfigStore(window.pinia);
+const configStore = useConfigStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

@@ -27,6 +27,11 @@ export default defineConfig({
         }
     },
     resolve: {
+        dedupe: [
+            '@vueform/multiselect',
+            'pinia',
+            'vue'
+        ],
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
         }

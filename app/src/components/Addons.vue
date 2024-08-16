@@ -6,8 +6,6 @@ import {computed, onMounted, onUnmounted} from 'vue';
 
 import {listen} from '@tauri-apps/api/event';
 
-import * as uuid from 'uuid';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -56,7 +54,7 @@ const addonAppend = (url = null) => {
 
     url = (url || '').trim();
 
-    const id = uuid.v4();
+    const id = __NYX_UUID__.v4();
 
     props.addons[id] = {
         id: id,
