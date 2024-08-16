@@ -4,13 +4,9 @@ import * as Vue from 'vue/dist/vue.esm-bundler';
 
 import * as VueRouter from 'vue-router/dist/vue-router.esm-bundler';
 
-import * as Bootstrap from 'bootstrap/dist/js/bootstrap.esm';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {createPinia} from 'pinia';
-
-import Chart from 'chart.js/auto';
 
 import {setup} from 'vue-nyx';
 
@@ -26,12 +22,9 @@ import input from './plugins/input';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-window.Vue       = Vue      ;
-window.Chart     = Chart    ;
-window.VueRouter = VueRouter;
-window.Bootstrap = Bootstrap;
-
-window.pinia = createPinia();
+window.__NYX_VUE__        = Vue          ;
+window.__NYX_VUE_ROUTER__ = VueRouter    ;
+window.__NYX_PINIA__      = createPinia();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -39,7 +32,7 @@ const app = Vue.createApp(App);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-app.use(window.pinia);
+app.use(window.__NYX_PINIA__);
 
 setup(app);
 
@@ -59,7 +52,7 @@ app.directive('tooltip', {
 
         if(title)
         {
-            new Bootstrap.Tooltip(el, {
+            new __NYX_BOOTSTRAP__.Tooltip(el, {
                 fallbackPlacements: ['right'],
                 placement: 'right',
                 trigger: 'hover',

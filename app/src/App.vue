@@ -2,13 +2,11 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {Window, getCurrentWindow} from '@tauri-apps/api/window';
-
 import {inject, reactive, onMounted} from 'vue';
 
-import {useNyxStore} from 'vue-nyx';
+import {Window, getCurrentWindow} from '@tauri-apps/api/window';
 
-import {Modal} from 'bootstrap';
+import {useNyxStore} from 'vue-nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -91,7 +89,7 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    new Modal(document.getElementById('A7E11E2F')).show();
+    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('A7E11E2F')).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };

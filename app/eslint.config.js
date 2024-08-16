@@ -12,6 +12,7 @@ export default [
     },
     {
         rules: {
+            'vue/no-v-html': 'off',
             'vue/html-indent': 'off',
             'vue/v-slot-style': 'off',
             'vue/attributes-order': 'off',
