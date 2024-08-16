@@ -343,7 +343,7 @@ const useConfigStore = defineStore('config', {
 
         import()
         {
-            this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).then((json) => this._loadConfig(json)).catch(this.dialog.error);
+            this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).then(([json, _]) => this._loadConfig(json)).catch(this.dialog.error);
         },
 
         /*------------------------------------------------------------------------------------------------------------*/

@@ -180,7 +180,7 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
                 {
                     fs.readTextFile(file.path).then((text) => {
 
-                        resolve(text);
+                        resolve([text, file.path]);
 
                     }).catch(() => {
 
@@ -221,7 +221,7 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
                     reader.onload = (e) => {
 
-                        resolve(e.target.result);
+                        resolve([e.target.result, null]);
                     };
 
                     reader.onabort = reject;
