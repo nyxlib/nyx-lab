@@ -1,4 +1,4 @@
-<!--suppress VueUnrecognizedSlot, HtmlUnknownAttribute, VueUnrecognizedDirective -->
+<!--suppress VueUnrecognizedSlot, HtmlUnknownAttribute -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -115,7 +115,7 @@ const state = reactive({
 
                                         <div class="mb-3">
                                             <label class="form-label" for="C8206AA4">Refresh interval [ms]</label>
-                                            <input class="form-control form-control-sm" type="number" min="100" max="100000" step="1" v-model="configStore.globals.refreshInterval" />
+                                            <input class="form-control form-control-sm" type="number" min="100" max="100000" step="1" required="required" v-model="configStore.globals.refreshInterval" />
                                         </div>
 
                                     </div>

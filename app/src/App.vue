@@ -148,8 +148,22 @@ onMounted(() => {
 
         mainWindow.listen('tauri://close-requested', () => {
 
-            addonWindow.destroy();
-            mainWindow.destroy();
+            if(configStore.modified)
+            {
+                dialog.confirm('Are you sure you want to close?', 'Nyx Dashboard').then((choice) => {
+
+                    if(choice)
+                    {
+                        addonWindow.destroy();
+                        mainWindow.destroy();
+                    }
+                });
+            }
+            else
+            {
+                addonWindow.destroy();
+                mainWindow.destroy();
+            }
         });
 
         addonWindow.listen('tauri://close-requested', () => {

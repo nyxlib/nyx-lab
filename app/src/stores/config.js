@@ -65,7 +65,7 @@ const useConfigStore = defineStore('config', {
             this.locker = inject('locker');
             this.addon = inject('addon');
 
-            watch(() => this.modified).then(() => {
+            watch(() => this.globals, () => {
 
                 this.modified = true;
             }, {
