@@ -62,7 +62,6 @@ const useConfigStore = defineStore('config', {
         init()
         {
             this.dialog = inject('dialog');
-            this.locker = inject('locker');
             this.addon = inject('addon');
 
             watch(() => this.globals, () => {
@@ -287,7 +286,7 @@ const useConfigStore = defineStore('config', {
 
         _loadConfig(json)
         {
-            this.locker.lock();
+            this.dialog.lock();
 
             try
             {
@@ -311,7 +310,7 @@ const useConfigStore = defineStore('config', {
 
                         this.dialog.success();
 
-                        this.locker.unlock();
+                        this.dialog.unlock();
                     });
                 });
 
@@ -321,7 +320,7 @@ const useConfigStore = defineStore('config', {
             {
                 this.dialog.error(e);
 
-                this.locker.unlock();
+                this.dialog.unlock();
             }
         },
 
@@ -329,7 +328,7 @@ const useConfigStore = defineStore('config', {
 
         _saveConfig(indent)
         {
-            this.locker.lock();
+            this.dialog.lock();
 
             return new Promise((resolve) => {
 
@@ -345,7 +344,7 @@ const useConfigStore = defineStore('config', {
 
                         this.dialog.success();
 
-                        this.locker.unlock();
+                        this.dialog.unlock();
                     });
                 });
 
