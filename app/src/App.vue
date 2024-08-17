@@ -283,7 +283,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="d-flex flex-column" style="height: 100%; width: 4.5rem; overflow-y: hidden;">
+        <div class="d-flex flex-column" style="height: 100%; width: 4.5rem; overflow: hidden;">
 
             <ul class="nav nav-pills flex-grow-1 flex-column justify-content-start text-center border-end">
 
@@ -335,7 +335,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="overflow-hidden" style="height: 100%; width: calc(100% - 4.5rem);">
+        <div style="height: 100%; width: calc(100% - 4.5rem); overflow: hidden;">
 
             <router-view :key="$route.path" />
 
