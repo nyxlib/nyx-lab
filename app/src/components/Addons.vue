@@ -38,13 +38,13 @@ let rank = 0;
 
 const addonSearch = () => {
 
-    if(typeof window['__TAURI__'] !== 'undefined')
+    if(typeof window['__TAURI__'] === 'undefined')
     {
-        __TAURI__.window.Window.getByLabel('addons')?.show();
+        window.open('https://addons.nyxlib.org/', 'Nyx Addon Index', 'width=1200,height=800,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
     }
     else
     {
-        window.open('https://addons.nyxlib.org/', 'Nyx Addon Index', 'width=1200,height=800,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
+        __TAURI__.window.Window.getByLabel('addons').show();
     }
 };
 

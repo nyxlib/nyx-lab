@@ -1,7 +1,7 @@
 // noinspection JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject} from 'vue';
+import {watch, inject} from 'vue';
 
 import {defineStore} from 'pinia';
 
@@ -49,6 +49,7 @@ const confDup = (src, def) => {
 const useConfigStore = defineStore('config', {
     state: () => ({
         globals: Object.assign({}, DEFAULT_GLOBALS),
+        modified: false,
         confPanels: {},
         appPanels: {},
     }),
@@ -63,6 +64,13 @@ const useConfigStore = defineStore('config', {
             this.dialog = inject('dialog');
             this.locker = inject('locker');
             this.addon = inject('addon');
+
+            watch(() => this.modified).then(() => {
+
+                this.modified = true;
+            }, {
+                deep: true
+            });
 
             this.load();
         },
@@ -295,6 +303,12 @@ const useConfigStore = defineStore('config', {
 
                     this.startStopAddons(this.globals.addons).then(() => {
 
+                        setTimeout(() => {
+
+                            this.modified = false;
+
+                        }, 500);
+
                         this.dialog.success();
 
                         this.locker.unlock();
@@ -359,7 +373,14 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], json.toString()).catch(this.dialog.error);
+                this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], json.toString()).catch(this.dialog.error).then(() => {
+
+                    setTimeout(() => {
+
+                        this.modified = false;
+
+                    }, 500);
+                });
             });
         },
 
@@ -370,6 +391,12 @@ const useConfigStore = defineStore('config', {
             this._saveConfig(false).then((json) => {
 
                 localStorage.setItem('nyx-dashboard-config', json.toString());
+
+                setTimeout(() => {
+
+                    this.modified = false;
+
+                }, 500);
             });
         },
 

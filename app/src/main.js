@@ -1,8 +1,8 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import * as Vue from 'vue/dist/vue.esm-bundler';
+import * as Vue from 'vue';
 
-import * as VueRouter from 'vue-router/dist/vue-router.esm-bundler';
+import * as VueRouter from 'vue-router';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

@@ -40,7 +40,7 @@ const state = reactive({
 
 const about = () => {
 
-    dialog.show('Nyx Dashboard\n\nAuthor: Jérôme ODIER\nEmail: jerome.odier@lpsc.in2p3.fr', 'About', 'success');
+    dialog.show('Nyx Dashboard\nhttps://nyxlib.org/\n\nAuthor: Jérôme ODIER\nEmail: jerome.odier@lpsc.in2p3.fr', 'About');
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -144,10 +144,18 @@ onMounted(() => {
         /*------------------------------------------------------------------------------------------------------------*/
 
         const addonWindow = Window.getByLabel('addons');
+        const mainWindow = Window.getByLabel('main');
+
+        mainWindow.listen('tauri://close-requested', () => {
+
+            addonWindow.destroy();
+            mainWindow.destroy();
+        });
 
         addonWindow.listen('tauri://close-requested', () => {
 
             addonWindow.hide();
+            mainWindow.show();
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
