@@ -242,7 +242,7 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <button class="btn btn-sm btn-primary me-1" type="button" @click="about">
+                <button class="btn btn-sm btn-primary me-1" type="button" @click="about()">
                     <i class="bi bi-question-circle"></i>
                 </button>
 
@@ -305,6 +305,12 @@ onMounted(() => {
                     </router-link>
                 </li>
 
+                <template v-for="addon in configStore.appPanels" :key="addon">
+                    <li class="nav-item" :title="panel.title" v-tooltip v-for="panel in addon" :key="panel">
+                        <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="panel.path" v-html="panel.logo" />
+                    </li>
+                </template>
+
                 <li class="nav-item" title="Node-RED" v-tooltip v-if="configStore.globals.nodeRedURL">
                     <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" to="/node-red">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
@@ -312,12 +318,6 @@ onMounted(() => {
                         </svg>
                     </router-link>
                 </li>
-
-                <template v-for="addon in configStore.appPanels" :key="addon">
-                    <li class="nav-item" :title="panel.title" v-tooltip v-for="panel in addon" :key="panel">
-                        <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="panel.path" v-html="panel.logo" />
-                    </li>
-                </template>
 
                 <li class="nav-item" title="Config" v-tooltip>
                     <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" to="/config">

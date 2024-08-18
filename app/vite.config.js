@@ -13,7 +13,7 @@ import eslintPlugin from 'vite-plugin-eslint';
 
 // noinspection JSUnusedGlobalSymbols
 export default defineConfig({
-    plugins: [vuePlugin()],
+    plugins: [vuePlugin(), eslintPlugin()],
     base: './',
     build: {
         chunkSizeWarningLimit: 1250,
@@ -29,6 +29,7 @@ export default defineConfig({
     resolve: {
         dedupe: [
             '@vueform/multiselect',
+            'bootstrap-icons',
             'pinia',
             'vue'
         ],

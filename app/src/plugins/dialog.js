@@ -98,7 +98,7 @@ const _unlock = () => {
 /* DIALOGS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _notify = (title, body) => {
+const _notify = (body, title) => {
 
     if(!body)
     {
@@ -164,7 +164,31 @@ const _success = (message) => {
         }, 500);
     }
 
-    _notify('Success', message);
+    _notify(message, 'Success');
+
+    return {then: () => {}};
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _warning = (message) => {
+
+    const el = document.querySelector('[data-tauri-drag-region]').closest('.navbar');
+
+    if(el)
+    {
+        el.classList.remove('bg-primary');
+        el.classList.add('bg-warning');
+
+        setTimeout(() => {
+
+            el.classList.remove('bg-warning');
+            el.classList.add('bg-primary');
+
+        }, 500);
+    }
+
+    _notify(message, 'Warning');
 
     return {then: () => {}};
 };
@@ -188,7 +212,7 @@ const _error = (message) => {
         }, 500);
     }
 
-    _notify('Error', message);
+    _notify(message, 'Error');
 
     return {then: () => {}};
 };
@@ -420,10 +444,16 @@ export default {
             lock: _lock,
             unlock: _unlock,
             /* DIALOGS */
+            notify: _notify,
+            /**/
             success: _success,
+            warning: _warning,
             error: _error,
+            /**/
             show: _show,
+            /**/
             confirm: _confirm,
+            /**/
             open: _open,
             save: _save,
         });

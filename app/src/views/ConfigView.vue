@@ -195,19 +195,19 @@ const state = reactive({
 
             <template v-slot:button>
 
-                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.import" style="width: 85px;">
+                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.import()" style="width: 85px;">
                     <i class="bi bi-upload"></i> Import
                 </button>
 
-                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.export" style="width: 85px;">
+                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.export()" style="width: 85px;">
                     <i class="bi bi-download"></i> Export
                 </button>
 
-                <button class="btn btn-sm btn-outline-warning my-1 me-2" type="button" @click="configStore.load" style="width: 85px;">
+                <button class="btn btn-sm btn-outline-warning my-1 me-2" type="button" @click="configStore.load()" style="width: 85px;">
                     <i class="bi bi-x-lg"></i> Reload
                 </button>
 
-                <button class="btn btn-sm btn-success xxxxxxx my-1 me-0" type="button" @click="configStore.save" style="width: 85px;">
+                <button class="btn btn-sm btn-success xxxxxxx my-1 me-0" type="button" @click="configStore.save()" style="width: 85px;">
                     <i class="bi bi-check-lg"></i> Save
                 </button>
 

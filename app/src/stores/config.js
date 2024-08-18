@@ -292,13 +292,13 @@ const useConfigStore = defineStore('config', {
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                const globals = JSON.parse(json || '{}');
+                const tmp_globals = JSON.parse(json || '{}');
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                this.initAddons(globals.addons).then(() => {
+                this.initAddons(tmp_globals.addons).then(() => {
 
-                    this.globals = confDup(globals, DEFAULT_GLOBALS);
+                    this.globals = confDup(tmp_globals, DEFAULT_GLOBALS);
 
                     this.startStopAddons(this.globals.addons).then(() => {
 
