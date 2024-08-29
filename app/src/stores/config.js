@@ -28,15 +28,31 @@ const DEFAULT_GLOBALS = {
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const deepClone = (obj) => {
+
+    /**/ if(Object.prototype.toString.call(obj) === '[object Object]')
+    {
+        return Object.fromEntries(Object.entries(obj).map(([key, val]) => [key, deepClone(val)]));
+    }
+    else if(Object.prototype.toString.call(obj) === '[object Array]')
+    {
+        return obj.map(deepClone);
+    }
+
+    return obj;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const confDup = (src, def) => {
 
     const result = {};
 
     if(typeof src === 'object'
-       &&
-       typeof def === 'object'
+        &&
+        typeof def === 'object'
     ) {
-        for(const key of Object.keys(def)) result[key] = (key in src) ? src[key] : def[key];
+        Object.keys(def).forEach((key) => { result[key] = deepClone((key in src) ? src[key] : def[key]); });
     }
 
     return result;
@@ -48,7 +64,7 @@ const confDup = (src, def) => {
 
 const useConfigStore = defineStore('config', {
     state: () => ({
-        globals: Object.assign({}, DEFAULT_GLOBALS),
+        globals: deepClone(DEFAULT_GLOBALS),
         modified: false,
         confPanels: {},
         appPanels: {},

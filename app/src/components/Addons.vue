@@ -90,7 +90,7 @@ const addonDw = (addon1) => {
 
     const index = array.findIndex((addon2) => addon2.id === addon1.id);
 
-    if(index > 0x0000000000)
+    if(index > 0x00000000000000)
     {
         const addon2 = array[index - 1];
 
@@ -107,7 +107,7 @@ const addonUp = (addon1) => {
 
     const index = array.findIndex(addon2 => addon2.id === addon1.id);
 
-    if(index < array.length)
+    if(index < array.length - 1)
     {
         const addon2 = array[index + 1];
 
