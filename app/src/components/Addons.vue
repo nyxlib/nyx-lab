@@ -44,7 +44,7 @@ const addonSearch = () => {
     }
     else
     {
-        _TAURI__.window.Window.getByLabel('addons').then((addonWindow) => {
+        __TAURI__.window.Window.getByLabel('addons').then((addonWindow) => {
 
             addonWindow.show();
         });
