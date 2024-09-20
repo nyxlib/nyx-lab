@@ -1,4 +1,4 @@
-<!--suppress VueUnrecognizedSlot, HtmlUnknownAttribute -->
+<!--suppress JSValidateTypes, VueUnrecognizedSlot, HtmlUnknownAttribute, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -12,10 +12,10 @@ import * as marked from 'marked';
 
 import useConfigStore from '../stores/config';
 
+import license from '../assets/gpl-3.0.txt';
+
 import Addons from '../components/Addons.vue';
 import WebPages from '../components/WebPages.vue';
-
-import license from '../assets/gpl-3.0.txt';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
