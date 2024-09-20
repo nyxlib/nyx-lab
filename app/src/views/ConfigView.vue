@@ -2,15 +2,20 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {reactive} from 'vue';
+import {reactive, onMounted} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
+
+import * as marked from 'marked';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from '../stores/config';
 
 import Addons from '../components/Addons.vue';
+import WebPages from '../components/WebPages.vue';
+
+import license from '../assets/gpl-3.0.txt';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -23,6 +28,21 @@ const configStore = useConfigStore();
 const state = reactive({
     shownTabs: new Set(),
     showNyx: false,
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* INITIALIZATION                                                                                                     */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onMounted(() => {
+
+    fetch(license).then((response) => {
+
+        response.text().then((content) => {
+
+            document.getElementById('gplv3').innerHTML = marked.marked(content).replace('/<a /g', '<a target="_blank" ');
+        });
+    });
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -126,16 +146,18 @@ const state = reactive({
 
                         <!-- *************************************************************************************** -->
 
+                    </div>
+                    <div class="col-md-6">
+
+                        <!-- *************************************************************************************** -->
+
                         <div class="shadow card mb-3">
-                            <div class="card-header d-flex">
-                                Node-RED
+                            <div class="card-header">
+                                License
                             </div>
                             <div class="card-body">
 
-                                <div class="mb-3">
-                                    <label class="form-label" for="A508D199">Server URL<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" id="A508D199" placeholder="Server URL" v-no-autocomplete v-model="configStore.globals.nodeRedURL" />
-                                </div>
+                                <div class="overflow-y-scroll" style="height: 391px;" id="gplv3"></div>
 
                             </div>
                         </div>
@@ -143,15 +165,34 @@ const state = reactive({
                         <!-- *************************************************************************************** -->
 
                     </div>
-                    <div class="col-md-6">
+                </div>
 
-                        <!-- *************************************************************************************** -->
+            </tab-pane>
 
-                        <addons :addons="configStore.globals.addons" />
+            <!-- *************************************************************************************************** -->
+            <!-- EXT.                                                                                                -->
+            <!-- *************************************************************************************************** -->
 
-                        <!-- *************************************************************************************** -->
+            <tab-pane title="Ext.">
 
-                    </div>
+                <div class="container">
+
+                    <nav-tabs margin="mb-3">
+
+                        <tab-pane title="Addons">
+
+                            <addons :addons="configStore.globals.addons" />
+
+                        </tab-pane>
+
+                        <tab-pane title="Web pages">
+
+                            <web-pages :web-pages="configStore.globals.webPages" />
+
+                        </tab-pane>
+
+                    </nav-tabs>
+
                 </div>
 
             </tab-pane>

@@ -2,16 +2,18 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {computed, onMounted, onUnmounted} from 'vue';
+import {computed} from 'vue';
 
-import {listen} from '@tauri-apps/api/event';
+import icons from '../assets/icons.json';
+
+import Multiselect from '@vueform/multiselect';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    addons: {
+    webPages: {
         type: Object,
         required: true,
     },
@@ -19,9 +21,9 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addons = computed(() => {
+const webPages = computed(() => {
 
-    const result = Object.values(props.addons);
+    const result = Object.values(props.webPages);
 
     result.sort((x, y) => x.rank - y.rank);
 
@@ -36,19 +38,19 @@ let rank = 0;
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addonAppend = (url = null) => {
+const webPageAppend = (url = null) => {
 
     url = (url || '').trim();
 
     const id = __NYX_UUID__.v4();
 
-    props.addons[id] = {
+    props.webPages[id] = {
         id: id,
         rank: rank,
         url: url,
+        icon: 'question',
         zombie: false,
         enabled: !!url,
-        started: false,
     };
 
     rank++;
@@ -56,106 +58,51 @@ const addonAppend = (url = null) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addonSearch = () => {
+const webPageZombie = (webPage) => {
 
-    if(typeof window['__TAURI__'] === 'undefined')
-    {
-        window.open('https://addons.nyxlib.org/', 'Nyx Addon Index', 'width=1200,height=800,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
-    }
-    else
-    {
-        __TAURI__.window.Window.getByLabel('addons').then((addonWindow) => {
-
-            addonWindow.show();
-        });
-    }
+    webPage.zombie = !webPage.zombie;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addonZombie = (addon) => {
+const webPageEnabled = (webPage) => {
 
-    addon.zombie = !addon.zombie;
+    webPage.enabled = !webPage.enabled;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addonEnabled = (addon) => {
+const webPageDw = (webPage1) => {
 
-    addon.enabled = !addon.enabled;
-};
+    const array = webPages.value;
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const addonDw = (addon1) => {
-
-    const array = addons.value;
-
-    const index = array.findIndex((addon2) => addon2.id === addon1.id);
+    const index = array.findIndex((webPage2) => webPage2.id === webPage1.id);
 
     if(index > 0x00000000000000)
     {
-        const addon2 = array[index - 1];
+        const webPage2 = array[index - 1];
 
-        addon1.rank--;
-        addon2.rank++;
+        webPage1.rank--;
+        webPage2.rank++;
     }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addonUp = (addon1) => {
+const webPageUp = (webPage1) => {
 
-    const array = addons.value;
+    const array = webPages.value;
 
-    const index = array.findIndex(addon2 => addon2.id === addon1.id);
+    const index = array.findIndex(webPage2 => webPage2.id === webPage1.id);
 
     if(index < array.length - 1)
     {
-        const addon2 = array[index + 1];
+        const webPage2 = array[index + 1];
 
-        addon1.rank++;
-        addon2.rank--;
+        webPage1.rank++;
+        webPage2.rank--;
     }
 };
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* INITIALIZATION                                                                                                     */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const tauriMessageHandler = (e) => addonAppend(e.payload);
-
-const htmlMessageHandler = (e) => addonAppend(e.data);
-
-let unlisten = null;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-onMounted(async () => {
-
-    if(typeof window['__TAURI__'] !== 'undefined')
-    {
-        unlisten = await listen('new-addon', tauriMessageHandler);
-    }
-    else
-    {
-        window.addEventListener('message', htmlMessageHandler);
-    }
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-onUnmounted(() => {
-
-    if(typeof window['__TAURI__'] !== 'undefined')
-    {
-        if(unlisten) unlisten(/*- 'new-addon', tauriMessageHandler -*/);
-    }
-    else
-    {
-        window.removeEventListener('message', htmlMessageHandler);
-    }
-});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -166,15 +113,11 @@ onUnmounted(() => {
 
     <div class="shadow card">
         <div class="card-header px-3 py-2">
-            Addons
+            Web pages
             [
-            <button class="btn btn-xs btn-primary me-1" type="button" @click="() => addonAppend()">
+            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => webPageAppend()">
                 <i class="bi bi-plus-lg"></i>
                 Add
-            </button>
-            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => addonSearch()">
-                <i class="bi bi-search"></i>
-                Search
             </button>
             ]
         </div>
@@ -194,6 +137,12 @@ onUnmounted(() => {
                         <th class="text-center" style="width: auto;">
                             URL
                         </th>
+                        <th class="text-center" style="width: auto;">
+                            Title
+                        </th>
+                        <th class="text-center" style="width: 200px;">
+                            Icon
+                        </th>
                         <th class="text-center" style="width: 105px;">
                             Enabled
                         </th>
@@ -206,27 +155,33 @@ onUnmounted(() => {
                 <!-- *********************************************************************************************** -->
 
                 <tbody>
-                    <tr v-for="(addon, idx) in addons" :key="idx">
+                    <tr v-for="(webPage, idx) in webPages" :key="idx">
                         <td class="text-center">
-                            <button class="btn btn-sm btn-link" type="button" @click="addonDw(addon)">
+                            <button class="btn btn-sm btn-link" type="button" @click="webPageDw(webPage)">
                                 <i class="bi bi-caret-up-fill"></i>
                             </button>
-                            <button class="btn btn-sm btn-link" type="button" @click="addonUp(addon)">
+                            <button class="btn btn-sm btn-link" type="button" @click="webPageUp(webPage)">
                                 <i class="bi bi-caret-down-fill"></i>
                             </button>
-                            <button class="btn btn-sm btn-link" type="button" @click="addonZombie(addon)">
-                                <i class="bi bi-trash2 text-danger" v-if="!addon.zombie"></i>
-                                <i class="bi bi-recycle text-primary" v-if="addon.zombie"></i>
+                            <button class="btn btn-sm btn-link" type="button" @click="webPageZombie(webPage)">
+                                <i class="bi bi-trash2 text-danger" v-if="!webPage.zombie"></i>
+                                <i class="bi bi-recycle text-primary" v-if="webPage.zombie"></i>
                             </button>
                         </td>
                         <td class="text-start">
-                            <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" v-model="addon.url" />
+                            <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': webPage.zombie}]" type="text" v-model="webPage.url" />
+                        </td>
+                        <td class="text-start">
+                            <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': webPage.zombie}]" type="text" v-model="webPage.title" />
+                        </td>
+                        <td class="text-start">
+                            <multiselect :options="icons" :searchable="true" v-model="webPage.icon"></multiselect>
                         </td>
                         <td class="text-center">
-                            <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>
+                            <button :class="['btn', 'btn-sm', {'btn-success': !webPage.zombie && webPage.enabled, 'btn-outline-success': !webPage.zombie && !webPage.enabled, 'btn-secondary': webPage.zombie && webPage.enabled, 'btn-outline-secondary': webPage.zombie && !webPage.enabled}]" type="button" @click="webPageEnabled(webPage)">Enabled</button>
                         </td>
                         <td class="text-center">
-                            <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': addon.started, 'text-secondary': !addon.started}]"></i>
+                            <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (webPage.enabled && webPage.url), 'text-secondary': !(webPage.enabled && webPage.url)}]"></i>
                         </td>
                     </tr>
                 </tbody>

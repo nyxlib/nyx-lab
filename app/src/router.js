@@ -18,9 +18,9 @@ const router = createRouter({
             component: () => import('./views/MonitoringView.vue'),
         },
         {
-            name: 'node-red',
-            path: '/node-red/',
-            component: () => import('./views/NodeRedView.vue'),
+            name: 'external',
+            path: '/external/:id',
+            component: () => import('./views/ExternalView.vue'),
         },
         {
             name: 'config',

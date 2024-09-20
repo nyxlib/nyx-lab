@@ -19,9 +19,8 @@ const DEFAULT_GLOBALS = {
     monitoringMetrics: {},
     refreshInterval: 1000,
     /**/
-    nodeRedURL: '',
-    /**/
     addons: {},
+    webPages: {},
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -217,8 +216,21 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        startStopAddons(addonDescrs)
+        startStopExts(addonDescrs, webPageDescrs)
         {
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* WEB PAGES                                                                                              */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            Object.values(webPageDescrs).filter((x) => x.zombie).forEach((zombie) => {
+
+                delete webPageDescrs[zombie.id];
+            });
+
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* ADDONS                                                                                                 */
+            /*--------------------------------------------------------------------------------------------------------*/
+
             return new Promise((resolve) => {
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -296,6 +308,8 @@ const useConfigStore = defineStore('config', {
 
                 /*----------------------------------------------------------------------------------------------------*/
             });
+
+            /*--------------------------------------------------------------------------------------------------------*/
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -316,7 +330,7 @@ const useConfigStore = defineStore('config', {
 
                     this.globals = confDup(tmp_globals, DEFAULT_GLOBALS);
 
-                    this.startStopAddons(this.globals.addons).then(() => {
+                    this.startStopExts(this.globals.addons, this.globals.webPages).then(() => {
 
                         setTimeout(() => {
 
@@ -354,7 +368,7 @@ const useConfigStore = defineStore('config', {
 
                     this.globals = confDup(this.globals, DEFAULT_GLOBALS);
 
-                    this.startStopAddons(this.globals.addons).then(() => {
+                    this.startStopExts(this.globals.addons, this.globals.webPages).then(() => {
 
                         resolve(JSON.stringify(this.globals, null, indent ? 2 : 0));
 
