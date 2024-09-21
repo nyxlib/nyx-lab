@@ -40,7 +40,7 @@ onMounted(() => {
 
         response.text().then((content) => {
 
-            document.getElementById('gplv3').innerHTML = marked.marked(content).replace('/<a /g', '<a target="_blank" ');
+            document.getElementById('gplv3').innerHTML = marked.marked(content).replace('/<a /g', '<a target="_blank" ').replace(/<h([1-6])>/g, (_, p1) => `<h${parseInt(p1) + 1}>`).replace(/<\/h([1-6])>/g, (_, p1) => `</h${parseInt(p1) + 1}>`);
         });
     });
 });

@@ -9,6 +9,7 @@
         "app-prod": "npm i --update vue-nyx && cd ./app/ && ../node_modules/vite/bin/vite.js build",
         "tauri-dev": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js dev",
         "tauri-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js build",
+        "tauri-android-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js android build",
         "lint": "cd ./app/ && ../node_modules/eslint/bin/eslint.js"
     },
     "dependencies": {
