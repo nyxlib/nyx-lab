@@ -6,6 +6,7 @@
 
 fn main()
 {
+    #[cfg(desktop)]
     nyxdashboard_lib::run();
 }
 
