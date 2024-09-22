@@ -8,11 +8,11 @@ use tauri::{http, Manager};
 
 use std::{fs, io, env, path};
 
-use reqwest::blocking::Client;
+use tauri_plugin_http::reqwest;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-fn _download_file(uri_without_query: &str, file_path: &path::PathBuf) -> Result<(), io::Error>
+async fn _download_file(uri_without_query: &str, file_path: &path::PathBuf) -> Result<(), io::Error>
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CREATE DIRECTORY                                                                                               */
@@ -27,19 +27,24 @@ fn _download_file(uri_without_query: &str, file_path: &path::PathBuf) -> Result<
     /* DOWNLOAD FILE                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    let client = Client::new();
+    let url = uri_without_query.replace("addon://", "https://addons.nyxlib.org/repo/").trim().to_string();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    let content = client.get(uri_without_query.replace("addon://", "https://addons.nyxlib.org/repo/").trim())
-                        .send()
-                        .and_then(|response| response.error_for_status())
-                        .and_then(|response| response.bytes())
-                        .map_err(|e| io::Error::new(
-                            io::ErrorKind::Other,
-                            e.to_string()
-                        ))?
+    let response = reqwest::Client::new()
+        .get(&url)
+        .send()
+        .await
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("HTTP request error: {}", e)))?
+        .error_for_status()
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("HTTP error: {}", e)))?
     ;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    let content = response.bytes()
+        .await
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("Error reading data: {}", e)))?;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -80,65 +85,70 @@ pub fn run()
 
         .register_uri_scheme_protocol("addon", move |app, req| {
 
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* EXTRACT FILE PATH FROM URL                                                                             */
-            /*--------------------------------------------------------------------------------------------------------*/
+            tauri::async_runtime::block_on(async move {
 
-            let uri = req.uri().to_string();
+                /*----------------------------------------------------------------------------------------------------*/
+                /* EXTRACT FILE PATH FROM URL                                                                         */
+                /*----------------------------------------------------------------------------------------------------*/
 
-            let uri_without_query = uri.split('?').next().unwrap_or(&uri);
+                let uri = req.uri().to_string();
 
-            let file_path = app.path().app_config_dir().unwrap().join("addons").join(uri_without_query.replace("addon://", "").trim());
+                let uri_without_query = uri.split('?').next().unwrap_or(&uri);
 
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* DOWNLOAD FILE IF NEEDED                                                                                */
-            /*--------------------------------------------------------------------------------------------------------*/
+                let file_path = app.path().app_config_dir().unwrap().join("addons").join(uri_without_query.replace("addon://", "").trim());
 
-            if !file_path.exists()
-            {
-                if let Err(e) = _download_file(&uri_without_query, &file_path)
+                /*----------------------------------------------------------------------------------------------------*/
+                /* DOWNLOAD FILE IF NEEDED                                                                            */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                if !file_path.exists()
                 {
-                    return http::Response::builder()
-                        .status(http::StatusCode::INTERNAL_SERVER_ERROR)
+                    if let Err(e) = _download_file(&uri_without_query, &file_path).await
+                    {
+                        return http::Response::builder()
+                            .status(http::StatusCode::INTERNAL_SERVER_ERROR)
+                            .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                            .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
+                            .body(e.to_string().into_bytes())
+                            .unwrap()
+                        ;
+                    }
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+                /* GET FILE MIME                                                                                      */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                let file_mime = mime_guess::from_path(&file_path).first_or_octet_stream();
+
+                /*----------------------------------------------------------------------------------------------------*/
+                /* SERVE FILE                                                                                         */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                return match fs::read(file_path) {
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    Ok(content) => http::Response::builder()
+                        .status(http::StatusCode::OK)
+                        .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                        .header(http::header::CONTENT_TYPE, file_mime.essence_str())
+                        .body(content)
+                        .unwrap(),
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    Err(e) => http::Response::builder()
+                        .status(http::StatusCode::NOT_FOUND)
                         .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                         .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
                         .body(e.to_string().into_bytes())
-                        .unwrap()
-                    ;
-                }
-            }
+                        .unwrap(),
 
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* GET FILE MIME                                                                                          */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            let file_mime = mime_guess::from_path(&file_path).first_or_octet_stream();
-
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* SERVE FILE                                                                                             */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            return match fs::read(file_path) {
-                /*----------------------------------------------------------------------------------------------------*/
-
-                Ok(content) => http::Response::builder()
-                    .status(http::StatusCode::OK)
-                    .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-                    .header(http::header::CONTENT_TYPE, file_mime.essence_str())
-                    .body(content)
-                    .unwrap(),
+                    /*------------------------------------------------------------------------------------------------*/
+                };
 
                 /*----------------------------------------------------------------------------------------------------*/
-
-                Err(e) => http::Response::builder()
-                    .status(http::StatusCode::NOT_FOUND)
-                    .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-                    .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
-                    .body(e.to_string().into_bytes())
-                    .unwrap(),
-
-                /*----------------------------------------------------------------------------------------------------*/
-            };
+            })
         })
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -148,6 +158,7 @@ pub fn run()
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
 
         /*------------------------------------------------------------------------------------------------------------*/
