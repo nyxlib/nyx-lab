@@ -22,7 +22,7 @@ build_project:
         - npm install
         - npm run tauri-prod
 
-        - mv tauri/target/release/bundle/appimage/nyx-dashboard_*.AppImage ./nyx-dashboard.AppImage
+        - mv src-tauri/target/release/bundle/appimage/nyx-dashboard_*.AppImage ./nyx-dashboard.AppImage
     artifacts:
         paths:
             - ./nyx-dashboard.AppImage
