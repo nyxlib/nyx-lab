@@ -129,7 +129,7 @@ pub fn run()
                     /*------------------------------------------------------------------------------------------------*/
 
                     Ok(content) => http::Response::builder()
-                        .status(http::StatusCode::OK)
+                        .status(http::StatusCode::/*-*/OK/*-*/)
                         .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                         .header(http::header::CONTENT_TYPE, file_mime.essence_str())
                         .body(content)
