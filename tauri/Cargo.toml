@@ -3,7 +3,7 @@ name = "nyx-dashboard"
 version = "1.0.0"
 description = "Nyx Dashboard"
 authors = ["Jérôme ODIER"]
-license = "AGPL"
+license = "GPL"
 repository = "https://gitlab.in2p3.fr/lpsc-kid/nyx-dashboard"
 edition = "2021"
 
@@ -14,15 +14,15 @@ name = "nyxdashboard_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.0.0-rc.7", features = [] }
+tauri-build = { version = "2.0.0-rc", features = [] }
 
 [dependencies]
-tauri = { version = "2.0.0-rc.15", features = ["devtools"] }
-tauri-plugin-notification = "2.0.0-rc.5"
-tauri-plugin-dialog = "2.0.0-rc.7"
-tauri-plugin-shell = "2.0.0-rc.3"
-tauri-plugin-http = "2.0.0-rc.5"
-tauri-plugin-fs = "2.0.0-rc.5"
+tauri = { version = "2.0.0-rc", features = ["devtools"] }
+tauri-plugin-notification = "2.0.0-rc"
+tauri-plugin-dialog = "2.0.0-rc"
+tauri-plugin-shell = "2.0.0-rc"
+tauri-plugin-http = "2.0.0-rc"
+tauri-plugin-fs = "2.0.0-rc"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 mime = "0.3.17"
