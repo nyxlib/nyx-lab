@@ -10,6 +10,7 @@
         "lint": "cd ./app/ && eslint",
         "tauri-dev": "tauri dev",
         "tauri-prod": "tauri build",
+        "tauri-android-dev": "tauri android dev",
         "tauri-android-prod": "tauri android build"
     },
     "dependencies": {
