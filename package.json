@@ -10,8 +10,7 @@
         "lint": "eslint",
         "tauri-dev": "tauri dev",
         "tauri-prod": "tauri build",
-        "tauri-android-dev": "tauri android dev",
-        "tauri-android-prod": "tauri android build"
+        "tauri-android": "tauri android build"
     },
     "dependencies": {
         "@tauri-apps/api": "^2.0.0-rc.5",
