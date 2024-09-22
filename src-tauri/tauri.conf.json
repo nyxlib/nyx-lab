@@ -13,19 +13,6 @@
         "withGlobalTauri": true,
         "windows": [
             {
-                "label": "main",
-                "height": 800,
-                "width": 1300,
-                "minHeight": 800,
-                "minWidth": 1300,
-                "visible": true,
-                "maximized": true,
-                "title": "Nyx Dashboard",
-                "decorations": false,
-                "transparent": true,
-                "url": "index.html"
-            },
-            {
                 "label": "addons",
                 "height": 800,
                 "width": 1300,
@@ -37,6 +24,19 @@
                 "decorations": true,
                 "transparent": false,
                 "url": "https://addons.nyxlib.org/"
+            },
+            {
+                "label": "main",
+                "height": 800,
+                "width": 1300,
+                "minHeight": 800,
+                "minWidth": 1300,
+                "visible": true,
+                "maximized": true,
+                "title": "Nyx Dashboard",
+                "decorations": false,
+                "transparent": true,
+                "url": "index.html"
             }
         ],
         "security": {

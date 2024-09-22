@@ -6,7 +6,9 @@
     "webviews": ["main", "addons"],
     "platforms": [
         "linux",
+        "android",
         "macOS",
+        "iOS",
         "windows"
     ],
     "remote": {
