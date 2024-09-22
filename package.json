@@ -1,16 +1,17 @@
 {
+    "$schema": "https://schema.tauri.app/config/2.0.0-rc",
     "name": "nyx-dashboard",
     "description": "Nyx Dashboard",
     "version": "1.0.0",
     "type": "module",
     "private": true,
     "scripts": {
-        "app-dev": "npm i --update vue-nyx && cd ./app/ && ../node_modules/vite/bin/vite.js --port 1234 dev",
-        "app-prod": "npm i --update vue-nyx && cd ./app/ && ../node_modules/vite/bin/vite.js build",
-        "tauri-dev": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js dev",
-        "tauri-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js build",
-        "tauri-android-prod": "cd ./tauri/ && ../node_modules/@tauri-apps/cli/tauri.js android build",
-        "lint": "cd ./app/ && ../node_modules/eslint/bin/eslint.js"
+        "app-dev": "npm i --update vue-nyx && cd ./app/ && vite --port 1234 dev",
+        "app-prod": "npm i --update vue-nyx && cd ./app/ && vite build",
+        "lint": "cd ./app/ && eslint",
+        "tauri-dev": "tauri dev",
+        "tauri-prod": "tauri build",
+        "tauri-android-prod": "tauri android build"
     },
     "dependencies": {
         "@tauri-apps/api": "^2.0.0-rc.5",
