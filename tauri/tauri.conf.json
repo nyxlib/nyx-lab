@@ -9,6 +9,7 @@
         "frontendDist": "../app/dist/"
     },
     "app": {
+        "withGlobalTauri": true,
         "windows": [
             {
                 "label": "main",
@@ -39,8 +40,7 @@
         ],
         "security": {
             "csp": null
-        },
-        "withGlobalTauri": true
+        }
     },
     "bundle": {
         "active": true,
