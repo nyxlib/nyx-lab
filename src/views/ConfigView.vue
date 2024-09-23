@@ -4,6 +4,8 @@
 
 import {reactive, onMounted} from 'vue';
 
+import {invoke} from '@tauri-apps/api/core';
+
 import Multiselect from '@vueform/multiselect';
 
 import * as marked from 'marked';
@@ -21,6 +23,10 @@ import WebPages from '../components/WebPages.vue';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const configStore = useConfigStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -29,6 +35,32 @@ const state = reactive({
     shownTabs: new Set(),
     showNyx: false,
 });
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+async function openDevTools()
+{
+    try {
+        await invoke('open_devtools');
+    }
+    catch(e) {
+        console.error('Failed to open devtools:', e);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+async function closeDevTools()
+{
+    try {
+        await invoke('close_devtools');
+    }
+    catch(e) {
+        console.error('Failed to close devtools:', e);
+    }
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
@@ -235,6 +267,14 @@ onMounted(() => {
             <!-- *************************************************************************************************** -->
 
             <template v-slot:button>
+
+                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="openDevTools()" style="width: 85px;" v-if="HAS_TAURI">
+                    <i class="bi bi-code-slash"></i> Open DevTools
+                </button>
+
+                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="closeDevTools()" style="width: 85px;" v-if="HAS_TAURI">
+                    <i class="bi bi-code-slash"></i> Close DevTools
+                </button>
 
                 <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.import()" style="width: 85px;">
                     <i class="bi bi-upload"></i> Import

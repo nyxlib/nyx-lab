@@ -102,7 +102,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(!HAS_TAURI)
+    if(!HAS_TAURI || /android/i.test(navigator.userAgent))
     {
         document.body.setAttribute('data-environment', 'browser');
     }

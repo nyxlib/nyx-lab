@@ -16,12 +16,14 @@
         "lint": "eslint",
         "tauri-dev": "tauri dev",
         "tauri-prod": "tauri build",
-        "tauri-android": "tauri android build --target armv7"
+        "tauri-android": "tauri android build --target armv7",
+        "tauri-android-deploy": "adb install ./src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk"
     },
     "dependencies": {
         "@tauri-apps/api": "^2.0.0-rc.5",
         "@tauri-apps/plugin-dialog": "^2.0.0-rc.1",
         "@tauri-apps/plugin-fs": "^2.0.0-rc.2",
+        "@tauri-apps/plugin-http": "^2.0.0-rc.2",
         "@tauri-apps/plugin-notification": "^2.0.0-rc.1",
         "@tauri-apps/plugin-shell": "^2.0.0-rc.1",
         "@vueform/multiselect": "^2.6.10",

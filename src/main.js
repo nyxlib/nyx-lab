@@ -35,6 +35,23 @@ app.use(addon);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+router.beforeEach(() => {
+
+    if(/android/i.test(navigator.userAgent))
+    {
+        setTimeout(() => {
+
+            document.querySelectorAll('[data-bs-original-title]').forEach((tooltip) => {
+
+                __NYX_BOOTSTRAP__.Tooltip.getInstance(tooltip)?.hide();
+            });
+
+        }, 1000);
+    }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 app.directive('tooltip', {
 
     mounted(el)
