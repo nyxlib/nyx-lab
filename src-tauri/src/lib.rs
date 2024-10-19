@@ -186,7 +186,7 @@ pub fn run()
         /* APPLICATION                                                                                                */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        .run(tauri::generate_context!()).expect("Error while running tauri application")
+        .run(tauri::generate_context!()).expect("Error while running Nyx-Dashboard")
 
         /*------------------------------------------------------------------------------------------------------------*/
     ;
