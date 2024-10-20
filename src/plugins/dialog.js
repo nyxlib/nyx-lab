@@ -105,6 +105,8 @@ const _notify = (body, title) => {
         return;
     }
 
+    console.log(body);
+
     if(typeof window['__TAURI__'] !== 'undefined')
     {
         /*------------------------------------------------------------------------------------------------------------*/
@@ -132,14 +134,6 @@ const _notify = (body, title) => {
                 });
             }
         });
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    }
-    else
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        console.log(body);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -287,13 +281,13 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
                     name: typeName,
                     extensions: typeExts,
                 }]
-            }).then((file) => {
+            }).then((path) => {
 
-                if(file)
+                if(path)
                 {
-                    fs.readTextFile(file.path).then((text) => {
+                    fs.readTextFile(path).then((text) => {
 
-                        resolve([text, file.path]);
+                        resolve([text, path]);
 
                     }).catch(() => {
 
