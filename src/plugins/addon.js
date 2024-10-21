@@ -48,7 +48,7 @@ function _load(app, path)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof window['__TAURI__'] === 'undefined' || /android/i.test(navigator.userAgent))
+    if(typeof window['__TAURI__'] === 'undefined' || /android|iphone|ipad/i.test(navigator.userAgent))
     {
         path = path.replace('addon://', 'https://addons.nyxlib.org/repo/');
     }
