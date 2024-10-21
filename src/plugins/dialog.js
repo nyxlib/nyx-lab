@@ -289,19 +289,19 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
                         resolve([text, path]);
 
-                    }).catch(() => {
+                    }).catch((e) => {
 
-                        reject();
+                        reject(e);
                     });
                 }
                 else
                 {
-                    reject();
+                    reject('empty path');
                 }
 
-            }).catch(() => {
+            }).catch((e) => {
 
-                reject();
+                reject(e);
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -381,19 +381,19 @@ const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
 
                         resolve(path);
 
-                    }).catch(() => {
+                    }).catch((e) => {
 
-                        reject();
+                        reject(e);
                     });
                 }
                 else
                 {
-                    reject();
+                    reject('empty path');
                 }
 
-            }).catch(() => {
+            }).catch((e) => {
 
-                reject();
+                reject(e);
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
