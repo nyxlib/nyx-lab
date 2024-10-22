@@ -48,7 +48,11 @@ function _load(app, path)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof window['__TAURI__'] === 'undefined' || /android|iphone|ipad/i.test(navigator.userAgent))
+    if(typeof window['__TAURI__'] !== 'undefined')
+    {
+        path = path.replace('addon://', 'http://localhost:7878/repo/');
+    }
+    else
     {
         path = path.replace('addon://', 'https://addons.nyxlib.org/repo/');
     }
@@ -70,7 +74,7 @@ function _load(app, path)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        fetch(`${path}/package.json`, {method: 'GET', mode: 'cors'}).then((response) => {
+        fetch(`${path}/package.json?_=${new Date().getTime()}`, {method: 'GET', mode: 'cors'}).then((response) => {
 
             response.json().then((json) =>  {
 

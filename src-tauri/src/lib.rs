@@ -1,75 +1,194 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-use mime;
+use std::collections::HashMap;
 
-use mime_guess;
+use serde::{Serialize, Deserialize};
 
-use std::{fs, io, env, path};
+use warp::{Filter, http::StatusCode};
+
+use base64::{Engine as _, engine::general_purpose::STANDARD};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 use tauri_plugin_http::reqwest;
 
-use tauri::{http, Manager, AppHandle};
+use tauri_plugin_store::StoreExt;
+
+use tauri::{App, async_runtime::spawn};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#[tauri::command]
-fn open_devtools(app: AppHandle)
+#[derive(Serialize, Deserialize)]
+struct CachedResponse
 {
-    if let Some(window) = app.get_webview_window("main")
-    {
-        window.open_devtools();
-    }
+    header_map: HashMap<String, String>,
+
+    payload: String,
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#[tauri::command]
-fn close_devtools(app: AppHandle)
+fn start_addon_proxy(app: &mut App)
 {
-    if let Some(window) = app.get_webview_window("main")
-    {
-        window.close_devtools();
-    }
-}
+    let store = app.store("nyx-addons-store.json").expect("Failed to get the store");
 
-/*--------------------------------------------------------------------------------------------------------------------*/
+    spawn(async move {
 
-fn _download_file(uri_without_query: &str, file_path: &path::PathBuf) -> Result<(), io::Error>
-{
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* CREATE DIRECTORY                                                                                               */
-    /*----------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    if let Some(parent_dir) = file_path.parent()
-    {
-        fs::create_dir_all(parent_dir)?;
-    }
+        let client = reqwest::Client::new();
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* DOWNLOAD FILE                                                                                                  */
-    /*----------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    let url = uri_without_query.replace("addon://", "https://addons.nyxlib.org/repo/").trim().to_string();
+        let proxy = warp::path::full().and(warp::method()).and(warp::header::headers_cloned()).and(warp::body::bytes()).and_then(move |path: warp::filters::path::FullPath, method: warp::http::Method, headers: warp::http::HeaderMap, body: warp::hyper::body::Bytes| {
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+            let client = client.clone();
 
-    let content = reqwest::blocking::Client::new()
-        .get(&url)
-        .send()
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("HTTP error: {}", e)))?
-        .error_for_status()
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("HTTP error: {}", e)))?
-        .bytes()
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("HTTP error: {}", e)))?
-    ;
+            let store = store.clone();
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+            async move {
 
-    fs::write(file_path, &content)?;
+                /*----------------------------------------------------------------------------------------------------*/
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+                let reqwest_url = format!("https://addons.nyxlib.org/{}", path.as_str()).replace("//", "/");
 
-    Ok(())
+                let reqwest_method = reqwest::Method::from_bytes(method.as_str().as_bytes()).unwrap();
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                let mut reqwest_headers = reqwest::header::HeaderMap::new();
+
+                for (key, val) in headers.iter()
+                {
+                    if key.as_str() != "host"
+                    {
+                        reqwest_headers.insert(
+                            reqwest::header::HeaderName::from_bytes(key.as_str().as_bytes()).unwrap(),
+                            reqwest::header::HeaderValue::from_bytes(val/*-----*/.as_bytes()).unwrap()
+                        );
+                    }
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                if store.has(&reqwest_url)
+                {
+                    let cached_response: Result<CachedResponse, _> = serde_json::from_value(store.get(&reqwest_url).unwrap());
+
+                    match cached_response
+                    {
+                        Ok(cached_response) => {
+
+                            /*----------------------------------------------------------------------------------------*/
+
+                            let mut response_builder = warp::http::Response::builder();
+
+                            for (key, val) in cached_response.header_map.iter()
+                            {
+                                response_builder = response_builder.header(key, val);
+                            }
+
+                            /*----------------------------------------------------------------------------------------*/
+
+                            let payload = STANDARD.decode(&cached_response.payload).unwrap();
+
+                            /*----------------------------------------------------------------------------------------*/
+
+                            return Ok::<_, warp::Rejection>(response_builder.status(StatusCode::OK).body(warp::hyper::Body::from(payload)).unwrap());
+
+                            /*----------------------------------------------------------------------------------------*/
+                        }
+                        Err(_) => {
+
+                            store.delete(&reqwest_url);
+                        }
+                    }
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                let response_result = client.request(reqwest_method, &reqwest_url)
+                    .headers(reqwest_headers)
+                    .body(body)
+                    .send()
+                    .await
+                ;
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                match response_result
+                {
+                    Ok(response) => {
+
+                        let status = response.status().clone();
+
+                        let headers = response.headers().clone();
+
+                        match response.bytes().await
+                        {
+                            Ok(body_bytes) => {
+
+                                /*------------------------------------------------------------------------------------*/
+
+                                let mut header_map = HashMap::new();
+                                let mut response_builder = warp::http::Response::builder();
+
+                                for (key, val) in headers.iter()
+                                {
+                                    let key_str = key.as_str()/*-----*/;
+                                    let val_str = val.to_str().unwrap();
+
+                                    header_map.insert(
+                                        key_str.into(),
+                                        val_str.into()
+                                    );
+
+                                    response_builder = response_builder.header(
+                                        key_str,
+                                        val_str
+                                    );
+                                }
+
+                                /*------------------------------------------------------------------------------------*/
+
+                                let payload =  STANDARD.encode(&body_bytes);
+
+                                /*------------------------------------------------------------------------------------*/
+
+                                let cached_response = CachedResponse {
+                                    header_map,
+                                    payload,
+                                };
+
+                                store.set(reqwest_url.clone(), serde_json::to_value(&cached_response).unwrap());
+
+                                /*------------------------------------------------------------------------------------*/
+
+                                Ok::<_, warp::Rejection>(response_builder
+                                    .status(StatusCode::from_u16(status.as_u16()).unwrap())
+                                    .body(warp::hyper::Body::from(body_bytes.to_vec())
+                                ).unwrap())
+                            }
+                            Err(_) => Ok::<_, warp::Rejection>(warp::http::Response::builder()
+                                .status(StatusCode::BAD_GATEWAY)
+                                .body(warp::hyper::Body::from(b"BAD_GATEWAY".to_vec())
+                            ).unwrap())
+                        }
+                    }
+                    Err(_) => Ok::<_, warp::Rejection>(warp::http::Response::builder()
+                        .status(StatusCode::BAD_GATEWAY)
+                        .body(warp::hyper::Body::from(b"BAD_GATEWAY".to_vec())
+                    ).unwrap())
+                }
+            }
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        warp::serve(proxy).run(([127, 0, 0, 1], 7878)).await;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    });
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -85,91 +204,16 @@ pub fn run()
 
         .setup(|app| {
 
-            let addons_dir = app.path()
-                .app_config_dir()
-                .map(|dir| dir.join("addons"))
-                .expect("Error determining the addon directory")
-            ;
-
-            fs::create_dir_all(&addons_dir).expect("Error creating the addons directory");
+            start_addon_proxy(app);
 
             Ok(())
-        })
-
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* ADDON PROTOCOL                                                                                             */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        .register_uri_scheme_protocol("addon", |ctx, req| {
-
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* EXTRACT FILE PATH FROM URL                                                                             */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            let uri = req.uri().to_string();
-
-            let uri_without_query = uri.split('?').next().unwrap_or(&uri);
-
-            let file_path = ctx.app_handle().path().app_config_dir().unwrap().join("addons").join(uri_without_query.replace("addon://", "").trim());
-
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* DOWNLOAD FILE IF NEEDED                                                                                */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            if !file_path.exists()
-            {
-                if let Err(e) = _download_file(&uri_without_query, &file_path)
-                {
-                    return http::Response::builder()
-                        .status(http::StatusCode::INTERNAL_SERVER_ERROR)
-                        .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-                        .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
-                        .body(e.to_string().into_bytes())
-                        .unwrap()
-                    ;
-                }
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* GET FILE MIME                                                                                          */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            let file_mime = mime_guess::from_path(&file_path).first_or_octet_stream();
-
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* SERVE FILE                                                                                             */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            return match fs::read(file_path) {
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                Ok(content) => http::Response::builder()
-                    .status(http::StatusCode::/*-*/OK/*-*/)
-                    .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-                    .header(http::header::CONTENT_TYPE, file_mime.essence_str())
-                    .body(content)
-                    .unwrap(),
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                Err(e) => http::Response::builder()
-                    .status(http::StatusCode::NOT_FOUND)
-                    .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-                    .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
-                    .body(e.to_string().into_bytes())
-                    .unwrap(),
-
-                /*----------------------------------------------------------------------------------------------------*/
-            };
-
-            /*--------------------------------------------------------------------------------------------------------*/
         })
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* PLUGINS                                                                                                    */
         /*------------------------------------------------------------------------------------------------------------*/
 
+        .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
@@ -177,16 +221,14 @@ pub fn run()
         .plugin(tauri_plugin_fs::init())
 
         /*------------------------------------------------------------------------------------------------------------*/
-        /* COMMANDS                                                                                                   */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        .invoke_handler(tauri::generate_handler![open_devtools, close_devtools])
-
-        /*------------------------------------------------------------------------------------------------------------*/
         /* APPLICATION                                                                                                */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        .run(tauri::generate_context!()).expect("Error while running Nyx-Dashboard")
+        .run(tauri::generate_context!())
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        .expect("Error while running Nyx-Dashboard")
 
         /*------------------------------------------------------------------------------------------------------------*/
     ;

@@ -1,10 +1,8 @@
-<!--suppress JSValidateTypes, VueUnrecognizedSlot, HtmlUnknownAttribute, JSUnresolvedReference -->
+<!--suppress VueUnrecognizedSlot, HtmlUnknownAttribute, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {reactive, onMounted} from 'vue';
-
-import {invoke} from '@tauri-apps/api/core';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -14,17 +12,13 @@ import * as marked from 'marked';
 
 import useConfigStore from '../stores/config';
 
-import license from '../assets/gpl-3.0.txt';
+import license from '../assets/license.txt';
 
 import Addons from '../components/Addons.vue';
 import WebPages from '../components/WebPages.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const configStore = useConfigStore();
@@ -37,42 +31,16 @@ const state = reactive({
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FUNCTIONS                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-async function openDevTools()
-{
-    try {
-        await invoke('open_devtools');
-    }
-    catch(e) {
-        console.error('Failed to open devtools:', e);
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-async function closeDevTools()
-{
-    try {
-        await invoke('close_devtools');
-    }
-    catch(e) {
-        console.error('Failed to close devtools:', e);
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(() => {
 
-    fetch(license).then((response) => {
+    fetch(license.toString()).then((response) => {
 
         response.text().then((content) => {
 
-            document.getElementById('gplv3').innerHTML = marked.marked(content).replace('/<a /g', '<a target="_blank" ').replace(/<h([1-6])>/g, (_, p1) => `<h${parseInt(p1) + 1}>`).replace(/<\/h([1-6])>/g, (_, p1) => `</h${parseInt(p1) + 1}>`);
+            document.getElementById('nyx_license').innerHTML = marked.marked(content).replace('/<a /g', '<a target="_blank" ').replace(/<h([1-6])>/g, (_, p1) => `<h${parseInt(p1) + 1}>`).replace(/<\/h([1-6])>/g, (_, p1) => `</h${parseInt(p1) + 1}>`);
         });
     });
 });
@@ -189,7 +157,7 @@ onMounted(() => {
                             </div>
                             <div class="card-body">
 
-                                <div class="overflow-y-scroll" style="height: 391px;" id="gplv3"></div>
+                                <div class="overflow-y-scroll" style="height: 391px;" id="nyx_license"></div>
 
                             </div>
                         </div>
@@ -267,14 +235,6 @@ onMounted(() => {
             <!-- *************************************************************************************************** -->
 
             <template v-slot:button>
-
-                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="openDevTools()" style="width: 85px;" v-if="HAS_TAURI">
-                    <i class="bi bi-code-slash"></i> Open DevTools
-                </button>
-
-                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="closeDevTools()" style="width: 85px;" v-if="HAS_TAURI">
-                    <i class="bi bi-code-slash"></i> Close DevTools
-                </button>
 
                 <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.import()" style="width: 85px;">
                     <i class="bi bi-upload"></i> Import
