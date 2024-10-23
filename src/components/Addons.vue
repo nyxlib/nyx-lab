@@ -2,12 +2,16 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {computed, onMounted, onUnmounted} from 'vue';
+import {inject, computed, onMounted, onUnmounted} from 'vue';
 
 import {load} from '@tauri-apps/plugin-store';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const dialog = inject('dialog');
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
@@ -65,9 +69,15 @@ const addonSearch = () => {
 
 const addonClear = () => {
 
-    load('nyx-addons-store.json').then((store) => {
+    dialog.confirm('Are you sure you want to re-download all addons?', 'Nyx Dashboard').then((choice) => {
 
-        store.clear();
+        if(choice)
+        {
+            load('nyx-addons-store.json').then((store) => {
+
+                store.clear();
+            });
+        }
     });
 };
 
