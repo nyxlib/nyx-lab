@@ -49,26 +49,13 @@ fn start_addon_proxy(app: &mut App)
             async move {
 
                 /*----------------------------------------------------------------------------------------------------*/
+                /*                                                                                                    */
+                /*----------------------------------------------------------------------------------------------------*/
 
                 let reqwest_url = format!("https://addons.nyxlib.org/{}", path.as_str()).replace("//", "/");
 
-                let reqwest_method = reqwest::Method::from_bytes(method.as_str().as_bytes()).unwrap();
-
                 /*----------------------------------------------------------------------------------------------------*/
-
-                let mut reqwest_headers = reqwest::header::HeaderMap::new();
-
-                for (key, val) in headers.iter()
-                {
-                    if key.as_str() != "host"
-                    {
-                        reqwest_headers.insert(
-                            reqwest::header::HeaderName::from_bytes(key.as_str().as_bytes()).unwrap(),
-                            reqwest::header::HeaderValue::from_bytes(val/*-----*/.as_bytes()).unwrap()
-                        );
-                    }
-                }
-
+                /*                                                                                                    */
                 /*----------------------------------------------------------------------------------------------------*/
 
                 if store.has(&reqwest_url)
@@ -106,6 +93,27 @@ fn start_addon_proxy(app: &mut App)
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
+                /*                                                                                                    */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                let reqwest_method = reqwest::Method::from_bytes(method.as_str().as_bytes()).unwrap();
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                let mut reqwest_headers = reqwest::header::HeaderMap::new();
+
+                for (key, val) in headers.iter()
+                {
+                    if key.as_str() != "host"
+                    {
+                        reqwest_headers.insert(
+                            reqwest::header::HeaderName::from_bytes(key.as_str().as_bytes()).unwrap(),
+                            reqwest::header::HeaderValue::from_bytes(val/*-----*/.as_bytes()).unwrap()
+                        );
+                    }
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
 
                 let response_result = client.request(reqwest_method, &reqwest_url)
                     .headers(reqwest_headers)
@@ -122,7 +130,13 @@ fn start_addon_proxy(app: &mut App)
 
                         let status = response.status().clone();
 
-                        let headers = response.headers().clone();
+                        let mut headers = response.headers().clone();
+
+                        headers.insert(reqwest::header::ACCESS_CONTROL_ALLOW_ORIGIN, reqwest::header::HeaderValue::from_static("*"));
+
+                        headers.insert(reqwest::header::ACCESS_CONTROL_ALLOW_METHODS, reqwest::header::HeaderValue::from_static("GET, POST, DELETE"));
+
+                        headers.insert(reqwest::header::ACCESS_CONTROL_ALLOW_HEADERS, reqwest::header::HeaderValue::from_static("Content-Type, Authorization"));
 
                         match response.bytes().await
                         {
@@ -138,15 +152,18 @@ fn start_addon_proxy(app: &mut App)
                                     let key_str = key.as_str()/*-----*/;
                                     let val_str = val.to_str().unwrap();
 
-                                    header_map.insert(
-                                        key_str.into(),
-                                        val_str.into()
-                                    );
+                                    if key.as_str() != "date"
+                                    {
+                                        header_map.insert(
+                                            key_str.into(),
+                                            val_str.into()
+                                        );
 
-                                    response_builder = response_builder.header(
-                                        key_str,
-                                        val_str
-                                    );
+                                        response_builder = response_builder.header(
+                                            key_str,
+                                            val_str
+                                        );
+                                    }
                                 }
 
                                 /*------------------------------------------------------------------------------------*/
