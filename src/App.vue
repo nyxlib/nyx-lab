@@ -1,4 +1,4 @@
-<!--suppress HtmlUnknownAttribute, JSUnresolvedReference -->
+<!--suppress HttpUrlsUsage, HtmlUnknownAttribute, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
