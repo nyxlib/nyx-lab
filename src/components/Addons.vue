@@ -42,20 +42,33 @@ let rank = 0;
 
 const addonAppend = (url = null) => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     url = (url || '').trim();
 
-    const id = __NYX_UUID__.v4();
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    props.addons[id] = {
-        id: id,
-        rank: rank,
-        url: url,
-        zombie: false,
-        enabled: !!url,
-        started: false,
-    };
+    const found = Object.values(props.addons).some((addon) => addon.url === url);
 
-    rank++;
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(!found)
+    {
+        const id = __NYX_UUID__.v4();
+
+        props.addons[id] = {
+            id: id,
+            rank: rank,
+            url: url,
+            zombie: false,
+            enabled: !!url,
+            started: false,
+        };
+
+        rank++;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -69,7 +82,7 @@ const addonSearch = () => {
 
 const addonClear = () => {
 
-    dialog.confirm('Are you sure you want to re-download all addons?', 'Nyx Dashboard').then((choice) => {
+    dialog.confirm('Are you sure you want to re-download the installed addons?', 'Nyx Dashboard').then((choice) => {
 
         if(choice)
         {
