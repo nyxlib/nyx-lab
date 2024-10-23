@@ -159,7 +159,7 @@ onUnmounted(() => {
                 Search
             </button>
             <button class="btn btn-xs btn-warning me-0" type="button" @click="() => addonClear()">
-                <i class="bi bi-recycle"></i>
+                <i class="bi bi-eraser"></i>
                 Clear cache
             </button>
             ]
