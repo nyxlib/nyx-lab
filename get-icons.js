@@ -25,7 +25,7 @@ function readSVG(inFile, size)
                 return;
             }
 
-            resolve(data.replace(/<svg [^>]+>/g, `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 ${size} ${size}">`));
+            resolve(data.replace(/<svg [^>]+>/g, `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 ${size} ${size}">`).replace(/<title>[^<]*<\/title>/, ''));
         });
     });
 }
@@ -54,7 +54,13 @@ function getIcons(icons, prefix, size, inDir, outDir)
                     return;
                 }
 
+                /*----------------------------------------------------------------------------------------------------*/
+
                 files = files.filter((file) => file.endsWith('.svg'));
+
+                files.sort();
+
+                /*----------------------------------------------------------------------------------------------------*/
 
                 let i = files.length;
 
@@ -71,7 +77,9 @@ function getIcons(icons, prefix, size, inDir, outDir)
                             resolve();
                         }
 
-                    }).catch(() => {
+                    }).catch((e) => {
+
+                        console.error(e);
 
                         if(--i === 0)
                         {
@@ -79,6 +87,8 @@ function getIcons(icons, prefix, size, inDir, outDir)
                         }
                     })
                 });
+
+                /*----------------------------------------------------------------------------------------------------*/
             });
         });
     });
