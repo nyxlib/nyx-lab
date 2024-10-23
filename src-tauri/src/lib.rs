@@ -20,6 +20,8 @@ use tauri::{App, async_runtime::spawn};
 
 const NYX_INDEX_URL: &str = "https://addons.nyxlib.org";
 
+const ADDON_STORE_FILENAME: &str = "nyx-addons-store.json";
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #[derive(Serialize, Deserialize)]
@@ -34,7 +36,7 @@ struct CachedResponse
 
 fn start_addon_proxy(app: &mut App)
 {
-    let store = app.store("nyx-addons-store.json").expect("Failed to get the store");
+    let store = app.store(ADDON_STORE_FILENAME).expect("Failed to get the store");
 
     spawn(async move {
 

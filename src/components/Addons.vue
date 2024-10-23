@@ -4,7 +4,7 @@
 
 import {computed, onMounted, onUnmounted} from 'vue';
 
-import {listen} from '@tauri-apps/api/event';
+import {load} from '@tauri-apps/plugin-store';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -58,17 +58,17 @@ const addonAppend = (url = null) => {
 
 const addonSearch = () => {
 
-    if(typeof window['__TAURI__'] === 'undefined')
-    {
-        window.open('https://addons.nyxlib.org/', 'Nyx Addon Index', 'width=1200,height=800,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
-    }
-    else
-    {
-        __TAURI__.window.Window.getByLabel('addons').then((addonWindow) => {
+    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('B9674BB2')).show();
+};
 
-            addonWindow.show();
-        });
-    }
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const addonClear = () => {
+
+    load('nyx-addons-store.json').then((store) => {
+
+        store.clear();
+    });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -123,38 +123,20 @@ const addonUp = (addon1) => {
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const tauriMessageHandler = (e) => addonAppend(e.payload);
-
 const htmlMessageHandler = (e) => addonAppend(e.data);
-
-let unlisten = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(async () => {
 
-    if(typeof window['__TAURI__'] !== 'undefined')
-    {
-        unlisten = await listen('new-addon', tauriMessageHandler);
-    }
-    else
-    {
-        window.addEventListener('message', htmlMessageHandler);
-    }
+    window.addEventListener('message', htmlMessageHandler);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onUnmounted(() => {
 
-    if(typeof window['__TAURI__'] !== 'undefined')
-    {
-        if(unlisten) unlisten(/*- 'new-addon', tauriMessageHandler -*/);
-    }
-    else
-    {
-        window.removeEventListener('message', htmlMessageHandler);
-    }
+    window.removeEventListener('message', htmlMessageHandler);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -172,9 +154,13 @@ onUnmounted(() => {
                 <i class="bi bi-plus-lg"></i>
                 Add
             </button>
-            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => addonSearch()">
+            <button class="btn btn-xs btn-primary me-1" type="button" @click="() => addonSearch()">
                 <i class="bi bi-search"></i>
                 Search
+            </button>
+            <button class="btn btn-xs btn-warning me-0" type="button" @click="() => addonClear()">
+                <i class="bi bi-recycle"></i>
+                Clear cache
             </button>
             ]
         </div>

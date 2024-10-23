@@ -359,6 +359,8 @@ onMounted(() => {
 
     <teleport to="body">
 
+        <!-- ******************************************************************************************************* -->
+
         <div class="modal" tabindex="-1" id="A7E11E2F">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
@@ -393,6 +395,40 @@ onMounted(() => {
                 </div>
             </div>
         </div>
+
+        <!-- ******************************************************************************************************* -->
+
+        <div class="modal" tabindex="-1" id="B9674BB2">
+            <div class="modal-dialog modal-dialog-centered" style="min-width: 95vw;">
+                <div class="modal-content">
+
+                    <!-- ******************************************************************************************* -->
+
+                    <div class="modal-header px-3 py-2">
+
+                        <span>
+                            <i class="bi bi-box-seam"></i> Nyx Addon Index
+                        </span>
+
+                        <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+
+                    </div>
+
+                    <!-- ******************************************************************************************* -->
+
+                    <div class="modal-body px-3 py-2">
+
+                        <iframe src="https://addons.nyxlib.org/" style="height: 85vh; width: 100%;"></iframe>
+
+                    </div>
+
+                    <!-- ******************************************************************************************* -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ******************************************************************************************************* -->
 
     </teleport>
 

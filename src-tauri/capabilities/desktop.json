@@ -39,9 +39,11 @@
         "notification:allow-request-permission",
         "notification:allow-is-permission-granted",
         "shell:allow-open",
+        "store:allow-load",
         "store:allow-has",
         "store:allow-get",
         "store:allow-set",
-        "store:allow-delete"
+        "store:allow-delete",
+        "store:allow-clear"
     ]
 }
