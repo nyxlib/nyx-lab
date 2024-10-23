@@ -4,6 +4,8 @@ import * as Vue from 'vue';
 
 import * as VueRouter from 'vue-router';
 
+import 'simple-icons';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {setup} from 'vue-nyx';

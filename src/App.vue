@@ -12,6 +12,8 @@ import {useNyxStore} from 'vue-nyx';
 
 import useConfigStore from './stores/config';
 
+import icons from './assets/icons.json';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -315,9 +317,7 @@ onMounted(() => {
 
                 <template v-for="(webPage, id) in configStore.globals.webPages" :key="id">
                     <li class="nav-item" :title="webPage.title" v-if="webPage.url && webPage.enabled">
-                        <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="`/external/${id}`">
-                            <i :class="['bi', `bi-${webPage.icon}`]" style="font-size: 24px;"></i>
-                        </router-link>
+                        <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="`/external/${id}`" v-html="icons[webPage.icon || 'bi-question']" />
                     </li>
                 </template>
 
