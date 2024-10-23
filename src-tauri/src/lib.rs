@@ -1,5 +1,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+use std::net::TcpListener;
+
 use std::collections::HashMap;
 
 use serde::{Serialize, Deserialize};
@@ -20,7 +22,7 @@ use tauri::{App, async_runtime::spawn};
 
 const NYX_INDEX_URL: &str = "https://addons.nyxlib.org";
 
-const ADDON_STORE_FILENAME: &str = "nyx-addons-store.json";
+const NYX_ADDON_STORE_FNAME: &str = "nyx-addons-store.json";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -36,7 +38,20 @@ struct CachedResponse
 
 fn start_addon_proxy(app: &mut App)
 {
-    let store = app.store(ADDON_STORE_FILENAME).expect("Failed to get the store");
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if TcpListener::bind("127.0.0.1:7878").is_err()
+    {
+        print!("Port 7878 is already in use, skipping the addon proxy.");
+
+        return;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    let store = app.store(NYX_ADDON_STORE_FNAME).expect("Failed to initialize the store, skipping the addon proxy.");
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     spawn(async move {
 
@@ -212,6 +227,8 @@ fn start_addon_proxy(app: &mut App)
 
         /*------------------------------------------------------------------------------------------------------------*/
     });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
