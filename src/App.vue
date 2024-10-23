@@ -316,7 +316,7 @@ onMounted(() => {
                 </template>
 
                 <template v-for="(webPage, id) in configStore.globals.webPages" :key="id">
-                    <li class="nav-item" :title="webPage.title" v-if="webPage.url && webPage.enabled">
+                    <li class="nav-item" :title="webPage.title" v-if="(webPage.url.startsWith('http://') || webPage.url.startsWith('https://')) && webPage.enabled">
                         <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="`/external/${id}`" v-html="icons[webPage.icon || 'bi-question']" />
                     </li>
                 </template>
