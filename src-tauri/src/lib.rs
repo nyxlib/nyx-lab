@@ -22,7 +22,7 @@ use tauri::{App, async_runtime::spawn};
 
 const NYX_INDEX_URL: &str = "https://addons.nyxlib.org";
 
-const NYX_ADDON_STORE_FNAME: &str = "nyx-addons-store.json";
+const NYX_ADDON_STORE_FILENAME: &str = "nyx-addons-store.json";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -49,7 +49,7 @@ fn start_addon_proxy(app: &mut App)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    let store = app.store(NYX_ADDON_STORE_FNAME).expect("Failed to initialize the store, skipping the addon proxy.");
+    let store = app.store(NYX_ADDON_STORE_FILENAME).expect("Failed to initialize the store, skipping the addon proxy.");
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
