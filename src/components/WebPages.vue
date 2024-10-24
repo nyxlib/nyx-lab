@@ -175,7 +175,7 @@ const webPageUp = (webPage1) => {
                             <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': webPage.zombie}]" type="text" v-model="webPage.title" />
                         </td>
                         <td class="text-start">
-                            <multiselect :options="Object.keys(icons)" :searchable="true" v-model="webPage.icon"></multiselect>
+                            <multiselect :options="Object.keys(icons)" :searchable="true" :limit="100" v-model="webPage.icon"></multiselect>
                         </td>
                         <td class="text-center">
                             <button :class="['btn', 'btn-sm', {'btn-success': !webPage.zombie && webPage.enabled, 'btn-outline-success': !webPage.zombie && !webPage.enabled, 'btn-secondary': webPage.zombie && webPage.enabled, 'btn-outline-secondary': webPage.zombie && !webPage.enabled}]" type="button" @click="webPageEnabled(webPage)">Enabled</button>
