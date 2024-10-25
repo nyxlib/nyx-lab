@@ -393,7 +393,7 @@ onMounted(() => {
         <!-- ******************************************************************************************************* -->
 
         <div class="modal" tabindex="-1" id="B9674BB2">
-            <div class="modal-dialog modal-dialog-centered" style="min-width: 100vw;">
+            <div class="modal-dialog modal-dialog-centered" style="min-width: calc(100vw - 4px);">
                 <div class="modal-content">
 
                     <!-- ******************************************************************************************* -->
