@@ -16,7 +16,7 @@ use tauri_plugin_http::reqwest;
 
 use tauri_plugin_store::StoreExt;
 
-use tauri::{App, async_runtime::spawn};
+use tauri::{App, Manager, AppHandle, async_runtime::spawn};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -233,6 +233,28 @@ fn start_addon_proxy(app: &mut App)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#[tauri::command]
+fn open_devtools(app: AppHandle)
+{
+    if let Some(window) = app.get_webview_window("main")
+    {
+        window.open_devtools();
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#[tauri::command]
+fn close_devtools(app: AppHandle)
+{
+    if let Some(window) = app.get_webview_window("main")
+    {
+        window.close_devtools();
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run()
 {
@@ -259,6 +281,12 @@ pub fn run()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* COMMANDS                                                                                                   */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        .invoke_handler(tauri::generate_handler![open_devtools, close_devtools])
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* APPLICATION                                                                                                */
