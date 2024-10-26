@@ -13,19 +13,6 @@
         "withGlobalTauri": true,
         "windows": [
             {
-                "label": "addons",
-                "height": 800,
-                "width": 1300,
-                "minHeight": 800,
-                "minWidth": 1300,
-                "visible": false,
-                "maximized": false,
-                "title": "Nyx Addon Index",
-                "decorations": true,
-                "transparent": false,
-                "url": "https://addons.nyxlib.org/"
-            },
-            {
                 "label": "main",
                 "height": 800,
                 "width": 1300,

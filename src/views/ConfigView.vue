@@ -40,15 +40,15 @@ const state = reactive({
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-async function toggleDevTools(enabled)
+function toggleDevTools(enabled)
 {
     try
     {
         if(enabled) {
-            await invoke('open_devtools');
+            invoke('open_devtools');
         }
         else {
-            await invoke('close_devtools');
+            invoke('close_devtools');
         }
     }
     catch(e)
