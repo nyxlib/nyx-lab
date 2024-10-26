@@ -144,7 +144,7 @@ const webPageUp = (webPage1) => {
 
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 105px;">
+                        <th class="text-center" style="width: 110px;">
                             Tools
                         </th>
                         <th class="text-center" style="width: auto;">
