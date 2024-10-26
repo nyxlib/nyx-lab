@@ -393,7 +393,7 @@ onMounted(() => {
         <!-- ******************************************************************************************************* -->
 
         <div class="modal" tabindex="-1" id="B9674BB2">
-            <div class="modal-dialog modal-dialog-centered" style="min-width: calc(100vw - 4px);">
+            <div class="modal-dialog" style="min-width: calc(100vw - 4px);">
                 <div class="modal-content">
 
                     <!-- ******************************************************************************************* -->
@@ -412,7 +412,7 @@ onMounted(() => {
 
                     <div class="modal-body px-3 py-2">
 
-                        <iframe src="https://addons.nyxlib.org/" style="height: calc(100vh - 150px); width: 100%;"></iframe>
+                        <iframe src="https://addons.nyxlib.org/" style="height: calc(100vh - 110px); width: 100%;"></iframe>
 
                     </div>
 

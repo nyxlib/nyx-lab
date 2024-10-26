@@ -28,8 +28,7 @@ html, body,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-body[data-environment="tauri"][data-maximized="false"] > #nyx_dashboard,
-body[data-environment="tauri"][data-maximized="false"] > .modal-backdrop {
+body[data-environment="tauri"][data-maximized="false"] > #nyx_dashboard {
 
     border: 1px var(--bs-secondary-border-subtle) solid;
 
@@ -49,6 +48,24 @@ input:invalid {
 .form-label {
 
     margin-bottom: 0.25rem;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.modal,
+.modal-backdrop {
+
+    top: 41px;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.modal-dialog {
+
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    padding: 2px;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
