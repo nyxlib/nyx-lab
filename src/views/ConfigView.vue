@@ -79,6 +79,10 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
+    <input type="checkbox" class="btn-check" id="C44A5A7F" autocomplete="off" @change="toggleDevTools($event.target.checked)" />
+
+    <!-- *********************************************************************************************************** -->
+
     <div class="h-100 w-100 overflow-y-auto p-3">
 
         <!--*********************************************************************************************************-->
@@ -262,8 +266,6 @@ onMounted(() => {
             <!-- *************************************************************************************************** -->
 
             <template v-slot:button>
-
-                <input type="checkbox" class="btn-check" id="C44A5A7F" autocomplete="off" @change="toggleDevTools($event.target.checked)">
 
                 <label class="btn btn-sm btn-outline-secondary my-1 me-2" for="C44A5A7F" v-if="HAS_TAURI" style="width: 120px;">
                     <i class="bi bi-tools"></i> DevTools
