@@ -1,4 +1,4 @@
-// noinspection JSUnusedGlobalSymbols
+// noinspection JSUnresolvedReference, JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {useNyxStore} from 'vue-nyx';
@@ -48,12 +48,10 @@ function _load(app, path)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof window['__TAURI__'] !== 'undefined')
-    {
+    if(typeof window['__TAURI__'] !== 'undefined') {
         path = path.replace('addon://', 'http://localhost:7878/repo/');
     }
-    else
-    {
+    else {
         path = path.replace('addon://', 'https://addons.nyxlib.org/repo/');
     }
 

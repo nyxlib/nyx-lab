@@ -1,4 +1,4 @@
-<!--suppress VueUnrecognizedSlot, HtmlUnknownAttribute, JSUnresolvedReference -->
+<!--suppress HtmlUnknownTag, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 

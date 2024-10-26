@@ -1,4 +1,4 @@
-<!--suppress JSUnresolvedReference -->
+<!--suppress HtmlUnknownTag, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
