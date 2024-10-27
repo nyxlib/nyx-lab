@@ -1,10 +1,9 @@
 <!--suppress HtmlUnknownAttribute, JSUnresolvedReference -->
+<script src="../plugins/dialog.js"></script>
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {inject, computed, onMounted, onUnmounted} from 'vue';
-
-import {load} from '@tauri-apps/plugin-store';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -76,22 +75,6 @@ const addonAppend = (url = null) => {
 const addonSearch = () => {
 
     __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('B9674BB2')).show();
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const addonClear = () => {
-
-    dialog.confirm('Are you sure you want to re-download the installed addons?', 'Nyx Dashboard').then((choice) => {
-
-        if(choice)
-        {
-            load('nyx-addons-store.json').then((store) => {
-
-                store.clear();
-            });
-        }
-    });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -180,10 +163,6 @@ onUnmounted(() => {
             <button class="btn btn-xs btn-primary me-1" type="button" @click="() => addonSearch()">
                 <i class="bi bi-search"></i>
                 Search
-            </button>
-            <button class="btn btn-xs btn-warning me-0" type="button" @click="() => addonClear()">
-                <i class="bi bi-eraser"></i>
-                Clear cache
             </button>
             ]
         </div>

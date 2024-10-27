@@ -146,33 +146,23 @@ onMounted(() => {
         /*------------------------------------------------------------------------------------------------------------*/
 
         Window.getByLabel('main').then((mainWindow) => {
-            Window.getByLabel('addons').then((addonWindow) => {
 
-                mainWindow.listen('tauri://close-requested', () => {
+            mainWindow.listen('tauri://close-requested', () => {
 
-                    if(configStore.modified)
-                    {
-                        dialog.confirm('Are you sure you want to close?', 'Nyx Dashboard').then((choice) => {
+                if(configStore.modified)
+                {
+                    dialog.confirm('Are you sure you want to close?', 'Nyx Dashboard').then((choice) => {
 
-                            if(choice)
-                            {
-                                addonWindow.destroy();
-                                mainWindow.destroy();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        addonWindow.destroy();
-                        mainWindow.destroy();
-                    }
-                });
-
-                addonWindow.listen('tauri://close-requested', () => {
-
-                    addonWindow.hide();
-                    mainWindow.show();
-                });
+                        if(choice)
+                        {
+                            mainWindow.destroy();
+                        }
+                    });
+                }
+                else
+                {
+                    mainWindow.destroy();
+                }
             });
         });
 
