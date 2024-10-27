@@ -18,7 +18,7 @@ import icons from './assets/icons.json';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined';
+const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined' && !/android|iPad|iPhone/i.test(navigator.userAgent);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -104,7 +104,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(!HAS_TAURI || /android/i.test(navigator.userAgent))
+    if(!HAS_TAURI)
     {
         document.body.setAttribute('data-environment', 'browser');
     }
@@ -383,7 +383,7 @@ onMounted(() => {
         <!-- ******************************************************************************************************* -->
 
         <div class="modal" tabindex="-1" id="B9674BB2">
-            <div class="modal-dialog" style="min-width: calc(100vw - 4px);">
+            <div class="modal-dialog" style="min-width: 100%;">
                 <div class="modal-content">
 
                     <!-- ******************************************************************************************* -->
