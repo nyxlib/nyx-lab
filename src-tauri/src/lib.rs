@@ -189,16 +189,23 @@ fn start_addon_proxy(app: &mut App)
 
                                 /*------------------------------------------------------------------------------------*/
 
-                                let payload =  STANDARD.encode(&body_bytes);
+                                if status.is_success()
+                                {
+                                    /*--------------------------------------------------------------------------------*/
 
-                                /*------------------------------------------------------------------------------------*/
+                                    let payload =  STANDARD.encode(&body_bytes);
 
-                                let cached_response = CachedResponse {
-                                    header_map,
-                                    payload,
-                                };
+                                    /*--------------------------------------------------------------------------------*/
 
-                                store.set(reqwest_url.clone(), serde_json::to_value(&cached_response).unwrap());
+                                    let cached_response = CachedResponse {
+                                        header_map,
+                                        payload,
+                                    };
+
+                                    store.set(reqwest_url.clone(), serde_json::to_value(&cached_response).unwrap());
+
+                                    /*--------------------------------------------------------------------------------*/
+                                }
 
                                 /*------------------------------------------------------------------------------------*/
 
