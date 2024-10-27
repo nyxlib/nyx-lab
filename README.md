@@ -36,6 +36,20 @@ sudo apt-get install libfuse2
 sudo apt-get install libfuse2t64
 ```
 
+For Android, in `AndroidManifest.xml`, add:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+
+and set:
+
+```xml
+<application android:usesCleartextTraffic="true" ...>...</application>
+```
+
 Developer
 =========
 
