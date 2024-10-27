@@ -20,7 +20,7 @@ use tauri::{App, Manager, AppHandle, async_runtime::spawn};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const NYX_INDEX_URL: &str = "https://addons.nyxlib.org";
+const NYX_INDEX_HOST: &str = "addons.nyxlib.org";
 
 const NYX_ADDON_STORE_FILENAME: &str = "nyx-addons-store.json";
 
@@ -73,7 +73,7 @@ fn start_addon_proxy(app: &mut App)
                 /*                                                                                                    */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                let reqwest_url = format!("{}/{}", NYX_INDEX_URL, path.as_str()).replace("//", "/");
+                let reqwest_url = format!("https://{}", format!("{}/{}", NYX_INDEX_HOST, path.as_str()).replace("//", "/"));
 
                 /*----------------------------------------------------------------------------------------------------*/
                 /*                                                                                                    */
@@ -277,6 +277,7 @@ pub fn run()
 
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_devtools::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_http::init())

@@ -150,7 +150,7 @@ const htmlMessageHandler = (e) => addonAppend(e.data);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onMounted(async () => {
+onMounted(() => {
 
     window.addEventListener('message', htmlMessageHandler);
 });

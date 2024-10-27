@@ -40,6 +40,7 @@
         "notification:allow-is-permission-granted",
         "shell:allow-open",
         "store:allow-load",
+        "store:allow-keys",
         "store:allow-has",
         "store:allow-get",
         "store:allow-set",

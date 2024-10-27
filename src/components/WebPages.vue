@@ -46,7 +46,7 @@ const webPageAppend = (url = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const found = Object.values(props.addons).some((addon) => addon.url === url);
+    const found = Object.values(props.webPages).some((webPage) => webPage.url === url);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

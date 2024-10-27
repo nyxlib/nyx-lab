@@ -16,8 +16,9 @@ import useConfigStore from '../stores/config';
 
 import license from '../assets/license.txt';
 
-import Addons from '../components/Addons.vue';
+import NyxAddons from '../components/NyxAddons.vue';
 import WebPages from '../components/WebPages.vue';
+import Cache from '../components/Cache.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -210,15 +211,21 @@ onMounted(() => {
 
                     <nav-tabs margin="mb-3">
 
-                        <tab-pane title="Addons">
+                        <tab-pane title="Nyx Addons">
 
-                            <addons :addons="configStore.globals.addons" />
+                            <nyx-addons :addons="configStore.globals.addons" />
 
                         </tab-pane>
 
                         <tab-pane title="Web pages">
 
                             <web-pages :web-pages="configStore.globals.webPages" />
+
+                        </tab-pane>
+
+                        <tab-pane title="Cache">
+
+                            <cache />
 
                         </tab-pane>
 
