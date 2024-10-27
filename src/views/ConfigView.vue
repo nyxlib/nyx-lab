@@ -22,6 +22,10 @@ import Cache from '../components/Cache.vue';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const configStore = useConfigStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -194,7 +198,7 @@ onMounted(() => {
 
                         <tab-pane title="Cache">
 
-                            <cache v-if="typeof window['__TAURI__'] !== 'undefined'" /><div v-else>Cache not available...</div>
+                            <cache v-if="HAS_TAURI" /><div v-else>Cache not available...</div>
 
                         </tab-pane>
 

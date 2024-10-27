@@ -156,7 +156,7 @@ onMounted(() => {
 
     <div class="text-end">
 
-        <button class="btn btn-sm btn-outline-primary me-1" type="button" @click="getFilenames">
+        <button class="btn btn-sm btn-outline-primary me-2" type="button" @click="getFilenames">
             <i class="bi bi-recycle"></i> Reload cache
         </button>
 
