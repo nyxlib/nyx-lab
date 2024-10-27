@@ -4,8 +4,6 @@
 
 import {reactive, onMounted} from 'vue';
 
-import {invoke} from '@tauri-apps/api/core';
-
 import Multiselect from '@vueform/multiselect';
 
 import * as marked from 'marked';
@@ -38,27 +36,6 @@ const state = reactive({
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FUNCTIONS                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-function toggleDevTools(enabled)
-{
-    try
-    {
-        if(enabled) {
-            invoke('open_devtools');
-        }
-        else {
-            invoke('close_devtools');
-        }
-    }
-    catch(e)
-    {
-        console.error('Failed to open/close devtools:', e);
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -77,10 +54,6 @@ onMounted(() => {
 </script>
 
 <template>
-
-    <!-- *********************************************************************************************************** -->
-
-    <input type="checkbox" class="btn-check" id="C44A5A7F" autocomplete="off" @change="toggleDevTools($event.target.checked)" />
 
     <!-- *********************************************************************************************************** -->
 
@@ -273,10 +246,6 @@ onMounted(() => {
             <!-- *************************************************************************************************** -->
 
             <template v-slot:button>
-
-                <label class="btn btn-sm btn-outline-secondary my-1 me-2" for="C44A5A7F" v-if="HAS_TAURI" style="width: 120px;">
-                    <i class="bi bi-tools"></i> DevTools
-                </label>
 
                 <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.import()" style="width: 85px;">
                     <i class="bi bi-upload"></i> Import
