@@ -1,5 +1,4 @@
 <!--suppress HtmlUnknownAttribute, JSUnresolvedReference -->
-<script src="../plugins/dialog.js"></script>
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
