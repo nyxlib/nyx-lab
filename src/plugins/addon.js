@@ -119,13 +119,11 @@ function _load(app, path)
 
             }).catch((e) => {
 
-                alert(e);
                 reject(e);
             });
 
         }).catch((e) => {
 
-            alert(e);
             reject(e);
         });
     });
