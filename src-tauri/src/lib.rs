@@ -173,7 +173,7 @@ fn start_addon_proxy(app: &mut App)
                                     let key_str = key.as_str()/*-----*/;
                                     let val_str = val.to_str().unwrap();
 
-                                    if key.as_str() != "date"
+                                    if ["access-control-allow-headers", "access-control-allow-methods", "access-control-allow-origin", "content-encoding", "content-type", "transfer-encoding"].contains(&key.as_str().to_lowercase().as_str())
                                     {
                                         header_map.insert(
                                             key_str.into(),
@@ -207,16 +207,14 @@ fn start_addon_proxy(app: &mut App)
                                     .body(warp::hyper::Body::from(body_bytes.to_vec())
                                 ).unwrap())
                             }
-                            Err(_) => Ok::<_, warp::Rejection>(warp::http::Response::builder()
+                            Err(e) => Ok::<_, warp::Rejection>(warp::http::Response::builder()
                                 .status(StatusCode::BAD_GATEWAY)
-                                .body(warp::hyper::Body::from(b"BAD_GATEWAY".to_vec())
-                            ).unwrap())
+                                .body(warp::hyper::Body::from(format!("Failed to retrieve response body: {}", e))).unwrap())
                         }
                     }
-                    Err(_) => Ok::<_, warp::Rejection>(warp::http::Response::builder()
+                    Err(e) => Ok::<_, warp::Rejection>(warp::http::Response::builder()
                         .status(StatusCode::BAD_GATEWAY)
-                        .body(warp::hyper::Body::from(b"BAD_GATEWAY".to_vec())
-                    ).unwrap())
+                        .body(warp::hyper::Body::from(format!("Failed to execute proxy request: {}", e))).unwrap())
                 }
             }
         });
