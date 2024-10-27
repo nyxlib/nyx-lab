@@ -153,11 +153,9 @@ fn start_addon_proxy(app: &mut App)
 
                         let mut headers = response.headers().clone();
 
-                        headers.insert(reqwest::header::ACCESS_CONTROL_ALLOW_ORIGIN, reqwest::header::HeaderValue::from_static("*"));
+                        headers.insert(reqwest::header::EXPIRES, reqwest::header::HeaderValue::from_static("0"));
 
-                        headers.insert(reqwest::header::ACCESS_CONTROL_ALLOW_METHODS, reqwest::header::HeaderValue::from_static("GET, POST, DELETE"));
-
-                        headers.insert(reqwest::header::ACCESS_CONTROL_ALLOW_HEADERS, reqwest::header::HeaderValue::from_static("Content-Type, Authorization"));
+                        headers.insert(reqwest::header::CACHE_CONTROL, reqwest::header::HeaderValue::from_static("no-store, no-cache, must-revalidate, max-age=0"));
 
                         match response.bytes().await
                         {
@@ -173,7 +171,7 @@ fn start_addon_proxy(app: &mut App)
                                     let key_str = key.as_str()/*-----*/;
                                     let val_str = val.to_str().unwrap();
 
-                                    if ["access-control-allow-headers", "access-control-allow-methods", "access-control-allow-origin", "content-encoding", "content-type", "transfer-encoding"].contains(&key.as_str().to_lowercase().as_str())
+                                    if ["access-control-allow-headers", "access-control-allow-methods", "access-control-allow-origin", "cache-control", "content-encoding", "content-type", "expires", "transfer-encoding"].contains(&key.as_str().to_lowercase().as_str())
                                     {
                                         header_map.insert(
                                             key_str.into(),
@@ -202,6 +200,8 @@ fn start_addon_proxy(app: &mut App)
                                         payload,
                                     };
 
+                                    /*--------------------------------------------------------------------------------*/
+
                                     store.set(reqwest_url.clone(), serde_json::to_value(&cached_response).unwrap());
 
                                     /*--------------------------------------------------------------------------------*/
@@ -211,8 +211,7 @@ fn start_addon_proxy(app: &mut App)
 
                                 Ok::<_, warp::Rejection>(response_builder
                                     .status(StatusCode::from_u16(status.as_u16()).unwrap())
-                                    .body(warp::hyper::Body::from(body_bytes.to_vec())
-                                ).unwrap())
+                                    .body(warp::hyper::Body::from(body_bytes.to_vec())).unwrap())
                             }
                             Err(e) => Ok::<_, warp::Rejection>(warp::http::Response::builder()
                                 .status(StatusCode::BAD_GATEWAY)
