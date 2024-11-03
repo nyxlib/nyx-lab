@@ -54,9 +54,10 @@ input:invalid {
 
 .modal,
 .offcanvas,
-.modal-backdrop {
+.modal-backdrop,
+.offcanvas-backdrop {
 
-    top: 41px;
+    top: 41px !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
