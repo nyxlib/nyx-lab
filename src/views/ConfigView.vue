@@ -196,9 +196,9 @@ onMounted(() => {
 
                         </tab-pane>
 
-                        <tab-pane title="Cache">
+                        <tab-pane title="Cache" v-if="HAS_TAURI">
 
-                            <cache v-if="HAS_TAURI" /><div v-else>Cache not available...</div>
+                            <cache />
 
                         </tab-pane>
 

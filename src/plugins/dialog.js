@@ -36,8 +36,8 @@ const _LOCKER_HTML = `
 
             position: fixed;
 
-            top: 0;
-            left: 0;
+            top: 40px;
+            left: 00px;
 
             width: 100vw;
             height: 100vh;
