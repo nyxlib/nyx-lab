@@ -112,7 +112,8 @@ export default {
 
                         inputs[0].style.display = 'none';
 
-                        for(let i = 1; i < length; i++) {
+                        for(let i = 1; i < length; i++)
+                        {
                             inputs[i].style.display = ((''));
                         }
                     }
@@ -131,7 +132,8 @@ export default {
 
                         inputs[0].style.display = ((''));
 
-                        for(let i = 1; i < length; i++) {
+                        for(let i = 1; i < length; i++)
+                        {
                             inputs[i].style.display = 'none';
                         }
                     }

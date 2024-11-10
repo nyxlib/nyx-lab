@@ -123,13 +123,13 @@ const _notify = (body, title) => {
 
     if(typeof window['__TAURI__'] !== 'undefined')
     {
-        notification.isPermissionGranted().then((permissionGranted) => {
+        notification.isPermissionGranted().then((permission) => {
 
-            if(!permissionGranted)
+            if(!permission)
             {
-                notification.requestPermission().then((permissionObtained) => {
+                notification.requestPermission().then((permission) => {
 
-                    if(permissionObtained === 'granted')
+                    if(permission === 'granted')
                     {
                         _notify_step2(notification, title, body);
                     }
