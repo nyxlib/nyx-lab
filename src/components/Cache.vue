@@ -49,7 +49,7 @@ const getFilenames = () => {
 
 const delFilenames = () => {
 
-    dialog.confirm('Are you sure you want to flush the cache?', 'Nyx Dashboard').then((choice) => {
+    dialog.confirm('Are you sure you want to flush cache and reload?', 'Nyx Dashboard').then((choice) => {
 
         if(choice)
         {
@@ -61,8 +61,7 @@ const delFilenames = () => {
 
                 store.clear().then(() => {
 
-                    dialog.success();
-                    dialog.unlock();
+                    location.reload();
 
                 }).catch((e) => {
 
@@ -83,7 +82,7 @@ const delFilenames = () => {
 
 const delFilename = (filename) => {
 
-    dialog.confirm('Are you sure you want to flush the cache?', 'Nyx Dashboard').then((choice) => {
+    dialog.confirm('Are you sure you want to delete this file?', 'Nyx Dashboard').then((choice) => {
 
         if(choice)
         {
@@ -160,8 +159,8 @@ onMounted(() => {
             <i class="bi bi-recycle"></i> Reload cache
         </button>
 
-        <button class="btn btn-sm btn-outline-danger me-0" type="button" @click="delFilenames">
-            <i class="bi bi-trash2"></i> Empty cache
+        <button class="btn btn-sm btn-outline-danger me-2" type="button" @click="delFilenames">
+            <i class="bi bi-trash2"></i> Flush cache
         </button>
 
     </div>

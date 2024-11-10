@@ -200,9 +200,9 @@ onMounted(() => {
 
                         </tab-pane>
 
-                        <tab-pane title="Cache" v-if="HAS_TAURI">
+                        <tab-pane title="Cache" v-if="HAS_TAURI" @shown="() => state.shownTabs.add('nyx-cache')">
 
-                            <cache />
+                            <cache v-if="state.shownTabs.has('nyx-cache')" />
 
                         </tab-pane>
 
