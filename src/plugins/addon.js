@@ -72,9 +72,9 @@ function _load(app, path)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        fetch(`${path}/package.json?_=${new Date().getTime()}`, {method: 'GET', mode: 'cors'}).then((response) => {
+        fetch(`${path}/package.json?_=${new Date().getTime()}`, {method: 'GET', mode: 'cors'}).catch(reject).then((response) => {
 
-            response.json().then((json) =>  {
+            response.json().catch(reject).then((json) =>  {
 
                 if(json.main
                    &&
@@ -116,15 +116,7 @@ function _load(app, path)
 
                     reject('missing metadata');
                 }
-
-            }).catch((e) => {
-
-                reject(e);
             });
-
-        }).catch((e) => {
-
-            reject(e);
         });
     });
 

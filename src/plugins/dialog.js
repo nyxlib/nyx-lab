@@ -252,10 +252,7 @@ const _confirm = (message, title, type = null) => {
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            dialog.confirm(message, {title: title, kind: type || 'info'}).then((choice) => {
-
-                resolve(choice);
-            });
+            dialog.confirm(message, {title: title, kind: type || 'info'}).then(resolve);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -287,27 +284,19 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
                     name: typeName,
                     extensions: typeExts,
                 }]
-            }).then((path) => {
+            }).catch(reject).then((path) => {
 
                 if(path)
                 {
-                    fs.readTextFile(path).then((text) => {
+                    fs.readTextFile(path).catch(reject).then((text) => {
 
                         resolve([text, path]);
-
-                    }).catch((e) => {
-
-                        reject(e);
                     });
                 }
                 else
                 {
                     reject('empty path');
                 }
-
-            }).catch((e) => {
-
-                reject(e);
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -379,17 +368,13 @@ const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
                         extensions: typeExts,
                     },
                 ],
-            }).then((path) => {
+            }).catch(reject).then((path) => {
 
                 if(path)
                 {
-                    fs.writeTextFile(path, contents).then(() => {
+                    fs.writeTextFile(path, contents).catch(reject).then(() => {
 
                         resolve(path);
-
-                    }).catch((e) => {
-
-                        reject(e);
                     });
                 }
                 else
@@ -397,9 +382,6 @@ const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
                     reject('empty path');
                 }
 
-            }).catch((e) => {
-
-                reject(e);
             });
 
             /*--------------------------------------------------------------------------------------------------------*/

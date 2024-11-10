@@ -4,19 +4,35 @@ import * as geolocation from '@tauri-apps/plugin-geolocation';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const getErrorMessage = (error) => {
+
+    switch(error.code)
+    {
+        case error.PERMISSION_DENIED:
+            return 'Geolocation: permission denied.';
+
+        case error.POSITION_UNAVAILABLE:
+            return 'Geolocation: position unavailable.';
+
+        case error.TIMEOUT:
+            return 'Geolocation: timeout.';
+
+        default:
+            return 'Geolocation: unknown error.';
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const _getGeolocation_step2 = (resolve, reject) => {
 
     geolocation.getCurrentPosition({
         enableHighAccuracy: true,
         maximumAge: 0x00,
         timeout: 10000,
-    }).then((position) => {
+    }).then(resolve).catch((error) => {
 
-        resolve(position);
-
-    }).catch((message) => {
-
-        reject(message);
+        reject(getErrorMessage(error));
     });
 };
 
@@ -32,28 +48,24 @@ const _getGeolocation = () => {
 
             geolocation.checkPermissions().then((permissions) => {
 
-                if(permissions.location === 'prompt' || permissions.location === 'prompt-with-rationale')
+                if(['prompt', 'prompt-with-rationale'].includes(permissions.location))
                 {
                     geolocation.requestPermissions(['location']).then((permissions) => {
 
-                        if(permissions.location === 'granted')
+                        if(permissions.location !== 'granted')
+                        {
+                            reject('Geolocation: permission denied.');
+                        }
+                        else
                         {
                             _getGeolocation_step2(resolve, reject);
                         }
-
-                    }).catch((message) => {
-
-                        reject(message);
                     });
                 }
                 else
                 {
                     _getGeolocation_step2(resolve, reject);
                 }
-
-            }).catch((message) => {
-
-                reject(message);
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -64,23 +76,19 @@ const _getGeolocation = () => {
 
             if(typeof navigator.geolocation === 'object')
             {
-                navigator.geolocation.getCurrentPosition((position) => {
+                navigator.geolocation.getCurrentPosition(resolve, (error) => {
 
-                    resolve(position.coords);
-
-                }, (message) => {
-
-                    reject(message);
+                    reject(getErrorMessage(error));
 
                 }, {
                     enableHighAccuracy: true,
                     maximumAge: 0x00,
-                    timeout: 10000,
+                    timeout: 30000,
                 });
             }
             else
             {
-                reject('not supported');
+                reject('Geolocation: not supported.');
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
