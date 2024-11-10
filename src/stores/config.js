@@ -1,4 +1,4 @@
-// noinspection JSUnresolvedReference
+// noinspection JSValidateTypes, JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {watch, inject} from 'vue';
@@ -82,7 +82,9 @@ const useConfigStore = defineStore('config', {
             watch(() => this.globals, () => {
 
                 this.modified = true;
+
             }, {
+
                 deep: true
             });
 
@@ -124,7 +126,7 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        _startStop(addon, name, do_start)
+        _startStop(descr, addon, name, do_start)
         {
             /*--------------------------------------------------------------------------------------------------------*/
             /* START / STOP                                                                                           */
@@ -134,17 +136,17 @@ const useConfigStore = defineStore('config', {
             {
                 if(typeof addon.start === 'function')
                 {
-                    this.confPanels[name] = [];
-                    this.appPanels[name] = [];
+                    this.confPanels[name] = {descr: descr, addon: addon, panels: []};
+                    this.appPanels[name] = {descr: descr, addon: addon, panels: []};
 
-                    addon.start(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name], this.appPanels[name]);
+                    addon.start(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name].panels, this.appPanels[name].panels);
                 }
             }
             else
             {
                 if(typeof addon.stop === 'function')
                 {
-                    addon.stop(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name], this.appPanels[name]);
+                    addon.stop(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name].panels, this.appPanels[name].panels);
 
                     delete this.confPanels[name];
                     delete this.appPanels[name];
@@ -175,7 +177,7 @@ const useConfigStore = defineStore('config', {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                for(const addonDescr of Object.values(addonDescrs))
+                for(const addonDescr of Object.values(addonDescrs).sort((x, y) => x.rank - y.rank))
                 {
                     n++;
 
@@ -262,7 +264,7 @@ const useConfigStore = defineStore('config', {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                for(const addonDescr of Object.values(addonDescrs))
+                for(const addonDescr of Object.values(addonDescrs).sort((x, y) => x.rank - y.rank))
                 {
                     if(addonDescr.zombie)
                     {
@@ -281,7 +283,7 @@ const useConfigStore = defineStore('config', {
 
                             addonDescr.started = addonDescr.enabled;
 
-                            this._startStop(addon, name, addonDescr.started);
+                            this._startStop(addonDescr, addon, name, addonDescr.started);
 
                             if(--n === 0) {
                                 cleanup();

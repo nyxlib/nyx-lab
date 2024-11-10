@@ -21,18 +21,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addons = computed(() => {
-
-    const result = Object.values(props.addons);
-
-    result.sort((x, y) => x.rank - y.rank);
-
-    return result;
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-let rank = 0;
+const addons = computed(() => Object.values(props.addons).sort((x, y) => x.rank - y.rank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -54,6 +43,8 @@ const addonAppend = (url = null) => {
     {
         const id = __NYX_UUID__.v4();
 
+        const rank = Date.now();
+
         props.addons[id] = {
             id: id,
             rank: rank,
@@ -62,8 +53,6 @@ const addonAppend = (url = null) => {
             enabled: !!url,
             started: false,
         };
-
-        rank++;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -102,8 +91,9 @@ const addonDw = (addon1) => {
     {
         const addon2 = array[index - 1];
 
-        addon1.rank--;
-        addon2.rank++;
+        const old = addon2.rank;
+        addon2.rank = addon1.rank;
+        addon1.rank = old;
     }
 };
 
@@ -113,14 +103,15 @@ const addonUp = (addon1) => {
 
     const array = addons.value;
 
-    const index = array.findIndex(addon2 => addon2.id === addon1.id);
+    const index = array.findIndex((addon2) => addon2.id === addon1.id);
 
     if(index < array.length - 1)
     {
         const addon2 = array[index + 1];
 
-        addon1.rank++;
-        addon2.rank--;
+        const old = addon2.rank;
+        addon2.rank = addon1.rank;
+        addon1.rank = old;
     }
 };
 
@@ -193,7 +184,7 @@ onUnmounted(() => {
                 <!-- *********************************************************************************************** -->
 
                 <tbody>
-                    <tr v-for="(addon, idx) in addons" :key="idx">
+                    <tr v-for="addon in addons" :key="addon.id">
                         <td class="text-center">
                             <button class="btn btn-sm btn-link" type="button" @click="addonDw(addon)">
                                 <i class="bi bi-caret-up-fill"></i>

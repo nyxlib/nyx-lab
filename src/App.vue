@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject, reactive, onMounted} from 'vue';
+import {inject, reactive, computed, onMounted} from 'vue';
 
 import {Window, getCurrentWindow} from '@tauri-apps/api/window';
 
@@ -35,6 +35,12 @@ const configStore = useConfigStore();
 const state = reactive({
     theme: 'light',
 });
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const appPanels = computed(() => Object.values(configStore.appPanels).sort((x, y) => x.descr.rank - y.descr.rank));
+
+const webPages = computed(() => Object.values(configStore.globals.webPages).sort((x, y) => x.rank - y.rank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -299,15 +305,15 @@ onMounted(() => {
                     </router-link>
                 </li>
 
-                <template v-for="(panels, id) in configStore.appPanels" :key="id">
-                    <li class="nav-item" :title="panel.title" v-tooltip v-for="panel in panels" :key="panel">
+                <template v-for="appPanel in appPanels" :key="appPanel.addon.id">
+                    <li class="nav-item" :title="panel.title" v-tooltip v-for="(panel, idx) in appPanel.panels" :key="`${appPanel.addon.id}_${idx}`">
                         <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="panel.path" v-html="panel.logo" />
                     </li>
                 </template>
 
-                <template v-for="(webPage, id) in configStore.globals.webPages" :key="id">
+                <template v-for="webPage in webPages" :key="webPage.id">
                     <li class="nav-item" :title="webPage.title" v-tooltip v-if="(webPage.url.startsWith('http://') || webPage.url.startsWith('https://')) && webPage.enabled">
-                        <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="`/external/${id}`" v-html="icons[webPage.icon || 'bi-question']" />
+                        <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" :to="`/external/${webPage.id}`" v-html="icons[webPage.icon || 'bi-question']" />
                     </li>
                 </template>
 

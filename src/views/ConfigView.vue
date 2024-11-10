@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {reactive, onMounted} from 'vue';
+import {reactive, computed, onMounted} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -34,6 +34,10 @@ const state = reactive({
     shownTabs: new Set(),
     showNyx: false,
 });
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const confPanels = computed(() => Object.values(configStore.confPanels).sort((x, y) => x.descr.rank - y.descr.rank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
@@ -230,12 +234,14 @@ onMounted(() => {
             </tab-pane>
 
             <!-- *************************************************************************************************** -->
+            <!-- ADDONS                                                                                              -->
+            <!-- *************************************************************************************************** -->
 
-            <template v-for="(addon, key) in configStore.confPanels" :key="key">
+            <template v-for="confPanel in confPanels" :key="confPanel.descr.id">
 
-                <tab-pane :title="panel.title" v-for="(panel, idx) in addon" :key="idx" @shown="() => state.shownTabs.add(`${key}_${idx}`)">
+                <tab-pane :title="panel.title" v-for="(panel, idx) in confPanel.panels" :key="`${confPanel.descr.id}_${idx}`" @shown="() => state.shownTabs.add(`${confPanel.descr.id}_${idx}`)">
 
-                    <component :is="panel.component" v-if="state.shownTabs.has(`${key}_${idx}`)" />
+                    <component :is="panel.component" v-if="state.shownTabs.has(`${confPanel.descr.id}_${idx}`)" />
 
                 </tab-pane>
 

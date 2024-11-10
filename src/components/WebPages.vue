@@ -21,18 +21,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const webPages = computed(() => {
-
-    const result = Object.values(props.webPages);
-
-    result.sort((x, y) => x.rank - y.rank);
-
-    return result;
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-let rank = 0;
+const webPages = computed(() => Object.values(props.webPages).sort((x, y) => x.rank - y.rank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -54,6 +43,8 @@ const webPageAppend = (url = null) => {
     {
         const id = __NYX_UUID__.v4();
 
+        const rank = Date.now();
+
         props.webPages[id] = {
             id: id,
             rank: rank,
@@ -62,8 +53,6 @@ const webPageAppend = (url = null) => {
             zombie: false,
             enabled: !!url,
         };
-
-        rank++;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -95,8 +84,9 @@ const webPageDw = (webPage1) => {
     {
         const webPage2 = array[index - 1];
 
-        webPage1.rank--;
-        webPage2.rank++;
+        const old = webPage2.rank;
+        webPage2.rank = webPage1.rank;
+        webPage1.rank = old;
     }
 };
 
@@ -106,14 +96,15 @@ const webPageUp = (webPage1) => {
 
     const array = webPages.value;
 
-    const index = array.findIndex(webPage2 => webPage2.id === webPage1.id);
+    const index = array.findIndex((webPage2) => webPage2.id === webPage1.id);
 
     if(index < array.length - 1)
     {
         const webPage2 = array[index + 1];
 
-        webPage1.rank++;
-        webPage2.rank--;
+        const old = webPage2.rank;
+        webPage2.rank = webPage1.rank;
+        webPage1.rank = old;
     }
 };
 
@@ -168,7 +159,7 @@ const webPageUp = (webPage1) => {
                 <!-- *********************************************************************************************** -->
 
                 <tbody>
-                    <tr v-for="(webPage, idx) in webPages" :key="idx">
+                    <tr v-for="webPage in webPages" :key="webPage.id">
                         <td class="text-center">
                             <button class="btn btn-sm btn-link" type="button" @click="webPageDw(webPage)">
                                 <i class="bi bi-caret-up-fill"></i>
