@@ -110,7 +110,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(!HAS_TAURI)
+    if(typeof window['__TAURI__'] === 'undefined' || ['android', 'ios'].includes(window.__NYX_OS_TYPE__))
     {
         document.body.setAttribute('data-environment', 'browser');
     }

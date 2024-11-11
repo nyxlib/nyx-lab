@@ -5,6 +5,8 @@ import * as Vue from 'vue';
 
 import * as VueRouter from 'vue-router';
 
+import * as os from '@tauri-apps/plugin-os';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {setup} from 'vue-nyx';
@@ -27,6 +29,34 @@ window.__NYX_VUE_ROUTER__ = VueRouter;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+if(typeof window['__TAURI__'] === 'undefined')
+{
+    /**/ if (/linux/i.test(navigator.userAgent)) {
+        window.__NYX_OS_TYPE__ = 'linux';
+    }
+    else if (/macintosh/i.test(navigator.userAgent)) {
+        window.__NYX_OS_TYPE__ = 'macos';
+    }
+    else if (/windows/i.test(navigator.userAgent)) {
+        window.__NYX_OS_TYPE__ = 'windows';
+    }
+    else if(/android/i.test(navigator.userAgent)) {
+        window.__NYX_OS_TYPE__ = 'android';
+    }
+    else if(/ipad|iphone/i.test(navigator.userAgent)) {
+        window.__NYX_OS_TYPE__ = 'ios';
+    }
+    else {
+        window.__NYX_OS_TYPE__ = 'unknown';
+    }
+}
+else
+{
+    window.__NYX_OS_TYPE__ = os.type();
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const app = Vue.createApp(App);
 
 setup(app);
@@ -41,7 +71,7 @@ app.use(addon);
 
 router.beforeEach(() => {
 
-    if(/android/i.test(navigator.userAgent))
+    if(window.__NYX_OS_TYPE__ === 'android')
     {
         setTimeout(() => {
 

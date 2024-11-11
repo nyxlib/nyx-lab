@@ -29,7 +29,7 @@ const _getGeolocation_step2 = (resolve, reject) => {
     geolocation.getCurrentPosition({
         enableHighAccuracy: true,
         maximumAge: 0x00,
-        timeout: 10000,
+        timeout: 30000,
     }).then(resolve).catch((error) => {
 
         reject(getErrorMessage(error));
