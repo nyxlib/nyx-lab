@@ -32,8 +32,8 @@ body[data-environment="tauri"][data-maximized="false"] > #nyx_dashboard {
 
     border: 1px var(--bs-secondary-border-subtle) solid;
 
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    border-top-left-radius: 11px;
+    border-top-right-radius: 11px;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

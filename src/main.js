@@ -71,7 +71,7 @@ app.use(addon);
 
 router.beforeEach(() => {
 
-    if(window.__NYX_OS_TYPE__ === 'android')
+    if(/android|iPad|iPhone/i.test(navigator.userAgent))
     {
         setTimeout(() => {
 
