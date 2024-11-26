@@ -13,7 +13,7 @@
     "scripts": {
         "app-dev": "npm i --update vue-nyx && vite --port 1234 dev",
         "app-prod": "npm i --update vue-nyx && vite build",
-        "lint": "eslint",
+        "app-lint": "eslint",
         "tauri-dev": "tauri dev",
         "tauri-prod": "tauri build",
         "tauri-android": "tauri android build --target armv7",

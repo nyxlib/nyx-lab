@@ -14,6 +14,8 @@ export default {
                 inputEl.setAttribute('autocorrect', 'off');
                 inputEl.setAttribute('autocomplete', 'off');
                 inputEl.setAttribute('autocapitalize', 'off');
+
+                inputEl.setAttribute('spellcheck', 'false');
             }
         });
 
