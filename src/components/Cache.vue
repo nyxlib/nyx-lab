@@ -128,41 +128,50 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <table class="table table-sm table-striped">
-        <thead>
-            <tr>
-                <th>Filename</th>
-                <th>Tools</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="filename in filenames" :key="filename">
-                <td>
-                    <a class="btn btn-sm btn-link" :href="filename" target="_blank">
-                        {{ filename }}
-                    </a>
-                </td>
-                <td>
-                    <button class="btn btn-sm btn-link" type="button" @click="delFilename(filename)">
-                        <i class="bi bi-trash2 text-danger"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="shadow card">
+        <div class="card-header px-3 py-2">
+            Cache
+            [
+            <button class="btn btn-xs btn-primary me-1" type="button" @click="getFilenames">
+                <i class="bi bi-recycle"></i>
+                Reload cache
+            </button>
+            <button class="btn btn-xs btn-danger me-0" type="button" @click="delFilenames">
+                <i class="bi bi-trash2"></i>
+                Flush cache
+            </button>
+            ]
+        </div>
+        <div class="card-body px-3 py-2">
 
-    <!-- *********************************************************************************************************** -->
+            <!-- *************************************************************************************************** -->
 
-    <div class="text-end">
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Filename</th>
+                        <th>Tools</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="filename in filenames" :key="filename">
+                        <td>
+                            <a class="btn btn-sm btn-link" :href="filename" target="_blank">
+                                {{ filename }}
+                            </a>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-link" type="button" @click="delFilename(filename)">
+                                <i class="bi bi-trash2 text-danger"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <button class="btn btn-sm btn-outline-primary me-2" type="button" @click="getFilenames">
-            <i class="bi bi-recycle"></i> Reload cache
-        </button>
+            <!-- *************************************************************************************************** -->
 
-        <button class="btn btn-sm btn-outline-danger me-2" type="button" @click="delFilenames">
-            <i class="bi bi-trash2"></i> Flush cache
-        </button>
-
+        </div>
     </div>
 
     <!-- *********************************************************************************************************** -->

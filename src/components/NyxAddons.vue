@@ -150,7 +150,7 @@ onUnmounted(() => {
                 <i class="bi bi-plus-lg"></i>
                 Add
             </button>
-            <button class="btn btn-xs btn-primary me-1" type="button" @click="() => addonSearch()">
+            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => addonSearch()">
                 <i class="bi bi-search"></i>
                 Search
             </button>
