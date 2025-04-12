@@ -48,7 +48,7 @@ const webPages = computed(() => Object.values(configStore.globals.webPages).sort
 
 const about = () => {
 
-    dialog.show('Nyx Dashboard\nhttps://nyxlib.org/\n\nAuthor: Jérôme ODIER\nEmail: jerome.odier@lpsc.in2p3.fr', 'About');
+    dialog.show(['Nyx Dashboard', 'https://nyxlib.org/', '', 'Author: Jérôme ODIER', 'Email: jerome.odier@lpsc.in2p3.fr'].join('\n'), 'About');
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
