@@ -17,7 +17,7 @@ export default defineConfig({
     base: './',
     build: {
         chunkSizeWarningLimit: 1250,
-        minify: false,
+        minify: true,
         rollupOptions: {
             output: {
                 entryFileNames: 'dashboard.js',
@@ -25,6 +25,9 @@ export default defineConfig({
                 assetFileNames: 'assets/[hash].[ext]',
             }
         }
+    },
+    esbuild: {
+        legalComments: 'none'
     },
     resolve: {
         dedupe: [
