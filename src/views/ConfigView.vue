@@ -131,7 +131,7 @@ onMounted(() => {
 
                         <div class="shadow card mb-3">
                             <div class="card-header">
-                                Monitoring
+                                User interfaces
                             </div>
                             <div class="card-body">
 
@@ -139,15 +139,15 @@ onMounted(() => {
                                     <div class="col-md-4">
 
                                         <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableMonitoring" :true-value="true" :false-value="false" />
-                                            <label class="form-check-label" for="A925CE04">Enable monitoring</label>
+                                            <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableInterfaces" :true-value="true" :false-value="false" />
+                                            <label class="form-check-label" for="A925CE04">Enable user interfaces</label>
                                         </div>
 
                                     </div>
                                     <div class="col-md-8">
 
                                         <div class="mb-3">
-                                            <label class="form-label" for="C8206AA4">Groups</label>
+                                            <label class="form-label" for="C8206AA4">Panels</label>
                                             <multiselect
                                                 mode="tags"
                                                 id="C8206AA4"
@@ -155,14 +155,19 @@ onMounted(() => {
                                                 :searchable="true"
                                                 :create-option="true"
                                                 :close-on-select="false"
-                                                :options="configStore.globals.monitoringGroups"
-                                                v-model="configStore.globals.monitoringGroups"
+                                                :options="configStore.globals.interfacePanels"
+                                                v-model="configStore.globals.interfacePanels"
                                             />
                                         </div>
 
                                         <div class="mb-3">
+                                            <label class="form-label" for="C8206AA4">Columns</label>
+                                            <input class="form-control form-control-sm" type="number" min="0" max="16" step="1" required="required" v-model="configStore.globals.interfaceColumns" />
+                                        </div>
+
+                                        <div class="mb-3">
                                             <label class="form-label" for="C8206AA4">Refresh interval [ms]</label>
-                                            <input class="form-control form-control-sm" type="number" min="100" max="100000" step="1" required="required" v-model="configStore.globals.refreshInterval" />
+                                            <input class="form-control form-control-sm" type="number" min="100" max="100000" step="1" required="required" v-model="configStore.globals.interfaceRefreshInterval" />
                                         </div>
 
                                     </div>
