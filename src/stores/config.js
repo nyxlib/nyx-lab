@@ -13,6 +13,7 @@ const DEFAULT_GLOBALS = {
     mqttURL: '',
     mqttUsername: '',
     mqttPassword: '',
+    streamURL: '',
     /**/
     enableMonitoring: false,
     monitoringGroups: [],
