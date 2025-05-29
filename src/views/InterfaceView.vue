@@ -64,6 +64,8 @@ const isValid = computed(() => !!state.plotGroup && state.metric1.length > 0 && 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const controlModal = ref(null);
+
 const jsonEditor = ref(null);
 
 let editor = null;
@@ -113,7 +115,7 @@ const newWidgetStep1 = (id = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).show();
+    Modal.getOrCreateInstance(controlModal.value).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -156,9 +158,9 @@ onMounted(() => {
 
             <tab-pane class="align-items-center justify-content-center" :title="interfaceName" v-for="(interfaceName, interfaceIndex) in configStore.globals.interfacePanels" :key="interfaceIndex">
 
-                <div class="grid-stack h-100 w-100 bg-info" :data-title="interfaceName">
+                <div class="grid-stack h-100 w-100" :data-title="interfaceName">
 
-                    {{ interfaceName }}
+
 
                 </div>
 
@@ -188,14 +190,14 @@ onMounted(() => {
 
     <teleport to="body">
 
-        <div class="modal" tabindex="-1" id="nyx_metrics">
+        <div class="modal" tabindex="-1" ref="controlModal">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
 
                     <div class="modal-header px-3 py-2">
                         <h5 class="modal-title">
                             <i class="bi bi-pencil"></i>
-                            {{ state.id ? 'Edit' : 'New' }} metric
+                            {{ state.id ? 'Edit' : 'New' }} control
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
@@ -293,8 +295,8 @@ onMounted(() => {
 
                                 <!-- ******************************************************************************* -->
 
-                                <div class="mb-3" v-if="state.mode === MODE_VARIABLE || state.mode === MODE_SCATTER">
-                                    <label class="form-label" for="BBA0018F">Y metric</label>
+                                <div class="mb-3" v-if="state.mode === MODE_VARIABLE ">
+                                    <label class="form-label" for="BBA0018F">Y variable</label>
                                     <multiselect
                                         mode="tags"
                                         id="BBA0018F"
@@ -306,7 +308,19 @@ onMounted(() => {
                                 </div>
 
                                 <div class="mb-3" v-if="state.mode === MODE_SCATTER">
-                                    <label class="form-label" for="B5D75D1E">X metric</label>
+                                    <label class="form-label" for="BBA0018F">Y variable</label>
+                                    <multiselect
+                                        mode="tags"
+                                        id="BBA0018F"
+                                        :required="true"
+                                        :searchable="true"
+                                        :create-option="false"
+                                        :close-on-select="true"
+                                        :options="Object.keys(nyxStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric1" />
+                                </div>
+
+                                <div class="mb-3" v-if="state.mode === MODE_SCATTER">
+                                    <label class="form-label" for="B5D75D1E">X variable</label>
                                     <multiselect
                                         mode="tags"
                                         id="B5D75D1E"
