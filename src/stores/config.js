@@ -15,10 +15,11 @@ const DEFAULT_GLOBALS = {
     mqttPassword: '',
     nssURL: '',
     /**/
-    enableMonitoring: false,
-    monitoringGroups: [],
-    monitoringMetrics: {},
-    refreshInterval: 1000,
+    enableInterfaces: false,
+    interfacePanels: [],
+    interfaceMetrics: {},
+    interfaceColumns: 12,
+    interfaceRefreshInterval: 1000,
     /**/
     addons: {},
     webPages: {},
