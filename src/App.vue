@@ -297,10 +297,10 @@ onMounted(() => {
                     </router-link>
                 </li>
 
-                <li class="nav-item" title="Monitoring" v-tooltip v-if="configStore.globals.enableMonitoring">
-                    <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" to="/monitoring">
+                <li class="nav-item" title="User interfaces" v-tooltip v-if="configStore.globals.enableInterfaces">
+                    <router-link class="nav-link border-bottom rounded-0 py-3" active-class="active" to="/interfaces">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07" />
+                            <path d="M2.5 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m2-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1 .5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" /><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm13 2v2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1M2 14a1 1 0 0 1-1-1V6h14v7a1 1 0 0 1-1 1z" />
                         </svg>
                     </router-link>
                 </li>

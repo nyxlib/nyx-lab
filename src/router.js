@@ -13,9 +13,9 @@ const router = createRouter({
             component: () => import('./views/HomeView.vue'),
         },
         {
-            name: 'monitoring',
-            path: '/monitoring/',
-            component: () => import('./views/MonitoringView.vue'),
+            name: 'interfaces',
+            path: '/interfaces/',
+            component: () => import('./views/InterfaceView.vue'),
         },
         {
             name: 'external',
