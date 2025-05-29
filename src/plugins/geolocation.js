@@ -4,6 +4,14 @@ import * as geolocation from '@tauri-apps/plugin-geolocation';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const OPTIONS = {
+    enableHighAccuracy: true,
+    maximumAge: 0x00,
+    timeout: 30000,
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const getErrorMessage = (error) => {
 
     switch(error.code)
@@ -26,11 +34,7 @@ const getErrorMessage = (error) => {
 
 const _getGeolocation_step2 = (resolve, reject) => {
 
-    geolocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        maximumAge: 0x00,
-        timeout: 30000,
-    }).then(resolve).catch((error) => {
+    geolocation.getCurrentPosition(OPTIONS).then(resolve).catch((error) => {
 
         reject(getErrorMessage(error));
     });
@@ -80,11 +84,7 @@ const _getGeolocation = () => {
 
                     reject(getErrorMessage(error));
 
-                }, {
-                    enableHighAccuracy: true,
-                    maximumAge: 0x00,
-                    timeout: 30000,
-                });
+                }, OPTIONS);
             }
             else
             {
