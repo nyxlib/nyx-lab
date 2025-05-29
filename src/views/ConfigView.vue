@@ -121,7 +121,7 @@ onMounted(() => {
 
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">Server URL<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" id="F3AB1470" placeholder="Server URL" v-no-autocomplete v-model="configStore.globals.streamURL" />
+                                    <input class="form-control form-control-sm" type="text" id="F3AB1470" placeholder="Server URL" v-no-autocomplete v-model="configStore.globals.nssURL" />
                                 </div>
 
                             </div>
