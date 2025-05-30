@@ -69,6 +69,7 @@ const useConfigStore = defineStore('config', {
         modified: false,
         confPanels: {},
         appPanels: {},
+        controls: {},
     }),
     actions: {
 
@@ -140,18 +141,20 @@ const useConfigStore = defineStore('config', {
                 {
                     this.confPanels[name] = {descr: descr, addon: addon, panels: []};
                     this.appPanels[name] = {descr: descr, addon: addon, panels: []};
+                    this.controls[name] = {descr: descr, addon: addon, ctrls: []};
 
-                    addon.start(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name].panels, this.appPanels[name].panels);
+                    addon.start(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name].panels, this.appPanels[name].panels, this.controls[name].ctrls);
                 }
             }
             else
             {
                 if(typeof addon.stop === 'function')
                 {
-                    addon.stop(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name].panels, this.appPanels[name].panels);
+                    addon.stop(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name].panels, this.appPanels[name].panels, this.controls[name].ctrls);
 
                     delete this.confPanels[name];
                     delete this.appPanels[name];
+                    delete this.controls[name];
                 }
             }
 
