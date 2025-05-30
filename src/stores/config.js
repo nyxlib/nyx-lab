@@ -17,7 +17,7 @@ const DEFAULT_GLOBALS = {
     /**/
     enableInterfaces: false,
     interfacePanels: [],
-    interfaceMetrics: {},
+    interfaceControls: {},
     interfaceColumns: 12,
     interfaceRefreshInterval: 1000,
     /**/
