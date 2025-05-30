@@ -52,11 +52,6 @@ const state = reactive({
     control: '',
     title: '',
     panel: '',
-    xTitle: '',
-    yTitle: '',
-    showLegend: false,
-    xLogScale: false,
-    yLogScale: false,
     variables1: [],
     variables2: [],
     blob: null,
@@ -112,8 +107,6 @@ const newWidgetStep1 = (id = null) => {
         state.control = control.control;
         state.title = control.title;
         state.panel = control.panel;
-        state.xTitle = control.xTitle;
-        state.yTitle = control.yTitle;
         state.variables1 = control.variables1;
         state.variables2 = control.variables2;
         state.blob = control.blob;
@@ -128,8 +121,6 @@ const newWidgetStep1 = (id = null) => {
         state.control = '';
         state.title = '';
         state.panel = '';
-        state.xTitle = '';
-        state.yTitle = '';
         state.variables1 = [];
         state.variables2 = [];
         state.blob = null;
@@ -148,6 +139,8 @@ const newWidgetStep1 = (id = null) => {
 
 const newWidgetStep2 = () => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     createWidget({
         id: state.id || uuid.v4(),
         mode: state.mode,
@@ -155,8 +148,6 @@ const newWidgetStep2 = () => {
         control: state.control,
         title: state.title,
         panel: state.panel,
-        xTitle: state.xTitle,
-        yTitle: state.yTitle,
         variables1: state.variables1,
         variables2: state.variables2,
         blob: state.blob,
@@ -164,6 +155,12 @@ const newWidgetStep2 = () => {
         x: 0, y: 0,
         h: 2, w: 2,
     }, !!state.id);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    Modal.getOrCreateInstance(controlModal.value).hide();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -226,8 +223,6 @@ const createWidget = (control, edit) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        /*------------------------------------------------------------------------------------------------------------*/
-
         configStore.globals.interfaceControls[control.id] = control;
 
         widgetDict[control.id] = widget;
@@ -236,6 +231,13 @@ const createWidget = (control, edit) => {
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const clearWidget = (id) => {
+
+    alert(id);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -263,22 +265,28 @@ const removeWidget = (_, widget) => {
 
 onMounted(() => {
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------------------*/
 
-    editor = createJSONEditor({
-        target: jsonEditor.value,
-        props: {
-            json: state.options,
-            onChange: (options) => {
-                state.options = options;
-            }
-        }
+    Tooltip.getOrCreateInstance(document.body, {
+        selector: '[data-bs-title]'
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(nyxStore.isConnected)
     {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        editor = createJSONEditor({
+            target: jsonEditor.value,
+            props: {
+                json: state.options,
+                onChange: (options) => {
+                    state.options = options;
+                }
+            }
+        });
+
         /*------------------------------------------------------------------------------------------------------------*/
 
         GridStack.renderCB = (el, w) => {
@@ -435,25 +443,6 @@ onMounted(() => {
                                                 :create-option="false"
                                                 :close-on-select="true"
                                                 :options="configStore.globals.interfacePanels.map((x) => ({value: x, label: x}))" v-model="state.panel" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- ******************************************************************************* -->
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="D8A97782">X title<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="D8A97782" placeholder="X title" v-model="state.xTitle" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="EC986FF8">Y title<sup class="text-secondary">opt</sup></label>
-                                                <input class="form-control form-control-sm" type="text" id="EC986FF8" placeholder="Y title" v-model="state.yTitle" />
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
