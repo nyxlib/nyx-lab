@@ -82,7 +82,7 @@ const isValid = computed(() =>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const controls = computed(() => Object.values(configStore.controls).flatMap((controls) => controls.ctrls).filter((ctrl) => ctrl.mode === state.mode).map((ctrl) => ({
-    value: ctrl.title,
+    value: ctrl.id,
     label: ctrl.title,
 })));
 
@@ -179,9 +179,24 @@ const newWidgetStep2 = () => {
 
 const createWidget = (control, edit) => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* GET CONTROL PANEL                                                                                              */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     const el = document.querySelector(`[data-title="${control.panel}"]`);
 
     if(!el)
+    {
+        return;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* CONTROL DESCR                                                                                                  */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === control.control);
+
+    if(!controlDescr)
     {
         return;
     }
@@ -223,7 +238,7 @@ const createWidget = (control, edit) => {
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* CREATE                                                                                                         */
+    /* CREATE CONTROL                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     const widget = el.gridstack.addWidget({
@@ -235,6 +250,10 @@ const createWidget = (control, edit) => {
             '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
             +
             '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
+            +
+            JSON.stringify(controlDescr)
+            +
+            control.control
         ),
     });
 
@@ -255,6 +274,8 @@ const createWidget = (control, edit) => {
     configStore.globals.interfaceControls[control.id] = control;
 
     widgetDict[control.id] = widget;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -307,6 +328,7 @@ onMounted(() => {
             target: jsonEditor.value,
             props: {
                 onChange: (options) => {
+
                     state.options = options;
                 }
             }
