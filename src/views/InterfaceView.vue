@@ -56,6 +56,7 @@ const state = reactive({
     mode: MODE_VARIABLE,
     divider: 1,
     control: '',
+    showLegende: false,
     shadow: 'shadow',
     title: '',
     panel: '',
@@ -106,6 +107,7 @@ const newWidgetStep1 = (id = null) => {
         state.mode = control.mode;
         state.divider = control.divider;
         state.control = control.control;
+        state.showLegende = control.showLegende;
         state.shadow = control.shadow;
         state.title = control.title;
         state.panel = control.panel;
@@ -121,6 +123,7 @@ const newWidgetStep1 = (id = null) => {
         state.mode = MODE_VARIABLE;
         state.divider = 1;
         state.control = '';
+        state.showLegende = false;
         state.shadow = 'shadow';
         state.title = '';
         state.panel = '';
@@ -149,14 +152,13 @@ const newWidgetStep2 = () => {
         mode: state.mode,
         divider: state.divider,
         control: state.control,
+        showLegende: state.showLegende,
         shadow: state.shadow,
         title: state.title,
         panel: state.panel,
         variables1: state.variables1,
         variables2: state.variables2,
         options: state.options,
-        x: 0, y: 0,
-        h: 2, w: 2,
     }, !!state.id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -169,6 +171,13 @@ const newWidgetStep2 = () => {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const createWidget = (control, edit) => {
+
+    const el = document.querySelector(`[data-title="${control.panel}"]`);
+
+    if(!el)
+    {
+        return;
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* EDIT                                                                                                           */
@@ -191,49 +200,54 @@ const createWidget = (control, edit) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
+    else
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(!control.h) {
+            control.h = Math.round(configStore.globals.interfaceColumns * el.offsetHeight / el.offsetWidth / 4);
+        }
+
+        if(!control.w) {
+            control.w = Math.round(configStore.globals.interfaceColumns * 1.000000000000000000000000000000 / 4);
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CREATE                                                                                                         */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const el = document.querySelector(`[data-title="${control.panel}"]`);
+    const widget = el.gridstack.addWidget({
+        x: control.x,
+        y: control.y,
+        h: control.h,
+        w: control.w,
+        content: (
+            '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
+            +
+            '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
+        ),
+    });
 
-    if(el)
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-        const widget = el.gridstack.addWidget({
-            x: control.x,
-            y: control.y,
-            h: control.h,
-            w: control.w,
-            content: (
-                '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
-                +
-                '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
-            ),
-        });
+    widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(control.id);
 
-        /*------------------------------------------------------------------------------------------------------------*/
+    widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(control.id);
 
-        widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(control.id);
+    widget.classList.add(control.shadow);
 
-        widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(control.id);
+    widget.gridstack = el.gridstack;
 
-        widget.classList.add(control.shadow);
+    widget.control = control;
 
-        widget.gridstack = el.gridstack;
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-        widget.control = control;
+    configStore.globals.interfaceControls[control.id] = control;
 
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        configStore.globals.interfaceControls[control.id] = control;
-
-        widgetDict[control.id] = widget;
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    }
+    widgetDict[control.id] = widget;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -470,17 +484,27 @@ onMounted(() => {
 
                                 <!-- ******************************************************************************* -->
 
-                                <div class="mb-3">
-                                    <label class="form-label" for="C8C721F4">Panel</label>
-                                    <multiselect
-                                        mode="single"
-                                        id="C8C721F4"
-                                        :required="true"
-                                        :can-clear="false"
-                                        :searchable="true"
-                                        :create-option="false"
-                                        :close-on-select="true"
-                                        :options="configStore.globals.interfacePanels.map((x) => ({value: x, label: x}))" v-model="state.panel" />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C8C721F4">Panel</label>
+                                            <multiselect
+                                                mode="single"
+                                                id="C8C721F4"
+                                                :required="true"
+                                                :can-clear="false"
+                                                :searchable="true"
+                                                :create-option="false"
+                                                :close-on-select="true"
+                                                :options="configStore.globals.interfacePanels.map((x) => ({value: x, label: x}))" v-model="state.panel" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-check-label" for="FD833D53">Show legend</label>
+                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="FD833D53" v-model="state.showLegende" /></div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- ******************************************************************************* -->
