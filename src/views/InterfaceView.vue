@@ -9,7 +9,11 @@ import { createJSONEditor } from 'vanilla-jsoneditor';
 
 import Multiselect from '@vueform/multiselect';
 
+import { GridStack } from 'gridstack';
+
 import { Modal } from 'bootstrap';
+
+import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -53,14 +57,34 @@ const state = reactive({
     showLegend: false,
     xLogScale: false,
     yLogScale: false,
-    metric1: [],
-    metric2: [],
+    variables1: [],
+    variables2: [],
+    blob: null,
+    stream: null,
     options: {},
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const isValid = computed(() => !!state.plotGroup && state.metric1.length > 0 && (state.mode !== MODE_SCATTER || state.metric1.length === state.metric2.length));
+const isValid = computed(() =>
+    !!state.panel
+    &&
+    !!state.control
+    &&
+    (
+        (state.mode == MODE_VARIABLE && state.variables1.length > 0 /*--------------------------------------------------*/)
+        ||
+        (state.mode == MODE_SCATTER && state.variables1.length > 0 && state.variables1.length === state.variables2.length)
+        ||
+        (state.mode == MODE_BLOB && state.blobOrStream)
+        ||
+        (state.mode == MODE_STREAM && state.blobOrStream)
+    )
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const widgetDict = {};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -80,20 +104,21 @@ const newWidgetStep1 = (id = null) => {
 
     if(id)
     {
-        state.id = null;
-        state.mode = MODE_VARIABLE;
-        state.divider = 1;
-        state.control = '';
-        state.title = '';
-        state.panel = '';
-        state.xTitle = '';
-        state.yTitle = '';
-        state.showLegend = false;
-        state.xLogScale = false;
-        state.yLogScale = false;
-        state.metric1 = [];
-        state.metric2 = [];
-        state.options = {};
+        const control = configStore.globals.interfaceControls[id];
+
+        state.id = id;
+        state.mode = control.mode;
+        state.divider = control.divider;
+        state.control = control.control;
+        state.title = control.title;
+        state.panel = control.panel;
+        state.xTitle = control.xTitle;
+        state.yTitle = control.yTitle;
+        state.variables1 = control.variables1;
+        state.variables2 = control.variables2;
+        state.blob = control.blob;
+        state.stream = control.stream;
+        state.options = control.options;
     }
     else
     {
@@ -105,11 +130,10 @@ const newWidgetStep1 = (id = null) => {
         state.panel = '';
         state.xTitle = '';
         state.yTitle = '';
-        state.showLegend = false;
-        state.xLogScale = false;
-        state.yLogScale = false;
-        state.metric1 = [];
-        state.metric2 = [];
+        state.variables1 = [];
+        state.variables2 = [];
+        state.blob = null;
+        state.stream = null;
         state.options = {};
     }
 
@@ -124,7 +148,113 @@ const newWidgetStep1 = (id = null) => {
 
 const newWidgetStep2 = () => {
 
+    createWidget({
+        id: state.id || uuid.v4(),
+        mode: state.mode,
+        divider: state.divider,
+        control: state.control,
+        title: state.title,
+        panel: state.panel,
+        xTitle: state.xTitle,
+        yTitle: state.yTitle,
+        variables1: state.variables1,
+        variables2: state.variables2,
+        blob: state.blob,
+        stream: state.stream,
+        x: 0, y: 0,
+        h: 2, w: 2,
+    }, !!state.id);
+};
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const createWidget = (control, edit) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* EDIT                                                                                                           */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(edit)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        widgetDict[control.id].gridstack.removeWidget(widgetDict[control.id], true, false);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const old = configStore.globals.interfaceControls[control.id];
+
+        control.x = old.x;
+        control.y = old.y;
+        control.h = old.h;
+        control.w = old.w;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* CREATE                                                                                                         */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const el = document.querySelector(`[data-title="${control.panel}"]`);
+
+    if(el)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const widget = el.gridstack.addWidget({
+            x: control.x,
+            y: control.y,
+            h: control.h,
+            w: control.w,
+            content: (
+                '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
+                +
+                '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
+            ),
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(control.id);
+
+        widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(control.id);
+
+        widget.gridstack = el.gridstack;
+
+        widget.metric = control;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        configStore.globals.interfaceControls[control.id] = control;
+
+        widgetDict[control.id] = widget;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const updateWidget = (_, widget) => {
+
+    widget.metric.x = widget.gridstackNode.x;
+    widget.metric.y = widget.gridstackNode.y;
+    widget.metric.h = widget.gridstackNode.h;
+    widget.metric.w = widget.gridstackNode.w;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const removeWidget = (_, widget) => {
+
+    delete configStore.globals.interfaceControls[widget.metric.id];
+
+    delete widgetDict[widget.metric.id];
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -133,15 +263,54 @@ const newWidgetStep2 = () => {
 
 onMounted(() => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     editor = createJSONEditor({
         target: jsonEditor.value,
         props: {
-            content: state.options,
+            json: state.options,
             onChange: (options) => {
                 state.options = options;
             }
         }
     });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(nyxStore.isConnected)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        GridStack.renderCB = (el, w) => {
+
+            el.innerHTML = w.content;
+        };
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        GridStack.initAll({float: true, removable: '#AAE7F472'}).forEach((grid) => {
+
+            grid.on('resizestop', updateWidget);
+
+            grid.on('dragstop', updateWidget);
+
+            grid.on('removed', (e, items) => {
+
+                items.forEach((item) => {
+
+                    removeWidget(e, item.el);
+                });
+            });
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        Object.values(configStore.globals.interfaceControls).forEach((control) => createWidget(control, false));
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -158,11 +327,7 @@ onMounted(() => {
 
             <tab-pane class="align-items-center justify-content-center" :title="interfaceName" v-for="(interfaceName, interfaceIndex) in configStore.globals.interfacePanels" :key="interfaceIndex">
 
-                <div class="grid-stack h-100 w-100" :data-title="interfaceName">
-
-
-
-                </div>
+                <div class="grid-stack h-100 w-100" :data-title="interfaceName"></div>
 
             </tab-pane>
 
@@ -244,7 +409,7 @@ onMounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="[]" v-model="state.control" />
+                                                :options="[{value: 'yok', label: 'yok'}]" v-model="state.control" />
                                         </div>
                                     </div>
                                 </div>
@@ -304,7 +469,7 @@ onMounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="Object.keys(nyxStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric1" />
+                                        :options="nyxStore.variableDefs" v-model="state.variables1" />
                                 </div>
 
                                 <div class="mb-3" v-if="state.mode === MODE_SCATTER">
@@ -316,7 +481,7 @@ onMounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="Object.keys(nyxStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric1" />
+                                        :options="nyxStore.variableDefs" v-model="state.variables1" />
                                 </div>
 
                                 <div class="mb-3" v-if="state.mode === MODE_SCATTER">
@@ -328,31 +493,31 @@ onMounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="Object.keys(nyxStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric2" />
+                                        :options="nyxStore.variableDefs" v-model="state.variables2" />
                                 </div>
 
                                 <div class="mb-3" v-if="state.mode === MODE_BLOB">
                                     <label class="form-label" for="BBA0018F">BLOB</label>
                                     <multiselect
-                                        mode="tags"
+                                        mode="single"
                                         id="BBA0018F"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="Object.keys(nyxStore.blobs || {}).map((x) => ({value: x, label: x}))" v-model="state.metric1" />
+                                        :options="nyxStore.blobDefs" v-model="state.blobOrStream" />
                                 </div>
 
                                 <div class="mb-3" v-if="state.mode === MODE_STREAM">
                                     <label class="form-label" for="BBA0018F">Stream</label>
                                     <multiselect
-                                        mode="tags"
+                                        mode="single"
                                         id="BBA0018F"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="Object.keys(nyxStore.streams || {}).map((x) => ({value: x, label: x}))" v-model="state.metric1" />
+                                        :options="nyxStore.streamDefs" v-model="state.blobOrStream" />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
