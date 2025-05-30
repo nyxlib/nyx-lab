@@ -36,7 +36,7 @@ const _LOCKER_HTML = `
 
             position: fixed;
 
-            top: 40px;
+            top: 39px;
             bottom: 00px;
 
             left: 4.5rem;
@@ -57,7 +57,7 @@ const _LOCKER_HTML = `
 
         body[data-environment="tauri"][data-maximized="false"] > #DEC2F4DE {
 
-            top: 41px !important;
+            top: 40px !important;
             bottom: 01px !important;
 
             left: 01px !important;
