@@ -61,8 +61,6 @@ const state = reactive({
     panel: '',
     variables1: [],
     variables2: [],
-    blob: null,
-    stream: null,
     options: {},
 });
 
@@ -74,13 +72,9 @@ const isValid = computed(() =>
     !!state.control
     &&
     (
-        (state.mode == MODE_VARIABLE && state.variables1.length > 0 /*--------------------------------------------------*/)
+        (state.mode !== MODE_SCATTER && state.variables1.length > 0 /*--------------------------------------------------*/)
         ||
-        (state.mode == MODE_SCATTER && state.variables1.length > 0 && state.variables1.length === state.variables2.length)
-        ||
-        (state.mode == MODE_BLOB && state.blob)
-        ||
-        (state.mode == MODE_STREAM && state.stream)
+        (state.mode === MODE_SCATTER && state.variables1.length > 0 && state.variables1.length === state.variables2.length)
     )
 );
 
@@ -117,8 +111,6 @@ const newWidgetStep1 = (id = null) => {
         state.panel = control.panel;
         state.variables1 = control.variables1;
         state.variables2 = control.variables2;
-        state.blob = control.blob;
-        state.stream = control.stream;
         editor.set({
             json: control.options || {}
         });
@@ -134,8 +126,6 @@ const newWidgetStep1 = (id = null) => {
         state.panel = '';
         state.variables1 = [];
         state.variables2 = [];
-        state.blob = null;
-        state.stream = null;
         editor.set({
             json: {}
         });
@@ -164,8 +154,6 @@ const newWidgetStep2 = () => {
         panel: state.panel,
         variables1: state.variables1,
         variables2: state.variables2,
-        blob: state.blob,
-        stream: state.stream,
         options: state.options,
         x: 0, y: 0,
         h: 2, w: 2,
@@ -536,25 +524,25 @@ onMounted(() => {
                                 <div class="mb-3" v-if="state.mode === MODE_BLOB">
                                     <label class="form-label" for="BBA0018F">BLOB</label>
                                     <multiselect
-                                        mode="single"
+                                        mode="tags"
                                         id="BBA0018F"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.blobDefs" v-model="state.blob" />
+                                        :options="nyxStore.blobDefs" v-model="state.variables1" />
                                 </div>
 
                                 <div class="mb-3" v-if="state.mode === MODE_STREAM">
                                     <label class="form-label" for="BBA0018F">Stream</label>
                                     <multiselect
-                                        mode="single"
+                                        mode="tags"
                                         id="BBA0018F"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.streamDefs" v-model="state.stream" />
+                                        :options="nyxStore.streamDefs" v-model="state.variables1" />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
