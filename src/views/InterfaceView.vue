@@ -81,6 +81,13 @@ const isValid = computed(() =>
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const controls = computed(() => Object.values(configStore.controls).flatMap((controls) => controls.ctrls).filter((ctrl) => ctrl.mode === state.mode).map((ctrl) => ({
+    value: ctrl.title,
+    label: ctrl.title,
+})));
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const widgetDict = {};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -350,6 +357,8 @@ onMounted(() => {
 
     <div class="d-flex flex-column overflow-y-auto h-100 w-100 p-3">
 
+        {{controls}}
+
         <nav-tabs margin="mb-3">
 
             <!-- *************************************************************************************************** -->
@@ -452,7 +461,7 @@ onMounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="[{value: 'yok', label: 'yok'}]" v-model="state.control" />
+                                                :options="controls" v-model="state.control" />
                                         </div>
                                     </div>
                                 </div>
