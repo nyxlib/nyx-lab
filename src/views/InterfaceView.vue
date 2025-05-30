@@ -78,9 +78,9 @@ const isValid = computed(() =>
         ||
         (state.mode == MODE_SCATTER && state.variables1.length > 0 && state.variables1.length === state.variables2.length)
         ||
-        (state.mode == MODE_BLOB && state.blobOrStream)
+        (state.mode == MODE_BLOB && state.blob)
         ||
-        (state.mode == MODE_STREAM && state.blobOrStream)
+        (state.mode == MODE_STREAM && state.stream)
     )
 );
 
@@ -119,7 +119,9 @@ const newWidgetStep1 = (id = null) => {
         state.variables2 = control.variables2;
         state.blob = control.blob;
         state.stream = control.stream;
-        state.options = control.options;
+        editor.set({
+            json: control.options || {}
+        });
     }
     else
     {
@@ -134,7 +136,9 @@ const newWidgetStep1 = (id = null) => {
         state.variables2 = [];
         state.blob = null;
         state.stream = null;
-        state.options = {};
+        editor.set({
+            json: {}
+        });
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -162,6 +166,7 @@ const newWidgetStep2 = () => {
         variables2: state.variables2,
         blob: state.blob,
         stream: state.stream,
+        options: state.options,
         x: 0, y: 0,
         h: 2, w: 2,
     }, !!state.id);
@@ -292,7 +297,6 @@ onMounted(() => {
         editor = createJSONEditor({
             target: jsonEditor.value,
             props: {
-                json: state.options,
                 onChange: (options) => {
                     state.options = options;
                 }
@@ -342,7 +346,7 @@ onMounted(() => {
     <!-- DASHBOARDS                                                                                                  -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="d-flex flex-column h-100 w-100 p-3">
+    <div class="d-flex flex-column overflow-y-auto h-100 w-100 p-3">
 
         <nav-tabs margin="mb-3">
 
@@ -538,7 +542,7 @@ onMounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.blobDefs" v-model="state.blobOrStream" />
+                                        :options="nyxStore.blobDefs" v-model="state.blob" />
                                 </div>
 
                                 <div class="mb-3" v-if="state.mode === MODE_STREAM">
@@ -550,7 +554,7 @@ onMounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.streamDefs" v-model="state.blobOrStream" />
+                                        :options="nyxStore.streamDefs" v-model="state.stream" />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
