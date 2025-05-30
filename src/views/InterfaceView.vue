@@ -357,8 +357,6 @@ onMounted(() => {
 
     <div class="d-flex flex-column overflow-y-auto h-100 w-100 p-3">
 
-        {{controls}}
-
         <nav-tabs margin="mb-3">
 
             <!-- *************************************************************************************************** -->
