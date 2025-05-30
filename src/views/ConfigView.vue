@@ -61,7 +61,7 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="h-100 w-100 overflow-y-auto p-3">
+    <div class="overflow-y-auto h-100 w-100 p-3">
 
         <!--*********************************************************************************************************-->
 
@@ -162,7 +162,7 @@ onMounted(() => {
 
                                         <div class="mb-3">
                                             <label class="form-label" for="C8206AA4">Columns</label>
-                                            <input class="form-control form-control-sm" type="number" min="0" max="16" step="1" required="required" v-model="configStore.globals.interfaceColumns" />
+                                            <input class="form-control form-control-sm" type="number" min="0" max="64" step="1" required="required" v-model="configStore.globals.interfaceColumns" />
                                         </div>
 
                                         <div class="mb-3">

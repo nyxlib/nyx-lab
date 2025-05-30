@@ -17,7 +17,7 @@ import App from './App.vue';
 import router from './router';
 
 import dialog from './plugins/dialog';
-import geolocation from './plugins/geolocation.js';
+import geoloc from './plugins/geoloc';
 import input from './plugins/input';
 
 import addon from './plugins/addon';
@@ -63,7 +63,7 @@ setup(app);
 
 app.use(router);
 app.use(dialog);
-app.use(geolocation);
+app.use(geoloc);
 app.use(input);
 app.use(addon);
 

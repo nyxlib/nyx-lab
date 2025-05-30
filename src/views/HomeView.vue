@@ -52,7 +52,7 @@ const disconnect = () => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="h-100 w-100 overflow-y-auto p-3">
+    <div class="overflow-y-auto h-100 w-100 p-3">
 
         <nyx-dashboard @connect="connect" @disconnect="disconnect" />
 

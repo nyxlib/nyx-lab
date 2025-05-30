@@ -1,17 +1,16 @@
 <!--suppress ALL, HtmlUnknownAttribute -->
-
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { ref, computed, reactive, onMounted } from 'vue';
+import {ref, computed, reactive, onMounted} from 'vue';
 
-import { createJSONEditor } from 'vanilla-jsoneditor';
+import {createJSONEditor} from 'vanilla-jsoneditor';
 
 import Multiselect from '@vueform/multiselect';
 
-import { GridStack } from 'gridstack';
+import {Modal, Tooltip} from 'bootstrap';
 
-import { Modal } from 'bootstrap';
+import {GridStack} from 'gridstack';
 
 import * as uuid from 'uuid';
 
@@ -19,7 +18,7 @@ import * as uuid from 'uuid';
 
 import useConfigStore from '../stores/config';
 
-import { useNyxStore } from 'vue-nyx';
+import {useNyxStore} from 'vue-nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -43,6 +42,13 @@ const MODES = [
     {value: MODE_STREAM, label: 'Stream'},
 ];
 
+const SHADOWS = [
+    {value: 'shadow-none', label: 'None'},
+    {value: 'shadow-sm', label: 'Small'},
+    {value: 'shadow', label: 'Regular'},
+    {value: 'shadow-lg', label: 'Large'},
+];
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const state = reactive({
@@ -50,6 +56,7 @@ const state = reactive({
     mode: MODE_VARIABLE,
     divider: 1,
     control: '',
+    shadow: 'shadow',
     title: '',
     panel: '',
     variables1: [],
@@ -105,6 +112,7 @@ const newWidgetStep1 = (id = null) => {
         state.mode = control.mode;
         state.divider = control.divider;
         state.control = control.control;
+        state.shadow = control.shadow;
         state.title = control.title;
         state.panel = control.panel;
         state.variables1 = control.variables1;
@@ -119,6 +127,7 @@ const newWidgetStep1 = (id = null) => {
         state.mode = MODE_VARIABLE;
         state.divider = 1;
         state.control = '';
+        state.shadow = 'shadow';
         state.title = '';
         state.panel = '';
         state.variables1 = [];
@@ -146,6 +155,7 @@ const newWidgetStep2 = () => {
         mode: state.mode,
         divider: state.divider,
         control: state.control,
+        shadow: state.shadow,
         title: state.title,
         panel: state.panel,
         variables1: state.variables1,
@@ -217,9 +227,11 @@ const createWidget = (control, edit) => {
 
         widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(control.id);
 
+        widget.classList.add(control.shadow);
+
         widget.gridstack = el.gridstack;
 
-        widget.metric = control;
+        widget.control = control;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -244,19 +256,19 @@ const clearWidget = (id) => {
 
 const updateWidget = (_, widget) => {
 
-    widget.metric.x = widget.gridstackNode.x;
-    widget.metric.y = widget.gridstackNode.y;
-    widget.metric.h = widget.gridstackNode.h;
-    widget.metric.w = widget.gridstackNode.w;
+    widget.control.x = widget.gridstackNode.x;
+    widget.control.y = widget.gridstackNode.y;
+    widget.control.h = widget.gridstackNode.h;
+    widget.control.w = widget.gridstackNode.w;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const removeWidget = (_, widget) => {
 
-    delete configStore.globals.interfaceControls[widget.metric.id];
+    delete configStore.globals.interfaceControls[widget.control.id];
 
-    delete widgetDict[widget.metric.id];
+    delete widgetDict[widget.control.id];
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -296,7 +308,7 @@ onMounted(() => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        GridStack.initAll({float: true, removable: '#AAE7F472'}).forEach((grid) => {
+        GridStack.initAll({float: true, column: configStore.globals.interfaceColumns, removable: '#AAE7F472'}).forEach((grid) => {
 
             grid.on('resizestop', updateWidget);
 
@@ -325,24 +337,41 @@ onMounted(() => {
 </script>
 
 <template>
+
     <!-- *********************************************************************************************************** -->
-    <!-- DASHBOARD                                                                                                   -->
+    <!-- DASHBOARDS                                                                                                  -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="h-100 w-100 d-flex flex-column p-3">
+    <div class="d-flex flex-column h-100 w-100 p-3">
 
         <nav-tabs margin="mb-3">
 
-            <tab-pane class="align-items-center justify-content-center" :title="interfaceName" v-for="(interfaceName, interfaceIndex) in configStore.globals.interfacePanels" :key="interfaceIndex">
+            <!-- *************************************************************************************************** -->
+
+            <tab-pane :title="interfaceName" v-for="(interfaceName, interfaceIndex) in configStore.globals.interfacePanels" :key="interfaceIndex">
 
                 <div class="grid-stack h-100 w-100" :data-title="interfaceName"></div>
 
             </tab-pane>
 
+            <!-- *************************************************************************************************** -->
+
+            <template v-slot:button>
+
+                <button class="btn btn-sm btn-success" type="button" @click="configStore.save">
+                    <i class="bi bi-check-lg"></i> Save
+                </button>
+
+            </template>
+
+            <!-- *************************************************************************************************** -->
+
         </nav-tabs>
 
     </div>
 
+    <!-- *********************************************************************************************************** -->
+    <!-- BUTTONS                                                                                                     -->
     <!-- *********************************************************************************************************** -->
 
     <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
@@ -427,13 +456,7 @@ onMounted(() => {
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="F938E61B">Title<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Plot title" v-model="state.title" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="C8C721F4">Panel</label>
+                                            <label class="form-label" for="C8C721F4">Shadow</label>
                                             <multiselect
                                                 mode="single"
                                                 id="C8C721F4"
@@ -442,9 +465,30 @@ onMounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="configStore.globals.interfacePanels.map((x) => ({value: x, label: x}))" v-model="state.panel" />
+                                                :options="SHADOWS" v-model="state.shadow" />
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="F938E61B">Title<sup class="text-secondary">opt</sup></label>
+                                            <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Plot title" v-model="state.title" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ******************************************************************************* -->
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="C8C721F4">Panel</label>
+                                    <multiselect
+                                        mode="single"
+                                        id="C8C721F4"
+                                        :required="true"
+                                        :can-clear="false"
+                                        :searchable="true"
+                                        :create-option="false"
+                                        :close-on-select="true"
+                                        :options="configStore.globals.interfacePanels.map((x) => ({value: x, label: x}))" v-model="state.panel" />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
