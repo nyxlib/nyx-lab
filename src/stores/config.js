@@ -91,6 +91,10 @@ const useConfigStore = defineStore('config', {
                 deep: true
             });
 
+            this.addon.init(
+                inject('nyx')
+            );
+
             this.load();
         },
 

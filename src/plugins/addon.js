@@ -15,6 +15,8 @@ import useConfigStore from '../stores/config';
 
 const ADDON_DICT = {};
 
+let _nyx = null;
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -125,7 +127,7 @@ function _load(app, path)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _updateVariables = (name1, name2, fractionDigits) => {
+const _updateVariables_func = (name1, name2, fractionDigits) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -146,7 +148,7 @@ const _updateVariables = (name1, name2, fractionDigits) => {
             }
         }
     }
-    catch(e)
+    catch(_)
     {
         /* IGNORE */
     }
@@ -156,21 +158,39 @@ const _updateVariables = (name1, name2, fractionDigits) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _register_stream_func = (stream, callback) => {
+
+
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _unregister_stream_func = (stream, callback) => {
+
+
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 export default {
 
     install(app)
     {
         app.provide('addon', {
+            init: (nyx) => {
+                _nyx = nyx;
+            },
             /**/
             load: (path) => _load(app, path),
             /**/
             app: () => app,
             router: () => router,
+            nyx: () => _nyx,
             nyxStore: () => useNyxStore(),
             configStore: () => useConfigStore(),
             newId: () => __NYX_UUID__.v4().substring(0, 13),
             /**/
-            updateVariables: _updateVariables,
+            updateVariables: _updateVariables_func,
         });
     }
 };
