@@ -20,6 +20,7 @@ export default [
             'vue/no-mutating-props': 'off',
             'vue/max-attributes-per-line': 'off',
             'vue/multi-word-component-names': 'off',
+            'vue/html-closing-bracket-newline': 'off',
             'vue/no-v-text-v-html-on-component': 'off',
             'vue/multiline-html-element-content-newline': 'off',
             'vue/singleline-html-element-content-newline': 'off',

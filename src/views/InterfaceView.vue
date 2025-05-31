@@ -1,4 +1,4 @@
-<!--suppress ALL, HtmlUnknownAttribute -->
+<!--suppress HtmlUnknownTag, HtmlUnknownAttribute, JSUnresolvedReference, JSUnusedGlobalSymbols -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
