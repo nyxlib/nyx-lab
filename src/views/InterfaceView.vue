@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, computed, reactive, onMounted} from 'vue';
+import {h, ref, render, computed, reactive, onMounted} from 'vue';
 
 import {createJSONEditor} from 'vanilla-jsoneditor';
 
@@ -196,13 +196,13 @@ const createWidget = (control, edit) => {
 
     const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === control.control);
 
-    if(!controlDescr)
+    if(!controlDescr?.component)
     {
         return;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* CREATE CONTROL                                                                                                 */
+    /* RENDER CONTROL                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(edit)
@@ -248,10 +248,6 @@ const createWidget = (control, edit) => {
             '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
             +
             '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
-            +
-            JSON.stringify(controlDescr)
-            +
-            control.control
         ),
     });
 
@@ -269,11 +265,13 @@ const createWidget = (control, edit) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    render(h(controlDescr.component, control), widget.firstElementChild);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     configStore.globals.interfaceControls[control.id] = control;
 
     widgetDict[control.id] = widget;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
