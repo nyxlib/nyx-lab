@@ -180,23 +180,12 @@ const newWidgetStep2 = () => {
 const createWidget = (widgetDescr, edit) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* GET CONTROL PANEL                                                                                              */
+    /* GET PANEL                                                                                                      */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     const el = document.querySelector(`[data-title="${widgetDescr.panel}"]`);
 
     if(!el)
-    {
-        return;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* GET CONTROL DESCR                                                                                              */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === widgetDescr.control);
-
-    if(!controlDescr?.component)
     {
         return;
     }
@@ -265,7 +254,9 @@ const createWidget = (widgetDescr, edit) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    render(h(controlDescr.component, widgetDescr), widget.firstElementChild);
+    const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === widgetDescr.control);
+
+    if(controlDescr?.component) render(h(controlDescr.component, widgetDescr), widget.firstElementChild);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
