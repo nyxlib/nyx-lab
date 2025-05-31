@@ -108,20 +108,20 @@ const newWidgetStep1 = (id = null) => {
 
     if(id)
     {
-        const control = configStore.globals.interfaceControls[id];
+        const widgetDescr = configStore.globals.interfaceWidgets[id];
 
         state.id = id;
-        state.mode = control.mode;
-        state.divider = control.divider;
-        state.control = control.control;
-        state.showLegende = control.showLegende;
-        state.shadow = control.shadow;
-        state.title = control.title;
-        state.panel = control.panel;
-        state.variables1 = control.variables1;
-        state.variables2 = control.variables2;
+        state.mode = widgetDescr.mode;
+        state.divider = widgetDescr.divider;
+        state.control = widgetDescr.control;
+        state.showLegende = widgetDescr.showLegende;
+        state.shadow = widgetDescr.shadow;
+        state.title = widgetDescr.title;
+        state.panel = widgetDescr.panel;
+        state.variables1 = widgetDescr.variables1;
+        state.variables2 = widgetDescr.variables2;
         editor.set({
-            json: control.options || {}
+            json: widgetDescr.options || {}
         });
     }
     else
@@ -177,13 +177,13 @@ const newWidgetStep2 = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const createWidget = (control, edit) => {
+const createWidget = (widgetDescr, edit) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET CONTROL PANEL                                                                                              */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const el = document.querySelector(`[data-title="${control.panel}"]`);
+    const el = document.querySelector(`[data-title="${widgetDescr.panel}"]`);
 
     if(!el)
     {
@@ -194,7 +194,7 @@ const createWidget = (control, edit) => {
     /* GET CONTROL DESCR                                                                                              */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === control.control);
+    const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === widgetDescr.control);
 
     if(!controlDescr?.component)
     {
@@ -209,16 +209,16 @@ const createWidget = (control, edit) => {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        widgetDict[control.id].gridstack.removeWidget(widgetDict[control.id], true, false);
+        widgetDict[widgetDescr.id].gridstack.removeWidget(widgetDict[widgetDescr.id], true, false);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const old = configStore.globals.interfaceControls[control.id];
+        const old = configStore.globals.interfaceWidgets[widgetDescr.id];
 
-        control.x = old.x;
-        control.y = old.y;
-        control.h = old.h;
-        control.w = old.w;
+        widgetDescr.x = old.x;
+        widgetDescr.y = old.y;
+        widgetDescr.h = old.h;
+        widgetDescr.w = old.w;
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -226,12 +226,12 @@ const createWidget = (control, edit) => {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!control.h) {
-            control.h = Math.round(configStore.globals.interfaceColumns * el.offsetHeight / el.offsetWidth / 4);
+        if(!widgetDescr.h) {
+            widgetDescr.h = Math.round(configStore.globals.interfaceColumns * el.offsetHeight / el.offsetWidth / 4);
         }
 
-        if(!control.w) {
-            control.w = Math.round(configStore.globals.interfaceColumns * 1.000000000000000000000000000000 / 4);
+        if(!widgetDescr.w) {
+            widgetDescr.w = Math.round(configStore.globals.interfaceColumns * 1.000000000000000000000000000000 / 4);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -240,10 +240,10 @@ const createWidget = (control, edit) => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     const widget = el.gridstack.addWidget({
-        x: control.x,
-        y: control.y,
-        h: control.h,
-        w: control.w,
+        x: widgetDescr.x,
+        y: widgetDescr.y,
+        h: widgetDescr.h,
+        w: widgetDescr.w,
         content: (
             '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
             +
@@ -253,25 +253,25 @@ const createWidget = (control, edit) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(control.id);
+    widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(widgetDescr.id);
 
-    widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(control.id);
+    widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(widgetDescr.id);
 
-    widget.classList.add(control.shadow);
+    widget.classList.add(widgetDescr.shadow);
 
     widget.gridstack = el.gridstack;
 
-    widget.control = control;
+    widget.descr = widgetDescr;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    render(h(controlDescr.component, control), widget.firstElementChild);
+    render(h(controlDescr.component, widgetDescr), widget.firstElementChild);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    configStore.globals.interfaceControls[control.id] = control;
+    configStore.globals.interfaceWidgets[widgetDescr.id] = widgetDescr;
 
-    widgetDict[control.id] = widget;
+    widgetDict[widgetDescr.id] = widget;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -287,19 +287,19 @@ const clearWidget = (id) => {
 
 const updateWidget = (_, widget) => {
 
-    widget.control.x = widget.gridstackNode.x;
-    widget.control.y = widget.gridstackNode.y;
-    widget.control.h = widget.gridstackNode.h;
-    widget.control.w = widget.gridstackNode.w;
+    widget.descr.x = widget.gridstackNode.x;
+    widget.descr.y = widget.gridstackNode.y;
+    widget.descr.h = widget.gridstackNode.h;
+    widget.descr.w = widget.gridstackNode.w;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const removeWidget = (_, widget) => {
 
-    delete configStore.globals.interfaceControls[widget.control.id];
+    delete configStore.globals.interfaceWidgets[widget.descr.id];
 
-    delete widgetDict[widget.control.id];
+    delete widgetDict[widget.descr.id];
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -319,17 +319,7 @@ onMounted(() => {
     if(nyxStore.isConnected)
     {
         /*------------------------------------------------------------------------------------------------------------*/
-
-        editor = createJSONEditor({
-            target: jsonEditor.value,
-            props: {
-                onChange: (options) => {
-
-                    state.options = options;
-                }
-            }
-        });
-
+        /* SETUP GRIDSTACK                                                                                            */
         /*------------------------------------------------------------------------------------------------------------*/
 
         GridStack.renderCB = (el, w) => {
@@ -355,8 +345,24 @@ onMounted(() => {
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
+        /* SETUP JSONEDITOR                                                                                           */
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        Object.values(configStore.globals.interfaceControls).forEach((control) => createWidget(control, false));
+        editor = createJSONEditor({
+            target: jsonEditor.value,
+            props: {
+                onChange: (options) => {
+
+                    state.options = options;
+                }
+            }
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* RENDER WIDGETS                                                                                             */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        Object.values(configStore.globals.interfaceWidgets).forEach((control) => createWidget(control, false));
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
