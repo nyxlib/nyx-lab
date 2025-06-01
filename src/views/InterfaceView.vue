@@ -320,13 +320,6 @@ onMounted(() => {
         /* SETUP GRID STACK                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        GridStack.renderCB = (el, w) => {
-
-            el.innerHTML = w.content;
-        };
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
         GridStack.initAll({float: true, column: configStore.globals.interfaceColumns, removable: '#AAE7F472'}).forEach((grid) => {
 
             grid.on('resizestop', updateWidget);

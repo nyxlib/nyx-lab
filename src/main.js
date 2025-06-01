@@ -3,6 +3,8 @@
 
 import * as Vue from 'vue';
 
+import * as gridstack from 'gridstack';
+
 import * as VueRouter from 'vue-router';
 
 import * as os from '@tauri-apps/plugin-os';
@@ -54,6 +56,10 @@ else
 {
     window.__NYX_OS_TYPE__ = os.type();
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+gridstack.GridStack.renderCB = (el, w) => el.innerHTML = w.content;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
