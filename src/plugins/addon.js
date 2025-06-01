@@ -142,15 +142,11 @@ const _registerAppPanel_func = (addonName, id, path, title, logo, component) => 
 
     useConfigStore().appPanels[addonName].panels.push({
         id: id.trim(),
+        name: id.trim(),
         path: path.trim(),
         title: title.trim(),
         logo: logo.trim(),
-    });
-
-    router.addRoute({
-        name: id.trim(),
-        path: path.trim(),
-        component: component,
+        component: markRaw(component),
     });
 };
 
@@ -161,7 +157,7 @@ const _registerControl_func = (addonName, id, title, mode, options, component) =
     useConfigStore().controls[addonName].ctrls.push({
         id: id.trim(),
         title: title.trim(),
-        mode: mode,
+        mode: mode.trim(),
         options: options,
         component: markRaw(component),
     });
