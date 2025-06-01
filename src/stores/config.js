@@ -143,14 +143,14 @@ const useConfigStore = defineStore('config', {
                     this.appPanels[name] = {descr: descr, addon: addon, panels: []};
                     this.controls[name] = {descr: descr, addon: addon, ctrls: []};
 
-                    addon.start(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name].panels, this.appPanels[name].panels, this.controls[name].ctrls);
+                    addon.start(this.addon, name);
                 }
             }
             else
             {
                 if(typeof addon.stop === 'function')
                 {
-                    addon.stop(this.addon.app(), this.addon.router(), this.addon, name, this.confPanels[name].panels, this.appPanels[name].panels, this.controls[name].ctrls);
+                    addon.stop(this.addon, name);
 
                     delete this.confPanels[name];
                     delete this.appPanels[name];

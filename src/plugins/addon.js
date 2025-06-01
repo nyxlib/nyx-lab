@@ -1,6 +1,8 @@
 // noinspection JSUnresolvedReference, JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import {markRaw} from 'vue';
+
 import {useNyxStore} from 'vue-nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -125,6 +127,48 @@ function _load(app, path)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _registerConfPanel_func = (addonName, id, title, component) => {
+
+    useConfigStore().confPanels[addonName].panels.push({
+        id: id.trim(),
+        title: title.trim(),
+        component: markRaw(component),
+    });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _registerAppPanel_func = (addonName, id, path, title, logo, component) => {
+
+    useConfigStore().appPanels[addonName].panels.push({
+        id: id.trim(),
+        path: path.trim(),
+        title: title.trim(),
+        logo: logo.trim(),
+    });
+
+    router.addRoute({
+        name: id.trim(),
+        path: path.trim(),
+        component: component,
+    });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _registerControl_func = (addonName, id, title, mode, options, component) => {
+
+    useConfigStore().controls[addonName].ctrls.push({
+        id: id.trim(),
+        title: title.trim(),
+        mode: mode,
+        options: options,
+        component: markRaw(component),
+    });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const _updateVariables_func = (name1, name2, fractionDigits) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -168,6 +212,10 @@ export default {
             nyxStore: () => useNyxStore(),
             configStore: () => useConfigStore(),
             newId: () => __NYX_UUID__.v4().substring(0, 13),
+            /**/
+            registerConfPanel: _registerConfPanel_func,
+            registerAppPanel: _registerAppPanel_func,
+            registerControl: _registerControl_func,
             /**/
             updateVariables: _updateVariables_func,
         });
