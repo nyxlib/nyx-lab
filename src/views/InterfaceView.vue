@@ -96,6 +96,8 @@ const controlModal = ref(null);
 
 const jsonEditor = ref(null);
 
+let appContext = null;
+
 let editor = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -166,7 +168,7 @@ const newWidgetStep2 = () => {
         variables1: state.variables1,
         variables2: state.variables2,
         options: state.options,
-    }, !!state.id);
+    }, !state.id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -177,7 +179,7 @@ const newWidgetStep2 = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const createWidget = (widgetDescr, edit) => {
+const createWidget = (widgetDescr, create = true) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PANEL                                                                                                      */
@@ -194,28 +196,9 @@ const createWidget = (widgetDescr, edit) => {
     /* RENDER CONTROL                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(edit)
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
+    let widget;
 
-        render(null, widgetDict[widgetDescr.id].firstElementChild);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        widgetDict[widgetDescr.id].gridstack.removeWidget(widgetDict[widgetDescr.id], true, false);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        const old = configStore.globals.interfaceWidgets[widgetDescr.id];
-
-        widgetDescr.x = old.x;
-        widgetDescr.y = old.y;
-        widgetDescr.h = old.h;
-        widgetDescr.w = old.w;
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    }
-    else
+    if(create)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -228,33 +211,52 @@ const createWidget = (widgetDescr, edit) => {
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
+
+        widget = el.gridstack.addWidget({
+            x: widgetDescr.x,
+            y: widgetDescr.y,
+            h: widgetDescr.h,
+            w: widgetDescr.w,
+            content: (
+                '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
+                +
+                '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
+            ),
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(widgetDescr.id);
+
+        widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(widgetDescr.id);
+
+        widget.classList.add(widgetDescr.shadow);
+
+        widget.descr = widgetDescr;
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
+    else
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+        widget = widgetDict[widgetDescr.id];
 
-    const widget = el.gridstack.addWidget({
-        x: widgetDescr.x,
-        y: widgetDescr.y,
-        h: widgetDescr.h,
-        w: widgetDescr.w,
-        content: (
-            '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
-            +
-            '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
-        ),
-    });
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+        render(null, widget.firstElementChild);
 
-    widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(widgetDescr.id);
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(widgetDescr.id);
+        const old = configStore.globals.interfaceWidgets[widgetDescr.id];
 
-    widget.classList.add(widgetDescr.shadow);
+        widgetDescr.x = old.x;
+        widgetDescr.y = old.y;
+        widgetDescr.h = old.h;
+        widgetDescr.w = old.w;
 
-    widget.gridstack = el.gridstack;
-
-    widget.descr = widgetDescr;
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -264,7 +266,7 @@ const createWidget = (widgetDescr, edit) => {
     {
         const vnode = h(controlDescr.component, widgetDescr);
 
-        vnode.appContext = getCurrentInstance()?.appContext;
+        vnode.appContext = /*---*/ appContext /*---*/;
 
         render(vnode, widget.firstElementChild);
     }
@@ -280,14 +282,24 @@ const createWidget = (widgetDescr, edit) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const clearWidget = (id) => {
+const removeWidget = (widget) => {
 
-    alert(id);
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    render(null, widget.firstElementChild);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    delete configStore.globals.interfaceWidgets[widget.descr.id];
+
+    delete widgetDict[widget.descr.id];
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const updateWidget = (_, widget) => {
+const updateWidget = (widget) => {
 
     widget.descr.x = widget.gridstackNode.x;
     widget.descr.y = widget.gridstackNode.y;
@@ -297,13 +309,9 @@ const updateWidget = (_, widget) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const removeWidget = (_, widget) => {
+const clearWidget = (id) => {
 
-    delete configStore.globals.interfaceWidgets[widget.descr.id];
-
-    render(null, widget.firstElementChild);
-
-    delete widgetDict[widget.descr.id];
+    alert(id);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -312,7 +320,11 @@ const removeWidget = (_, widget) => {
 
 onMounted(() => {
 
-    /*------------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    appContext = getCurrentInstance()?.appContext;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     Tooltip.getOrCreateInstance(document.body, {
         selector: '[data-bs-title]'
@@ -328,16 +340,16 @@ onMounted(() => {
 
         GridStack.initAll({float: true, column: configStore.globals.interfaceColumns, removable: '#AAE7F472'}).forEach((grid) => {
 
-            grid.on('resizestop', updateWidget);
+            grid.on('resizestop', (_, el) => updateWidget(el));
 
-            grid.on('dragstop', updateWidget);
+            grid.on('dragstop', (_, el) => updateWidget(el));
 
-            grid.on('removed', (e, items) => {
+            grid.on('removed', (_, items) => {
 
-                items.forEach((item) => {
-
-                    removeWidget(e, item.el);
-                });
+                for(const item of items)
+                {
+                    removeWidget(item.el);
+                }
             });
         });
 
@@ -359,7 +371,7 @@ onMounted(() => {
         /* RENDER WIDGETS                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        Object.values(configStore.globals.interfaceWidgets).forEach((control) => createWidget(control, false));
+        Object.values(configStore.globals.interfaceWidgets).forEach((control) => createWidget(control, true));
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
