@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {h, ref, render, computed, reactive, onMounted, getCurrentInstance} from 'vue';
+import {h, ref, render, computed, reactive, onMounted, onUnmounted, getCurrentInstance} from 'vue';
 
 import {createJSONEditor} from 'vanilla-jsoneditor';
 
@@ -198,6 +198,10 @@ const createWidget = (widgetDescr, edit) => {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
+        render(null, widgetDict[widgetDescr.id].firstElementChild);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         widgetDict[widgetDescr.id].gridstack.removeWidget(widgetDict[widgetDescr.id], true, false);
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -297,6 +301,8 @@ const removeWidget = (_, widget) => {
 
     delete configStore.globals.interfaceWidgets[widget.descr.id];
 
+    render(null, widget.firstElementChild);
+
     delete widgetDict[widget.descr.id];
 };
 
@@ -359,6 +365,16 @@ onMounted(() => {
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onUnmounted(() => {
+
+    for(const widget of Object.values(widgetDict))
+    {
+        render(null, widget.firstElementChild);
+    }
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
