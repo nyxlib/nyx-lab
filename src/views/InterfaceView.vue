@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {h, ref, render, computed, reactive, onMounted,          getCurrentInstance} from 'vue';
+import {h, ref, render, computed, reactive, onMounted, getCurrentInstance} from 'vue';
 
 import {createJSONEditor} from 'vanilla-jsoneditor';
 
