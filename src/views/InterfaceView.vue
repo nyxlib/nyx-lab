@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {h, ref, render, computed, reactive, onMounted} from 'vue';
+import {h, ref, render, computed, reactive, onMounted,          getCurrentInstance} from 'vue';
 
 import {createJSONEditor} from 'vanilla-jsoneditor';
 
@@ -256,7 +256,14 @@ const createWidget = (widgetDescr, edit) => {
 
     const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === widgetDescr.control);
 
-    if(controlDescr?.component) render(h(controlDescr.component, widgetDescr), widget.firstElementChild);
+    if(controlDescr?.component)
+    {
+        const vnode = h(controlDescr.component, widgetDescr);
+
+        vnode.appContext = getCurrentInstance()?.appContext;
+
+        render(vnode, widget.firstElementChild);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

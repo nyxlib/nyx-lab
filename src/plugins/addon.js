@@ -15,8 +15,6 @@ import useConfigStore from '../stores/config';
 
 const _addonDict = {};
 
-let _nyx = null;
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -163,15 +161,10 @@ export default {
     install(app)
     {
         app.provide('addon', {
-            init: (nyx) => {
-                _nyx = nyx;
-            },
-            /**/
             load: (path) => _load(app, path),
             /**/
             app: () => app,
             router: () => router,
-            nyx: () => _nyx,
             nyxStore: () => useNyxStore(),
             configStore: () => useConfigStore(),
             newId: () => __NYX_UUID__.v4().substring(0, 13),
