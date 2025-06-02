@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {h, ref, render, computed, reactive, onMounted, onUnmounted, getCurrentInstance} from 'vue';
+import {h, ref, watch, render, computed, reactive, onMounted, onUnmounted, getCurrentInstance} from 'vue';
 
 import {createJSONEditor} from 'vanilla-jsoneditor';
 
@@ -107,6 +107,8 @@ const newWidgetStep1 = (id = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    let options;
+
     if(id)
     {
         const widgetDescr = configStore.globals.interfaceWidgets[id];
@@ -121,9 +123,8 @@ const newWidgetStep1 = (id = null) => {
         state.panel = widgetDescr.panel;
         state.variables1 = widgetDescr.variables1;
         state.variables2 = widgetDescr.variables2;
-        editor.set({
-            json: widgetDescr.options || {}
-        });
+
+        options = widgetDescr.options || {};
     }
     else
     {
@@ -137,14 +138,21 @@ const newWidgetStep1 = (id = null) => {
         state.panel = '';
         state.variables1 = [];
         state.variables2 = [];
-        editor.set({
-            json: {}
-        });
+
+        options = {};
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     Modal.getOrCreateInstance(controlModal.value).show();
+
+    setTimeout(() => {
+
+        editor.set({
+            json: options
+        });
+
+    }, 500);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -166,6 +174,7 @@ const newWidgetStep2 = () => {
         panel: state.panel,
         variables1: state.variables1,
         variables2: state.variables2,
+        options: editor.get(),
     }, !state.id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -215,7 +224,7 @@ const createWidget = (widgetDescr, create = true) => {
             y: widgetDescr.y,
             h: widgetDescr.h,
             w: widgetDescr.w,
-            content: '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: -0px; top: -4px;"></i>'
+            content: '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: -4px; top: -8px;"></i>'
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -249,10 +258,6 @@ const createWidget = (widgetDescr, create = true) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    widgetDescr.options = editor.get();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -305,6 +310,26 @@ const updateWidget = (widget) => {
     widget.descr.y = widget.gridstackNode.y;
     widget.descr.h = widget.gridstackNode.h;
     widget.descr.w = widget.gridstackNode.w;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const setDefaultOptions = (id) => {
+
+    const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === id);
+
+    if(controlDescr?.options)
+    {
+        editor.set({
+            json: controlDescr.options
+        });
+    }
+    else
+    {
+        editor.set({
+            json: {}
+        });
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -487,7 +512,7 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="controls" v-model="state.control" />
+                                                :options="controls" v-model="state.control" @change="setDefaultOptions" />
                                         </div>
                                     </div>
                                 </div>
