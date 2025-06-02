@@ -62,7 +62,6 @@ const state = reactive({
     panel: '',
     variables1: [],
     variables2: [],
-    options: {},
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -167,7 +166,6 @@ const newWidgetStep2 = () => {
         panel: state.panel,
         variables1: state.variables1,
         variables2: state.variables2,
-        options: state.options,
     }, !state.id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -217,18 +215,12 @@ const createWidget = (widgetDescr, create = true) => {
             y: widgetDescr.y,
             h: widgetDescr.h,
             w: widgetDescr.w,
-            content: (
-                '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
-                +
-                '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
-            ),
+            content: '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: -0px; top: -4px;"></i>'
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(widgetDescr.id);
-
-        widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(widgetDescr.id);
 
         widget.classList.add(widgetDescr.shadow);
 
@@ -260,15 +252,23 @@ const createWidget = (widgetDescr, create = true) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    widgetDescr.options = editor.get();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === widgetDescr.control);
 
     if(controlDescr?.component)
     {
-        const vnode = h(controlDescr.component, widgetDescr);
+        setTimeout(() => {
 
-        vnode.appContext = /*---*/ appContext /*---*/;
+            const vnode = h(controlDescr.component, widgetDescr);
 
-        render(vnode, widget.firstElementChild);
+            vnode.appContext = /*---*/ appContext /*---*/;
+
+            render(vnode, widget.firstElementChild);
+
+        }, 250);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -305,13 +305,6 @@ const updateWidget = (widget) => {
     widget.descr.y = widget.gridstackNode.y;
     widget.descr.h = widget.gridstackNode.h;
     widget.descr.w = widget.gridstackNode.w;
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const clearWidget = (id) => {
-
-    alert(id);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -357,15 +350,7 @@ onMounted(() => {
         /* SETUP JSON EDITOR                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        editor = createJSONEditor({
-            target: jsonEditor.value,
-            props: {
-                onChange: (options) => {
-
-                    state.options = options;
-                }
-            }
-        });
+        editor = createJSONEditor({target: jsonEditor.value});
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* RENDER WIDGETS                                                                                             */
