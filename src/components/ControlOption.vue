@@ -3,6 +3,10 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import {ref, watch} from 'vue';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const props = defineProps({
     type: {
         type: String,
@@ -40,11 +44,25 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const uid = __NYX_UUID__.v4()
+const value = ref(props.modelValue ?? props.defaultValue);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+watch(() => props.modelValue, (_value) => {
+
+    if(_value !== value.value)
+    {
+        value.value = _value;
+    }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const uid = __NYX_UUID__.v4();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -52,42 +70,65 @@ const uid = __NYX_UUID__.v4()
 <template>
 
     <!-- *********************************************************************************************************** -->
+    <!-- BOOL                                                                                                        -->
+    <!-- *********************************************************************************************************** -->
 
     <div class="row mb-2" v-if="props.type.toLowerCase() === 'bool'">
         <label class="col-sm-3 col-form-label" :for="uid">
             {{ props.label }}
         </label>
         <div class="col-sm-9">
-            <select class="form-select form-select-sm" @change="emit('update:modelValue', $event.target.value === 'true')" :id="uid">
-                <option value="true" :selected="String(props.modelValue ?? props.defaultValue) === 'true'">true</option>
-                <option value="false" :selected="String(props.modelValue ?? props.defaultValue) !== 'true'">false</option>
+            <select class="form-select form-select-sm" :id="uid"
+                :value="String(value) === 'true' ? 'true' : 'false'"
+                    @change="(e) => {
+                    const _value = e.target.value === 'true';
+                    emit('update:modelValue', _value);
+                    value.value = _value;
+                }"
+            >
+                <option value="true">true</option>
+                <option value="false">false</option>
             </select>
         </div>
     </div>
 
     <!-- *********************************************************************************************************** -->
+    <!-- STRING                                                                                                      -->
+    <!-- *********************************************************************************************************** -->
 
     <div class="row mb-2" v-if="props.type.toLowerCase() === 'string'">
         <label class="col-sm-3 col-form-label" :for="uid">
-            <label class="form-label" :for="uid">
-                {{ props.label }}
-            </label>
+            {{ props.label }}
         </label>
         <div class="col-sm-9">
-            <input class="form-control form-control-sm" type="text" :value="props.modelValue ?? props.defaultValue" @input="emit('update:modelValue', $event.target.value)" :id="uid" />
+            <input class="form-control form-control-sm" type="text" :id="uid"
+                :value="value"
+                @input="(e) => {
+                    const _value = e.target.value.trim() ? e.target.value.trim() : null;
+                    emit('update:modelValue', _value);
+                    value.value = _value;
+                }"
+            />
         </div>
     </div>
 
     <!-- *********************************************************************************************************** -->
+    <!-- NUMBER                                                                                                      -->
+    <!-- *********************************************************************************************************** -->
 
     <div class="row mb-2" v-if="props.type.toLowerCase() === 'number'">
         <label class="col-sm-3 col-form-label" :for="uid">
-            <label class="form-label" :for="uid">
-                {{ props.label }}
-            </label>
+            {{ props.label }}
         </label>
         <div class="col-sm-9">
-            <input class="form-control form-control-sm" type="number" :value="props.modelValue ?? props.defaultValue" @input="emit('update:modelValue', $event.target.value !== '' ? $event.target.valueAsNumber : null)" :min="props.min ?? undefined" :max="props.max ?? undefined" :step="props.step ?? undefined" :id="uid" />
+            <input class="form-control form-control-sm" type="number" :id="uid"
+               :value="value"
+                   @input="(e) => {
+                   const _value = e.target.value.trim() ? e.target.valueAsNumber : null;
+                   emit('update:modelValue', _value);
+                   value.value = _value;
+               }"
+            />
         </div>
     </div>
 
