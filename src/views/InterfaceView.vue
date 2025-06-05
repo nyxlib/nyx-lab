@@ -10,8 +10,6 @@ import {Modal, Tooltip} from 'bootstrap';
 
 import {GridStack} from 'gridstack';
 
-import * as uuid from 'uuid';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from '../stores/config';
@@ -89,19 +87,15 @@ const controls = computed(() => Object.values(configStore.controls).flatMap((con
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const options = computed(() => Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.mode === state.mode)?.options ?? []);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const widgetDict = {};
+const options = computed(() => Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === state.control)?.options ?? []);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const controlModal = ref(null);
 
-const jsonEditor = ref(null);
+const widgetDict = {};
 
-let appContext = null;
+let appContext;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -110,8 +104,6 @@ let appContext = null;
 const newWidgetStep1 = (id = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    let options;
 
     if(id)
     {
@@ -158,7 +150,7 @@ const newWidgetStep2 = () => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     createWidget({
-        id: state.id || uuid.v4(),
+        id: state.id || __NYX_UUID__.v4(),
         mode: state.mode,
         divider: state.divider,
         control: state.control,
@@ -609,7 +601,7 @@ onUnmounted(() => {
 
                                 <div v-for="(option, index) in options" :key="index">
 
-                                    <control-option :type="option.type" :name="option.name" :label="option.label" :default-value="option.defaultValue" v-model="state.options[option.name]"></control-option>
+                                    <control-option :type="option.type" :name="option.name" :label="option.label" :min="option.min" :max="option.max" :step="option.step" :default-value="option.defaultValue" v-model="state.options[option.name]"></control-option>
 
                                 </div>
 
