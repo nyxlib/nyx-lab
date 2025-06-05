@@ -78,7 +78,8 @@ const uid = __NYX_UUID__.v4();
             {{ props.label }}
         </label>
         <div class="col-sm-9">
-            <select class="form-select form-select-sm" :id="uid"
+            <select class="form-select form-select-sm"
+                :id="uid"
                 :value="String(value) === 'true' ? 'true' : 'false'"
                 @change="(e) => {
                     const _value = e.target.value === 'true';
@@ -101,7 +102,8 @@ const uid = __NYX_UUID__.v4();
             {{ props.label }}
         </label>
         <div class="col-sm-9">
-            <input class="form-control form-control-sm" type="text" :id="uid"
+            <input class="form-control form-control-sm" type="text"
+                :id="uid"
                 :value="value"
                 @input="(e) => {
                     const _value = e.target.value.trim() ? e.target.value.trim() : null;
@@ -121,7 +123,8 @@ const uid = __NYX_UUID__.v4();
             {{ props.label }}
         </label>
         <div class="col-sm-9">
-            <input class="form-control form-control-sm" type="number" :id="uid"
+            <input class="form-control form-control-sm" type="number"
+               :id="uid"
                :value="value"
                @input="(e) => {
                    const _value = e.target.value.trim() ? e.target.valueAsNumber : null;
