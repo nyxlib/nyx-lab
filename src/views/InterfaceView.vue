@@ -2,9 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {h, ref, watch, render, computed, reactive, onMounted, onUnmounted, getCurrentInstance} from 'vue';
-
-import {createJSONEditor} from 'vanilla-jsoneditor';
+import {h, ref, render, computed, reactive, onMounted, onUnmounted, getCurrentInstance} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -19,6 +17,10 @@ import * as uuid from 'uuid';
 import useConfigStore from '../stores/config';
 
 import {useNyxStore} from 'vue-nyx';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+import ControlOption from '../components/ControlOption.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -87,6 +89,10 @@ const controls = computed(() => Object.values(configStore.controls).flatMap((con
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const options = computed(() => Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.mode === state.mode)?.options ?? []);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const widgetDict = {};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -96,8 +102,6 @@ const controlModal = ref(null);
 const jsonEditor = ref(null);
 
 let appContext = null;
-
-let editor = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -123,8 +127,7 @@ const newWidgetStep1 = (id = null) => {
         state.panel = widgetDescr.panel;
         state.variables1 = widgetDescr.variables1;
         state.variables2 = widgetDescr.variables2;
-
-        options = widgetDescr.options || {};
+        state.options = Object.prototype.toString.call(widgetDescr.options) === '[object Object]' ? widgetDescr.options: {};
     }
     else
     {
@@ -138,21 +141,12 @@ const newWidgetStep1 = (id = null) => {
         state.panel = '';
         state.variables1 = [];
         state.variables2 = [];
-
-        options = {};
+        state.options = {};
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     Modal.getOrCreateInstance(controlModal.value).show();
-
-    setTimeout(() => {
-
-        editor.set({
-            json: options
-        });
-
-    }, 500);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -174,7 +168,7 @@ const newWidgetStep2 = () => {
         panel: state.panel,
         variables1: state.variables1,
         variables2: state.variables2,
-        options: editor.get(),
+        options: state.options,
     }, !state.id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -313,26 +307,6 @@ const updateWidget = (widget) => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-const setDefaultOptions = (id) => {
-
-    const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === id);
-
-    if(controlDescr?.options)
-    {
-        editor.set({
-            json: controlDescr.options
-        });
-    }
-    else
-    {
-        editor.set({
-            json: {}
-        });
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -370,12 +344,6 @@ onMounted(() => {
                 }
             });
         });
-
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* SETUP JSON EDITOR                                                                                           */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        editor = createJSONEditor({target: jsonEditor.value});
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* RENDER WIDGETS                                                                                             */
@@ -512,7 +480,7 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="controls" v-model="state.control" @change="setDefaultOptions" />
+                                                :options="controls" v-model="state.control" />
                                         </div>
                                     </div>
                                 </div>
@@ -639,7 +607,11 @@ onUnmounted(() => {
 
                             <tab-pane title="Options">
 
-                                <div style="height: 400px;" ref="jsonEditor"></div>
+                                <div v-for="(option, index) in options" :key="index">
+
+                                    <control-option :type="option.type" :name="option.name" :label="option.label" :default-value="option.defaultValue" v-model="state.options[option.name]"></control-option>
+
+                                </div>
 
                             </tab-pane>
 
