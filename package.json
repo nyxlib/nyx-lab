@@ -30,6 +30,7 @@
         "@tauri-apps/plugin-shell": "^2.2.1",
         "@tauri-apps/plugin-store": "^2.2.0",
         "@vueform/multiselect": "^2.6.11",
+        "bootstrap": "^5.3.6",
         "bootstrap-icons": "^1.13.1",
         "gridstack": "^12.2.1",
         "marked": "^15.0.12",

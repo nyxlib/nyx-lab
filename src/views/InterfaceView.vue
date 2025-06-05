@@ -1,4 +1,4 @@
-<!--suppress HtmlUnknownTag, JSUnresolvedReference, NpmUsedModulesInstalled -->
+<!--suppress HtmlUnknownTag, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 

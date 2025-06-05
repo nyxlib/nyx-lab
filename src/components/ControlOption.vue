@@ -80,7 +80,7 @@ const uid = __NYX_UUID__.v4();
         <div class="col-sm-9">
             <select class="form-select form-select-sm" :id="uid"
                 :value="String(value) === 'true' ? 'true' : 'false'"
-                    @change="(e) => {
+                @change="(e) => {
                     const _value = e.target.value === 'true';
                     emit('update:modelValue', _value);
                     value.value = _value;
@@ -123,7 +123,7 @@ const uid = __NYX_UUID__.v4();
         <div class="col-sm-9">
             <input class="form-control form-control-sm" type="number" :id="uid"
                :value="value"
-                   @input="(e) => {
+               @input="(e) => {
                    const _value = e.target.value.trim() ? e.target.valueAsNumber : null;
                    emit('update:modelValue', _value);
                    value.value = _value;
