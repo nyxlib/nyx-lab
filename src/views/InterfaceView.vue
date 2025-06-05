@@ -119,7 +119,7 @@ const newWidgetStep1 = (id = null) => {
         state.panel = widgetDescr.panel;
         state.variables1 = widgetDescr.variables1;
         state.variables2 = widgetDescr.variables2;
-        state.options = Object.prototype.toString.call(widgetDescr.options) === '[object Object]' ? widgetDescr.options: {};
+        state.options = widgetDescr.options;
     }
     else
     {
@@ -210,7 +210,15 @@ const createWidget = (widgetDescr, create = true) => {
             y: widgetDescr.y,
             h: widgetDescr.h,
             w: widgetDescr.w,
-            content: '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: -4px; top: -8px;"></i>'
+            content: `
+                <div class="card h-100 w-100 m-0">
+                    <div class="card-header overflow-hidden px-3 py-1">
+                        ${widgetDescr.title} <i class="bi bi-pencil-fill"></i>
+                    </div>
+                    <div class="card-body overflow-hidden px-1 py-1">
+                    </div>
+                </div>
+            `
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -231,7 +239,7 @@ const createWidget = (widgetDescr, create = true) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        render(null, widget.firstElementChild);
+        render(null, widget.querySelector('.card-body'));
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -255,9 +263,9 @@ const createWidget = (widgetDescr, create = true) => {
 
             const vnode = h(controlDescr.component, widgetDescr);
 
-            vnode.appContext = /*---*/ appContext /*---*/;
+            vnode.appContext = /*-----*/ appContext /*-----*/;
 
-            render(vnode, widget.firstElementChild);
+            render(vnode, widget.querySelector('.card-body'));
 
         }, 250);
     }
@@ -322,7 +330,7 @@ onMounted(() => {
         /* SETUP GRID STACK                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        GridStack.initAll({float: true, column: configStore.globals.interfaceColumns, removable: '#AAE7F472'}).forEach((grid) => {
+        GridStack.initAll({float: true, margin: 0, column: configStore.globals.interfaceColumns, removable: '#AAE7F472'}).forEach((grid) => {
 
             grid.on('resizestop', (_, el) => updateWidget(el));
 
@@ -638,3 +646,14 @@ onUnmounted(() => {
     <!-- *********************************************************************************************************** -->
 
 </template>
+
+<style>
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.grid-stack-item {
+
+    border-radius: 50px;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+</style>
