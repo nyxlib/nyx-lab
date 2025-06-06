@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {h, ref, render, computed, reactive, onMounted, onUnmounted, getCurrentInstance} from 'vue';
+import {h, ref, inject, render, computed, reactive, onMounted, onUnmounted, getCurrentInstance} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -27,6 +27,10 @@ import ControlOption from '../components/ControlOption.vue';
 const configStore = useConfigStore();
 
 const nyxStore = useNyxStore();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const dialog = inject('dialog');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -295,24 +299,30 @@ const createWidget = (widgetDescr, create = true) => {
 
 const closeWidget = (widget) => {
 
-    const grid = widget.closest('.grid-stack')?.gridstack;
+    dialog.confirm('Are you sure you want to delete this widget?', 'Nyx Dashboard').then((choice) => {
 
-    if(grid)
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
+        if(choice)
+        {
+            const grid = widget.closest('.grid-stack')?.gridstack;
 
-        render(null, widget.firstElementChild);
+            if(grid)
+            {
+                /*----------------------------------------------------------------------------------------------------*/
 
-        grid.removeWidget(widget, true);
+                render(null, widget.firstElementChild);
 
-        /*------------------------------------------------------------------------------------------------------------*/
+                grid.removeWidget(widget, true);
 
-        delete configStore.globals.interfaceWidgets[widget.descr.id];
+                /*----------------------------------------------------------------------------------------------------*/
 
-        delete widgetDict[widget.descr.id];
+                delete configStore.globals.interfaceWidgets[widget.descr.id];
 
-        /*------------------------------------------------------------------------------------------------------------*/
-    }
+                delete widgetDict[widget.descr.id];
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+        }
+    });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -416,19 +426,6 @@ onUnmounted(() => {
             <!-- *************************************************************************************************** -->
 
         </nav-tabs>
-
-    </div>
-
-    <!-- *********************************************************************************************************** -->
-    <!-- BUTTONS                                                                                                     -->
-    <!-- *********************************************************************************************************** -->
-
-    <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
-
-
-        <button class="btn btn-danger ms-1" type="button" data-bs-placement="top" data-bs-title="Drop here to remove" :disabled="!nyxStore.isConnected" id="AAE7F472">
-            <i class="bi bi-trash2"></i>
-        </button>
 
     </div>
 
