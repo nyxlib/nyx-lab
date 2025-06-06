@@ -1,4 +1,4 @@
-<!--suppress HtmlUnknownTag, JSUnresolvedReference -->
+<!--suppress HtmlUnknownTag, CssUnusedSymbol, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -291,7 +291,7 @@ const createWidget = (widgetDescr, create = true) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const removeWidget = (widget) => {
+const closeWidget = (widget) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
