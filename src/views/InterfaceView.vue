@@ -235,6 +235,8 @@ const createWidget = (widgetDescr, create = true) => {
             closeWidget(widget);
         };
 
+        /*------------------------------------------------------------------------------------------------------------*/
+
         widget.classList.add(widgetDescr.shadow);
 
         widget.descr = widgetDescr;
