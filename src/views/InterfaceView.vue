@@ -6,9 +6,9 @@ import {h, ref, render, computed, reactive, onMounted, onUnmounted, getCurrentIn
 
 import Multiselect from '@vueform/multiselect';
 
-import {Modal, Tooltip} from 'bootstrap';
-
 import {GridStack} from 'gridstack';
+
+import {Modal} from 'bootstrap';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -101,15 +101,15 @@ let appContext;
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const newWidgetStep1 = (id = null) => {
+const newWidget = (widget = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(id)
-    {
-        const widgetDescr = configStore.globals.interfaceWidgets[id];
+    const widgetDescr = widget?.descr;
 
-        state.id = id;
+    if(widgetDescr)
+    {
+        state.id = widgetDescr.id;
         state.mode = widgetDescr.mode;
         state.divider = widgetDescr.divider;
         state.control = widgetDescr.control;
@@ -213,7 +213,9 @@ const createWidget = (widgetDescr, create = true) => {
             content: `
                 <div class="card h-100 w-100 m-0">
                     <div class="card-header overflow-hidden px-3 py-1">
-                        ${widgetDescr.title} <i class="bi bi-pencil-fill"></i>
+                        <span class="widget-title"></span>
+                        <i class="bi bi-pencil" style="cursor: pointer;"></i>
+                        <i class="bi bi-x-lg" style="cursor: pointer;"></i>
                     </div>
                     <div class="card-body overflow-hidden px-1 py-1">
                     </div>
@@ -223,7 +225,15 @@ const createWidget = (widgetDescr, create = true) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(widgetDescr.id);
+        widget.querySelector('.bi-pencil').onclick = () => {
+
+            newWidget(widget);
+        };
+
+        widget.querySelector('.bi-x-lg').onclick = () => {
+
+            closeWidget(widget);
+        };
 
         widget.classList.add(widgetDescr.shadow);
 
@@ -255,19 +265,19 @@ const createWidget = (widgetDescr, create = true) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    widget.querySelector('.widget-title').textContent = widgetDescr.title;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === widgetDescr.control);
 
     if(controlDescr?.component)
     {
-        setTimeout(() => {
+        const vnode = h(controlDescr.component, widgetDescr);
 
-            const vnode = h(controlDescr.component, widgetDescr);
+        vnode.appContext = /*------*/ appContext /*------*/;
 
-            vnode.appContext = /*-----*/ appContext /*-----*/;
-
-            render(vnode, widget.querySelector('.card-body'));
-
-        }, 250);
+        render(vnode, widget.querySelector('.card-body'));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -318,30 +328,22 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Tooltip.getOrCreateInstance(document.body, {
-        selector: '[data-bs-title]'
-    });
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     if(nyxStore.isConnected)
     {
         /*------------------------------------------------------------------------------------------------------------*/
         /* SETUP GRID STACK                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        GridStack.initAll({float: true, margin: 0, column: configStore.globals.interfaceColumns, removable: '#AAE7F472'}).forEach((grid) => {
+        GridStack.initAll({float: true, margin: 0, column: configStore.globals.interfaceColumns}).forEach((grid) => {
 
-            grid.on('resizestop', (_, el) => updateWidget(el));
+            grid.on('resizestop', (_, el) => {
 
-            grid.on('dragstop', (_, el) => updateWidget(el));
+                updateWidget(el)
+            });
 
-            grid.on('removed', (_, items) => {
+            grid.on('dragstop', (_, el) => {
 
-                for(const item of items)
-                {
-                    removeWidget(item.el);
-                }
+                updateWidget(el)
             });
         });
 
@@ -392,7 +394,11 @@ onUnmounted(() => {
 
             <template v-slot:button>
 
-                <button class="btn btn-sm btn-success" type="button" @click="configStore.save">
+                <button class="btn btn-sm btn-primary ms-0" type="button" :disabled="!nyxStore.isConnected" @click="newWidget()">
+                    <i class="bi bi-plus-lg"></i> New widget
+                </button>
+
+                <button class="btn btn-sm btn-success ms-2" type="button" :disabled="!nyxStore.isConnected" @click="configStore.save()">
                     <i class="bi bi-check-lg"></i> Save
                 </button>
 
@@ -410,9 +416,6 @@ onUnmounted(() => {
 
     <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
 
-        <button class="btn btn-primary ms-0" type="button" data-bs-placement="top" data-bs-title="Add a new widget" :disabled="!nyxStore.isConnected" @click="newWidgetStep1(null)">
-            <i class="bi bi-plus-lg"></i>
-        </button>
 
         <button class="btn btn-danger ms-1" type="button" data-bs-placement="top" data-bs-title="Drop here to remove" :disabled="!nyxStore.isConnected" id="AAE7F472">
             <i class="bi bi-trash2"></i>
@@ -538,7 +541,7 @@ onUnmounted(() => {
                                 <!-- ******************************************************************************* -->
 
                                 <div class="mb-3" v-if="state.mode === MODE_VARIABLE ">
-                                    <label class="form-label" for="BBA0018F">Y variable</label>
+                                    <label class="form-label" for="BBA0018F">Variable</label>
                                     <multiselect
                                         mode="tags"
                                         id="BBA0018F"
@@ -548,6 +551,8 @@ onUnmounted(() => {
                                         :close-on-select="true"
                                         :options="nyxStore.variableDefs" v-model="state.variables1" />
                                 </div>
+
+                                <!-- ******************************************************************************* -->
 
                                 <div class="mb-3" v-if="state.mode === MODE_SCATTER">
                                     <label class="form-label" for="BBA0018F">Y variable</label>
@@ -560,6 +565,8 @@ onUnmounted(() => {
                                         :close-on-select="true"
                                         :options="nyxStore.variableDefs" v-model="state.variables1" />
                                 </div>
+
+                                <!-- ******************************************************************************* -->
 
                                 <div class="mb-3" v-if="state.mode === MODE_SCATTER">
                                     <label class="form-label" for="B5D75D1E">X variable</label>
@@ -573,6 +580,8 @@ onUnmounted(() => {
                                         :options="nyxStore.variableDefs" v-model="state.variables2" />
                                 </div>
 
+                                <!-- ******************************************************************************* -->
+
                                 <div class="mb-3" v-if="state.mode === MODE_BLOB">
                                     <label class="form-label" for="BBA0018F">BLOB</label>
                                     <multiselect
@@ -584,6 +593,8 @@ onUnmounted(() => {
                                         :close-on-select="true"
                                         :options="nyxStore.blobDefs" v-model="state.variables1" />
                                 </div>
+
+                                <!-- ******************************************************************************* -->
 
                                 <div class="mb-3" v-if="state.mode === MODE_STREAM">
                                     <label class="form-label" for="BBA0018F">Stream</label>
@@ -652,7 +663,7 @@ onUnmounted(() => {
 
 .grid-stack-item {
 
-    border-radius: 50px;
+    border-radius: calc(var(--bs-border-radius) + 10px);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
