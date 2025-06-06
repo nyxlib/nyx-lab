@@ -216,13 +216,14 @@ const createWidget = (widgetDescr, create = true) => {
             w: widgetDescr.w,
             content: `
                 <div class="card h-100 w-100 m-0">
-                    <div class="card-header overflow-hidden px-3 py-1">
+                    <div class="card-header px-3 py-1">
                         <span class="widget-title"></span>
-                        <i class="bi bi-pencil" style="cursor: pointer;"></i>
-                        <i class="bi bi-x-lg" style="cursor: pointer;"></i>
+                        <span>
+                            <i class="bi bi-pencil" style="cursor: pointer;"></i>
+                            <i class="bi bi-x-lg" style="cursor: pointer;"></i>
+                        </span>
                     </div>
-                    <div class="card-body overflow-hidden px-1 py-1">
-                    </div>
+                    <div class="card-body px-1 py-1"></div>
                 </div>
             `
         });
@@ -311,13 +312,15 @@ const closeWidget = (widget) => {
 
                 render(null, widget.querySelector('.card-body'));
 
-                grid.removeWidget(widget, true);
-
                 /*----------------------------------------------------------------------------------------------------*/
 
                 delete configStore.globals.interfaceWidgets[widget.descr.id];
 
                 delete widgetDict[widget.descr.id];
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                grid.removeWidget(widget, true);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -363,6 +366,11 @@ onMounted(() => {
             grid.on('dragstop', (_, el) => {
 
                 updateWidget(el)
+            });
+
+            grid.on('removed', (_, el) => {
+
+
             });
         });
 
@@ -670,6 +678,16 @@ onUnmounted(() => {
 .grid-stack-item {
 
     border-radius: calc(var(--bs-border-radius) + 10px);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.grid-stack-item .card-body,
+.grid-stack-item .card-header {
+
+    display: flex;
+    overflow: hidden;
+    justify-content: space-between;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
