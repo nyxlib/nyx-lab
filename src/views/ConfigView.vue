@@ -165,11 +165,6 @@ onMounted(() => {
                                             <input class="form-control form-control-sm" type="number" min="0" max="64" step="1" required="required" v-model="configStore.globals.interfaceColumns" />
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label class="form-label" for="C8206AA4">Refresh interval [ms]</label>
-                                            <input class="form-control form-control-sm" type="number" min="100" max="100000" step="1" required="required" v-model="configStore.globals.interfaceRefreshInterval" />
-                                        </div>
-
                                     </div>
                                 </div>
 

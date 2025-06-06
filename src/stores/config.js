@@ -23,7 +23,6 @@ const DEFAULT_GLOBALS = {
     interfacePanels: [],
     interfaceWidgets: {},
     interfaceColumns: 64,
-    interfaceRefreshInterval: 1000,
     /**/
     addons: {},
     webPages: {},
