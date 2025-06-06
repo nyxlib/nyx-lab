@@ -309,7 +309,7 @@ const closeWidget = (widget) => {
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                render(null, widget.firstElementChild);
+                render(null, widget.querySelector('.card-body'));
 
                 grid.removeWidget(widget, true);
 
@@ -384,7 +384,7 @@ onUnmounted(() => {
 
     for(const widget of Object.values(widgetDict))
     {
-        render(null, widget.firstElementChild);
+        render(null, widget.querySelector('.card-body'));
     }
 });
 
