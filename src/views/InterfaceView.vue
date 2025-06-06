@@ -225,14 +225,14 @@ const createWidget = (widgetDescr, create = true) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        widget.querySelector('.bi-pencil').onclick = (e) => {
+        widget.querySelector('.bi-pencil').onclick = () => {
 
-            newWidget(e.currentTarget);
+            newWidget(widget);
         };
 
-        widget.querySelector('.bi-x-lg').onclick = (e) => {
+        widget.querySelector('.bi-x-lg').onclick = () => {
 
-            closeWidget(e.currentTarget);
+            closeWidget(widget);
         };
 
         widget.classList.add(widgetDescr.shadow);
