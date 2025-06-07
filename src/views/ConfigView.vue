@@ -147,7 +147,6 @@ onMounted(() => {
                                             <label class="form-label" for="C8206AA4">Number of columns</label>
                                             <input class="form-control form-control-sm" type="number" min="0" max="64" step="1" required="required" v-model="configStore.globals.interfaceColumns" />
                                         </div>
-
                                     </div>
                                 </div>
 
