@@ -2,14 +2,12 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject, computed, onMounted, onUnmounted} from 'vue';
+import {ref, watchEffect, onMounted, onUnmounted} from 'vue';
+
+import draggable from 'vuedraggable';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const dialog = inject('dialog');
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
@@ -21,10 +19,27 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addons = computed(() => Object.values(props.addons).sort((x, y) => x.rank - y.rank));
+const sortedAddons = ref([]);
+
+watchEffect(() => {
+
+    sortedAddons.value = Object.values(props.addons).sort((a, b) => a.rank - b.rank);
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const onDragEnd = () => {
+
+    for(let i = 0; i < sortedAddons.value.length; i++)
+    {
+        const addon = sortedAddons.value[i];
+
+        props.addons[addon.id].rank = i;
+    }
+};
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const addonAppend = (url = null) => {
@@ -77,42 +92,6 @@ const addonZombie = (addon) => {
 const addonEnabled = (addon) => {
 
     addon.enabled = !addon.enabled;
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const addonDw = (addon1) => {
-
-    const array = addons.value;
-
-    const index = array.findIndex((addon2) => addon2.id === addon1.id);
-
-    if(index > 0x00000000000000)
-    {
-        const addon2 = array[index - 1];
-
-        const old = addon2.rank;
-        addon2.rank = addon1.rank;
-        addon1.rank = old;
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const addonUp = (addon1) => {
-
-    const array = addons.value;
-
-    const index = array.findIndex((addon2) => addon2.id === addon1.id);
-
-    if(index < array.length - 1)
-    {
-        const addon2 = array[index + 1];
-
-        const old = addon2.rank;
-        addon2.rank = addon1.rank;
-        addon1.rank = old;
-    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -183,31 +162,28 @@ onUnmounted(() => {
 
                 <!-- *********************************************************************************************** -->
 
-                <tbody>
-                    <tr v-for="addon in addons" :key="addon.id">
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-link" type="button" @click="addonDw(addon)">
-                                <i class="bi bi-caret-up-fill"></i>
-                            </button>
-                            <button class="btn btn-sm btn-link" type="button" @click="addonUp(addon)">
-                                <i class="bi bi-caret-down-fill"></i>
-                            </button>
-                            <button class="btn btn-sm btn-link" type="button" @click="addonZombie(addon)">
-                                <i class="bi bi-trash2 text-danger" v-if="!addon.zombie"></i>
-                                <i class="bi bi-recycle text-primary" v-if="addon.zombie"></i>
-                            </button>
-                        </td>
-                        <td class="text-start">
-                            <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" v-model="addon.url" />
-                        </td>
-                        <td class="text-center">
-                            <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>
-                        </td>
-                        <td class="text-center">
-                            <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': addon.started, 'text-secondary': !addon.started}]"></i>
-                        </td>
-                    </tr>
-                </tbody>
+                <draggable tag="tbody" handle=".drag-handle" v-model="sortedAddons" item-key="id" @end="onDragEnd">
+                    <template #item="{element: addon}">
+                        <tr :key="addon.id">
+                            <td class="text-center">
+                                <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
+                                <button class="btn btn-sm btn-link" type="button" @click="addonZombie(addon)">
+                                    <i class="bi bi-trash2 text-danger" v-if="!addon.zombie"></i>
+                                    <i class="bi bi-recycle text-primary" v-if="addon.zombie"></i>
+                                </button>
+                            </td>
+                            <td class="text-start">
+                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" v-model="addon.url" />
+                            </td>
+                            <td class="text-center">
+                                <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>
+                            </td>
+                            <td class="text-center">
+                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': addon.started, 'text-secondary': !addon.started}]"></i>
+                            </td>
+                        </tr>
+                    </template>
+                </draggable>
 
                 <!-- *********************************************************************************************** -->
 

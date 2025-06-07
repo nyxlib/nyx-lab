@@ -2,7 +2,9 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {computed} from 'vue';
+import {ref, watchEffect} from 'vue';
+
+import draggable from 'vuedraggable';
 
 import icons from '../assets/icons.json';
 
@@ -21,10 +23,27 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const webPages = computed(() => Object.values(props.webPages).sort((x, y) => x.rank - y.rank));
+const sortedWebPages = ref([]);
+
+watchEffect(() => {
+
+    sortedWebPages.value = Object.values(props.webPages).sort((a, b) => a.rank - b.rank);
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const onDragEnd = () => {
+
+    for(let i = 0; i < sortedWebPages.value.length; i++)
+    {
+        const webPage = sortedWebPages.value[i];
+
+        props.webPages[webPage.id].rank = i;
+    }
+};
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const webPageAppend = (url = null) => {
@@ -70,42 +89,6 @@ const webPageZombie = (webPage) => {
 const webPageEnabled = (webPage) => {
 
     webPage.enabled = !webPage.enabled;
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const webPageDw = (webPage1) => {
-
-    const array = webPages.value;
-
-    const index = array.findIndex((webPage2) => webPage2.id === webPage1.id);
-
-    if(index > 0x00000000000000)
-    {
-        const webPage2 = array[index - 1];
-
-        const old = webPage2.rank;
-        webPage2.rank = webPage1.rank;
-        webPage1.rank = old;
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const webPageUp = (webPage1) => {
-
-    const array = webPages.value;
-
-    const index = array.findIndex((webPage2) => webPage2.id === webPage1.id);
-
-    if(index < array.length - 1)
-    {
-        const webPage2 = array[index + 1];
-
-        const old = webPage2.rank;
-        webPage2.rank = webPage1.rank;
-        webPage1.rank = old;
-    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -158,37 +141,34 @@ const webPageUp = (webPage1) => {
 
                 <!-- *********************************************************************************************** -->
 
-                <tbody>
-                    <tr v-for="webPage in webPages" :key="webPage.id">
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-link" type="button" @click="webPageDw(webPage)">
-                                <i class="bi bi-caret-up-fill"></i>
-                            </button>
-                            <button class="btn btn-sm btn-link" type="button" @click="webPageUp(webPage)">
-                                <i class="bi bi-caret-down-fill"></i>
-                            </button>
-                            <button class="btn btn-sm btn-link" type="button" @click="webPageZombie(webPage)">
-                                <i class="bi bi-trash2 text-danger" v-if="!webPage.zombie"></i>
-                                <i class="bi bi-recycle text-primary" v-if="webPage.zombie"></i>
-                            </button>
-                        </td>
-                        <td class="text-start">
-                            <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': webPage.zombie}]" type="text" v-model="webPage.url" />
-                        </td>
-                        <td class="text-start">
-                            <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': webPage.zombie}]" type="text" v-model="webPage.title" />
-                        </td>
-                        <td class="text-start">
-                            <multiselect :options="Object.keys(icons)" :searchable="true" :limit="100" v-model="webPage.icon"></multiselect>
-                        </td>
-                        <td class="text-center">
-                            <button :class="['btn', 'btn-sm', {'btn-success': !webPage.zombie && webPage.enabled, 'btn-outline-success': !webPage.zombie && !webPage.enabled, 'btn-secondary': webPage.zombie && webPage.enabled, 'btn-outline-secondary': webPage.zombie && !webPage.enabled}]" type="button" @click="webPageEnabled(webPage)">Enabled</button>
-                        </td>
-                        <td class="text-center">
-                            <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (webPage.enabled && webPage.url), 'text-secondary': !(webPage.enabled && webPage.url)}]"></i>
-                        </td>
-                    </tr>
-                </tbody>
+                <draggable tag="tbody" handle=".drag-handle" v-model="sortedWebPages" item-key="id" @end="onDragEnd">
+                    <template #item="{element: webPage}">
+                        <tr :key="webPage.id">
+                            <td class="text-center">
+                                <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
+                                <button class="btn btn-sm btn-link" type="button" @click="webPageZombie(webPage)">
+                                    <i class="bi bi-trash2 text-danger" v-if="!webPage.zombie"></i>
+                                    <i class="bi bi-recycle text-primary" v-if="webPage.zombie"></i>
+                                </button>
+                            </td>
+                            <td class="text-start">
+                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': webPage.zombie}]" type="text" v-model="webPage.url" />
+                            </td>
+                            <td class="text-start">
+                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': webPage.zombie}]" type="text" v-model="webPage.title" />
+                            </td>
+                            <td class="text-start">
+                                <multiselect :options="Object.keys(icons)" :searchable="true" :limit="100" v-model="webPage.icon"></multiselect>
+                            </td>
+                            <td class="text-center">
+                                <button :class="['btn', 'btn-sm', {'btn-success': !webPage.zombie && webPage.enabled, 'btn-outline-success': !webPage.zombie && !webPage.enabled, 'btn-secondary': webPage.zombie && webPage.enabled, 'btn-outline-secondary': webPage.zombie && !webPage.enabled}]" type="button" @click="webPageEnabled(webPage)">Enabled</button>
+                            </td>
+                            <td class="text-center">
+                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (webPage.enabled && webPage.url), 'text-secondary': !(webPage.enabled && webPage.url)}]"></i>
+                            </td>
+                        </tr>
+                    </template>
+                </draggable>
 
                 <!-- *********************************************************************************************** -->
 
