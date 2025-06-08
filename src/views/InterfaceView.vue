@@ -182,7 +182,7 @@ const createWidget = (widgetDescr, create = true) => {
     /* GET PANEL                                                                                                      */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const el = document.querySelector(`[data-title="${widgetDescr.panel}"]`);
+    const el = document.querySelector(`[data-panel="${widgetDescr.panel}"]`);
 
     if(!el)
     {
@@ -367,11 +367,6 @@ onMounted(() => {
 
                 updateWidget(el)
             });
-
-            grid.on('removed', (_, el) => {
-
-
-            });
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -411,11 +406,15 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <tab-pane :title="interfaceName" v-for="(interfaceName, interfaceIndex) in configStore.globals.interfacePanels" :key="interfaceIndex">
+            <template v-for="panel in Object.values(configStore.globals.interfacePanels).sort((a, b) => a.rank - b.rank)" :key="panel.id">
 
-                <div class="grid-stack h-100 w-100" :data-title="interfaceName"></div>
+                <tab-pane :title="panel.label" v-if="panel.label && panel.enabled">
 
-            </tab-pane>
+                    <div class="grid-stack h-100 w-100" :data-panel="panel.id"></div>
+
+                </tab-pane>
+
+            </template>
 
             <!-- *************************************************************************************************** -->
 
@@ -541,7 +540,7 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="configStore.globals.interfacePanels.map((x) => ({value: x, label: x}))" v-model="state.panel" />
+                                                :options="Object.values(configStore.globals.interfacePanels).map((x) => ({value: x.id, label: x.label}))" v-model="state.panel" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">

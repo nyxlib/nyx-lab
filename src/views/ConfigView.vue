@@ -4,8 +4,6 @@
 
 import {reactive, computed, onMounted} from 'vue';
 
-import Multiselect from '@vueform/multiselect';
-
 import * as marked from 'marked';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -14,6 +12,7 @@ import useConfigStore from '../stores/config';
 
 import license from '../assets/license.txt';
 
+import InterfacePanels from '../components/InterfacePanels.vue';
 import NyxAddons from '../components/NyxAddons.vue';
 import WebPages from '../components/WebPages.vue';
 import Cache from '../components/Cache.vue';
@@ -136,32 +135,24 @@ onMounted(() => {
                             <div class="card-body">
 
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
+
                                         <div class="mb-3">
-                                            <label class="form-check-label" for="A925CE04">Enable user interfaces</label>
+                                            <label class="form-label" for="A925CE04">Enable user interfaces</label>
                                             <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableInterfaces" /></div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-8">
+
                                         <div class="mb-3">
                                             <label class="form-label" for="C8206AA4">Number of columns</label>
                                             <input class="form-control form-control-sm" type="number" min="0" max="64" step="1" required="required" v-model="configStore.globals.interfaceColumns" />
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label" for="C8206AA4">Panels</label>
-                                    <multiselect
-                                        mode="tags"
-                                        id="C8206AA4"
-                                        :can-clear="true"
-                                        :searchable="true"
-                                        :create-option="true"
-                                        :close-on-select="false"
-                                        :options="configStore.globals.interfacePanels"
-                                        v-model="configStore.globals.interfacePanels"
-                                    />
+                                    </div>
+                                    <div class="col-md-9">
+
+                                        <interface-panels :interface-panels="configStore.globals.interfacePanels" />
+
+                                    </div>
                                 </div>
 
                             </div>

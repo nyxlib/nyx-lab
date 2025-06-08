@@ -6,16 +6,12 @@ import {ref, watchEffect} from 'vue';
 
 import draggable from 'vuedraggable';
 
-import icons from '../assets/icons.json';
-
-import Multiselect from '@vueform/multiselect';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    webPages: {
+    interfacePanels: {
         type: Object,
         required: true,
     },
@@ -23,11 +19,11 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const sortedWebPages = ref([]);
+const sortedInterfacePanels = ref([]);
 
 watchEffect(() => {
 
-    sortedWebPages.value = Object.values(props.webPages).sort((a, b) => a.rank - b.rank);
+    sortedInterfacePanels.value = Object.values(props.interfacePanels).sort((a, b) => a.rank - b.rank);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -36,17 +32,17 @@ watchEffect(() => {
 
 const onDragEnd = () => {
 
-    for(let i = 0; i < sortedWebPages.value.length; i++)
+    for(let i = 0; i < sortedInterfacePanels.value.length; i++)
     {
-        const webPage = sortedWebPages.value[i];
+        const interfacePanel = sortedInterfacePanels.value[i];
 
-        props.webPages[webPage.id].rank = i;
+        props.interfacePanels[interfacePanel.id].rank = i;
     }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const webPageAppend = () => {
+const interfacePanelAppend = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -54,12 +50,10 @@ const webPageAppend = () => {
 
     const rank = Date.now();
 
-    props.webPages[id] = {
+    props.interfacePanels[id] = {
         id: id,
         rank: rank,
-        url: '',
-        title: '?',
-        icon: 'bi-question',
+        label: '',
         zombie: false,
         enabled: false,
     };
@@ -69,16 +63,16 @@ const webPageAppend = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const webPageZombie = (webPage) => {
+const interfacePanelZombie = (interfacePanel) => {
 
-    webPage.zombie = !webPage.zombie;
+    interfacePanel.zombie = !interfacePanel.zombie;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const webPageEnabled = (webPage) => {
+const interfacePanelEnabled = (interfacePanel) => {
 
-    webPage.enabled = !webPage.enabled;
+    interfacePanel.enabled = !interfacePanel.enabled;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -90,9 +84,9 @@ const webPageEnabled = (webPage) => {
 
     <div class="shadow card">
         <div class="card-header px-3 py-2">
-            Web pages
+            Interface panels
             [
-            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => webPageAppend()">
+            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => interfacePanelAppend()">
                 <i class="bi bi-plus-lg"></i>
                 Add
             </button>
@@ -112,13 +106,7 @@ const webPageEnabled = (webPage) => {
                             Tools
                         </th>
                         <th class="text-center" style="width: auto;">
-                            URL
-                        </th>
-                        <th class="text-center" style="width: auto;">
-                            Title
-                        </th>
-                        <th class="text-center" style="width: 200px;">
-                            Icon
+                            Label
                         </th>
                         <th class="text-center" style="width: 105px;">
                             Enabled
@@ -131,30 +119,24 @@ const webPageEnabled = (webPage) => {
 
                 <!-- *********************************************************************************************** -->
 
-                <draggable tag="tbody" handle=".drag-handle" v-model="sortedWebPages" item-key="id" @end="onDragEnd">
-                    <template #item="{element: webPage}">
-                        <tr :key="webPage.id">
+                <draggable tag="tbody" handle=".drag-handle" v-model="sortedInterfacePanels" item-key="id" @end="onDragEnd">
+                    <template #item="{element: interfacePanel}">
+                        <tr :key="interfacePanel.id">
                             <td class="text-center">
                                 <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
-                                <button class="btn btn-sm btn-link" type="button" @click="webPageZombie(webPage)">
-                                    <i class="bi bi-trash2 text-danger" v-if="!webPage.zombie"></i>
-                                    <i class="bi bi-recycle text-primary" v-if="webPage.zombie"></i>
+                                <button class="btn btn-sm btn-link" type="button" @click="interfacePanelZombie(interfacePanel)">
+                                    <i class="bi bi-trash2 text-danger" v-if="!interfacePanel.zombie"></i>
+                                    <i class="bi bi-recycle text-primary" v-if="interfacePanel.zombie"></i>
                                 </button>
                             </td>
                             <td class="text-start">
-                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': webPage.zombie}]" type="text" v-model="webPage.url" />
-                            </td>
-                            <td class="text-start">
-                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': webPage.zombie}]" type="text" v-model="webPage.title" />
-                            </td>
-                            <td class="text-start">
-                                <multiselect :options="Object.keys(icons)" :searchable="true" :limit="100" v-model="webPage.icon"></multiselect>
+                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': interfacePanel.zombie}]" type="text" v-model="interfacePanel.label" />
                             </td>
                             <td class="text-center">
-                                <button :class="['btn', 'btn-sm', {'btn-success': !webPage.zombie && webPage.enabled, 'btn-outline-success': !webPage.zombie && !webPage.enabled, 'btn-secondary': webPage.zombie && webPage.enabled, 'btn-outline-secondary': webPage.zombie && !webPage.enabled}]" type="button" @click="webPageEnabled(webPage)">Enabled</button>
+                                <button :class="['btn', 'btn-sm', {'btn-success': !interfacePanel.zombie && interfacePanel.enabled, 'btn-outline-success': !interfacePanel.zombie && !interfacePanel.enabled, 'btn-secondary': interfacePanel.zombie && interfacePanel.enabled, 'btn-outline-secondary': interfacePanel.zombie && !interfacePanel.enabled}]" type="button" @click="interfacePanelEnabled(interfacePanel)">Enabled</button>
                             </td>
                             <td class="text-center">
-                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (webPage.enabled && webPage.url), 'text-secondary': !(webPage.enabled && webPage.url)}]"></i>
+                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (interfacePanel.enabled && interfacePanel.label), 'text-secondary': !(interfacePanel.enabled && interfacePanel.label)}]"></i>
                             </td>
                         </tr>
                     </template>

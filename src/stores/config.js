@@ -20,7 +20,7 @@ const DEFAULT_GLOBALS = {
     nssURL: '',
     /**/
     enableInterfaces: false,
-    interfacePanels: [],
+    interfacePanels: {},
     interfaceWidgets: {},
     interfaceColumns: 64,
     /**/
@@ -252,8 +252,17 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        startStopExts(addonDescrs, webPageDescrs)
+        startStopExts(addonDescrs, webPageDescrs, interfacePanelDescrs)
         {
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* INTERFACE PANELS                                                                                       */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            Object.values(interfacePanelDescrs).filter((x) => x.zombie).forEach((zombie) => {
+
+                delete interfacePanelDescrs[zombie.id];
+            });
+
             /*--------------------------------------------------------------------------------------------------------*/
             /* WEB PAGES                                                                                              */
             /*--------------------------------------------------------------------------------------------------------*/
@@ -366,7 +375,7 @@ const useConfigStore = defineStore('config', {
 
                     this.globals = confDup(tmp_globals, DEFAULT_GLOBALS);
 
-                    this.startStopExts(this.globals.addons, this.globals.webPages).then(() => {
+                    this.startStopExts(this.globals.addons, this.globals.webPages, this.globals.interfacePanels).then(() => {
 
                         setTimeout(() => {
 
@@ -404,7 +413,7 @@ const useConfigStore = defineStore('config', {
 
                     this.globals = confDup(this.globals, DEFAULT_GLOBALS);
 
-                    this.startStopExts(this.globals.addons, this.globals.webPages).then(() => {
+                    this.startStopExts(this.globals.addons, this.globals.webPages, this.globals.interfacePanels).then(() => {
 
                         resolve(JSON.stringify(this.globals, null, indent ? 2 : 0));
 
