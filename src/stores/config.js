@@ -22,7 +22,6 @@ const DEFAULT_GLOBALS = {
     enableInterfaces: false,
     interfacePanels: {},
     interfaceWidgets: {},
-    interfaceColumns: 64,
     /**/
     addons: {},
     webPages: {},

@@ -372,7 +372,7 @@ onMounted(() => {
         /* SETUP GRID STACK                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        GridStack.initAll({float: true, margin: 0, column: configStore.globals.interfaceColumns}).forEach((grid) => {
+        GridStack.initAll({float: true, margin: 0, column: 64}).forEach((grid) => {
 
             grid.on('resizestop', (_, el) => {
 
