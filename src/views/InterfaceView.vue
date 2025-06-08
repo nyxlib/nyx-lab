@@ -176,6 +176,17 @@ const newWidgetStep2 = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const createComponent = (component, attributes) => {
+
+    const vnode = h(component, attributes);
+
+    vnode.appContext = appContext;
+
+    return vnode;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const createWidget = (widgetDescr, create = true) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -282,9 +293,7 @@ const createWidget = (widgetDescr, create = true) => {
     {
         try
         {
-            const vnode = h(controlDescr.component, widgetDescr);
-
-            vnode.appContext = /*------*/ appContext /*------*/;
+            const vnode = createComponent(controlDescr.component, widgetDescr)
 
             render(vnode, widget.querySelector('.card-body'));
         }
