@@ -280,11 +280,18 @@ const createWidget = (widgetDescr, create = true) => {
 
     if(controlDescr?.component)
     {
-        const vnode = h(controlDescr.component, widgetDescr);
+        try
+        {
+            const vnode = h(controlDescr.component, widgetDescr);
 
-        vnode.appContext = /*------*/ appContext /*------*/;
+            vnode.appContext = /*------*/ appContext /*------*/;
 
-        render(vnode, widget.querySelector('.card-body'));
+            render(vnode, widget.querySelector('.card-body'));
+        }
+        catch(e)
+        {
+            console.error(e);
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
