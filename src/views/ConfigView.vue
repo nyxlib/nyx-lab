@@ -145,7 +145,7 @@ onMounted(() => {
                                     </div>
                                     <div class="col-md-9">
 
-                                        <interface-panels :interface-panels="configStore.globals.interfacePanels" />
+                                        <interface-panels :enabled="configStore.globals.enableInterfaces" :interface-panels="configStore.globals.interfacePanels" />
 
                                     </div>
                                 </div>

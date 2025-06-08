@@ -11,6 +11,10 @@ import draggable from 'vuedraggable';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
+    enabled: {
+        type: Boolean,
+        required: true,
+    },
     interfacePanels: {
         type: Object,
         required: true,
@@ -136,7 +140,7 @@ const interfacePanelEnabled = (interfacePanel) => {
                                 <button :class="['btn', 'btn-sm', {'btn-success': !interfacePanel.zombie && interfacePanel.enabled, 'btn-outline-success': !interfacePanel.zombie && !interfacePanel.enabled, 'btn-secondary': interfacePanel.zombie && interfacePanel.enabled, 'btn-outline-secondary': interfacePanel.zombie && !interfacePanel.enabled}]" type="button" @click="interfacePanelEnabled(interfacePanel)">Enabled</button>
                             </td>
                             <td class="text-center">
-                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (interfacePanel.enabled && interfacePanel.label), 'text-secondary': !(interfacePanel.enabled && interfacePanel.label)}]"></i>
+                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (enabled && interfacePanel.enabled && interfacePanel.label), 'text-secondary': !(enabled && interfacePanel.enabled && interfacePanel.label)}]"></i>
                             </td>
                         </tr>
                     </template>
