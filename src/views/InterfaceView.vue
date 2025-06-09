@@ -82,9 +82,9 @@ const isValid = computed(() =>
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const panels = computed(() => Object.values(configStore.globals.interfacePanels).filter((panel) => panel.enabled).sort((a, b) => a.rank - b.rank).map((x) => ({
-    value: x.id,
-    label: x.label
+const panels = computed(() => Object.values(configStore.globals.interfacePanels).filter((panel) => panel.enabled).sort((a, b) => a.rank - b.rank).map((panel) => ({
+    value: panel.id,
+    label: panel.title,
 })));
 
 /*--------------------------------------------------------------------------------------------------------------------*/

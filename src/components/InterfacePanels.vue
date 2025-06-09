@@ -57,7 +57,7 @@ const interfacePanelAppend = () => {
     props.interfacePanels[id] = {
         id: id,
         rank: rank,
-        label: '',
+        title: '',
         zombie: false,
         enabled: false,
     };
@@ -110,7 +110,7 @@ const interfacePanelEnabled = (interfacePanel) => {
                             Tools
                         </th>
                         <th class="text-center" style="width: auto;">
-                            Label
+                            Title
                         </th>
                         <th class="text-center" style="width: 105px;">
                             Enabled
@@ -134,13 +134,13 @@ const interfacePanelEnabled = (interfacePanel) => {
                                 </button>
                             </td>
                             <td class="text-start">
-                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': interfacePanel.zombie}]" type="text" v-model="interfacePanel.label" />
+                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': interfacePanel.zombie}]" type="text" v-model="interfacePanel.title" />
                             </td>
                             <td class="text-center">
                                 <button :class="['btn', 'btn-sm', {'btn-success': !interfacePanel.zombie && interfacePanel.enabled, 'btn-outline-success': !interfacePanel.zombie && !interfacePanel.enabled, 'btn-secondary': interfacePanel.zombie && interfacePanel.enabled, 'btn-outline-secondary': interfacePanel.zombie && !interfacePanel.enabled}]" type="button" @click="interfacePanelEnabled(interfacePanel)">Enabled</button>
                             </td>
                             <td class="text-center">
-                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (enabled && interfacePanel.enabled && interfacePanel.label), 'text-secondary': !(enabled && interfacePanel.enabled && interfacePanel.label)}]"></i>
+                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (enabled && interfacePanel.enabled && interfacePanel.title), 'text-secondary': !(enabled && interfacePanel.enabled && interfacePanel.title)}]"></i>
                             </td>
                         </tr>
                     </template>
