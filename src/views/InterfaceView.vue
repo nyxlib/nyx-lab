@@ -12,13 +12,11 @@ import {Modal} from 'bootstrap';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import ControlOption from '../components/ControlOption.vue';
+
 import useConfigStore from '../stores/config';
 
 import {useNyxStore} from 'vue-nyx';
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-import ControlOption from '../components/ControlOption.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -81,6 +79,13 @@ const isValid = computed(() =>
         (state.mode === MODE_SCATTER && state.variables1.length > 0 && state.variables1.length === state.variables2.length)
     )
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const panels = computed(() => Object.values(configStore.globals.interfacePanels).filter((panel) => panel.enabled).sort((a, b) => a.rank - b.rank).map((x) => ({
+    value: x.id,
+    label: x.label
+})));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -418,19 +423,15 @@ onUnmounted(() => {
 
     <div class="d-flex flex-column overflow-y-auto h-100 w-100 p-3">
 
-        <nav-tabs margin="mb-3"  v-if="nyxStore.isConnected">
+        <nav-tabs margin="mb-3" v-if="nyxStore.isConnected">
 
             <!-- *************************************************************************************************** -->
 
-            <template v-for="panel in Object.values(configStore.globals.interfacePanels).sort((a, b) => a.rank - b.rank)" :key="panel.id">
+            <tab-pane :title="panel.label" v-for="panel in panels" :key="panel.value">
 
-                <tab-pane :title="panel.label" v-if="panel.label && panel.enabled">
+                <div class="grid-stack h-100 w-100" :data-panel="panel.value"></div>
 
-                    <div class="grid-stack h-100 w-100" :data-panel="panel.id"></div>
-
-                </tab-pane>
-
-            </template>
+            </tab-pane>
 
             <!-- *************************************************************************************************** -->
 
@@ -560,7 +561,7 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="Object.values(configStore.globals.interfacePanels).map((x) => ({value: x.id, label: x.label}))" v-model="state.panel" />
+                                                :options="panels" v-model="state.panel" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
