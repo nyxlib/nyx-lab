@@ -418,7 +418,7 @@ onUnmounted(() => {
 
     <div class="d-flex flex-column overflow-y-auto h-100 w-100 p-3">
 
-        <nav-tabs margin="mb-3">
+        <nav-tabs margin="mb-3"  v-if="nyxStore.isConnected">
 
             <!-- *************************************************************************************************** -->
 
@@ -449,6 +449,10 @@ onUnmounted(() => {
             <!-- *************************************************************************************************** -->
 
         </nav-tabs>
+
+        <div class="alert alert-warning" role="alert" v-else>
+            Not connected
+        </div>
 
     </div>
 
