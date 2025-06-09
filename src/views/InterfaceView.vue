@@ -58,7 +58,7 @@ const SHADOWS = [
 const state = reactive({
     id: null,
     mode: MODE_VARIABLE,
-    divider: 1,
+    refreshTime: 1000,
     control: '',
     showLegend: false,
     shadow: 'shadow',
@@ -115,7 +115,7 @@ const newWidget = (widget = null) => {
     {
         state.id = widgetDescr.id;
         state.mode = widgetDescr.mode;
-        state.divider = widgetDescr.divider;
+        state.refreshTime = widgetDescr.refreshTime;
         state.control = widgetDescr.control;
         state.showLegend = widgetDescr.showLegend;
         state.shadow = widgetDescr.shadow;
@@ -129,7 +129,7 @@ const newWidget = (widget = null) => {
     {
         state.id = null;
         state.mode = MODE_VARIABLE;
-        state.divider = 1;
+        state.refreshTime = 1000;
         state.control = '';
         state.showLegend = false;
         state.shadow = 'shadow';
@@ -156,7 +156,7 @@ const newWidgetStep2 = () => {
     createWidget({
         id: state.id || __NYX_UUID__.v4(),
         mode: state.mode,
-        divider: state.divider,
+        refreshTime: state.refreshTime,
         control: state.control,
         showLegend: state.showLegend,
         shadow: state.shadow,
@@ -483,7 +483,7 @@ onUnmounted(() => {
                                 <!-- ******************************************************************************* -->
 
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="mb-3">
                                             <label class="form-label" for="D38EC0FA">Mode</label>
                                             <multiselect
@@ -497,9 +497,9 @@ onUnmounted(() => {
                                                 :options="MODES" v-model="state.mode" />
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label" for="E9549BAB">Divider</label>
-                                        <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.divider" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER" required="required" />
+                                    <div class="col-md-3">
+                                        <label class="form-label" for="E9549BAB">Refresh time [ms]</label>
+                                        <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.refreshTime" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER" required="required" />
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
