@@ -13,8 +13,8 @@ import useConfigStore from '../stores/config';
 import license from '../assets/license.txt';
 
 import InterfacePanels from '../components/InterfacePanels.vue';
-import NyxAddons from '../components/NyxAddons.vue';
 import WebPages from '../components/WebPages.vue';
+import Addons from '../components/Addons.vue';
 import Cache from '../components/Cache.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -78,10 +78,8 @@ onMounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <div class="shadow card mb-3">
-                            <div class="card-header d-flex">
-                                <span class="me-auto">
-                                    MQTT Broker
-                                </span>
+                            <div class="card-header">
+                                <i class="bi bi-hdd-stack"></i> MQTT Broker
                             </div>
                             <div class="card-body">
 
@@ -111,10 +109,8 @@ onMounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <div class="shadow card mb-3">
-                            <div class="card-header d-flex">
-                                <span class="me-auto">
-                                    Nyx-Stream Server
-                                </span>
+                            <div class="card-header">
+                                <i class="bi bi-hdd-stack"></i> Nyx-Stream Server
                             </div>
                             <div class="card-body">
 
@@ -130,7 +126,7 @@ onMounted(() => {
 
                         <div class="shadow card mb-3">
                             <div class="card-header">
-                                User interfaces
+                                <i class="bi bi-grid-1x2"></i> User interfaces
                             </div>
                             <div class="card-body">
 
@@ -162,7 +158,7 @@ onMounted(() => {
 
                         <div class="shadow card mb-3">
                             <div class="card-header">
-                                License
+                                <i class="bi bi-bank"></i> License
                             </div>
                             <div class="card-body">
 
@@ -188,22 +184,16 @@ onMounted(() => {
 
                     <nav-tabs margin="mb-3">
 
-                        <tab-pane title="Nyx Addons">
-
-                            <nyx-addons :addons="configStore.globals.addons" />
-
+                        <tab-pane title="Addons">
+                            <Addons :addons="configStore.globals.addons" />
                         </tab-pane>
 
                         <tab-pane title="Web pages">
-
                             <web-pages :web-pages="configStore.globals.webPages" />
-
                         </tab-pane>
 
                         <tab-pane title="Cache" v-if="HAS_TAURI" @shown="() => state.shownTabs.add('nyx-cache')">
-
                             <cache v-if="state.shownTabs.has('nyx-cache')" />
-
                         </tab-pane>
 
                     </nav-tabs>
