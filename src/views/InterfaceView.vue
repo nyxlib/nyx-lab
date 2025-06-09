@@ -32,6 +32,8 @@ const dialog = inject('dialog');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const NB_COLUMNS = 64;
+
 const MODE_VARIABLE = 'variable';
 const MODE_SCATTER = 'temporal';
 const MODE_BLOB = 'blob';
@@ -216,11 +218,11 @@ const createWidget = (widgetDescr, create = true) => {
         /*------------------------------------------------------------------------------------------------------------*/
 
         if(!widgetDescr.h) {
-            widgetDescr.h = Math.round(configStore.globals.interfaceColumns * el.offsetHeight / el.offsetWidth / 4);
+            widgetDescr.h = Math.round(NB_COLUMNS * el.offsetHeight / el.offsetWidth / 4);
         }
 
         if(!widgetDescr.w) {
-            widgetDescr.w = Math.round(configStore.globals.interfaceColumns * 1.000000000000000000000000000000 / 4);
+            widgetDescr.w = Math.round(NB_COLUMNS * 1.000000000000000000000000000000 / 4);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -377,7 +379,7 @@ onMounted(() => {
         /* SETUP GRID STACK                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        GridStack.initAll({float: true, margin: 0, column: 64}).forEach((grid) => {
+        GridStack.initAll({float: true, margin: 0, column: NB_COLUMNS}).forEach((grid) => {
 
             grid.on('resizestop', (_, el) => {
 
