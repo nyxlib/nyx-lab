@@ -14,7 +14,7 @@ import {Modal} from 'bootstrap';
 
 import ControlOption from '../components/ControlOption.vue';
 
-import {useNyxStore, NyxVector} from 'vue-nyx';
+import {useNyxStore, NyxGroup} from 'vue-nyx';
 
 import useConfigStore from '../stores/config';
 
@@ -335,13 +335,13 @@ const createWidget = (widgetDescr, create = true) => {
         /* RENDER COMMAND                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const defXXXVector = nyxStore.defXXXVectorDict[widgetDescr.variables1[0]];
+        const groupDescr = widgetDescr.variables1.map((x) => nyxStore.defXXXVectorDict[x]).filter((x) => !!x);
 
-        if(defXXXVector?.['<>'])
+        if(groupDescr)
         {
             try
             {
-                const vnode = createComponent(NyxVector, {defXXXVector: defXXXVector});
+                const vnode = createComponent(NyxGroup, {groupInfo: groupDescr});
 
                 if(vnode)
                 {
@@ -765,12 +765,22 @@ onUnmounted(() => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.grid-stack-item .card-body,
 .grid-stack-item .card-header {
 
     display: flex;
     overflow: hidden;
+    flex-direction: row;
     justify-content: space-between;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.grid-stack-item .card-body {
+
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: /**/ center /**/;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
