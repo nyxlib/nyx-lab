@@ -335,7 +335,7 @@ const createWidget = (widgetDescr, create = true) => {
         /* RENDER COMMAND                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const groupDescr = widgetDescr.variables1.map((x) => nyxStore.defXXXVectorDict[x]).filter((defXXXVector) => !!defXXXVector);
+        const groupDescr = widgetDescr.variables1.map((defXXXVector) => nyxStore.defXXXVectorDict[defXXXVector]).filter(Boolean);
 
         if(groupDescr)
         {
