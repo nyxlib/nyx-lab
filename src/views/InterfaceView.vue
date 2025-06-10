@@ -335,13 +335,13 @@ const createWidget = (widgetDescr, create = true) => {
         /* RENDER COMMAND                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const groupDescr = widgetDescr.variables1.map((x) => nyxStore.defXXXVectorDict[x]).filter((x) => !!x);
+        const groupDescr = widgetDescr.variables1.map((x) => nyxStore.defXXXVectorDict[x]).filter((defXXXVector) => !!defXXXVector);
 
         if(groupDescr)
         {
             try
             {
-                const vnode = createComponent(NyxGroup, {groupInfo: groupDescr});
+                const vnode = createComponent(NyxGroup, {groupDescr: groupDescr});
 
                 if(vnode)
                 {
