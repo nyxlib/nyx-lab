@@ -1,4 +1,4 @@
-<!--suppress HtmlUnknownTag, CssUnusedSymbol, JSUnresolvedReference -->
+<!--suppress HtmlUnknownTag, CssUnusedSymbol, JSUnresolvedReference, PointlessArithmeticExpressionJS -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -34,12 +34,14 @@ const dialog = inject('dialog');
 
 const NB_COLUMNS = 64;
 
+const MODE_VECTOR = 'vector';
 const MODE_VARIABLE = 'variable';
 const MODE_SCATTER = 'temporal';
 const MODE_BLOB = 'blob';
 const MODE_STREAM = 'stream';
 
 const MODES = [
+    {value: MODE_VECTOR, label: 'Vector'},
     {value: MODE_VARIABLE, label: 'Variable'},
     {value: MODE_SCATTER, label: 'Scatter'},
     {value: MODE_BLOB, label: 'BLOB'},
@@ -519,7 +521,7 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="controls" v-model="state.control" />
+                                                :options="controls" v-model="state.control" :disabled="state.mode === MODE_VECTOR" />
                                         </div>
                                     </div>
                                 </div>
@@ -572,6 +574,20 @@ onUnmounted(() => {
                                             <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="FD833D53" v-model="state.showLegend" /></div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <!-- ******************************************************************************* -->
+
+                                <div class="mb-3" v-if="state.mode === MODE_VECTOR">
+                                    <label class="form-label" for="BBA0018F">Vector</label>
+                                    <multiselect
+                                        mode="tags"
+                                        id="BBA0018F"
+                                        :required="true"
+                                        :searchable="true"
+                                        :create-option="false"
+                                        :close-on-select="true"
+                                        :options="nyxStore.vectorDefs" v-model="state.variables1" />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
