@@ -14,9 +14,9 @@ import {Modal} from 'bootstrap';
 
 import ControlOption from '../components/ControlOption.vue';
 
-import useConfigStore from '../stores/config';
+import {useNyxStore, NyxVector} from 'vue-nyx';
 
-import {useNyxStore} from 'vue-nyx';
+import useConfigStore from '../stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -34,19 +34,23 @@ const dialog = inject('dialog');
 
 const NB_COLUMNS = 64;
 
-const MODE_VECTOR = 'vector';
 const MODE_VARIABLE = 'variable';
 const MODE_SCATTER = 'temporal';
 const MODE_BLOB = 'blob';
 const MODE_STREAM = 'stream';
+const MODE_COMMAND = 'command';
 
 const MODES = [
-    {value: MODE_VECTOR, label: 'Vector'},
     {value: MODE_VARIABLE, label: 'Variable'},
     {value: MODE_SCATTER, label: 'Scatter'},
     {value: MODE_BLOB, label: 'BLOB'},
     {value: MODE_STREAM, label: 'Stream'},
+    {value: MODE_COMMAND, label: 'Command'},
 ];
+
+const CONTROLS = [
+    {value: 'auto', label: 'Auto'},
+]
 
 const SHADOWS = [
     {value: 'shadow-none', label: 'None'},
@@ -73,9 +77,11 @@ const state = reactive({
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const isValid = computed(() =>
+    !!state.mode
+    &&
     !!state.panel
     &&
-    !!state.control
+    (!!state.control || state.mode === MODE_COMMAND)
     &&
     (
         (state.mode !== MODE_SCATTER && state.variables1.length > 0 /*--------------------------------------------------*/)
@@ -210,7 +216,7 @@ const createWidget = (widgetDescr, create = true) => {
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* RENDER CONTROL                                                                                                 */
+    /* RENDER WIDGET                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     let widget;
@@ -296,20 +302,59 @@ const createWidget = (widgetDescr, create = true) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === widgetDescr.control);
-
-    if(controlDescr?.component)
+    if(widgetDescr.mode !== MODE_COMMAND)
     {
-        try
-        {
-            const vnode = createComponent(controlDescr.component, widgetDescr)
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* RENDER CONTROL                                                                                             */
+        /*------------------------------------------------------------------------------------------------------------*/
 
-            render(vnode, widget.querySelector('.card-body'));
-        }
-        catch(e)
+        const controlDescr = Object.values(configStore.controls).flatMap((controls) => controls.ctrls).find((ctrl) => ctrl.id === widgetDescr.control);
+
+        if(controlDescr?.['component'])
         {
-            console.error(e);
+            try
+            {
+                const vnode = createComponent(controlDescr.component, widgetDescr);
+
+                if(vnode)
+                {
+                    render(vnode, widget.querySelector('.card-body'));
+                }
+            }
+            catch(e)
+            {
+                console.error(e);
+            }
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* RENDER COMMAND                                                                                             */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const defXXXVector = nyxStore.defXXXVectorDict[widgetDescr.variables1[0]];
+
+        if(defXXXVector?.['<>'])
+        {
+            try
+            {
+                const vnode = createComponent(NyxVector, {defXXXVector: defXXXVector});
+
+                if(vnode)
+                {
+                    render(vnode, widget.querySelector('.card-body'));
+                }
+            }
+            catch(e)
+            {
+                console.error(e);
+            }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -521,7 +566,7 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="controls" v-model="state.control" :disabled="state.mode === MODE_VECTOR" />
+                                                :options="state.mode === MODE_COMMAND ? CONTROLS : controls" v-model="state.control" />
                                         </div>
                                     </div>
                                 </div>
@@ -574,20 +619,6 @@ onUnmounted(() => {
                                             <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="FD833D53" v-model="state.showLegend" /></div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <!-- ******************************************************************************* -->
-
-                                <div class="mb-3" v-if="state.mode === MODE_VECTOR">
-                                    <label class="form-label" for="BBA0018F">Vector</label>
-                                    <multiselect
-                                        mode="tags"
-                                        id="BBA0018F"
-                                        :required="true"
-                                        :searchable="true"
-                                        :create-option="false"
-                                        :close-on-select="true"
-                                        :options="nyxStore.vectorDefs" v-model="state.variables1" />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
@@ -658,6 +689,20 @@ onUnmounted(() => {
                                         :create-option="false"
                                         :close-on-select="true"
                                         :options="nyxStore.streamDefs" v-model="state.variables1" />
+                                </div>
+
+                                <!-- ******************************************************************************* -->
+
+                                <div class="mb-3" v-if="state.mode === MODE_COMMAND">
+                                    <label class="form-label" for="BBA0018F">Command</label>
+                                    <multiselect
+                                        mode="tags"
+                                        id="BBA0018F"
+                                        :required="true"
+                                        :searchable="true"
+                                        :create-option="false"
+                                        :close-on-select="true"
+                                        :options="nyxStore.vectorDefs" v-model="state.variables1" />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
