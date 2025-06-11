@@ -91,9 +91,38 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
     document.getElementById('DC2D5B47').textContent = widgetName;
 
-    document.getElementById('C7F2FB8E').innerHTML = widgetHTML;
-
     document.getElementById('E9F2EAA2').href = widgetURL;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const target = document.getElementById('C7F2FB8E');
+
+    const temp = document.createElement('div');
+
+    temp.innerHTML = widgetHTML;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    while(temp.firstChild)
+    {
+        const child = temp.firstChild;
+
+        if(child.tagName === 'SCRIPT' && child.src)
+        {
+            const script = document.createElement('script');
+
+            script.src   = child.src  ;
+            script.async = child.async;
+
+            temp.removeChild(child);
+
+            target.appendChild(script);
+        }
+        else
+        {
+            target.appendChild(child);
+        }
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
