@@ -66,7 +66,7 @@ const state = reactive({
     mode: MODE_VARIABLE,
     refreshTime: 1000,
     control: '',
-    showLegend: false,
+    enabled: true,
     shadow: 'shadow',
     title: '',
     panel: '',
@@ -132,7 +132,7 @@ const newWidget = (widget = null) => {
         state.mode = widgetDescr.mode;
         state.refreshTime = widgetDescr.refreshTime;
         state.control = widgetDescr.control;
-        state.showLegend = widgetDescr.showLegend;
+        state.enabled = widgetDescr.showLegend;
         state.shadow = widgetDescr.shadow;
         state.title = widgetDescr.title;
         state.panel = widgetDescr.panel;
@@ -146,7 +146,7 @@ const newWidget = (widget = null) => {
         state.mode = MODE_VARIABLE;
         state.refreshTime = 1000;
         state.control = '';
-        state.showLegend = false;
+        state.enabled = false;
         state.shadow = 'shadow';
         state.title = '';
         state.panel = '';
@@ -173,7 +173,7 @@ const newWidgetStep2 = () => {
         mode: state.mode,
         refreshTime: state.refreshTime,
         control: state.control,
-        showLegend: state.showLegend,
+        showLegend: state.enabled,
         shadow: state.shadow,
         title: state.title,
         panel: state.panel,
@@ -636,7 +636,7 @@ onUnmounted(() => {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-check-label" for="FD833D53">Show legend</label>
-                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="FD833D53" v-model="state.showLegend" /></div>
+                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="FD833D53" v-model="state.enabled" /></div>
                                         </div>
                                     </div>
                                 </div>
