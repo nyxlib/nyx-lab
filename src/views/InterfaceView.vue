@@ -486,12 +486,16 @@ onUnmounted(() => {
 
             <template v-slot:button>
 
-                <button class="btn btn-sm btn-primary ms-0" type="button" :disabled="!nyxStore.isConnected" @click="newWidget()">
+                <button class="btn btn-sm btn-primary ms-0" type="button" :disabled="!nyxStore.isConnected" data-bs-toggle="offcanvas" data-bs-target="#controlCanvas">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <button class="btn btn-sm btn-primary ms-2" type="button" :disabled="!nyxStore.isConnected" @click="newWidget(null)">
                     <i class="bi bi-plus-lg"></i> New widget
                 </button>
 
                 <button class="btn btn-sm btn-success ms-2" type="button" :disabled="!nyxStore.isConnected" @click="configStore.save()">
-                    <i class="bi bi-check-lg"></i> Save
+                    <i class="bi bi-check-lg"></i> Save dashboards
                 </button>
 
             </template>
@@ -504,6 +508,22 @@ onUnmounted(() => {
             Not connected
         </div>
 
+    </div>
+
+    <!-- *********************************************************************************************************** -->
+    <!-- OFFCANVAS                                                                                                   -->
+    <!-- *********************************************************************************************************** -->
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="controlCanvas">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">
+                <i class="bi bi-list"></i>
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+
+        </div>
     </div>
 
     <!-- *********************************************************************************************************** -->
@@ -761,6 +781,13 @@ onUnmounted(() => {
 .grid-stack-item {
 
     border-radius: calc(var(--bs-border-radius) + 10px);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.grid-stack-item > .ui-resizable-se {
+
+    background-image: none;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
