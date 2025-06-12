@@ -143,7 +143,7 @@ const newWidget = (widget = null) => {
     }
     else
     {
-        state.id = null;
+        state.id = __NYX_UUID__.v4();
         state.mode = MODE_VARIABLE;
         state.refreshTime = 1000;
         state.control = '';
@@ -170,7 +170,7 @@ const newWidgetStep2 = () => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     createWidget({
-        id: state.id || __NYX_UUID__.v4(),
+        id: state.id,
         mode: state.mode,
         refreshTime: state.refreshTime,
         control: state.control,
@@ -181,7 +181,7 @@ const newWidgetStep2 = () => {
         variables2: state.variables2,
         enabled: state.enabled,
         options: state.options,
-    }, !state.id);
+    });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -203,7 +203,7 @@ const createComponent = (component, attributes) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const createWidget = (widgetDescr, create = true) => {
+const createWidget = (widgetDescr) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PANEL                                                                                                      */
@@ -222,7 +222,7 @@ const createWidget = (widgetDescr, create = true) => {
 
     let widget;
 
-    if(widgetDescr.id in widgetDict)
+    if(!(widgetDescr.id in widgetDict))
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -447,7 +447,7 @@ onMounted(() => {
         /* RENDER WIDGETS                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        Object.values(configStore.globals.interfaceWidgets).forEach((control) => createWidget(control, true));
+        Object.values(configStore.globals.interfaceWidgets).forEach((widgetDescr) => createWidget(widgetDescr));
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -527,6 +527,8 @@ onUnmounted(() => {
         </div>
         <div class="offcanvas-body">
 
+            <!-- *************************************************************************************************** -->
+
             <div class="list-group">
                 <template v-for="(control, index1) in Object.values(configStore.globals.interfaceWidgets)" :key="control.id">
                     <div class="list-group-item" v-if="control.mode !== MODE_COMMAND">
@@ -544,6 +546,8 @@ onUnmounted(() => {
                     </div>
                 </template>
             </div>
+
+            <!-- *************************************************************************************************** -->
 
         </div>
     </div>
