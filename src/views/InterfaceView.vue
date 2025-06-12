@@ -71,7 +71,6 @@ const state = reactive({
     panel: '',
     variables1: [],
     variables2: [],
-    enabled: [],
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -153,7 +152,7 @@ const newWidget = (widget = null) => {
         state.panel = '';
         state.variables1 = [];
         state.variables2 = [];
-        state.enabled = [];
+        state.enabled = {};
         state.options = {};
     }
 
@@ -218,12 +217,12 @@ const createWidget = (widgetDescr, create = true) => {
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* RENDER WIDGET                                                                                                  */
+    /* CREATE / UPDATE WIDGET                                                                                         */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     let widget;
 
-    if(create)
+    if(widgetDescr.id in widgetDict)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -270,9 +269,7 @@ const createWidget = (widgetDescr, create = true) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        widget.classList.add(widgetDescr.shadow);
-
-        widget.descr = widgetDescr;
+        widgetDict[widgetDescr.id] = widget;
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -300,8 +297,19 @@ const createWidget = (widgetDescr, create = true) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    for(const {value} of SHADOWS)
+    {
+        widget.classList.toggle(value, widgetDescr.shadow === value);
+    }
+
     widget.querySelector('.widget-title').textContent = widgetDescr.title;
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    configStore.globals.interfaceWidgets[widgetDescr.id] = widget.descr = widgetDescr;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* CREATE / UPDATE COMPONENT                                                                                      */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(widgetDescr.mode !== MODE_COMMAND)
@@ -339,7 +347,7 @@ const createWidget = (widgetDescr, create = true) => {
 
         const groupDescr = widgetDescr.variables1.map((defXXXVector) => nyxStore.defXXXVectorDict[defXXXVector]).filter(Boolean);
 
-        if(groupDescr)
+        if(groupDescr.length > 0)
         {
             try
             {
@@ -358,12 +366,6 @@ const createWidget = (widgetDescr, create = true) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    configStore.globals.interfaceWidgets[widgetDescr.id] = widgetDescr;
-
-    widgetDict[widgetDescr.id] = widget;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -594,7 +596,7 @@ onUnmounted(() => {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="E9549BAB">Refresh time [ms]</label>
-                                            <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.refreshTime" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER" required="required" />
+                                            <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Refresh time" v-model="state.refreshTime" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER" required="required" />
                                         </div>
                                     </div>
                                 </div>
