@@ -48,16 +48,16 @@ const MODES = [
     {value: MODE_COMMAND, label: 'Command'},
 ];
 
-const CONTROLS = [
-    {value: 'auto', label: 'Auto'},
-]
-
 const SHADOWS = [
     {value: 'shadow-none', label: 'None'},
     {value: 'shadow-sm', label: 'Small'},
     {value: 'shadow', label: 'Regular'},
     {value: 'shadow-lg', label: 'Large'},
 ];
+
+const CONTROLS = [
+    {value: 'auto', label: 'Auto'},
+]
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -297,10 +297,9 @@ const createWidget = (widgetDescr) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(const {value} of SHADOWS)
-    {
-        widget.classList.toggle(value, widgetDescr.shadow === value);
-    }
+    widgetDescr.enabled = Object.fromEntries(widgetDescr.variables1.map((variable) => [variable, widgetDescr.enabled?.[variable] ?? true]));
+
+    SHADOWS.forEach((shadow) => widget.classList.toggle(shadow.value, widgetDescr.shadow === shadow.value));
 
     widget.querySelector('.widget-title').textContent = widgetDescr.title;
 
@@ -530,20 +529,26 @@ onUnmounted(() => {
             <!-- *************************************************************************************************** -->
 
             <div class="list-group">
-                <template v-for="(control, index1) in Object.values(configStore.globals.interfaceWidgets)" :key="control.id">
-                    <div class="list-group-item" v-if="control.mode !== MODE_COMMAND">
+                <template v-for="(widgetDescr, index1) in Object.values(configStore.globals.interfaceWidgets)" :key="widgetDescr.id">
+
+                    <!-- ******************************************************************************************* -->
+
+                    <div class="list-group-item" v-if="widgetDescr.mode !== MODE_COMMAND">
                         <div class="ms-1 me-auto">
                             <div class="fw-bold">
-                                {{ control.title }}
+                                {{ widgetDescr.title }}
                             </div>
-                            <div class="form-check form-switch" v-for="(variable, index2) in control.variables1" :key="variable">
-                                <input class="form-check-input" type="checkbox" role="switch" :id="`FE664D_${index1}${index2}`">
+                            <div class="form-check form-switch" v-for="(variable, index2) in widgetDescr.variables1" :key="variable">
+                                <input class="form-check-input" type="checkbox" role="switch" :id="`FE664D_${index1}${index2}`" v-model="widgetDescr.enabled[variable]">
                                 <label class="form-check-label" :for="`FE664D_${index1}${index2}`">
                                     {{ variable }}
                                 </label>
                             </div>
                         </div>
                     </div>
+
+                    <!-- ******************************************************************************************* -->
+
                 </template>
             </div>
 
