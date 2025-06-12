@@ -22,14 +22,17 @@ const props = defineProps({
     },
     min: {
         type: Number,
+        default: NaN,
         required: false,
     },
     max: {
         type: Number,
+        default: NaN,
         required: false,
     },
     step: {
         type: Number,
+        default: NaN,
         required: false,
     },
     defaultValue: {
@@ -38,7 +41,7 @@ const props = defineProps({
     },
     modelValue: {
         type: [String, Number, Boolean],
-        required: false,
+        required: true,
     },
 });
 
