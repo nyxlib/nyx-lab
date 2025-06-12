@@ -66,12 +66,12 @@ const state = reactive({
     mode: MODE_VARIABLE,
     refreshTime: 1000,
     control: '',
-    enabled: true,
     shadow: 'shadow',
     title: '',
     panel: '',
     variables1: [],
     variables2: [],
+    enabled: [],
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -80,6 +80,8 @@ const isValid = computed(() =>
     !!state.mode
     &&
     !!state.panel
+    ||
+    !!state.title
     &&
     (!!state.control || state.mode === MODE_COMMAND)
     &&
@@ -132,12 +134,12 @@ const newWidget = (widget = null) => {
         state.mode = widgetDescr.mode;
         state.refreshTime = widgetDescr.refreshTime;
         state.control = widgetDescr.control;
-        state.enabled = widgetDescr.showLegend;
         state.shadow = widgetDescr.shadow;
         state.title = widgetDescr.title;
         state.panel = widgetDescr.panel;
         state.variables1 = widgetDescr.variables1;
         state.variables2 = widgetDescr.variables2;
+        state.enabled = widgetDescr.enabled;
         state.options = widgetDescr.options;
     }
     else
@@ -146,12 +148,12 @@ const newWidget = (widget = null) => {
         state.mode = MODE_VARIABLE;
         state.refreshTime = 1000;
         state.control = '';
-        state.enabled = false;
         state.shadow = 'shadow';
         state.title = '';
         state.panel = '';
         state.variables1 = [];
         state.variables2 = [];
+        state.enabled = [];
         state.options = {};
     }
 
@@ -173,12 +175,12 @@ const newWidgetStep2 = () => {
         mode: state.mode,
         refreshTime: state.refreshTime,
         control: state.control,
-        showLegend: state.enabled,
         shadow: state.shadow,
         title: state.title,
         panel: state.panel,
         variables1: state.variables1,
         variables2: state.variables2,
+        enabled: state.enabled,
         options: state.options,
     }, !state.id);
 
@@ -523,6 +525,24 @@ onUnmounted(() => {
         </div>
         <div class="offcanvas-body">
 
+            <div class="list-group">
+                <template v-for="(control, index1) in Object.values(configStore.globals.interfaceWidgets)" :key="control.id">
+                    <div class="list-group-item" v-if="control.mode !== MODE_COMMAND">
+                        <div class="ms-1 me-auto">
+                            <div class="fw-bold">
+                                {{ control.title }}
+                            </div>
+                            <div class="form-check form-switch" v-for="(variable, index2) in control.variables1" :key="variable">
+                                <input class="form-check-input" type="checkbox" role="switch" :id="`FE664D_${index1}${index2}`">
+                                <label class="form-check-label" :for="`FE664D_${index1}${index2}`">
+                                    {{ variable }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
         </div>
     </div>
 
@@ -557,7 +577,7 @@ onUnmounted(() => {
                                 <!-- ******************************************************************************* -->
 
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="D38EC0FA">Mode</label>
                                             <multiselect
@@ -571,10 +591,17 @@ onUnmounted(() => {
                                                 :options="MODES" v-model="state.mode" />
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label" for="E9549BAB">Refresh time [ms]</label>
-                                        <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.refreshTime" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER" required="required" />
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="E9549BAB">Refresh time [ms]</label>
+                                            <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.refreshTime" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER" required="required" />
+                                        </div>
                                     </div>
+                                </div>
+
+                                <!-- ******************************************************************************* -->
+
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="F8E884DD">Control</label>
@@ -589,11 +616,6 @@ onUnmounted(() => {
                                                 :options="state.mode === MODE_COMMAND ? CONTROLS : controls" v-model="state.control" />
                                         </div>
                                     </div>
-                                </div>
-
-                                <!-- ******************************************************************************* -->
-
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="C8C721F4">Shadow</label>
@@ -606,12 +628,6 @@ onUnmounted(() => {
                                                 :create-option="false"
                                                 :close-on-select="true"
                                                 :options="SHADOWS" v-model="state.shadow" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="F938E61B">Title<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Plot title" v-model="state.title" />
                                         </div>
                                     </div>
                                 </div>
@@ -635,8 +651,8 @@ onUnmounted(() => {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-check-label" for="FD833D53">Show legend</label>
-                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="FD833D53" v-model="state.enabled" /></div>
+                                            <label class="form-label" for="F938E61B">Title</label>
+                                            <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Plot title" v-model="state.title" />
                                         </div>
                                     </div>
                                 </div>
