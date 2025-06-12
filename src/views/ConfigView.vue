@@ -85,20 +85,20 @@ onMounted(() => {
 
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">Server URL</label>
-                                    <input class="form-control form-control-sm" type="text" id="F3AB1470" placeholder="Server URL" v-no-autocomplete v-model="configStore.globals.mqttURL" />
+                                    <input class="form-control form-control-sm" type="text" id="F3AB1470" placeholder="Server URL" autocomplete="mqtt-server url" v-model="configStore.globals.mqttURL" />
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="A45F11A0">Username<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="A45F11A0" placeholder="Username" v-no-autocomplete v-model="configStore.globals.mqttUsername" />
+                                            <input class="form-control form-control-sm" type="text" id="A45F11A0" placeholder="Username" autocomplete="mqtt-server username" v-model="configStore.globals.mqttUsername" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="A4245C17">Password<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="password" id="A4245C17" placeholder="Password" v-password-toggle v-model="configStore.globals.mqttPassword" />
+                                            <input class="form-control form-control-sm" type="password" id="A4245C17" placeholder="Password" autocomplete="mqtt-server current-password" v-password-toggle v-model="configStore.globals.mqttPassword" />
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +116,22 @@ onMounted(() => {
 
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">Server URL<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" id="F3AB1470" placeholder="Server URL" v-no-autocomplete v-model="configStore.globals.nssURL" />
+                                    <input class="form-control form-control-sm" type="text" id="F3AB1470" placeholder="Server URL" autocomplete="nss-server url" v-model="configStore.globals.nssURL" />
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="D82503D3">Username<sup class="text-secondary">opt</sup></label>
+                                            <input class="form-control form-control-sm" type="text" id="D82503D3" placeholder="Username" autocomplete="nss-server username" v-model="configStore.globals.nssUsername" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="DDCC3DFE">Password<sup class="text-secondary">opt</sup></label>
+                                            <input class="form-control form-control-sm" type="password" id="DDCC3DFE" placeholder="Password" autocomplete="nss-server current-password" v-password-toggle v-model="configStore.globals.nssPassword" />
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>

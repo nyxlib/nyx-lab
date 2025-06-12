@@ -18,6 +18,8 @@ const DEFAULT_GLOBALS = {
     mqttUsername: '',
     mqttPassword: '',
     nssURL: '',
+    nssUsername: '',
+    nssPassword: '',
     /**/
     enableInterfaces: false,
     interfacePanels: {},
