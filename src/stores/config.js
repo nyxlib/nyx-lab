@@ -26,8 +26,8 @@ const DEFAULT_GLOBALS = {
     interfacePanels: {},
     interfaceWidgets: {},
     /**/
+    devices: {},
     addons: {},
-    /**/
     webPages: {},
 };
 
