@@ -16,9 +16,10 @@ export default [
             'vue/html-indent': 'off',
             'vue/v-slot-style': 'off',
             'vue/attributes-order': 'off',
-            'vue/html-self-closing': 'off',
-            'vue/no-mutating-props': 'off',
+            'vue/html-self-closing': 'off', //check
+            'vue/no-mutating-props': 'off', //check
             'vue/max-attributes-per-line': 'off',
+            'vue/first-attribute-linebreak': 'off',
             'vue/multi-word-component-names': 'off',
             'vue/html-closing-bracket-newline': 'off',
             'vue/no-v-text-v-html-on-component': 'off',
