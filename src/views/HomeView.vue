@@ -32,7 +32,9 @@ const connect = () => {
     );
 
     nss.update(
-        configStore.globals.nssURL
+        configStore.globals.nssURL,
+        configStore.globals.nssUsername,
+        configStore.globals.nssPassword
     );
 };
 
@@ -42,7 +44,7 @@ const disconnect = () => {
 
     mqtt.update('', '', '');
 
-    nss.update('');
+    nss.update('', '', '');
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
