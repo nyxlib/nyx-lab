@@ -17,6 +17,7 @@ const DEFAULT_GLOBALS = {
     mqttURL: '',
     mqttUsername: '',
     mqttPassword: '',
+    /**/
     nssURL: '',
     nssUsername: '',
     nssPassword: '',
@@ -26,6 +27,7 @@ const DEFAULT_GLOBALS = {
     interfaceWidgets: {},
     /**/
     addons: {},
+    /**/
     webPages: {},
 };
 
