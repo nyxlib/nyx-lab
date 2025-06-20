@@ -8,8 +8,6 @@ import Multiselect from '@vueform/multiselect';
 
 import {GridStack} from 'gridstack';
 
-import {Modal} from 'bootstrap';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import ControlOption from '../components/ControlOption.vue';
@@ -158,7 +156,7 @@ const newWidget = (widget = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Modal.getOrCreateInstance(controlModal.value).show();
+    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(controlModal.value).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -185,7 +183,7 @@ const newWidgetStep2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Modal.getOrCreateInstance(controlModal.value).hide();
+    __NYX_BOOTSTRAP__.getOrCreateInstance(controlModal.value).hide();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
