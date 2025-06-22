@@ -71,12 +71,30 @@ const confDup = (src, def) => {
 
 const useConfigStore = defineStore('config', {
     state: () => ({
+        /* CONFIGURATION */
         globals: deepClone(DEFAULT_GLOBALS),
         modified: false,
+        /* ADDONS */
         confPanels: {},
         appPanels: {},
         controls: {},
+        methods: {},
     }),
+    getters: {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        isAddonEnabled()
+        {
+            return (addonName) => {
+
+                const addon = this.globals.addons?.[addonName];
+
+                return addon?.enabled === true && addon?.zombie !== true;
+            };
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    },
     actions: {
 
         /*------------------------------------------------------------------------------------------------------------*/
