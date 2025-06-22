@@ -31,10 +31,12 @@ export default defineConfig({
     },
     resolve: {
         dedupe: [
-            '@vueform/multiselect',
             'bootstrap-icons',
+            'simple-icons',
+            '@vueform/multiselect',
+            'vuedraggable',
             'pinia',
-            'vue'
+            'vue',
         ],
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
