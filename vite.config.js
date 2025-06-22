@@ -16,7 +16,7 @@ export default defineConfig({
     plugins: [vuePlugin(), eslintPlugin()],
     base: './',
     build: {
-        chunkSizeWarningLimit: 1250,
+        chunkSizeWarningLimit: 8000,
         minify: true,
         rollupOptions: {
             output: {
