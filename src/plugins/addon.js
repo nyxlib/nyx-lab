@@ -165,6 +165,43 @@ const _registerControl_func = (addonName, id, title, mode, options, component) =
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _registerFunction_func = (addonName, funcName, func) => {
+
+    useConfigStore().functions[addonName].funcs[funcName] = func;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _hasAddon_func = (addonName) => {
+
+    return typeof(useConfigStore()?.functions[addonName]) === 'object';
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _hasFunction_func = (addonName, funcName) => {
+
+    return typeof(useConfigStore()?.functions[addonName]?.funcs[funcName]) === 'function';
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _execFunction_func = (addonName, funcName, ...args) => {
+
+    const f = useConfigStore()?.functions[addonName]?.funcs[funcName];
+
+    if(typeof(f) !== 'function')
+    {
+        throw new Error(`Unknown function: ${funcName}`);
+    }
+    else
+    {
+        return f(...args);
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const _updateVariables_func = (name1, name2, fractionDigits) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -212,7 +249,11 @@ export default {
             registerConfPanel: _registerConfPanel_func,
             registerAppPanel: _registerAppPanel_func,
             registerControl: _registerControl_func,
+            registerFunction: _registerFunction_func,
             /**/
+            hasAddon: _hasAddon_func,
+            hasFunction: _hasFunction_func,
+            execFunction: _execFunction_func,
             updateVariables: _updateVariables_func,
         });
     }

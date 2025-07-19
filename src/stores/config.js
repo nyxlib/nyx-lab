@@ -78,7 +78,7 @@ const useConfigStore = defineStore('config', {
         confPanels: {},
         appPanels: {},
         controls: {},
-        methods: {},
+        functions: {},
     }),
     getters: {
         /*------------------------------------------------------------------------------------------------------------*/
@@ -130,11 +130,16 @@ const useConfigStore = defineStore('config', {
 
             if(do_init && typeof addon.init === 'function')
             {
-                /*----------------------------------------------------------------------------------------------------*/
-
                 const TEMP_GLOBALS = {};
 
-                addon.init(TEMP_GLOBALS, this.addon, name);
+                /*----------------------------------------------------------------------------------------------------*/
+
+                try {
+                    addon.init(TEMP_GLOBALS, this.addon, name);
+                }
+                catch(e) {
+                    console.error(e);
+                }
 
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -168,10 +173,16 @@ const useConfigStore = defineStore('config', {
                     this.confPanels[name] = {descr: descr, addon: addon, panels: []};
                     this.appPanels[name] = {descr: descr, addon: addon, panels: []};
                     this.controls[name] = {descr: descr, addon: addon, ctrls: []};
+                    this.functions[name] = {descr: descr, addon: addon, funcs: {}};
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    addon.start(this.addon, name);
+                    try {
+                        addon.start(this.addon, name);
+                    }
+                    catch(e) {
+                        console.error(e);
+                    }
 
                     /*------------------------------------------------------------------------------------------------*/
 
@@ -196,13 +207,19 @@ const useConfigStore = defineStore('config', {
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    addon.stop(this.addon, name);
+                    try {
+                        addon.stop(this.addon, name);
+                    }
+                    catch(e) {
+                        console.error(e);
+                    }
 
                     /*------------------------------------------------------------------------------------------------*/
 
                     delete this.confPanels[name];
                     delete this.appPanels[name];
                     delete this.controls[name];
+                    delete this.functions[name];
 
                     /*------------------------------------------------------------------------------------------------*/
                 }
