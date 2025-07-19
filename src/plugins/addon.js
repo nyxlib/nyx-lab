@@ -180,9 +180,9 @@ const _updateVariables_func = (name1, name2, fractionDigits) => {
         {
             const def = nyxStore.resolve(configStore.globals[name2]);
 
-            if(def !== null)
+            if(def?.$)
             {
-                configStore.globals[name1] = Number(Number(def['$']).toFixed(fractionDigits));
+                configStore.globals[name1] = Number(Number(def.$).toFixed(fractionDigits));
             }
         }
     }
