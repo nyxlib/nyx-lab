@@ -231,7 +231,7 @@ onMounted(() => {
                     </div>
                     <div class="col-md-6">
 
-                        <nyx-variables class="shadow mb-3" :devices="configStore.globals.devices" v-if="state.showNyx" />
+                        <nyx-variables class="shadow mb-3" v-if="state.showNyx" />
 
                     </div>
                 </div>
