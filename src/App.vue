@@ -244,11 +244,11 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <button class="btn btn-sm btn-success me-0" type="button" v-if="nyxStore.isConnected">
+                <button class="btn btn-sm btn-success border-primary2 me-0" type="button" v-if="nyxStore.isConnected">
                     <i class="bi bi-lightning-charge"></i> connected
                 </button>
 
-                <button class="btn btn-sm btn-secondary me-0" type="button" v-if="!nyxStore.isConnected">
+                <button class="btn btn-sm btn-secondary border-primary2 me-0" type="button" v-if="!nyxStore.isConnected">
                     <i class="bi bi-lightning-charge"></i> disconnected
                 </button>
 
@@ -258,11 +258,11 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1" v-if="configStore.globals.weatherWidgetHTML || configStore.globals.seeingWidgetHTML">
 
-                <button class="btn btn-sm btn-primary me-1" type="button" v-if="configStore.globals.weatherWidgetHTML" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)">
+                <button class="btn btn-sm btn-primary border-primary2 me-1" type="button" v-if="configStore.globals.weatherWidgetHTML" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)">
                     <i class="bi bi-cloud-moon-fill"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary me-0" type="button" v-if="configStore.globals.seeingWidgetHTML" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)">
+                <button class="btn btn-sm btn-primary border-primary2 me-0" type="button" v-if="configStore.globals.seeingWidgetHTML" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)">
                     <i class="bi bi-stars"></i>
                 </button>
 
@@ -272,11 +272,11 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <button class="btn btn-sm btn-primary me-1" type="button" @click="about()">
-                    <i class="bi bi-question-circle"></i>
+                <button class="btn btn-sm btn-primary border-primary2 me-1" type="button" @click="about()">
+                    <i class="bi bi-question"></i>
                 </button>
 
-                <label class="btn btn-sm btn-primary me-0" for="C2D68371">
+                <label class="btn btn-sm btn-primary border-primary2 me-0" for="C2D68371">
                     <i class="bi bi-moon-stars"></i>
                 </label>
 
