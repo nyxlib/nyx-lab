@@ -73,9 +73,25 @@ input:invalid {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.border-primary2 {
+[data-tauri-drag-region] input,
+[data-tauri-drag-region] button,
+[data-tauri-drag-region] label[for="C2D68371"] {
+
+    color: white;
 
     border-color: rgb(10, 89, 204);
+
+    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+[data-tauri-drag-region] .btn-secondary { background-color: var(--bs-secondary); }
+[data-tauri-drag-region] .btn-success { background-color: var(--bs-success); }
+[data-tauri-drag-region] .btn-danger { background-color: var(--bs-danger); }
+[data-tauri-drag-region] .btn-warning { background-color: var(--bs-warning); }
+[data-tauri-drag-region] .btn-info { background-color: var(--bs-info); }
+[data-tauri-drag-region] .btn-light { background-color: var(--bs-light); }
+[data-tauri-drag-region] .btn-dark { background-color: var(--bs-dark); }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
