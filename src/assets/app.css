@@ -73,8 +73,8 @@ input:invalid {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-[data-tauri-drag-region] input,
-[data-tauri-drag-region] button,
+[data-tauri-drag-region] .btn,
+[data-tauri-drag-region] .form-control,
 [data-tauri-drag-region] label[for="C2D68371"] {
 
     color: white;
