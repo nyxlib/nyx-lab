@@ -75,7 +75,7 @@ input:invalid {
 
 .border-primary2 {
 
-    border-color: var(--bs-btn-hover-border-color);
+    border-color: rgb(10, 89, 204);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
