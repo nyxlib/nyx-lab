@@ -90,7 +90,14 @@ function _load(app, path)
 
                     script.addEventListener('load', () => {
 
-                        resolve([_register(app, path, json.entry), json.entry, true]);
+                        try
+                        {
+                            resolve([_register(app, path, json.entry), json.entry, true]);
+                        }
+                        catch(_)
+                        {
+                            reject('corrupted addon');
+                        }
                     });
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -106,7 +113,7 @@ function _load(app, path)
 
                     script.type = 'text/javascript';
 
-                    script.async = true;
+                    script.async = false;
 
                     /*------------------------------------------------------------------------------------------------*/
 
