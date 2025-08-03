@@ -73,11 +73,25 @@ input:invalid {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+[data-tauri-drag-region] .navbar-text {
+
+    color: white;
+
+    white-space: nowrap;
+
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 [data-tauri-drag-region] .btn,
 [data-tauri-drag-region] .form-control,
 [data-tauri-drag-region] label[for="C2D68371"] {
 
     color: white;
+
+    white-space: nowrap;
 
     border-color: rgb(10, 89, 204);
 
