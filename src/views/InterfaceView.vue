@@ -473,7 +473,7 @@ onUnmounted(() => {
 
     <div class="d-flex flex-column overflow-y-auto h-100 w-100 p-3">
 
-        <nav-tabs margin="mb-3" v-if="nyxStore.isConnected">
+        <nav-tabs v-if="nyxStore.isConnected">
 
             <!-- *************************************************************************************************** -->
 
@@ -575,7 +575,7 @@ onUnmounted(() => {
 
                     <form class="modal-body px-3 py-2" @submit.prevent="newWidgetStep2" id="D1531250">
 
-                        <nav-tabs margin="mb-3">
+                        <nav-tabs>
 
                             <!-- *********************************************************************************** -->
                             <!-- Control                                                                             -->

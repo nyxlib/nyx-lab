@@ -64,7 +64,7 @@ onMounted(() => {
 
         <!--*********************************************************************************************************-->
 
-        <nav-tabs margin="mb-3">
+        <nav-tabs>
 
             <!-- *************************************************************************************************** -->
             <!-- SERVICES                                                                                            -->
@@ -197,7 +197,7 @@ onMounted(() => {
 
                 <div class="container">
 
-                    <nav-tabs margin="mb-3">
+                    <nav-tabs>
 
                         <tab-pane title="Addons">
                             <Addons :addons="configStore.globals.addons" />
