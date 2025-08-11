@@ -247,10 +247,11 @@ export default {
         app.provide('addon', {
             load: (path) => _load(app, path),
             /**/
-            app: () => app,
-            router: () => router,
-            nyxStore: () => useNyxStore(),
-            configStore: () => useConfigStore(),
+            app: app,
+            router: router,
+            nyxStore: useNyxStore,
+            configStore: useConfigStore,
+            /**/
             newId: () => __NYX_UUID__.v4().substring(0, 13),
             /**/
             registerConfPanel: _registerConfPanel_func,
