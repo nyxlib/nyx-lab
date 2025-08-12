@@ -134,8 +134,6 @@ const connect = () => {
         configStore.globals.nssUsername,
         configStore.globals.nssPassword
     );
-
-    setTimeout(init, 1000);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
