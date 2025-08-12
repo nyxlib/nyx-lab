@@ -148,7 +148,7 @@ const userInterfaceEnabled = (userInterface) => {
                                 <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': userInterface.zombie}]" type="text" v-model="userInterface.title" />
                             </td>
                             <td class="text-center">
-                                <button :class="['btn', 'btn-sm', {'btn-success': !userInterface.zombie && userInterface.locked, 'btn-outline-success': !userInterface.zombie && !userInterface.locked, 'btn-secondary': userInterface.zombie && userInterface.locked, 'btn-outline-secondary': userInterface.zombie && !userInterface.locked}]" type="button" @click="userInterfaceLocked(userInterface)">Locked</button>
+                                <button :class="['btn', 'btn-sm', {'btn-warning': !userInterface.zombie && userInterface.locked, 'btn-outline-warning': !userInterface.zombie && !userInterface.locked, 'btn-secondary': userInterface.zombie && userInterface.locked, 'btn-outline-secondary': userInterface.zombie && !userInterface.locked}]" type="button" @click="userInterfaceLocked(userInterface)">Locked</button>
                             </td>
                             <td class="text-center">
                                 <button :class="['btn', 'btn-sm', {'btn-success': !userInterface.zombie && userInterface.enabled, 'btn-outline-success': !userInterface.zombie && !userInterface.enabled, 'btn-secondary': userInterface.zombie && userInterface.enabled, 'btn-outline-secondary': userInterface.zombie && !userInterface.enabled}]" type="button" @click="userInterfaceEnabled(userInterface)">Enabled</button>
