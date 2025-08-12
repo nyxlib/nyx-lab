@@ -308,6 +308,8 @@ const createWidget = (widgetDescr) => {
         /*------------------------------------------------------------------------------------------------------------*/
 
         widget = el.gridstack.addWidget({
+            noMove: locked,
+            noResize: locked,
             x: widgetDescr.x,
             y: widgetDescr.y,
             h: widgetDescr.h,
