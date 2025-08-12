@@ -151,7 +151,7 @@ const disconnect = () => {
 
 const init = () => {
 
-    if(configStore.globals.showUserInterfaces && nyxStore.isConnected)
+    if(configStore.globals.showUserInterfaces)
     {
         Object.values(configStore.globals.interfaceWidgets).forEach(createWidget);
     }
