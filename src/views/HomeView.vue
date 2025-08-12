@@ -501,15 +501,19 @@ onUnmounted(() => {
 
     <div class="overflow-y-auto h-100 w-100 p-3">
 
-        <nyx-dashboard @connect="connect" @disconnect="disconnect">
+        <nyx-dashboard :show-devices="configStore.globals.showNyxInterfaces" @connect="connect" @disconnect="disconnect">
 
             <!-- *************************************************************************************************** -->
 
-            <tab-pane :title="panel.label" v-for="panel in panels" :key="panel.value">
+            <template v-if="configStore.globals.showUserInterfaces">
 
-                <div class="grid-stack h-100 w-100" :data-panel="panel.value"></div>
+                <tab-pane :title="panel.label" v-for="panel in panels" :key="panel.value">
 
-            </tab-pane>
+                    <div class="grid-stack h-100 w-100" :data-panel="panel.value"></div>
+
+                </tab-pane>
+
+            </template>
 
             <!-- *************************************************************************************************** -->
 

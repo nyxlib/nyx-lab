@@ -22,7 +22,8 @@ const DEFAULT_GLOBALS = {
     nssUsername: '',
     nssPassword: '',
     /**/
-    enableInterfaces: false,
+    showNyxInterfaces: true,
+    showUserInterfaces: false,
     interfacePanels: {},
     interfaceWidgets: {},
     /**/

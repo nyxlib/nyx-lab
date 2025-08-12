@@ -12,7 +12,7 @@ import useConfigStore from '../stores/config';
 
 import license from '../assets/license.txt';
 
-import InterfacePanels from '../components/InterfacePanels.vue';
+import UserInterfaces from '../components/UserInterfaces.vue';
 import WebPages from '../components/WebPages.vue';
 import Addons from '../components/Addons.vue';
 import Cache from '../components/Cache.vue';
@@ -141,7 +141,7 @@ onMounted(() => {
 
                         <div class="shadow card mb-3">
                             <div class="card-header">
-                                <i class="bi bi-grid-1x2"></i> User interfaces
+                                <i class="bi bi-grid-1x2"></i> Control interfaces
                             </div>
                             <div class="card-body">
 
@@ -149,14 +149,19 @@ onMounted(() => {
                                     <div class="col-md-3">
 
                                         <div class="mb-3">
-                                            <label class="form-label" for="A925CE04">Enable user interfaces</label>
-                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.enableInterfaces" /></div>
+                                            <label class="form-label" for="A925CE04">Show Nyx interfaces</label>
+                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showNyxInterfaces" /></div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label" for="A925CE04">Show user interfaces</label>
+                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showUserInterfaces" /></div>
                                         </div>
 
                                     </div>
                                     <div class="col-md-9">
 
-                                        <interface-panels :enabled="configStore.globals.enableInterfaces" :interface-panels="configStore.globals.interfacePanels" />
+                                        <user-interfaces :user-interfaces="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
 
                                     </div>
                                 </div>
