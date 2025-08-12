@@ -96,6 +96,7 @@ const isValid = computed(() =>
 const panels = computed(() => Object.values(configStore.globals.interfacePanels).filter((panel) => panel.enabled).sort((a, b) => a.rank - b.rank).map((panel) => ({
     value: panel.id,
     label: panel.title,
+    locked: panel.locked,
 })));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -103,6 +104,7 @@ const panels = computed(() => Object.values(configStore.globals.interfacePanels)
 const controls = computed(() => Object.values(configStore.controls).flatMap((controls) => controls.ctrls).filter((ctrl) => ctrl.mode === state.mode).map((ctrl) => ({
     value: ctrl.id,
     label: ctrl.title,
+    //////: ctrl.locked,
 })));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -291,6 +293,10 @@ const createWidget = (widgetDescr) => {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
+        const locked = configStore.globals.interfacePanels[widgetDescr.panel].locked;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         if(!widgetDescr.h) {
             widgetDescr.h = Math.round(NB_COLUMNS * el.offsetHeight / el.offsetWidth / 4);
         }
@@ -310,7 +316,7 @@ const createWidget = (widgetDescr) => {
                 <div class="card h-100 w-100 m-0">
                     <div class="card-header px-3 py-1">
                         <span class="widget-title"></span>
-                        <span>
+                        <span class="${locked ? 'd-none' : ''}">
                             <i class="bi bi-pencil" style="cursor: pointer;"></i>
                             <i class="bi bi-x-lg" style="cursor: pointer;"></i>
                         </span>
@@ -729,7 +735,7 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="panels" v-model="state.panel" />
+                                                :options="panels.filter((panel) => !panel.locked)" v-model="state.panel" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
