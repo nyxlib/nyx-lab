@@ -104,7 +104,7 @@ const panels = computed(() => Object.values(configStore.globals.interfacePanels)
 const controls = computed(() => Object.values(configStore.controls).flatMap((controls) => controls.ctrls).filter((ctrl) => ctrl.mode === state.mode).map((ctrl) => ({
     value: ctrl.id,
     label: ctrl.title,
-    //////: ctrl.locked,
+    //////: ctrl.?????,
 })));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
