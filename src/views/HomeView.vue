@@ -139,11 +139,13 @@ const connect = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    let cnt = 0, timeout = setTimeout(() => {
+    let cnt = 0, interval = setInterval(() => {
 
         if(cnt++ > 10 || nyxStore.isConnected)
         {
-            clearTimeout(timeout);
+            clearInterval(interval);
+
+            interval = null;
 
             init();
         }
@@ -486,7 +488,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const internal = setInterval(() => {
+    let interval = setInterval(() => {
 
         const grids = GridStack.initAll({float: true, margin: 0, column: NB_COLUMNS});
 
@@ -509,9 +511,9 @@ onMounted(() => {
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            clearInterval(internal);
+            clearInterval(interval);
 
-            /*--------------------------------------------------------------------------------------------------------*/
+            interval = null
 
             init();
 
