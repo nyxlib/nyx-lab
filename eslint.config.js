@@ -16,8 +16,8 @@ export default [
             'vue/html-indent': 'off',
             'vue/v-slot-style': 'off',
             'vue/attributes-order': 'off',
-            'vue/html-self-closing': 'off', //check
-            'vue/no-mutating-props': 'off', //check
+            'vue/html-self-closing': 'off',
+            'vue/no-mutating-props': 'off',
             'vue/max-attributes-per-line': 'off',
             'vue/first-attribute-linebreak': 'off',
             'vue/multi-word-component-names': 'off',
@@ -26,6 +26,8 @@ export default [
             'vue/multiline-html-element-content-newline': 'off',
             'vue/singleline-html-element-content-newline': 'off',
             'quotes': ['error', 'single'],
+            'semi': ['error', 'always'],
+            'no-extra-semi': 'error',
         },
     },
 ];

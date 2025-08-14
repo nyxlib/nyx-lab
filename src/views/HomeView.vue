@@ -57,7 +57,7 @@ const SHADOWS = [
 
 const CONTROLS = [
     {value: 'auto', label: 'Auto'},
-]
+];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -508,12 +508,12 @@ onMounted(() => {
 
                 grid.on('resizestop', (_, el) => {
 
-                    updateWidget(el)
+                    updateWidget(el);
                 });
 
                 grid.on('dragstop', (_, el) => {
 
-                    updateWidget(el)
+                    updateWidget(el);
                 });
             });
 
@@ -521,7 +521,7 @@ onMounted(() => {
 
             clearInterval(interval);
 
-            interval = null
+            interval = null;
 
             init();
 
