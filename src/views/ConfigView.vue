@@ -261,7 +261,7 @@ onMounted(() => {
             <!-- BUTTONS                                                                                             -->
             <!-- *************************************************************************************************** -->
 
-            <template v-slot:button>
+            <template #button>
 
                 <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.import()" style="width: 85px;">
                     <i class="bi bi-upload"></i> Import
