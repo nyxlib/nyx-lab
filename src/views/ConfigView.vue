@@ -12,10 +12,10 @@ import useConfigStore from '../stores/config';
 
 import license from '../assets/license.txt';
 
-import UserInterfaces from '../components/UserInterfaces.vue';
-import AppAddons from '../components/AppAddons.vue';
-import AppCache from '../components/AppCache.vue';
-import WebPages from '../components/WebPages.vue';
+import UserInterfaceTable from '../components/UserInterfaceTable.vue';
+import AddonTable from '../components/AddonTable.vue';
+import CacheTable from '../components/CacheTable.vue';
+import WebPageTable from '../components/WebPageTable.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -161,7 +161,7 @@ onMounted(() => {
                                     </div>
                                     <div class="col-md-9">
 
-                                        <user-interfaces :user-interfaces="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
+                                        <user-interface-table :user-interfaces="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
 
                                     </div>
                                 </div>
@@ -205,15 +205,15 @@ onMounted(() => {
                     <nav-tabs>
 
                         <tab-pane title="Addons">
-                            <AppAddons :addons="configStore.globals.addons" />
+                            <addon-table :addons="configStore.globals.addons" />
                         </tab-pane>
 
                         <tab-pane title="Web pages">
-                            <web-pages :web-pages="configStore.globals.webPages" />
+                            <web-page-table :web-pages="configStore.globals.webPages" />
                         </tab-pane>
 
                         <tab-pane title="Cache" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
-                            <app-cache v-if="state.shownTabs.has('nyx-cache')" />
+                            <cache-table v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 
                     </nav-tabs>
