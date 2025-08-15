@@ -212,7 +212,7 @@ onMounted(() => {
                             <web-pages :web-pages="configStore.globals.webPages" />
                         </tab-pane>
 
-                        <tab-pane title="Cache" v-if="HAS_TAURI" @shown="() => state.shownTabs.add('nyx-cache')">
+                        <tab-pane title="Cache" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
                             <app-cache v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 

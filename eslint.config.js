@@ -27,13 +27,13 @@ export default [
                     'OTHER_ATTR',
                     'OTHER_DIRECTIVES',
                     'GLOBAL',               // id
-                    'CONDITIONALS',         // v-if, v-show
                     'LIST_RENDERING',       // v-for
                     'UNIQUE',               // ref, key
                     'SLOT',                 // slot
                     'TWO_WAY_BINDING',      // v-model
                     'EVENTS',               // events
                     'CONTENT',              // v-html, v-text
+                    'CONDITIONALS',         // v-if, v-show
                 ],
                 'alphabetical': false,
             }],
