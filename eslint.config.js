@@ -18,6 +18,7 @@ export default [
             'vue/no-mutating-props': 'off',
             'vue/max-attributes-per-line': 'off',
             'vue/first-attribute-linebreak': 'off',
+            'vue/multi-word-component-names': 'off',
             'vue/no-v-text-v-html-on-component': 'off',
             'vue/multiline-html-element-content-newline': 'off',
             'vue/singleline-html-element-content-newline': 'off',
