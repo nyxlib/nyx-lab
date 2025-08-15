@@ -687,7 +687,7 @@ onUnmounted(() => {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="E9549BAB">Refresh time [ms]</label>
-                                            <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Refresh time" v-model="state.refreshTime" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER" required="required" />
+                                            <input class="form-control form-control-sm" type="number" min="1" step="1" placeholder="Refresh time" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER" :required="true" id="E9549BAB" v-model="state.refreshTime" />
                                         </div>
                                     </div>
                                 </div>
@@ -700,13 +700,13 @@ onUnmounted(() => {
                                             <label class="form-label" for="F8E884DD">Control</label>
                                             <multiselect
                                                 mode="single"
-                                                id="F8E884DD"
                                                 :required="true"
                                                 :can-clear="false"
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="state.mode === MODE_COMMAND ? CONTROLS : controls" v-model="state.control"
+                                                :options="state.mode === MODE_COMMAND ? CONTROLS : controls"
+                                                id="F8E884DD" v-model="state.control"
                                             />
                                         </div>
                                     </div>
@@ -715,13 +715,13 @@ onUnmounted(() => {
                                             <label class="form-label" for="C8C721F4">Shadow</label>
                                             <multiselect
                                                 mode="single"
-                                                id="C8C721F4"
                                                 :required="true"
                                                 :can-clear="false"
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="SHADOWS" v-model="state.shadow"
+                                                :options="SHADOWS"
+                                                id="C8C721F4" v-model="state.shadow"
                                             />
                                         </div>
                                     </div>
@@ -735,20 +735,20 @@ onUnmounted(() => {
                                             <label class="form-label" for="C8C721F4">Panel</label>
                                             <multiselect
                                                 mode="single"
-                                                id="C8C721F4"
                                                 :required="true"
                                                 :can-clear="false"
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="panels.filter((panel) => !panel.locked)" v-model="state.panel"
+                                                :options="panels.filter((panel) => !panel.locked)"
+                                                id="C8C721F4" v-model="state.panel"
                                             />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="F938E61B">Title</label>
-                                            <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Plot title" v-model="state.title" />
+                                            <input class="form-control form-control-sm" type="text" placeholder="Plot title" id="F938E61B" v-model="state.title" />
                                         </div>
                                     </div>
                                 </div>
@@ -759,12 +759,12 @@ onUnmounted(() => {
                                     <label class="form-label" for="BBA0018F">Variable</label>
                                     <multiselect
                                         mode="tags"
-                                        id="BBA0018F"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.variableDefs" v-model="state.variables1"
+                                        :options="nyxStore.variableDefs"
+                                        id="BBA0018F" v-model="state.variables1"
                                     />
                                 </div>
 
@@ -774,12 +774,12 @@ onUnmounted(() => {
                                     <label class="form-label" for="BBA0018F">Y variable</label>
                                     <multiselect
                                         mode="tags"
-                                        id="BBA0018F"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.variableDefs" v-model="state.variables1"
+                                        :options="nyxStore.variableDefs"
+                                        id="BBA0018F" v-model="state.variables1"
                                     />
                                 </div>
 
@@ -789,12 +789,12 @@ onUnmounted(() => {
                                     <label class="form-label" for="B5D75D1E">X variable</label>
                                     <multiselect
                                         mode="tags"
-                                        id="B5D75D1E"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.variableDefs" v-model="state.variables2"
+                                        :options="nyxStore.variableDefs"
+                                        id="B5D75D1E" v-model="state.variables2"
                                     />
                                 </div>
 
@@ -804,12 +804,12 @@ onUnmounted(() => {
                                     <label class="form-label" for="BBA0018F">BLOB</label>
                                     <multiselect
                                         mode="tags"
-                                        id="BBA0018F"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.blobDefs" v-model="state.variables1"
+                                        :options="nyxStore.blobDefs"
+                                        id="BBA0018F" v-model="state.variables1"
                                     />
                                 </div>
 
@@ -819,12 +819,12 @@ onUnmounted(() => {
                                     <label class="form-label" for="BBA0018F">Stream</label>
                                     <multiselect
                                         mode="tags"
-                                        id="BBA0018F"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.streamDefs" v-model="state.variables1"
+                                        :options="nyxStore.streamDefs"
+                                        id="BBA0018F" v-model="state.variables1"
                                     />
                                 </div>
 
@@ -834,12 +834,12 @@ onUnmounted(() => {
                                     <label class="form-label" for="BBA0018F">Command</label>
                                     <multiselect
                                         mode="tags"
-                                        id="BBA0018F"
                                         :required="true"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.vectorDefs" v-model="state.variables1"
+                                        :options="nyxStore.vectorDefs"
+                                        id="BBA0018F" v-model="state.variables1"
                                     />
                                 </div>
 

@@ -85,20 +85,20 @@ onMounted(() => {
 
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">Server URL</label>
-                                    <input class="form-control form-control-sm" type="text" id="F3AB1470" placeholder="Server URL" autocomplete="mqtt-server url" v-model="configStore.globals.mqttURL" />
+                                    <input class="form-control form-control-sm" type="text" placeholder="Server URL" autocomplete="mqtt-server url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="A45F11A0">Username<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="A45F11A0" placeholder="Username" autocomplete="mqtt-server username" v-model="configStore.globals.mqttUsername" />
+                                            <input class="form-control form-control-sm" type="text" placeholder="Username" autocomplete="mqtt-server username" id="A45F11A0" v-model="configStore.globals.mqttUsername" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="A4245C17">Password<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="password" id="A4245C17" placeholder="Password" autocomplete="mqtt-server current-password" v-password-toggle v-model="configStore.globals.mqttPassword" />
+                                            <input class="form-control form-control-sm" type="password" placeholder="Password" autocomplete="mqtt-server current-password" v-password-toggle id="A4245C17" v-model="configStore.globals.mqttPassword" />
                                         </div>
                                     </div>
                                 </div>
@@ -116,20 +116,20 @@ onMounted(() => {
 
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">Server URL<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" id="F3AB1470" placeholder="Server URL" autocomplete="nss-server url" v-model="configStore.globals.nssURL" />
+                                    <input class="form-control form-control-sm" type="text" placeholder="Server URL" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="D82503D3">Username<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" id="D82503D3" placeholder="Username" autocomplete="nss-server username" v-model="configStore.globals.nssUsername" />
+                                            <input class="form-control form-control-sm" type="text" placeholder="Username" autocomplete="nss-server username" id="D82503D3" v-model="configStore.globals.nssUsername" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="DDCC3DFE">Password<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="password" id="DDCC3DFE" placeholder="Password" autocomplete="nss-server current-password" v-password-toggle v-model="configStore.globals.nssPassword" />
+                                            <input class="form-control form-control-sm" type="password" placeholder="Password" autocomplete="nss-server current-password" v-password-toggle id="DDCC3DFE" v-model="configStore.globals.nssPassword" />
                                         </div>
                                     </div>
                                 </div>
@@ -263,19 +263,19 @@ onMounted(() => {
 
             <template #button>
 
-                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.import()" style="width: 85px;">
+                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" style="width: 85px;" @click="configStore.import()">
                     <i class="bi bi-upload"></i> Import
                 </button>
 
-                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" @click="configStore.export()" style="width: 85px;">
+                <button class="btn btn-sm btn-outline-primary my-1 me-2" type="button" style="width: 85px;" @click="configStore.export()">
                     <i class="bi bi-download"></i> Export
                 </button>
 
-                <button class="btn btn-sm btn-outline-warning my-1 me-2" type="button" @click="configStore.load()" style="width: 85px;">
+                <button class="btn btn-sm btn-outline-warning my-1 me-2" type="button" style="width: 85px;" @click="configStore.load()">
                     <i class="bi bi-x-lg"></i> Reload
                 </button>
 
-                <button class="btn btn-sm btn-success xxxxxxx my-1 me-0" type="button" @click="configStore.save()" style="width: 85px;">
+                <button class="btn btn-sm btn-success xxxxxxx my-1 me-0" type="button" style="width: 85px;" @click="configStore.save()">
                     <i class="bi bi-check-lg"></i> Save
                 </button>
 
