@@ -11,6 +11,7 @@
     "type": "module",
     "private": true,
     "scripts": {
+        "lint": "eslint",
         "app-dev": "npm i --update vue-nyx && vite --port 1234 dev",
         "app-prod": "npm i --update vue-nyx && vite build",
         "app-lint": "eslint",
