@@ -8,23 +8,21 @@ import pluginVue from 'eslint-plugin-vue';
 export default [
     ...pluginVue.configs['flat/recommended'],
     {
-        ignores: ['dist/**', 'public/**', 'node_modules/**'],
+        ignores: ['dist/**', 'public/**', 'src-tauri/**', 'node_modules/**'],
     },
     {
         rules: {
             'vue/no-v-html': 'off',
             'vue/html-indent': 'off',
-            'vue/v-slot-style': 'off',
-            'vue/attributes-order': 'off',
+            'vue/attributes-order': 'off', // check
             'vue/html-self-closing': 'off',
             'vue/no-mutating-props': 'off',
             'vue/max-attributes-per-line': 'off',
             'vue/first-attribute-linebreak': 'off',
-            'vue/multi-word-component-names': 'off',
-            'vue/html-closing-bracket-newline': 'off',
             'vue/no-v-text-v-html-on-component': 'off',
             'vue/multiline-html-element-content-newline': 'off',
             'vue/singleline-html-element-content-newline': 'off',
+            /**/
             'quotes': ['error', 'single'],
             'semi': ['error', 'always'],
             'no-extra-semi': 'error',

@@ -679,7 +679,8 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="MODES" v-model="state.mode" />
+                                                :options="MODES" v-model="state.mode"
+                                            />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -704,7 +705,8 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="state.mode === MODE_COMMAND ? CONTROLS : controls" v-model="state.control" />
+                                                :options="state.mode === MODE_COMMAND ? CONTROLS : controls" v-model="state.control"
+                                            />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -718,7 +720,8 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="SHADOWS" v-model="state.shadow" />
+                                                :options="SHADOWS" v-model="state.shadow"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -737,7 +740,8 @@ onUnmounted(() => {
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="panels.filter((panel) => !panel.locked)" v-model="state.panel" />
+                                                :options="panels.filter((panel) => !panel.locked)" v-model="state.panel"
+                                            />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -759,7 +763,8 @@ onUnmounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.variableDefs" v-model="state.variables1" />
+                                        :options="nyxStore.variableDefs" v-model="state.variables1"
+                                    />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
@@ -773,7 +778,8 @@ onUnmounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.variableDefs" v-model="state.variables1" />
+                                        :options="nyxStore.variableDefs" v-model="state.variables1"
+                                    />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
@@ -787,7 +793,8 @@ onUnmounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.variableDefs" v-model="state.variables2" />
+                                        :options="nyxStore.variableDefs" v-model="state.variables2"
+                                    />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
@@ -801,7 +808,8 @@ onUnmounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.blobDefs" v-model="state.variables1" />
+                                        :options="nyxStore.blobDefs" v-model="state.variables1"
+                                    />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
@@ -815,7 +823,8 @@ onUnmounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.streamDefs" v-model="state.variables1" />
+                                        :options="nyxStore.streamDefs" v-model="state.variables1"
+                                    />
                                 </div>
 
                                 <!-- ******************************************************************************* -->
@@ -829,7 +838,8 @@ onUnmounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="nyxStore.vectorDefs" v-model="state.variables1" />
+                                        :options="nyxStore.vectorDefs" v-model="state.variables1"
+                                    />
                                 </div>
 
                                 <!-- ******************************************************************************* -->

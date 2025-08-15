@@ -13,9 +13,9 @@ import useConfigStore from '../stores/config';
 import license from '../assets/license.txt';
 
 import UserInterfaces from '../components/UserInterfaces.vue';
+import AppAddons from '../components/AppAddons.vue';
+import AppCache from '../components/AppCache.vue';
 import WebPages from '../components/WebPages.vue';
-import Addons from '../components/Addons.vue';
-import Cache from '../components/Cache.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -205,7 +205,7 @@ onMounted(() => {
                     <nav-tabs>
 
                         <tab-pane title="Addons">
-                            <Addons :addons="configStore.globals.addons" />
+                            <AppAddons :addons="configStore.globals.addons" />
                         </tab-pane>
 
                         <tab-pane title="Web pages">
@@ -213,7 +213,7 @@ onMounted(() => {
                         </tab-pane>
 
                         <tab-pane title="Cache" v-if="HAS_TAURI" @shown="() => state.shownTabs.add('nyx-cache')">
-                            <cache v-if="state.shownTabs.has('nyx-cache')" />
+                            <app-cache v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 
                     </nav-tabs>
