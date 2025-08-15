@@ -225,7 +225,7 @@ onMounted(() => {
     <!-- HEADER                                                                                                      -->
     <!-- *********************************************************************************************************** -->
 
-    <input class="btn-check" type="checkbox" role="switch" id="C2D68371" v-model="state.theme" :true-value="'dark'" :false-value="'light'" @change="themeSet" />
+    <input class="btn-check" type="checkbox" :true-value="'dark'" :false-value="'light'" id="C2D68371" v-model="state.theme" @change="themeSet" />
 
     <!-- *********************************************************************************************************** -->
 
@@ -286,15 +286,15 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <button class="btn btn-sm border-0 me-1" type="button" @click="() => getCurrentWindow().minimize()" :hidden="!HAS_TAURI">
+                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!HAS_TAURI" @click="() => getCurrentWindow().minimize()">
                     <i class="bi bi-dash-lg"></i>
                 </button>
 
-                <button class="btn btn-sm border-0 me-1" type="button" @click="() => getCurrentWindow().toggleMaximize()" :hidden="!HAS_TAURI">
+                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!HAS_TAURI" @click="() => getCurrentWindow().toggleMaximize()">
                     <i class="bi bi-collection"></i>
                 </button>
 
-                <button class="btn btn-sm border-0 me-0" type="button" @click="() => getCurrentWindow().close()" :hidden="!HAS_TAURI">
+                <button class="btn btn-sm border-0 me-0" type="button" :hidden="!HAS_TAURI" @click="() => getCurrentWindow().close()">
                     <i class="bi bi-x-lg"></i>
                 </button>
 

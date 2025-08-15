@@ -131,7 +131,7 @@ const webPageEnabled = (webPage) => {
 
                 <!-- *********************************************************************************************** -->
 
-                <draggable tag="tbody" handle=".drag-handle" v-model="sortedWebPages" item-key="id" @end="onDragEnd">
+                <draggable tag="tbody" handle=".drag-handle" item-key="id" v-model="sortedWebPages" @end="onDragEnd">
                     <template #item="{element: webPage}">
                         <tr :key="webPage.id">
                             <td class="text-center">

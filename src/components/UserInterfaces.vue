@@ -134,7 +134,7 @@ const userInterfaceEnabled = (userInterface) => {
 
                 <!-- *********************************************************************************************** -->
 
-                <draggable tag="tbody" handle=".drag-handle" v-model="sortedInterfacePanels" item-key="id" @end="onDragEnd">
+                <draggable tag="tbody" handle=".drag-handle" item-key="id" v-model="sortedInterfacePanels" @end="onDragEnd">
                     <template #item="{element: userInterface}">
                         <tr :key="userInterface.id">
                             <td class="text-center">

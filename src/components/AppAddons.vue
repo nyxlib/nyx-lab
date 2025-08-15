@@ -162,7 +162,7 @@ onUnmounted(() => {
 
                 <!-- *********************************************************************************************** -->
 
-                <draggable tag="tbody" handle=".drag-handle" v-model="sortedAddons" item-key="id" @end="onDragEnd">
+                <draggable tag="tbody" handle=".drag-handle" item-key="id" v-model="sortedAddons" @end="onDragEnd">
                     <template #item="{element: addon}">
                         <tr :key="addon.id">
                             <td class="text-center">

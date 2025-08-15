@@ -14,7 +14,6 @@ export default [
         rules: {
             'vue/no-v-html': 'off',
             'vue/html-indent': 'off',
-            'vue/attributes-order': 'off', // check
             'vue/html-self-closing': 'off',
             'vue/no-mutating-props': 'off',
             'vue/max-attributes-per-line': 'off',
@@ -22,6 +21,22 @@ export default [
             'vue/no-v-text-v-html-on-component': 'off',
             'vue/multiline-html-element-content-newline': 'off',
             'vue/singleline-html-element-content-newline': 'off',
+            /**/
+            'vue/attributes-order': ['error', {
+                'order': [
+                    'OTHER_ATTR',
+                    'OTHER_DIRECTIVES',
+                    'GLOBAL',               // id
+                    'CONDITIONALS',         // v-if, v-show
+                    'LIST_RENDERING',       // v-for
+                    'UNIQUE',               // ref, key
+                    'SLOT',                 // slot
+                    'TWO_WAY_BINDING',      // v-model
+                    'EVENTS',               // events
+                    'CONTENT',              // v-html, v-text
+                ],
+                'alphabetical': false,
+            }],
             /**/
             'quotes': ['error', 'single'],
             'semi': ['error', 'always'],

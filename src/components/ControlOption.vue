@@ -94,8 +94,8 @@ onMounted(() => {
         </label>
         <div class="col-sm-9">
             <select class="form-select form-select-sm"
-                :id="uid"
                 :value="String(value) === 'true' ? 'true' : 'false'"
+                :id="uid"
                 @change="(e) => {
                     const _value = e.target.value === 'true';
                     emit('update:modelValue', _value);
@@ -118,8 +118,8 @@ onMounted(() => {
         </label>
         <div class="col-sm-9">
             <input class="form-control form-control-sm" type="text"
-                :id="uid"
                 :value="value"
+                :id="uid"
                 @input="(e) => {
                     const _value = e.target.value.trim() ? e.target.value.trim() : null;
                     emit('update:modelValue', _value);
@@ -139,13 +139,13 @@ onMounted(() => {
         </label>
         <div class="col-sm-9">
             <input class="form-control form-control-sm" type="number"
-               :id="uid"
-               :value="value"
-               @input="(e) => {
-                   const _value = e.target.value.trim() ? e.target.valueAsNumber : null;
-                   emit('update:modelValue', _value);
-                   value.value = _value;
-               }"
+                :value="value"
+                :id="uid"
+                @input="(e) => {
+                    const _value = e.target.value.trim() ? e.target.valueAsNumber : null;
+                    emit('update:modelValue', _value);
+                    value.value = _value;
+                }"
             />
         </div>
     </div>

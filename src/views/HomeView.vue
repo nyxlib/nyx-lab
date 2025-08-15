@@ -619,7 +619,7 @@ onUnmounted(() => {
                                 {{ widgetDescr.title }}
                             </div>
                             <div class="form-check form-switch" v-for="(variable, index2) in widgetDescr.variables1" :key="variable">
-                                <input class="form-check-input" type="checkbox" role="switch" :id="`FE664D_${index1}${index2}`" v-model="widgetDescr.enabled[variable]">
+                                <input class="form-check-input" type="checkbox" :id="`FE664D_${index1}${index2}`" v-model="widgetDescr.enabled[variable]">
                                 <label class="form-check-label" :for="`FE664D_${index1}${index2}`">
                                     {{ variable }}
                                 </label>
@@ -655,7 +655,7 @@ onUnmounted(() => {
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
-                    <form class="modal-body px-3 py-2" @submit.prevent="newWidgetStep2" id="D1531250">
+                    <form class="modal-body px-3 py-2" id="D1531250" @submit.prevent="newWidgetStep2">
 
                         <nav-tabs>
 
@@ -673,13 +673,14 @@ onUnmounted(() => {
                                             <label class="form-label" for="D38EC0FA">Mode</label>
                                             <multiselect
                                                 mode="single"
-                                                id="D38EC0FA"
                                                 :required="true"
                                                 :can-clear="false"
                                                 :searchable="true"
                                                 :create-option="false"
                                                 :close-on-select="true"
-                                                :options="MODES" v-model="state.mode"
+                                                :options="MODES"
+                                                id="D38EC0FA"
+                                                v-model="state.mode"
                                             />
                                         </div>
                                     </div>

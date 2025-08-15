@@ -150,12 +150,12 @@ onMounted(() => {
 
                                         <div class="mb-3">
                                             <label class="form-label" for="A925CE04">Show Nyx interfaces</label>
-                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showNyxInterfaces" /></div>
+                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" id="A925CE04" v-model="configStore.globals.showNyxInterfaces" /></div>
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label" for="A925CE04">Show user interfaces</label>
-                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showUserInterfaces" /></div>
+                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" id="A925CE04" v-model="configStore.globals.showUserInterfaces" /></div>
                                         </div>
 
                                     </div>
