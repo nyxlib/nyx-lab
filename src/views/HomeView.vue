@@ -571,7 +571,7 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <template v-slot:button>
+            <template #button>
 
                 <button class="btn btn-sm btn-primary ms-0" type="button" :disabled="!nyxStore.isConnected" data-bs-toggle="offcanvas" data-bs-target="#controlCanvas">
                     <i class="bi bi-list"></i>
