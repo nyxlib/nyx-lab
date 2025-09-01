@@ -31,6 +31,7 @@ const configStore = useConfigStore();
 
 const state = reactive({
     shownTabs: new Set(),
+    indexMode: false,
     showNyx: false,
 });
 
@@ -60,7 +61,19 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="overflow-y-auto h-100 w-100 p-3">
+    <template v-if="state.indexMode">
+
+        <button class="btn btn-dark" type="button" style="z-index: 999999; position: absolute; top: 52px; right: 1rem;" @click="() => { state.indexMode = false; }">
+            <i class="bi bi-door-open"></i> Close addon index
+        </button>
+
+        <iframe src="https://addons.nyxlib.org/" style="height: 100%; width: 100%;" v-show="state.indexMode"></iframe>
+
+    </template>
+
+    <!-- *********************************************************************************************************** -->
+
+    <div class="overflow-y-auto h-100 w-100 p-3" v-show="!state.indexMode">
 
         <!--*********************************************************************************************************-->
 
@@ -205,7 +218,7 @@ onMounted(() => {
                     <nav-tabs>
 
                         <tab-pane title="Addons">
-                            <addon-table :addons="configStore.globals.addons" />
+                            <addon-table :addons="configStore.globals.addons" @search="() => {state.indexMode = true; }"/>
                         </tab-pane>
 
                         <tab-pane title="Web pages">
