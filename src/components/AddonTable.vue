@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, watchEffect, onMounted, onUnmounted} from 'vue';
+import {ref, inject, watchEffect, onMounted, onUnmounted} from 'vue';
 
 import draggable from 'vuedraggable';
 
@@ -29,6 +29,10 @@ watchEffect(() => {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const emit = defineEmits(['search']);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const dialog = inject('dialog');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -72,6 +76,16 @@ const addonAppend = (url = null) => {
             enabled: !!url,
             started: false,
         };
+
+        if(url) {
+            dialog.success(`Addon "${url}" successfully installed!`);
+        }
+    }
+    else
+    {
+        if(url) {
+            dialog.warning(`Addon "${url}" already installed!`);
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
