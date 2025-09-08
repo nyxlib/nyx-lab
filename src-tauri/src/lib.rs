@@ -1,5 +1,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+use bytes::Bytes;
+
 use std::net::TcpListener;
 
 use std::collections::HashMap;
@@ -61,7 +63,7 @@ fn start_addon_proxy(app: &mut App)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        let proxy = warp::path::full().and(warp::method()).and(warp::header::headers_cloned()).and(warp::body::bytes()).and_then(move |path: warp::filters::path::FullPath, method: warp::http::Method, headers: warp::http::HeaderMap, body: warp::hyper::body::Bytes| {
+        let proxy = warp::path::full().and(warp::method()).and(warp::header::headers_cloned()).and(warp::body::bytes()).and_then(move |path: warp::filters::path::FullPath, method: warp::http::Method, headers: warp::http::HeaderMap, body: Bytes| {
 
             let client = client.clone();
 
@@ -102,7 +104,7 @@ fn start_addon_proxy(app: &mut App)
 
                             /*----------------------------------------------------------------------------------------*/
 
-                            return Ok::<_, warp::Rejection>(response_builder.status(StatusCode::OK).body(warp::hyper::Body::from(payload)).unwrap());
+                            return Ok::<_, warp::Rejection>(response_builder.status(StatusCode::OK).body(Bytes::from(payload)).unwrap());
 
                             /*----------------------------------------------------------------------------------------*/
                         }
@@ -211,16 +213,16 @@ fn start_addon_proxy(app: &mut App)
 
                                 Ok::<_, warp::Rejection>(response_builder
                                     .status(StatusCode::from_u16(status.as_u16()).unwrap())
-                                    .body(warp::hyper::Body::from(body_bytes.to_vec())).unwrap())
+                                    .body(body_bytes).unwrap())
                             }
                             Err(e) => Ok::<_, warp::Rejection>(warp::http::Response::builder()
                                 .status(StatusCode::BAD_GATEWAY)
-                                .body(warp::hyper::Body::from(format!("Failed to retrieve response body: {}", e))).unwrap())
+                                .body(Bytes::from(format!("Failed to retrieve response body: {}", e))).unwrap())
                         }
                     }
                     Err(e) => Ok::<_, warp::Rejection>(warp::http::Response::builder()
                         .status(StatusCode::BAD_GATEWAY)
-                        .body(warp::hyper::Body::from(format!("Failed to execute proxy request: {}", e))).unwrap())
+                        .body(Bytes::from(format!("Failed to execute proxy request: {}", e))).unwrap())
                 }
             }
         });
