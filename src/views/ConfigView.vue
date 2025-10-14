@@ -225,12 +225,12 @@ onMounted(() => {
                             <web-page-table :web-pages="configStore.globals.webPages" @search="() => {state.indexMode = true; }" />
                         </tab-pane>
 
-                        <tab-pane title="Cache" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
-                            <cache-table v-if="state.shownTabs.has('nyx-cache')" />
+                        <tab-pane title="Console">
+                            <pre class="font-monospace rounded border p-2">{{ configStore.console.join('\n').trim() }}</pre>
                         </tab-pane>
 
-                        <tab-pane title="Console">
-                            <pre class="font-monospace rounded border p-2">{{ configStore.console.join('\n') }}</pre>
+                        <tab-pane title="Cache" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
+                            <cache-table v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 
                     </nav-tabs>
