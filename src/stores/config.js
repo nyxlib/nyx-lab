@@ -187,7 +187,7 @@ const useConfigStore = defineStore('config', {
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    for(const panel of this.appPanels[name].panels)
+                    for(const panel of this.appPanels[name]?.panels || [])
                     {
                         router.addRoute(panel);
                     }
@@ -201,7 +201,7 @@ const useConfigStore = defineStore('config', {
                 {
                     /*------------------------------------------------------------------------------------------------*/
 
-                    for(const panel of this.appPanels[name].panels)
+                    for(const panel of this.appPanels[name]?.panels || [])
                     {
                         router.removeRoute(panel.id);
                     }

@@ -28,6 +28,7 @@ const nyxStore = useNyxStore();
 
 const dialog = inject('dialog');
 const mqtt = inject('mqtt');
+const nyx = inject('nyx');
 const nss = inject('nss');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -180,10 +181,20 @@ const init = () => {
 
 const final = () => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx.enableBLOB(null, false);
+
+    nyx.enableStream(null, false);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     for(const widget of Object.values(widgetDict))
     {
         render(null, widget.querySelector('.card-body'));
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -485,6 +496,47 @@ const updateWidget = (widget) => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const enableBLOBsAndStreams = (panel, enabled) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const blobs = new Set();
+    const streams = new Set();
+
+    console.log('===', panel, enabled);
+
+    Object.values(configStore.globals.interfaceWidgets).filter((widget) => widget.panel === panel).forEach((widget) => {
+
+        if(widget.mode === 'blob')
+        {
+            widget.variables1.forEach((variable) => { blobs.add(variable); });
+            widget.variables2.forEach((variable) => { blobs.add(variable); });
+        }
+
+        if(widget.mode === 'stream')
+        {
+            widget.variables1.forEach((variable) => { streams.add(variable); });
+            widget.variables2.forEach((variable) => { streams.add(variable); });
+        }
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    blobs.forEach((blob) => {
+
+        nyx.enableBLOB(blob, enabled);
+    });
+
+    streams.forEach((stream) => {
+
+        nyx.enableStream(stream, enabled);
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -561,7 +613,7 @@ onUnmounted(() => {
 
             <template v-if="configStore.globals.showUserInterfaces">
 
-                <tab-pane class="pt-3" :title="panel.label" v-for="panel in panels" :key="panel.value">
+                <tab-pane class="pt-3" :title="panel.label" v-for="panel in panels" :key="panel.value" @shown="enableBLOBsAndStreams(panel.value, true)" @hidden="enableBLOBsAndStreams(panel.value, false)">
 
                     <div class="grid-stack h-100 w-100" :data-panel="panel.value"></div>
 
