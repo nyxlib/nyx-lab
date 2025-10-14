@@ -226,7 +226,7 @@ onMounted(() => {
                         </tab-pane>
 
                         <tab-pane title="Console">
-                            <pre class="font-monospace rounded border p-2">{{ configStore.console.join('\n').trim() }}</pre>
+                            <pre class="font-monospace rounded border p-2">{{ configStore.console.map((line) => line.trim()).join('\n') }}</pre>
                         </tab-pane>
 
                         <tab-pane title="Cache" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
