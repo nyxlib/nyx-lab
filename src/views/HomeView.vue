@@ -504,8 +504,6 @@ const enableBLOBsAndStreams = (panel, enabled) => {
     const blobs = new Set();
     const streams = new Set();
 
-    console.log('===', panel, enabled);
-
     Object.values(configStore.globals.interfaceWidgets).filter((widget) => widget.panel === panel).forEach((widget) => {
 
         if(widget.mode === 'blob')

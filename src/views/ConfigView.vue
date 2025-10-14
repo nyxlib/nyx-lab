@@ -229,6 +229,10 @@ onMounted(() => {
                             <cache-table v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 
+                        <tab-pane title="Console">
+                            <pre class="font-monospace rounded border p-2">{{ configStore.console.join('\n') }}</pre>
+                        </tab-pane>
+
                     </nav-tabs>
 
                 </div>

@@ -80,6 +80,7 @@ const useConfigStore = defineStore('config', {
         appPanels: {},
         controls: {},
         functions: {},
+        console: []
     }),
     getters: {
         /*------------------------------------------------------------------------------------------------------------*/
@@ -139,7 +140,7 @@ const useConfigStore = defineStore('config', {
                     addon.init(TEMP_GLOBALS, this.addon, name);
                 }
                 catch(e) {
-                    console.error(e);
+                    this.console.push(e);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -182,7 +183,7 @@ const useConfigStore = defineStore('config', {
                         addon.start(this.addon, name);
                     }
                     catch(e) {
-                        console.error(e);
+                        this.console.push(e);
                     }
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -212,7 +213,7 @@ const useConfigStore = defineStore('config', {
                         addon.stop(this.addon, name);
                     }
                     catch(e) {
-                        console.error(e);
+                        this.console.push(e);
                     }
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -260,7 +261,7 @@ const useConfigStore = defineStore('config', {
 
                             this._init(addon, name, do_init);
 
-                            console.info(`Loading addon '${addonDescr.url}': [OKAY]`);
+                            this.console.push(`Loading addon '${addonDescr.url}': [OKAY]`);
 
                             if(--n === 0) {
                                 resolve();
@@ -268,7 +269,7 @@ const useConfigStore = defineStore('config', {
 
                         }).catch((e) => {
 
-                            console.error(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
+                            this.console.push(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
 
                             if(--n === 0) {
                                 resolve();
@@ -277,7 +278,7 @@ const useConfigStore = defineStore('config', {
                     }
                     catch(e)
                     {
-                        console.error(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
+                        this.console.push(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
 
                         if(--n === 0) {
                             resolve();
@@ -373,7 +374,7 @@ const useConfigStore = defineStore('config', {
 
                         }).catch((e) => {
 
-                            console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
+                            this.console.push(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
 
                             if(--n === 0) {
                                 cleanup();
@@ -382,7 +383,7 @@ const useConfigStore = defineStore('config', {
                     }
                     catch(e)
                     {
-                        console.error(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
+                        this.console.push(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
 
                         if(--n === 0) {
                             cleanup();
