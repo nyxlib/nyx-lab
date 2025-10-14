@@ -263,7 +263,7 @@ const newWidgetStep2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NYX_BOOTSTRAP__.getOrCreateInstance(controlModal.value).hide();
+    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(controlModal.value).hide();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
