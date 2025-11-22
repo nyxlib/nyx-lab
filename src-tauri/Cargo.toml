@@ -1,16 +1,16 @@
 [package]
-name = "nyx-dashboard"
+name = "nyx-lab"
 version = "1.0.0"
-description = "Nyx Dashboard"
+description = "Nyx Lab"
 authors = ["Jérôme ODIER"]
 license = "GPL"
-repository = "https://gitlab.in2p3.fr/lpsc-kid/nyx-dashboard"
+repository = "https://https://github.com/nyxlib/nyx-lab/"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "nyxdashboard_lib"
+name = "nyxlab_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]

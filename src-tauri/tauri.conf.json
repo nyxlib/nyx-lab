@@ -1,8 +1,8 @@
 {
     "$schema": "https://schema.tauri.app/config/2.0.0",
-    "productName": "nyx-dashboard",
+    "productName": "nyx-lab",
     "version": "1.0.0",
-    "identifier": "org.nyxlib.dashboard",
+    "identifier": "org.nyxlib.lab",
     "build": {
         "beforeDevCommand": "npm run app-prod",
         "beforeBuildCommand": "npm run app-prod",
@@ -20,7 +20,7 @@
                 "minWidth": 1300,
                 "visible": true,
                 "maximized": true,
-                "title": "Nyx Dashboard",
+                "title": "Nyx Lab",
                 "decorations": false,
                 "transparent": true,
                 "url": "index.html"

@@ -15,7 +15,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 html, body,
-#nyx_dashboard {
+#nyx_lab {
 
     background-color: transparent;
 
@@ -30,7 +30,7 @@ html, body,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-body[data-environment="tauri"][data-maximized="false"] > #nyx_dashboard {
+body[data-environment="tauri"][data-maximized="false"] > #nyx_lab {
 
     border: 1px var(--bs-secondary-border-subtle) solid;
 

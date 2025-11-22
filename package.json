@@ -1,12 +1,12 @@
 {
-    "name": "nyx-dashboard",
-    "description": "Nyx Dashboard",
+    "name": "nyx-lab",
+    "description": "Nyx Lab",
     "version": "1.0.0",
     "author": "Jérôme Odier",
     "license": "GPL",
     "repository": {
         "type": "git",
-        "url": "https://gitlab.in2p3.fr/lpsc-kid/nyx-dashboard"
+        "url": "https://github.com/nyxlib/nyx-lab/"
     },
     "type": "module",
     "private": true,

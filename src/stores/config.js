@@ -477,7 +477,7 @@ const useConfigStore = defineStore('config', {
 
         load()
         {
-            this._loadConfig(localStorage.getItem('nyx-dashboard-config'));
+            this._loadConfig(localStorage.getItem('nyx-lab-config'));
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -503,7 +503,7 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(false).then((json) => {
 
-                localStorage.setItem('nyx-dashboard-config', json.toString());
+                localStorage.setItem('nyx-lab-config', json.toString());
 
                 setTimeout(() => {
 

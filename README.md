@@ -21,7 +21,7 @@ TODO
 Downloading Nyx Dashboard
 =========================
 
-The last build can be downloaded [there](https://gitlab.in2p3.fr/lpsc-kid/nyx-dashboard/-/artifacts).
+The last build can be downloaded [there](https://nyxlib.org/installing).
 
 Installing Nyx Dashboard
 ========================

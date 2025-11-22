@@ -48,7 +48,7 @@ const webPages = computed(() => Object.values(configStore.globals.webPages).sort
 
 const about = () => {
 
-    dialog.show(['Nyx Dashboard', 'https://nyxlib.org/', '', 'Author: Jérôme ODIER', 'Email: jerome.odier@lpsc.in2p3.fr'].join('\n'), 'About');
+    dialog.show(['Nyx Lab', 'https://nyxlib.org/', '', 'Author: Jérôme ODIER', 'Email: jerome.odier@lpsc.in2p3.fr'].join('\n'), 'About');
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -61,7 +61,7 @@ const themeSet = () => {
     {
         document.documentElement.setAttribute('data-bs-theme', 'dark');
 
-        localStorage.setItem('nyx-dashboard-theme', 'dark');
+        localStorage.setItem('nyx-lab-theme', 'dark');
 
         label.classList.add   ('bi-moon-stars');
         label.classList.remove('bi-sun');
@@ -70,7 +70,7 @@ const themeSet = () => {
     {
         document.documentElement.setAttribute('data-bs-theme', 'light');
 
-        localStorage.setItem('nyx-dashboard-theme', 'light');
+        localStorage.setItem('nyx-lab-theme', 'light');
 
         label.classList.remove('bi-moon-stars');
         label.classList.add   ('bi-sun');
@@ -187,7 +187,7 @@ onMounted(() => {
 
                 if(configStore.modified)
                 {
-                    dialog.confirm('Are you sure you want to close?', 'Nyx Dashboard').then((choice) => {
+                    dialog.confirm('Are you sure you want to close?', 'Nyx Lab').then((choice) => {
 
                         if(choice)
                         {
@@ -207,7 +207,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    state.theme = localStorage.getItem('nyx-dashboard-theme') || 'dark';
+    state.theme = localStorage.getItem('nyx-lab-theme') || 'dark';
 
     configStore.init();
 
