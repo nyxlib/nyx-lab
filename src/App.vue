@@ -1,4 +1,3 @@
-<!--suppress HttpUrlsUsage, HtmlUnknownAttribute, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
