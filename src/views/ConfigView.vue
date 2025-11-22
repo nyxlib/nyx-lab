@@ -9,7 +9,7 @@ import * as marked from 'marked';
 
 import useConfigStore from '../stores/config';
 
-import UserInterfaceTable from '../components/UserInterfaceTable.vue';
+import UserDashboardTable from '../components/UserDashboardTable.vue';
 import AddonTable from '../components/AddonTable.vue';
 import CacheTable from '../components/CacheTable.vue';
 import WebPageTable from '../components/WebPageTable.vue';
@@ -153,7 +153,7 @@ onMounted(() => {
 
                         <div class="shadow card mb-3">
                             <div class="card-header">
-                                <i class="bi bi-grid-1x2"></i> Control interfaces
+                                <i class="bi bi-grid-1x2"></i> Interfaces & dashboards
                             </div>
                             <div class="card-body">
 
@@ -166,14 +166,14 @@ onMounted(() => {
                                         </div>
 
                                         <div class="mb-3">
-                                            <label class="form-label" for="A925CE04">Show user interfaces</label>
+                                            <label class="form-label" for="A925CE04">Show user dashboards</label>
                                             <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" id="A925CE04" v-model="configStore.globals.showUserInterfaces" /></div>
                                         </div>
 
                                     </div>
                                     <div class="col-md-9">
 
-                                        <user-interface-table :user-interfaces="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
+                                        <user-dashboard-table :user-dashboards="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
 
                                     </div>
                                 </div>

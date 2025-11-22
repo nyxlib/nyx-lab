@@ -14,7 +14,7 @@ const props = defineProps({
         type: Boolean,
         required: true,
     },
-    userInterfaces: {
+    userDashboards: {
         type: Object,
         required: true,
     },
@@ -26,7 +26,7 @@ const sortedInterfacePanels = ref([]);
 
 watchEffect(() => {
 
-    sortedInterfacePanels.value = Object.values(props.userInterfaces).sort((a, b) => a.rank - b.rank);
+    sortedInterfacePanels.value = Object.values(props.userDashboards).sort((a, b) => a.rank - b.rank);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -37,15 +37,15 @@ const onDragEnd = () => {
 
     for(let i = 0; i < sortedInterfacePanels.value.length; i++)
     {
-        const userInterface = sortedInterfacePanels.value[i];
+        const userDashboard = sortedInterfacePanels.value[i];
 
-        props.userInterfaces[userInterface.id].rank = i;
+        props.userDashboards[userDashboard.id].rank = i;
     }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const userInterfaceAppend = () => {
+const userDashboardAppend = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -53,7 +53,7 @@ const userInterfaceAppend = () => {
 
     const rank = Date.now();
 
-    props.userInterfaces[id] = {
+    props.userDashboards[id] = {
         id: id,
         rank: rank,
         title: '',
@@ -67,23 +67,23 @@ const userInterfaceAppend = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const userInterfaceZombie = (userInterface) => {
+const userDashboardZombie = (userDashboard) => {
 
-    userInterface.zombie = !userInterface.zombie;
+    userDashboard.zombie = !userDashboard.zombie;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const userInterfaceLocked= (userInterface) => {
+const userDashboardLocked= (userDashboard) => {
 
-    userInterface.locked = !userInterface.locked;
+    userDashboard.locked = !userDashboard.locked;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const userInterfaceEnabled = (userInterface) => {
+const userDashboardEnabled = (userDashboard) => {
 
-    userInterface.enabled = !userInterface.enabled;
+    userDashboard.enabled = !userDashboard.enabled;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -95,9 +95,9 @@ const userInterfaceEnabled = (userInterface) => {
 
     <div class="shadow card">
         <div class="card-header px-3 py-2">
-            User interfaces
+            User dashboards
             [
-            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => userInterfaceAppend()">
+            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => userDashboardAppend()">
                 <i class="bi bi-plus-lg"></i>
                 Add
             </button>
@@ -134,26 +134,26 @@ const userInterfaceEnabled = (userInterface) => {
                 <!-- *********************************************************************************************** -->
 
                 <draggable tag="tbody" handle=".drag-handle" item-key="id" v-model="sortedInterfacePanels" @end="onDragEnd">
-                    <template #item="{element: userInterface}">
-                        <tr :key="userInterface.id">
+                    <template #item="{element: userDashboard}">
+                        <tr :key="userDashboard.id">
                             <td class="text-center">
                                 <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
-                                <button class="btn btn-sm btn-link" type="button" @click="userInterfaceZombie(userInterface)">
-                                    <i class="bi bi-trash2 text-danger" v-if="!userInterface.zombie"></i>
-                                    <i class="bi bi-recycle text-primary" v-if="userInterface.zombie"></i>
+                                <button class="btn btn-sm btn-link" type="button" @click="userDashboardZombie(userDashboard)">
+                                    <i class="bi bi-trash2 text-danger" v-if="!userDashboard.zombie"></i>
+                                    <i class="bi bi-recycle text-primary" v-if="userDashboard.zombie"></i>
                                 </button>
                             </td>
                             <td class="text-start">
-                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': userInterface.zombie}]" type="text" v-model="userInterface.title" />
+                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': userDashboard.zombie}]" type="text" v-model="userDashboard.title" />
                             </td>
                             <td class="text-center">
-                                <button :class="['btn', 'btn-sm', {'btn-warning': !userInterface.zombie && userInterface.locked, 'btn-outline-warning': !userInterface.zombie && !userInterface.locked, 'btn-secondary': userInterface.zombie && userInterface.locked, 'btn-outline-secondary': userInterface.zombie && !userInterface.locked}]" type="button" @click="userInterfaceLocked(userInterface)">Locked</button>
+                                <button :class="['btn', 'btn-sm', {'btn-warning': !userDashboard.zombie && userDashboard.locked, 'btn-outline-warning': !userDashboard.zombie && !userDashboard.locked, 'btn-secondary': userDashboard.zombie && userDashboard.locked, 'btn-outline-secondary': userDashboard.zombie && !userDashboard.locked}]" type="button" @click="userDashboardLocked(userDashboard)">Locked</button>
                             </td>
                             <td class="text-center">
-                                <button :class="['btn', 'btn-sm', {'btn-success': !userInterface.zombie && userInterface.enabled, 'btn-outline-success': !userInterface.zombie && !userInterface.enabled, 'btn-secondary': userInterface.zombie && userInterface.enabled, 'btn-outline-secondary': userInterface.zombie && !userInterface.enabled}]" type="button" @click="userInterfaceEnabled(userInterface)">Enabled</button>
+                                <button :class="['btn', 'btn-sm', {'btn-success': !userDashboard.zombie && userDashboard.enabled, 'btn-outline-success': !userDashboard.zombie && !userDashboard.enabled, 'btn-secondary': userDashboard.zombie && userDashboard.enabled, 'btn-outline-secondary': userDashboard.zombie && !userDashboard.enabled}]" type="button" @click="userDashboardEnabled(userDashboard)">Enabled</button>
                             </td>
                             <td class="text-center">
-                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (enabled && userInterface.enabled && userInterface.title), 'text-secondary': !(enabled && userInterface.enabled && userInterface.title)}]"></i>
+                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (enabled && userDashboard.enabled && userDashboard.title), 'text-secondary': !(enabled && userDashboard.enabled && userDashboard.title)}]"></i>
                             </td>
                         </tr>
                     </template>
