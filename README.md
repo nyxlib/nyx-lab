@@ -1,7 +1,7 @@
 [![][Build Status img]][Build Status]
 [![][License img]][License]
 
-<table style="border: none;">
+<table style="border: none !important;">
     <tr>
         <td>
             <a href="http://lpsc.in2p3.fr/" target="_blank">
