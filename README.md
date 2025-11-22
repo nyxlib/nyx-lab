@@ -2,7 +2,7 @@
 [![][License img]][License]
 
 <table style="">
-    <td>
+    <tr>
         <td>
             <a href="http://lpsc.in2p3.fr/" target="_blank">
                 <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/main/docs/img/logo_lpsc.svg" alt="LPSC" height="72" />
