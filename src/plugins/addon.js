@@ -1,4 +1,3 @@
-// noinspection JSUnresolvedReference, JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {markRaw} from 'vue';

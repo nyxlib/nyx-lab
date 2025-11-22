@@ -1,4 +1,4 @@
-<!--suppress JSUnresolvedReference -->
+<!--suppress JSValidateTypes -->
 <script setup>
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -11,6 +11,7 @@ const props = defineProps({
     type: {
         type: String,
         required: true,
+        validator: (value) => ['bool', 'number', 'string'].includes(value.trim()),
     },
     name: {
         type: String,
@@ -36,11 +37,11 @@ const props = defineProps({
         required: false,
     },
     defaultValue: {
-        type: [String, Number, Boolean],
+        type: [Boolean, Number, String],
         required: true,
     },
     modelValue: {
-        type: [String, Number, Boolean],
+        type: [Boolean, Number, String],
         required: true,
     },
 });
@@ -99,12 +100,33 @@ onMounted(() => {
                 @change="(e) => {
                     const _value = e.target.value === 'true';
                     emit('update:modelValue', _value);
-                    value.value = _value;
+                    value = _value;
                 }"
             >
                 <option value="true">true</option>
                 <option value="false">false</option>
             </select>
+        </div>
+    </div>
+
+    <!-- *********************************************************************************************************** -->
+    <!-- NUMBER                                                                                                      -->
+    <!-- *********************************************************************************************************** -->
+
+    <div class="row mb-2" v-if="props.type.toLowerCase() === 'number'">
+        <label class="col-sm-3 col-form-label" :for="uid">
+            {{ props.label }}
+        </label>
+        <div class="col-sm-9">
+            <input class="form-control form-control-sm" type="number"
+                   :value="value"
+                   :id="uid"
+                   @input="(e) => {
+                    const _value = e.target.value.trim() ? e.target.valueAsNumber : null;
+                    emit('update:modelValue', _value);
+                    value = _value;
+                }"
+            />
         </div>
     </div>
 
@@ -123,28 +145,7 @@ onMounted(() => {
                 @input="(e) => {
                     const _value = e.target.value.trim() ? e.target.value.trim() : null;
                     emit('update:modelValue', _value);
-                    value.value = _value;
-                }"
-            />
-        </div>
-    </div>
-
-    <!-- *********************************************************************************************************** -->
-    <!-- NUMBER                                                                                                      -->
-    <!-- *********************************************************************************************************** -->
-
-    <div class="row mb-2" v-if="props.type.toLowerCase() === 'number'">
-        <label class="col-sm-3 col-form-label" :for="uid">
-            {{ props.label }}
-        </label>
-        <div class="col-sm-9">
-            <input class="form-control form-control-sm" type="number"
-                :value="value"
-                :id="uid"
-                @input="(e) => {
-                    const _value = e.target.value.trim() ? e.target.valueAsNumber : null;
-                    emit('update:modelValue', _value);
-                    value.value = _value;
+                    value = _value;
                 }"
             />
         </div>

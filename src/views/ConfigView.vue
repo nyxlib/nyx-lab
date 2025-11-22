@@ -1,4 +1,3 @@
-<!--suppress HtmlUnknownTag, JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -10,12 +9,12 @@ import * as marked from 'marked';
 
 import useConfigStore from '../stores/config';
 
-import license from '../assets/license.txt';
-
 import UserInterfaceTable from '../components/UserInterfaceTable.vue';
 import AddonTable from '../components/AddonTable.vue';
 import CacheTable from '../components/CacheTable.vue';
 import WebPageTable from '../components/WebPageTable.vue';
+
+import license from '../assets/license.txt';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -86,7 +85,7 @@ onMounted(() => {
             <tab-pane title="Main">
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
 
                         <!-- *************************************************************************************** -->
 
@@ -103,13 +102,13 @@ onMounted(() => {
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="mb-3">
+                                        <div class="mb-3 mb-md-0">
                                             <label class="form-label" for="A45F11A0">Username<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="text" placeholder="Username" autocomplete="mqtt-server username" id="A45F11A0" v-model="configStore.globals.mqttUsername" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="mb-3">
+                                        <div class="mb-0 mb-md-0">
                                             <label class="form-label" for="A4245C17">Password<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="password" placeholder="Password" autocomplete="mqtt-server current-password" v-password-toggle id="A4245C17" v-model="configStore.globals.mqttPassword" />
                                         </div>
@@ -134,13 +133,13 @@ onMounted(() => {
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="mb-3">
+                                        <div class="mb-3 mb-md-0">
                                             <label class="form-label" for="D82503D3">Username<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="text" placeholder="Username" autocomplete="nss-server username" id="D82503D3" v-model="configStore.globals.nssUsername" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="mb-3">
+                                        <div class="mb-0 mb-md-0">
                                             <label class="form-label" for="DDCC3DFE">Password<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="password" placeholder="Password" autocomplete="nss-server current-password" v-password-toggle id="DDCC3DFE" v-model="configStore.globals.nssPassword" />
                                         </div>
@@ -185,7 +184,7 @@ onMounted(() => {
                         <!-- *************************************************************************************** -->
 
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
 
                         <!-- *************************************************************************************** -->
 
@@ -246,12 +245,12 @@ onMounted(() => {
             <tab-pane title="Nyx" @shown="state.showNyx = true">
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
 
                         <nyx-topology class="shadow mb-3" v-if="state.showNyx" />
 
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
 
                         <nyx-variables class="shadow mb-3" v-if="state.showNyx" />
 

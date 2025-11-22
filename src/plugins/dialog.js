@@ -1,4 +1,3 @@
-// noinspection JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import * as notification from '@tauri-apps/plugin-notification';

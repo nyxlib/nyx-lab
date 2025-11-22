@@ -1,4 +1,3 @@
-<!--suppress HtmlUnknownTag, CssUnusedSymbol, JSUnresolvedReference, PointlessArithmeticExpressionJS -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -609,7 +608,7 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <template v-if="configStore.globals.showUserInterfaces">
+            <template v-if="nyxStore.isConnected && configStore.globals.showUserInterfaces">
 
                 <tab-pane class="pt-3" :title="panel.label" v-for="panel in panels" :key="panel.value" @shown="enableBLOBsAndStreams(panel.value, true)" @hidden="enableBLOBsAndStreams(panel.value, false)">
 

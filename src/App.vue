@@ -18,7 +18,7 @@ import icons from './assets/icons.json';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined' && !/android|iPad|iPhone/i.test(navigator.userAgent);
+const HAS_TAURI_AND_NOT_MOBILE = typeof window['__TAURI__'] !== 'undefined' && !['android', 'ios'].includes(window['__NYX_OS_TYPE__']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -140,7 +140,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof window['__TAURI__'] === 'undefined' || ['android', 'ios'].includes(window.__NYX_OS_TYPE__))
+    if(!HAS_TAURI_AND_NOT_MOBILE)
     {
         document.body.setAttribute('data-environment', 'browser');
     }
@@ -286,15 +286,15 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-1">
 
-                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!HAS_TAURI" @click="() => getCurrentWindow().minimize()">
+                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!HAS_TAURI_AND_NOT_MOBILE" @click="() => getCurrentWindow().minimize()">
                     <i class="bi bi-dash-lg"></i>
                 </button>
 
-                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!HAS_TAURI" @click="() => getCurrentWindow().toggleMaximize()">
+                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!HAS_TAURI_AND_NOT_MOBILE" @click="() => getCurrentWindow().toggleMaximize()">
                     <i class="bi bi-collection"></i>
                 </button>
 
-                <button class="btn btn-sm border-0 me-0" type="button" :hidden="!HAS_TAURI" @click="() => getCurrentWindow().close()">
+                <button class="btn btn-sm border-0 me-0" type="button" :hidden="!HAS_TAURI_AND_NOT_MOBILE" @click="() => getCurrentWindow().close()">
                     <i class="bi bi-x-lg"></i>
                 </button>
 

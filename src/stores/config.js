@@ -1,4 +1,3 @@
-// noinspection JSValidateTypes, JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {watch, inject} from 'vue';
