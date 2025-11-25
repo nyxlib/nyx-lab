@@ -1,0 +1,74 @@
+name: Build and Deploy
+
+on:
+    push:
+        branches:
+            - main
+
+concurrency:
+    group: ${{ github.repository }}
+    cancel-in-progress: true
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout repository
+                uses: actions/checkout@v4
+                with:
+                    submodules: recursive
+                    fetch-depth: 1
+
+            -   name: Install system dependencies
+                run: |
+                    sudo apt-get update
+                    sudo apt-get install -y file wget curl openssh-client build-essential
+                    sudo apt-get install -y libssl-dev libgtk-3-dev librsvg2-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev libjavascriptcoregtk-6.0-dev
+
+            -   name: Install Node toolchain
+                shell: bash
+                run: |
+                    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+                    source "${HOME}/.nvm/nvm.sh"
+                    nvm install --lts
+
+            -   name: Install Rust toolchain
+                shell: bash
+                run: |
+                    curl -fsSL https://sh.rustup.rs | bash -s -- -y
+
+            -   name: Build project 1/2
+                shell: bash
+                run: |
+                    source "${HOME}/.nvm/nvm.sh"
+                    source "${HOME}/.cargo/env"
+
+                    npm --version
+                    node --version
+                    rustc --version
+                    cargo --version
+
+                    npm install
+                    npm run tauri-prod
+
+            -   name: Deploy project
+                shell: bash
+                env:
+                    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+                    DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+                    DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+                run: |
+                    mkdir -p ~/.ssh/
+                    chmod 700 ~/.ssh/
+
+                    echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+                    chmod 600 ~/.ssh/id_rsa
+
+                    eval "$(ssh-agent -s)"
+                    ssh-add ~/.ssh/id_rsa
+
+                    ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts
+                    chmod 644 ~/.ssh/known_hosts
+
+                    scp ./src-tauri/target/release/bundle/appimage/nyx-lab_*.AppImage "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/linux/x86_64/nyx-lab.AppImage"
