@@ -3,7 +3,7 @@ name = "nyx-lab"
 version = "1.0.0"
 description = "Nyx Lab"
 authors = ["Jérôme ODIER"]
-license = "GPL"
+license = "GPL-3.0-or-later"
 repository = "https://https://github.com/nyxlib/nyx-lab/"
 edition = "2021"
 
