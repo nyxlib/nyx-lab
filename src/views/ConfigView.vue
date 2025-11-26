@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {reactive, computed, onMounted} from 'vue';
+import {reactive, computed, onMounted, inject} from 'vue';
 
 import * as marked from 'marked';
 
@@ -24,6 +24,11 @@ const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const dialog = inject('dialog');
+const nss = inject('nss');
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const configStore = useConfigStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -37,6 +42,29 @@ const state = reactive({
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const confPanels = computed(() => Object.values(configStore.confPanels).sort((x, y) => x.descr.rank - y.descr.rank));
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const checkMQTTConnection = () => {
+
+
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const checkNSSConnection = () => {
+
+    nss.check(configStore.globals.nssURL, configStore.globals.nssUsername, configStore.globals.nssPassword).then((message) => {
+
+        dialog.show(message, 'Testing Nyx-Stream', 'info');
+
+    }).catch((message) => {
+
+        dialog.show(message, 'Testing Nyx-Stream', 'error');
+    });
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
@@ -90,8 +118,9 @@ onMounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <div class="shadow card mb-3">
-                            <div class="card-header">
-                                <i class="bi bi-hdd-stack"></i> MQTT Broker
+                            <div class="d-flex card-header justify-content-between">
+                                <div><i class="bi bi-hdd-stack"></i> MQTT Broker</div>
+                                <button class="btn btn-xs btn-primary" type="button" @click="checkMQTTConnection">Check connection</button>
                             </div>
                             <div class="card-body">
 
@@ -121,8 +150,9 @@ onMounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <div class="shadow card mb-3">
-                            <div class="card-header">
-                                <i class="bi bi-hdd-stack"></i> Nyx-Stream Server
+                            <div class="d-flex card-header justify-content-between">
+                                <div><i class="bi bi-hdd-stack"></i> Nyx-Stream Server</div>
+                                <button class="btn btn-xs btn-primary" type="button" @click="checkNSSConnection">Check connection</button>
                             </div>
                             <div class="card-body">
 
