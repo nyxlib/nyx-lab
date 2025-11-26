@@ -128,7 +128,10 @@ onMounted(() => {
                         <div class="shadow card mb-3">
                             <div class="d-flex card-header justify-content-between">
                                 <div><i class="bi bi-hdd-stack"></i> MQTT Broker</div>
-                                <button class="btn btn-xs btn-primary" type="button" @click="checkMQTTConnection">Check connection</button>
+                                <button class="btn btn-xs btn-primary" type="button" @click="checkMQTTConnection">
+                                    <i class="bi bi-broadcast"></i>
+                                    Check connection
+                                </button>
                             </div>
                             <div class="card-body">
 
@@ -160,7 +163,10 @@ onMounted(() => {
                         <div class="shadow card mb-3">
                             <div class="d-flex card-header justify-content-between">
                                 <div><i class="bi bi-hdd-stack"></i> Nyx-Stream Server</div>
-                                <button class="btn btn-xs btn-primary" type="button" @click="checkNSSConnection">Check connection</button>
+                                <button class="btn btn-xs btn-primary" type="button" @click="checkNSSConnection">
+                                    <i class="bi bi-broadcast"></i>
+                                    Check connection
+                                </button>
                             </div>
                             <div class="card-body">
 
