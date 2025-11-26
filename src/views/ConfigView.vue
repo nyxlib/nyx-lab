@@ -25,6 +25,7 @@ const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const dialog = inject('dialog');
+const mqtt = inject('mqtt');
 const nss = inject('nss');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -49,7 +50,7 @@ const confPanels = computed(() => Object.values(configStore.confPanels).sort((x,
 
 const checkMQTTConnection = () => {
 
-
+    mqtt.update(configStore.globals.mqttURL, configStore.globals.mqttUsername, configStore.globals.mqttPassword);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
