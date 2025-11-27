@@ -137,20 +137,20 @@ onMounted(() => {
 
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">Server URL</label>
-                                    <input class="form-control form-control-sm" type="text" placeholder="Server URL" autocomplete="mqtt-server url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
+                                    <input class="form-control form-control-sm" type="text" name="mqttURL" placeholder="Server URL" autocomplete="mqtt-server url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3 mb-md-0">
                                             <label class="form-label" for="A45F11A0">Username<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" placeholder="Username" autocomplete="mqtt-server username" id="A45F11A0" v-model="configStore.globals.mqttUsername" />
+                                            <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="mqtt-server username" id="A45F11A0" v-model="configStore.globals.mqttUsername" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-0 mb-md-0">
                                             <label class="form-label" for="A4245C17">Password<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="password" placeholder="Password" autocomplete="mqtt-server current-password" v-password-toggle id="A4245C17" v-model="configStore.globals.mqttPassword" />
+                                            <input class="form-control form-control-sm" type="password" name="mqttPassword" placeholder="Password" autocomplete="mqtt-server current-password" v-password-toggle id="A4245C17" v-model="configStore.globals.mqttPassword" />
                                         </div>
                                     </div>
                                 </div>
@@ -172,20 +172,20 @@ onMounted(() => {
 
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">Server URL<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" placeholder="Server URL" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
+                                    <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3 mb-md-0">
                                             <label class="form-label" for="D82503D3">Username<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" placeholder="Username" autocomplete="nss-server username" id="D82503D3" v-model="configStore.globals.nssUsername" />
+                                            <input class="form-control form-control-sm" type="text" name="nssUsername" placeholder="Username" autocomplete="nss-server username" id="D82503D3" v-model="configStore.globals.nssUsername" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-0 mb-md-0">
                                             <label class="form-label" for="DDCC3DFE">Password<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="password" placeholder="Password" autocomplete="nss-server current-password" v-password-toggle id="DDCC3DFE" v-model="configStore.globals.nssPassword" />
+                                            <input class="form-control form-control-sm" type="password" name="nssPassword" placeholder="Password" autocomplete="nss-server current-password" v-password-toggle id="DDCC3DFE" v-model="configStore.globals.nssPassword" />
                                         </div>
                                     </div>
                                 </div>
