@@ -174,7 +174,7 @@ const _notify = (body, title) => {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        Notification_isPermissionGranted.then((granted) => {
+        Notification_isPermissionGranted().then((granted) => {
 
             if(!granted)
             {
