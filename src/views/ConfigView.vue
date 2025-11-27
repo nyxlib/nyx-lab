@@ -14,7 +14,7 @@ import AddonTable from '../components/AddonTable.vue';
 import CacheTable from '../components/CacheTable.vue';
 import WebPageTable from '../components/WebPageTable.vue';
 
-import license from '../assets/license.txt';
+import license from '../assets/license.txt?raw';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -80,13 +80,7 @@ const checkNSSConnection = () => {
 
 onMounted(() => {
 
-    fetch(license.toString()).then((response) => {
-
-        response.text().then((content) => {
-
-            document.getElementById('nyx_license').innerHTML = marked.marked(content).replace('/<a /g', '<a target="_blank" ').replace(/<h([1-6])>/g, (_, p1) => `<h${parseInt(p1) + 1}>`).replace(/<\/h([1-6])>/g, (_, p1) => `</h${parseInt(p1) + 1}>`);
-        });
-    });
+    document.getElementById('nyx_license').innerHTML = marked.marked(license).replace('/<a /g', '<a target="_blank" ').replace(/<h([1-6])>/g, (_, p1) => `<h${parseInt(p1) + 1}>`).replace(/<\/h([1-6])>/g, (_, p1) => `</h${parseInt(p1) + 1}>`);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
