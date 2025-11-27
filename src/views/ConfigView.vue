@@ -78,7 +78,7 @@ const checkNSSConnection = () => {
 
     }).finally(() => {
 
-        nss.check('', '', '');
+        nss.update('', '', '');
     });
 };
 
