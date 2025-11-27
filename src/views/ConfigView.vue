@@ -52,13 +52,15 @@ const checkMQTTConnection = () => {
 
     mqtt.update(configStore.globals.mqttURL, configStore.globals.mqttUsername, configStore.globals.mqttPassword).then((message) => {
 
-        mqtt.update('', '', '');
-
         dialog.show(message, 'Testing MQTT broker', 'info');
 
     }).catch((message) => {
 
         dialog.show(message, 'Testing MQTT broker', 'error');
+
+    }).finally(() => {
+
+        mqtt.update('', '', '');
     });
 };
 
@@ -68,13 +70,15 @@ const checkNSSConnection = () => {
 
     nss.check(configStore.globals.nssURL, configStore.globals.nssUsername, configStore.globals.nssPassword).then((message) => {
 
-        nss.check('', '', '');
-
         dialog.show(message, 'Testing Nyx-Stream', 'info');
 
     }).catch((message) => {
 
         dialog.show(message, 'Testing Nyx-Stream', 'error');
+
+    }).finally(() => {
+
+        nss.check('', '', '');
     });
 };
 
