@@ -98,7 +98,7 @@ onMounted(() => {
 
     <template v-if="state.indexMode">
 
-        <button class="btn btn-light" type="button" style="z-index: 999999; position: absolute; top: 51px; right: 1rem;" @click="() => { state.indexMode = false; }">
+        <button class="btn btn-light" type="button" style="z-index: 999999; position: absolute; top: 50px; right: 1rem;" @click="() => { state.indexMode = false; }">
             <i class="bi bi-door-open"></i> Close addon index
         </button>
 
