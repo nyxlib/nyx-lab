@@ -7,9 +7,14 @@ import * as dialog from '@tauri-apps/plugin-dialog';
 import * as fs from '@tauri-apps/plugin-fs';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const Notification_isPermissionGranted = () => Promise.resolve(Notification.permission === 'granted');
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* LOCK                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+// noinspection CssUnresolvedCustomProperty
 const _LOCKER_HTML = `
     <!-- *********************************************************************************************************** -->
 
@@ -111,10 +116,19 @@ const _unlock = () => {
 
 const _notify_step2 = (body, title) => {
 
-    notification.sendNotification({
-        title: title,
-        body: body,
-    });
+    if(typeof window['__TAURI__'] !== 'undefined')
+    {
+        notification.sendNotification({
+            title: title,
+            body: body,
+        });
+    }
+    else
+    {
+        new Notification(title, {
+            body: body
+        });
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -134,13 +148,15 @@ const _notify = (body, title) => {
 
     if(typeof window['__TAURI__'] !== 'undefined')
     {
+        /*------------------------------------------------------------------------------------------------------------*/
+
         notification.isPermissionGranted().then((granted) => {
 
             if(!granted)
             {
-                notification.requestPermission().then((result) => {
+                notification.requestPermission().then((permission) => {
 
-                    if(result === 'granted')
+                    if(permission === 'granted')
                     {
                         _notify_step2(title, body);
                     }
@@ -151,6 +167,32 @@ const _notify = (body, title) => {
                 _notify_step2(title, body);
             }
         });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else if('Notification' in window)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        Notification_isPermissionGranted.then((granted) => {
+
+            if(!granted)
+            {
+                Notification.requestPermission().then((permission) => {
+
+                    if(permission === 'granted')
+                    {
+                        _notify_step2(title, body);
+                    }
+                });
+            }
+            else
+            {
+                _notify_step2(title, body);
+            }
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
