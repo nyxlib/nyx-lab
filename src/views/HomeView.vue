@@ -131,13 +131,19 @@ const connect = () => {
         configStore.globals.mqttURL,
         configStore.globals.mqttUsername,
         configStore.globals.mqttPassword
-    );
+    ).catch((e) => {
+
+        alert(e);
+    });
 
     nss.update(
         configStore.globals.nssURL,
         configStore.globals.nssUsername,
         configStore.globals.nssPassword
-    );
+    ).catch((e) => {
+
+        alert(e);
+    });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -622,15 +628,15 @@ onUnmounted(() => {
 
             <template #button>
 
-                <button class="btn btn-sm btn-primary ms-0" type="button" :disabled="!nyxStore.isConnected" data-bs-toggle="offcanvas" data-bs-target="#controlCanvas">
+                <button class="btn btn-sm btn-outline-primary ms-0" type="button" :disabled="!nyxStore.isConnected" data-bs-toggle="offcanvas" data-bs-target="#controlCanvas">
                     <i class="bi bi-list"></i>
                 </button>
 
-                <button class="btn btn-sm btn-primary ms-2" type="button" :disabled="!nyxStore.isConnected" @click="newWidget(null)">
+                <button class="btn btn-sm btn-outline-primary ms-2" type="button" :disabled="!nyxStore.isConnected" @click="newWidget(null)">
                     <i class="bi bi-plus-lg"></i> New widget
                 </button>
 
-                <button class="btn btn-sm btn-success ms-2" type="button" :disabled="!nyxStore.isConnected" @click="configStore.save()">
+                <button class="btn btn-sm btn-outline-success ms-2" type="button" :disabled="!nyxStore.isConnected" @click="configStore.save()">
                     <i class="bi bi-check-lg"></i> Save dashboards
                 </button>
 
