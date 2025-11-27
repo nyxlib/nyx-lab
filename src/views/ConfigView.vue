@@ -50,17 +50,13 @@ const confPanels = computed(() => Object.values(configStore.confPanels).sort((x,
 
 const checkMQTTConnection = () => {
 
-    mqtt.update(configStore.globals.mqttURL, configStore.globals.mqttUsername, configStore.globals.mqttPassword).then((message) => {
+    mqtt.check(configStore.globals.mqttURL, configStore.globals.mqttUsername, configStore.globals.mqttPassword).then((message) => {
 
         dialog.show(message, 'Testing MQTT broker', 'info');
 
     }).catch((message) => {
 
         dialog.show(message, 'Testing MQTT broker', 'error');
-
-    }).finally(() => {
-
-        mqtt.update('', '', '');
     });
 };
 
@@ -75,10 +71,6 @@ const checkNSSConnection = () => {
     }).catch((message) => {
 
         dialog.show(message, 'Testing Nyx-Stream', 'error');
-
-    }).finally(() => {
-
-        nss.update('', '', '');
     });
 };
 
