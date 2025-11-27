@@ -24,13 +24,13 @@ const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const dialog = inject('dialog');
-const mqtt = inject('mqtt');
-const nss = inject('nss');
+const configStore = useConfigStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const configStore = useConfigStore();
+const dialog = inject('dialog');
+const mqtt = inject('mqtt');
+const nss = inject('nss');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

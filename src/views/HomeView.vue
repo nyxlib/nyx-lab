@@ -19,16 +19,16 @@ import useConfigStore from '../stores/config';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const configStore = useConfigStore();
-
-const nyxStore = useNyxStore();
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const dialog = inject('dialog');
 const mqtt = inject('mqtt');
 const nyx = inject('nyx');
 const nss = inject('nss');
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const configStore = useConfigStore();
+
+const nyxStore = useNyxStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -131,18 +131,18 @@ const connect = () => {
         configStore.globals.mqttURL,
         configStore.globals.mqttUsername,
         configStore.globals.mqttPassword
-    ).catch((e) => {
+    ).catch((reason) => {
 
-        alert(e);
+        dialog.error(reason);
     });
 
     nss.update(
         configStore.globals.nssURL,
         configStore.globals.nssUsername,
         configStore.globals.nssPassword
-    ).catch((e) => {
+    ).catch((reason) => {
 
-        alert(e);
+        dialog.error(reason);
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
