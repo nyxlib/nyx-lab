@@ -246,15 +246,11 @@ onMounted(() => {
                     <nav-tabs>
 
                         <tab-pane title="Addons">
-                            <addon-table :addons="configStore.globals.addons" @search="() => {state.indexMode = true; }" />
+                            <addon-table :addons="configStore.globals.addons" :console="configStore.console" @search="() => {state.indexMode = true; }" />
                         </tab-pane>
 
                         <tab-pane title="Web pages">
                             <web-page-table :web-pages="configStore.globals.webPages" @search="() => {state.indexMode = true; }" />
-                        </tab-pane>
-
-                        <tab-pane title="Console">
-                            <pre class="font-monospace rounded shadow bg-dark text-light border p-2">{{ configStore.console.map((line) => line.trim()).join('\n') }}</pre>
                         </tab-pane>
 
                         <tab-pane title="Cache" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">

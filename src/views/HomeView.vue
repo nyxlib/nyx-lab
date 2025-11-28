@@ -696,13 +696,20 @@ onUnmounted(() => {
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
 
+                    <!-- ******************************************************************************************* -->
+
                     <div class="modal-header px-3 py-2">
+
                         <h5 class="modal-title">
                             <i class="bi bi-pencil"></i>
                             {{ state.id ? 'Edit' : 'New' }} control
                         </h5>
+
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
                     </div>
+
+                    <!-- ******************************************************************************************* -->
 
                     <form class="modal-body px-3 py-2" id="D1531250" @submit.prevent="newWidgetStep2">
 
@@ -916,9 +923,9 @@ onUnmounted(() => {
 
                     </form>
 
-                    <div class="modal-footer px-3 py-1">
+                    <!-- ******************************************************************************************* -->
 
-                        <!-- *************************************************************************************** -->
+                    <div class="modal-footer px-3 py-1">
 
                         <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">
                             <i class="bi bi-x-lg"></i> Cancel
@@ -928,9 +935,9 @@ onUnmounted(() => {
                             <i class="bi bi-check-lg"></i> Add
                         </button>
 
-                        <!-- *************************************************************************************** -->
-
                     </div>
+
+                    <!-- ******************************************************************************************* -->
 
                 </div>
             </div>
