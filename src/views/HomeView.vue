@@ -131,19 +131,13 @@ const connect = () => {
         configStore.globals.mqttURL,
         configStore.globals.mqttUsername,
         configStore.globals.mqttPassword
-    ).catch((reason) => {
-
-        dialog.error(reason);
-    });
+    );
 
     nss.update(
         configStore.globals.nssURL,
         configStore.globals.nssUsername,
         configStore.globals.nssPassword
-    ).catch((reason) => {
-
-        dialog.error(reason);
-    });
+    );
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

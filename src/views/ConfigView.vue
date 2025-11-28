@@ -122,7 +122,7 @@ onMounted(() => {
                         <div class="shadow card mb-3">
                             <div class="d-flex card-header justify-content-between">
                                 <div><i class="bi bi-hdd-stack"></i> MQTT Broker</div>
-                                <button class="btn btn-xs btn-primary" type="button" @click="checkMQTTConnection">
+                                <button class="btn btn-xs btn-primary" type="button" :disabled="!configStore.globals.mqttURL?.trim()" @click="checkMQTTConnection">
                                     <i class="bi bi-broadcast"></i>
                                     Check connection
                                 </button>
@@ -157,7 +157,7 @@ onMounted(() => {
                         <div class="shadow card mb-3">
                             <div class="d-flex card-header justify-content-between">
                                 <div><i class="bi bi-hdd-stack"></i> Nyx-Stream Server</div>
-                                <button class="btn btn-xs btn-primary" type="button" @click="checkNSSConnection">
+                                <button class="btn btn-xs btn-primary" type="button" :disabled="!configStore.globals.nssURL?.trim()" @click="checkNSSConnection">
                                     <i class="bi bi-broadcast"></i>
                                     Check connection
                                 </button>
@@ -190,31 +190,22 @@ onMounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <div class="shadow card mb-3">
-                            <div class="card-header">
-                                <i class="bi bi-grid-1x2"></i> Interfaces & dashboards
+                            <div class="d-flex card-header justify-content-between">
+                                <div><i class="bi bi-grid-1x2"></i> Interfaces & dashboards</div>
+                                <div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showNyxInterfaces">
+                                        <label class="form-check-label" for="A925CE04">Show Nyx interfaces</label>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showUserInterfaces">
+                                        <label class="form-check-label" for="A925CE04">Show user dashboards</label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
 
-                                <div class="row">
-                                    <div class="col-md-3">
-
-                                        <div class="mb-3">
-                                            <label class="form-label" for="A925CE04">Show Nyx interfaces</label>
-                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" id="A925CE04" v-model="configStore.globals.showNyxInterfaces" /></div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label" for="A925CE04">Show user dashboards</label>
-                                            <div class="form-check form-switch form-switch-lg"><input class="form-check-input" type="checkbox" id="A925CE04" v-model="configStore.globals.showUserInterfaces" /></div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-9">
-
-                                        <user-dashboard-table :user-dashboards="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
-
-                                    </div>
-                                </div>
+                                <user-dashboard-table :user-dashboards="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
 
                             </div>
                         </div>
@@ -263,7 +254,7 @@ onMounted(() => {
                         </tab-pane>
 
                         <tab-pane title="Console">
-                            <pre class="font-monospace rounded border p-2">{{ configStore.console.map((line) => line.trim()).join('\n') }}</pre>
+                            <pre class="font-monospace rounded shadow bg-dark text-light border p-2">{{ configStore.console.map((line) => line.trim()).join('\n') }}</pre>
                         </tab-pane>
 
                         <tab-pane title="Cache" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
