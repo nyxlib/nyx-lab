@@ -120,33 +120,29 @@ onMounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <div class="shadow card mb-3">
-                            <div class="d-flex card-header justify-content-between">
-                                <div><i class="bi bi-hdd-stack"></i> Servers</div>
-                                <div>
-                                    <div>
-                                        <button class="btn btn-xs btn-primary" type="button" :disabled="!configStore.globals.mqttURL?.trim()" @click="checkMQTTConnection">
-                                            <i class="bi bi-broadcast"></i>
-                                            Check MQTT Broker connection
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-xs btn-primary" type="button" :disabled="!configStore.globals.nssURL?.trim()" @click="checkNSSConnection">
-                                            <i class="bi bi-broadcast"></i>
-                                            Check Nyx-Stream Server connection
-                                        </button>
-                                    </div>
-                                </div>
+                            <div class="card-header">
+                                <i class="bi bi-hdd-stack"></i> Servers
                             </div>
                             <div class="card-body">
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="F3AB1470">MQTT Broker URL</label>
-                                    <input class="form-control form-control-sm" type="text" name="mqttURL" placeholder="Server URL" autocomplete="mqtt-server url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
+                                    <label class="form-label" for="F3AB1470">MQTT Broker URL<!-- ********************************** --></label>
+                                    <div class="input-group input-group-sm">
+                                        <input class="form-control form-control-sm" type="text" name="mqttURL" placeholder="Server URL" autocomplete="mqtt-server url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
+                                        <button class="btn btn-primary" type="button" :disabled="!configStore.globals.mqttURL?.trim()" @click="checkMQTTConnection">
+                                            <i class="bi bi-broadcast"></i> Check
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">Nyx-Stream Server URL<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
+                                    <div class="input-group input-group-sm">
+                                        <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
+                                        <button class="btn btn-primary" type="button" :disabled="!configStore.globals.nssURL?.trim()" @click="checkNSSConnection">
+                                            <i class="bi bi-broadcast"></i> Check
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="row">
@@ -169,26 +165,7 @@ onMounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="shadow card mb-3">
-                            <div class="d-flex card-header justify-content-between">
-                                <div><i class="bi bi-grid-1x2"></i> Interfaces & dashboards</div>
-                                <div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showNyxInterfaces">
-                                        <label class="form-check-label" for="A925CE04">Show Nyx interfaces</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showUserInterfaces">
-                                        <label class="form-check-label" for="A925CE04">Show user dashboards</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-
-                                <user-dashboard-table :user-dashboards="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
-
-                            </div>
-                        </div>
+                        <user-dashboard-table class="mb-3" :user-dashboards="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
 
                         <!-- *************************************************************************************** -->
 
@@ -203,7 +180,7 @@ onMounted(() => {
                             </div>
                             <div class="card-body">
 
-                                <div class="overflow-y-scroll" style="height: 500px;" id="nyx_license"></div>
+                                <div class="overflow-y-scroll" style="height: 545px;" id="nyx_license"></div>
 
                             </div>
                         </div>

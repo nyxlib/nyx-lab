@@ -6,7 +6,15 @@ import {ref, watchEffect} from 'vue';
 import draggable from 'vuedraggable';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+import useConfigStore from '../stores/config.js';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const configStore = useConfigStore();
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
@@ -94,14 +102,26 @@ const userDashboardEnabled = (userDashboard) => {
     <!-- *********************************************************************************************************** -->
 
     <div class="shadow card">
-        <div class="card-header px-3 py-2">
-            User dashboards
-            [
-            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => userDashboardAppend()">
-                <i class="bi bi-plus-lg"></i>
-                Add
-            </button>
-            ]
+        <div class="d-flex card-header justify-content-between">
+            <div>
+                <i class="bi bi-grid-1x2"></i> Dashboards
+                [
+                    <button class="btn btn-xs btn-primary me-0" type="button" @click="() => userDashboardAppend()">
+                        <i class="bi bi-plus-lg"></i>
+                        Add dashboard
+                    </button>
+                ]
+            </div>
+            <div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showNyxInterfaces">
+                    <label class="form-check-label" for="A925CE04">Show Nyx interfaces</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showUserInterfaces">
+                    <label class="form-check-label" for="A925CE04">Show user dashboards</label>
+                </div>
+            </div>
         </div>
         <div class="card-body px-3 py-2">
 
