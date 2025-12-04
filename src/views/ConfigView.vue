@@ -128,7 +128,7 @@ onMounted(() => {
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">MQTT Broker URL<!-- ********************************** --></label>
                                     <div class="input-group input-group-sm">
-                                        <input class="form-control form-control-sm" type="text" name="mqttURL" placeholder="Server URL" autocomplete="mqtt-server url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
+                                        <input class="form-control form-control-sm" type="text" name="mqttURL" placeholder="Server URL, e.g. ws://localhost:8080/" autocomplete="mqtt-server url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
                                         <button class="btn btn-primary" type="button" :disabled="!configStore.globals.mqttURL?.trim()" @click="checkMQTTConnection">
                                             <i class="bi bi-broadcast"></i> Check
                                         </button>
@@ -138,7 +138,7 @@ onMounted(() => {
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">Nyx-Stream Server URL<sup class="text-secondary">opt</sup></label>
                                     <div class="input-group input-group-sm">
-                                        <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
+                                        <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL, e.g. ws://localhost:9999/" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
                                         <button class="btn btn-primary" type="button" :disabled="!configStore.globals.nssURL?.trim()" @click="checkNSSConnection">
                                             <i class="bi bi-broadcast"></i> Check
                                         </button>
