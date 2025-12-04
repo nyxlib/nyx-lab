@@ -135,8 +135,8 @@ const connect = () => {
 
     nss.update(
         configStore.globals.nssURL,
-        configStore.globals.nssUsername,
-        configStore.globals.nssPassword
+        configStore.globals.mqttUsername,
+        configStore.globals.mqttPassword
     );
 
     /*----------------------------------------------------------------------------------------------------------------*/

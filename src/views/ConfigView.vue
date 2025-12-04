@@ -121,17 +121,32 @@ onMounted(() => {
 
                         <div class="shadow card mb-3">
                             <div class="d-flex card-header justify-content-between">
-                                <div><i class="bi bi-hdd-stack"></i> MQTT Broker</div>
-                                <button class="btn btn-xs btn-primary" type="button" :disabled="!configStore.globals.mqttURL?.trim()" @click="checkMQTTConnection">
-                                    <i class="bi bi-broadcast"></i>
-                                    Check connection
-                                </button>
+                                <div><i class="bi bi-hdd-stack"></i> Servers</div>
+                                <div>
+                                    <div>
+                                        <button class="btn btn-xs btn-primary" type="button" :disabled="!configStore.globals.mqttURL?.trim()" @click="checkMQTTConnection">
+                                            <i class="bi bi-broadcast"></i>
+                                            Check MQTT Broker connection
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-xs btn-primary" type="button" :disabled="!configStore.globals.nssURL?.trim()" @click="checkNSSConnection">
+                                            <i class="bi bi-broadcast"></i>
+                                            Check Nyx-Stream Server connection
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="F3AB1470">Server URL</label>
+                                    <label class="form-label" for="F3AB1470">MQTT Broker URL</label>
                                     <input class="form-control form-control-sm" type="text" name="mqttURL" placeholder="Server URL" autocomplete="mqtt-server url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="F3AB1470">Nyx-Stream Server URL<sup class="text-secondary">opt</sup></label>
+                                    <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
                                 </div>
 
                                 <div class="row">
@@ -145,41 +160,6 @@ onMounted(() => {
                                         <div class="mb-0 mb-md-0">
                                             <label class="form-label" for="A4245C17">Password<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="password" name="mqttPassword" placeholder="Password" autocomplete="mqtt-server current-password" v-password-toggle id="A4245C17" v-model="configStore.globals.mqttPassword" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- *************************************************************************************** -->
-
-                        <div class="shadow card mb-3">
-                            <div class="d-flex card-header justify-content-between">
-                                <div><i class="bi bi-hdd-stack"></i> Nyx-Stream Server</div>
-                                <button class="btn btn-xs btn-primary" type="button" :disabled="!configStore.globals.nssURL?.trim()" @click="checkNSSConnection">
-                                    <i class="bi bi-broadcast"></i>
-                                    Check connection
-                                </button>
-                            </div>
-                            <div class="card-body">
-
-                                <div class="mb-3">
-                                    <label class="form-label" for="F3AB1470">Server URL<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3 mb-md-0">
-                                            <label class="form-label" for="D82503D3">Username<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" name="nssUsername" placeholder="Username" autocomplete="nss-server username" id="D82503D3" v-model="configStore.globals.nssUsername" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-0 mb-md-0">
-                                            <label class="form-label" for="DDCC3DFE">Password<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="password" name="nssPassword" placeholder="Password" autocomplete="nss-server current-password" v-password-toggle id="DDCC3DFE" v-model="configStore.globals.nssPassword" />
                                         </div>
                                     </div>
                                 </div>

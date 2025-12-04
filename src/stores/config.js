@@ -14,12 +14,9 @@ import router from '../router';
 
 const DEFAULT_GLOBALS = {
     mqttURL: '',
+    nssURL: '',
     mqttUsername: '',
     mqttPassword: '',
-    /**/
-    nssURL: '',
-    nssUsername: '',
-    nssPassword: '',
     /**/
     showNyxInterfaces: true,
     showUserInterfaces: false,
