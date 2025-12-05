@@ -180,7 +180,7 @@ onMounted(() => {
                             </div>
                             <div class="card-body">
 
-                                <div class="overflow-y-scroll" style="height: 545px;" id="nyx_license"></div>
+                                <div class="overflow-y-scroll" style="height: 500px;" id="nyx_license"></div>
 
                             </div>
                         </div>
