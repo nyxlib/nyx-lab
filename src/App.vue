@@ -312,7 +312,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <ul class="nav nav-pills flex-column" style="background-color: rgb(var(--bs-body-color-rgb), 0.03)">
+        <ul class="nav nav-pills flex-column overflow-y-scroll" style="background-color: rgb(var(--bs-body-color-rgb), 0.03)">
 
             <!-- *********************************************************************************************** -->
 
