@@ -108,7 +108,7 @@ const userDashboardEnabled = (userDashboard) => {
                 [
                     <button class="btn btn-xs btn-primary me-0" type="button" @click="() => userDashboardAppend()">
                         <i class="bi bi-plus-lg"></i>
-                        Add dashboard
+                        Add
                     </button>
                 ]
             </div>
