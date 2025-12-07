@@ -2,6 +2,8 @@
 
 import {markRaw} from 'vue';
 
+import * as uuid from 'uuid';
+
 import {useNyxStore} from 'vue-nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -251,7 +253,7 @@ export default {
             nyxStore: useNyxStore,
             configStore: useConfigStore,
             /**/
-            newId: () => __NYX_UUID__.v4().substring(0, 13),
+            newId: () => uuid.v4().substring(0, 13),
             /**/
             registerConfPanel: _registerConfPanel_func,
             registerAppPanel: _registerAppPanel_func,

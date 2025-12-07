@@ -7,6 +7,8 @@ import {Window, getCurrentWindow} from '@tauri-apps/api/window';
 
 import {useNyxStore} from 'vue-nyx';
 
+import {Modal} from 'bootstrap';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from './stores/config';
@@ -126,7 +128,7 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('A7E11E2F')).show();
+    Modal.getOrCreateInstance(document.getElementById('A7E11E2F')).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };

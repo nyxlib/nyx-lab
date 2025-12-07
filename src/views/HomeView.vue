@@ -7,6 +7,10 @@ import Multiselect from '@vueform/multiselect';
 
 import {GridStack} from 'gridstack';
 
+import {Modal} from 'bootstrap';
+
+import * as uuid from 'uuid';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import ControlOption from '../components/ControlOption.vue';
@@ -220,7 +224,7 @@ const newWidget = (widget = null) => {
     }
     else
     {
-        state.id = __NYX_UUID__.v4();
+        state.id = uuid.v4();
         state.mode = MODE_VARIABLE;
         state.refreshTime = 1000;
         state.control = '';
@@ -235,7 +239,7 @@ const newWidget = (widget = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(controlModal.value).show();
+    Modal.getOrCreateInstance(controlModal.value).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -262,7 +266,7 @@ const newWidgetStep2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(controlModal.value).hide();
+    Modal.getOrCreateInstance(controlModal.value).hide();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -608,7 +612,7 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <template v-if="nyxStore.isConnected && configStore.globals.showUserInterfaces">
+            <template v-if="configStore.globals.showUserInterfaces">
 
                 <tab-pane class="pt-3" :title="panel.label" v-for="panel in panels" :key="panel.value" @shown="enableBLOBsAndStreams(panel.value, true)" @hidden="enableBLOBsAndStreams(panel.value, false)">
 

@@ -5,6 +5,8 @@ import {ref, watchEffect} from 'vue';
 
 import draggable from 'vuedraggable';
 
+import * as uuid from 'uuid';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from '../stores/config.js';
@@ -57,7 +59,7 @@ const userDashboardAppend = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const id = __NYX_UUID__.v4();
+    const id = uuid.v4();
 
     const rank = Date.now();
 

@@ -3,11 +3,15 @@
 
 import {ref, inject, watchEffect} from 'vue';
 
+import Multiselect from '@vueform/multiselect';
+
 import draggable from 'vuedraggable';
 
-import icons from '../assets/icons.json';
+import * as uuid from 'uuid';
 
-import Multiselect from '@vueform/multiselect';
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+import icons from '../assets/icons.json';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -67,7 +71,7 @@ const webPageAppend = (url = null) => {
 
     if(!found)
     {
-        const id = __NYX_UUID__.v4();
+        const id = uuid.v4();
 
         const rank = Date.now();
 

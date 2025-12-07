@@ -6,6 +6,10 @@ import {ref, inject, watchEffect, onMounted, onUnmounted} from 'vue';
 
 import draggable from 'vuedraggable';
 
+import {Modal} from 'bootstrap';
+
+import * as uuid from 'uuid';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -68,7 +72,7 @@ const addonAppend = (url = null) => {
 
     if(!found)
     {
-        const id = __NYX_UUID__.v4();
+        const id = uuid.v4();
 
         const rank = Date.now();
 
@@ -120,7 +124,7 @@ const addonEnabled = (addon) => {
 
 const showConsole = () => {
 
-    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('AB1BC33A')).show();
+    Modal.getOrCreateInstance(document.getElementById('AB1BC33A')).show();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
