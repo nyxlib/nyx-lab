@@ -3,6 +3,8 @@
 
 import {inject, computed, reactive} from 'vue';
 
+import {useNyxStore} from 'vue-nyx';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from '@/stores/config';
@@ -20,6 +22,8 @@ const nss = inject('nss');
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const configStore = useConfigStore();
+
+const nyxStore = useNyxStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -95,12 +99,12 @@ const enableBLOBsAndStreams = (panel, enabled) => {
 
     blobs.forEach((blob) => {
 
-        nyx.enableBLOB(blob, enabled);
+        nyx.enableBLOB(blob, enabled && nyxStore.isConnected);
     });
 
     streams.forEach((stream) => {
 
-        nyx.enableStream(stream, enabled);
+        nyx.enableStream(stream, enabled && nyxStore.isConnected);
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/

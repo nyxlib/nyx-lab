@@ -187,7 +187,7 @@ onUnmounted(() => {
                       <i class="bi bi-x-lg me-0" style="cursor: pointer;" @click="closeWidget(widget.id)"></i>
                     </span>
                 </div>
-                <div class="card-body px-1 py-1">
+                <div :class="['card-body', 'px-1', 'py-1', {'nyx-group-disabled': !nyxStore.isConnected}]">
 
                     <!-- ******************************************************************************************* -->
 
