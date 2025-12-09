@@ -46,6 +46,8 @@ body[data-environment="tauri"][data-maximized="false"] > #nyx_lab {
     background-color: rgb(var(--bs-body-bg-rgb));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 .nyx-bg2
 /*-----------------------------*/ {
 
@@ -73,7 +75,7 @@ input:invalid {
 .modal-backdrop,
 .offcanvas-backdrop {
 
-    top: 40px !important;
+    top: 48px !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

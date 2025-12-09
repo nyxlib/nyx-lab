@@ -103,7 +103,7 @@ const userDashboardEnabled = (userDashboard) => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="shadow card">
+    <div class="card">
         <div class="d-flex card-header justify-content-between">
             <div>
                 <i class="bi bi-grid-1x2"></i> Dashboards

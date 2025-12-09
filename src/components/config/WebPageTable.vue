@@ -120,7 +120,7 @@ const webPageEnabled = (webPage) => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="shadow card">
+    <div class="card">
         <div class="card-header px-3 py-2">
             Web pages
             [

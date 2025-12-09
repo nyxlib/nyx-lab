@@ -119,7 +119,7 @@ onMounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="shadow card mb-3">
+                        <div class="shadow-sm card mb-3">
                             <div class="card-header">
                                 <i class="bi bi-window"></i> Nyx Lab
                             </div>
@@ -147,7 +147,7 @@ onMounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="shadow card mb-3">
+                        <div class="shadow-sm card mb-3">
                             <div class="card-header">
                                 <i class="bi bi-hdd-stack"></i> Servers
                             </div>
@@ -193,7 +193,7 @@ onMounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <user-dashboard-table class="mb-3" :user-dashboards="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
+                        <user-dashboard-table class="shadow-sm mb-3" :user-dashboards="configStore.globals.interfacePanels" :enabled="configStore.globals.showUserInterfaces" />
 
                         <!-- *************************************************************************************** -->
 
@@ -202,7 +202,7 @@ onMounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="shadow card mb-3">
+                        <div class="shadow-sm card mb-3">
                             <div class="card-header">
                                 <i class="bi bi-bank"></i> License
                             </div>
@@ -231,15 +231,15 @@ onMounted(() => {
                     <nav-tabs>
 
                         <tab-pane title="Addons">
-                            <addon-table :addons="configStore.globals.addons" :console="configStore.console" @search="() => {state.indexMode = true; }" />
+                            <addon-table class="shadow-sm" :addons="configStore.globals.addons" :console="configStore.console" @search="() => {state.indexMode = true; }" />
                         </tab-pane>
 
                         <tab-pane title="Web pages">
-                            <web-page-table :web-pages="configStore.globals.webPages" @search="() => {state.indexMode = true; }" />
+                            <web-page-table class="shadow-sm" :web-pages="configStore.globals.webPages" @search="() => {state.indexMode = true; }" />
                         </tab-pane>
 
                         <tab-pane title="Cache" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
-                            <cache-table v-if="state.shownTabs.has('nyx-cache')" />
+                            <cache-table class="shadow-sm" v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 
                     </nav-tabs>
@@ -257,12 +257,12 @@ onMounted(() => {
                 <div class="row">
                     <div class="col-lg-6">
 
-                        <nyx-topology class="shadow mb-3" v-if="state.showNyx" />
+                        <nyx-topology class="shadow-sm mb-3" v-if="state.showNyx" />
 
                     </div>
                     <div class="col-lg-6">
 
-                        <nyx-variables class="shadow mb-3" v-if="state.showNyx" />
+                        <nyx-variables class="shadow-sm mb-3" v-if="state.showNyx" />
 
                     </div>
                 </div>

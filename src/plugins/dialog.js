@@ -40,7 +40,7 @@ const _LOCKER_HTML = `
 
             position: fixed;
 
-            top: 40px;
+            top: 48px;
             bottom: 00px;
 
             left: 4.5rem;
