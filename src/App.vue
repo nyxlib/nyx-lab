@@ -231,7 +231,7 @@ onMounted(() => {
     <!-- *********************************************************************************************************** -->
 
     <nav class="navbar navbar-expand nyx-bg1 py-0">
-        <div class="container-fluid nyx-bg2 ps-2 pe-3" data-tauri-drag-region>
+        <div class="container-fluid nyx-bg2 px-2" data-tauri-drag-region>
 
             <!-- *************************************************************************************************** -->
 

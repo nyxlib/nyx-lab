@@ -126,7 +126,6 @@ const isValid = computed(() => (
 const _panels = computed(() => Object.values(configStore.globals.interfacePanels).filter((x) => x.enabled && !x.locked).sort((a, b) => a.rank - b.rank).map((x) => ({
     value: x.id,
     label: x.title,
-    locked: x.locked,
 })));
 
 /*--------------------------------------------------------------------------------------------------------------------*/

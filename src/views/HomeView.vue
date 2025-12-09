@@ -5,8 +5,6 @@ import {inject, computed, reactive} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {useNyxStore} from 'vue-nyx';
-
 import useConfigStore from '@/stores/config';
 
 import PanelGrid from '@/components/dashboard/PanelGrid.vue';

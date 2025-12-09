@@ -102,9 +102,9 @@ const getControl = (widget) => {
 
     const controls = Object.values(configStore.controls).flatMap((controls) => controls.ctrls);
 
-    const descr = controls.find((ctrl) => ctrl.id === widget.control);
+    const control = controls.find((x) => x.id === widget.control);
 
-    return descr?.component ?? null;
+    return control?.component ?? null;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
