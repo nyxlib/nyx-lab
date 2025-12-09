@@ -20,7 +20,7 @@ import license from '../assets/license.txt?raw';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const HAS_TAURI = typeof window['__TAURI__'] !== 'undefined';
+const HAS_TAURI = window['__TAURI__'] === undefined;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -80,7 +80,7 @@ const checkNSSConnection = () => {
 
 onMounted(() => {
 
-    document.getElementById('nyx_license').innerHTML = marked.marked(license).replace('/<a /g', '<a target="_blank" ').replace(/<h([1-6])>/g, (_, p1) => `<h${parseInt(p1) + 1}>`).replace(/<\/h([1-6])>/g, (_, p1) => `</h${parseInt(p1) + 1}>`);
+    document.getElementById('nyx_license').innerHTML = marked.marked(license).replace('/<a /g', '<a target="_blank" ').replaceAll(/<h([1-6])>/g, (_, p1) => `<h${Number.parseInt(p1) + 1}>`).replaceAll(/<\/h([1-6])>/g, (_, p1) => `</h${Number.parseInt(p1) + 1}>`);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -96,7 +96,7 @@ onMounted(() => {
             <i class="bi bi-door-open"></i> Close addon index
         </button>
 
-        <iframe src="https://addons.nyxlib.org/" style="height: 100%; width: 100%;" v-show="state.indexMode"></iframe>
+        <iframe src="https://addons.nyxlib.org/" title="Nyx Addon Index" style="height: 100%; width: 100%;" v-show="state.indexMode"></iframe>
 
     </template>
 
@@ -164,9 +164,9 @@ onMounted(() => {
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="F3AB1470">Nyx-Stream Server URL<sup class="text-secondary">opt</sup></label>
+                                    <label class="form-label" for="FCF446F6">Nyx-Stream Server URL<sup class="text-secondary">opt</sup></label>
                                     <div class="input-group input-group-sm">
-                                        <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL, e.g. ws://localhost:9999/" autocomplete="nss-server url" id="F3AB1470" v-model="configStore.globals.nssURL" />
+                                        <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL, e.g. ws://localhost:9999/" autocomplete="nss-server url" id="FCF446F6" v-model="configStore.globals.nssURL" />
                                         <button class="btn btn-primary" type="button" :disabled="!configStore.globals.nssURL?.trim()" @click="checkNSSConnection">
                                             <i class="bi bi-broadcast"></i> Check
                                         </button>
