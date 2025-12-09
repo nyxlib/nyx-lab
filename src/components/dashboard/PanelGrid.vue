@@ -179,7 +179,7 @@ onUnmounted(() => {
             :gs-no-resize="panel.locked ? 'true' : undefined"
             v-for="widget in widgets" :key="widget.id"
         >
-            <div :class="['grid-stack-item-content', 'card', 'h-100', 'w-100', 'm-0', {/* TODO */}]">
+            <div :class="['grid-stack-item-content', widget.shadow, 'card', 'h-100', 'w-100', 'm-0']">
                 <div class="card-header px-3 py-1">
                     <span>{{ widget.title }}</span>
                     <span :class="{ 'd-none': panel.locked }">
