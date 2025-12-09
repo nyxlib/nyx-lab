@@ -94,7 +94,7 @@ onUnmounted(() => {
 
                     <div class="modal-body px-3 py-2">
 
-                        <pre class="font-monospace"><code v-for="line in lines" :key="line">{{ `${line.trim()}\n` }}</code></pre>
+                        <pre class="font-monospace overflow-y-scroll" style="max-height: 80vh;"><code v-for="line in lines" :key="line">{{ `${line.trim()}\n` }}</code></pre>
 
                     </div>
 
