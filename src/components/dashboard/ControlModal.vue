@@ -94,10 +94,24 @@ watch(
             state.shadow = value.shadow ?? 'shadow';
             state.title = value.title ?? '';
             state.panel = value.panel ?? '';
-            state.variables1 = Array.isArray(value.variables1) ? [...value.variables1] : ([]);
-            state.variables2 = Array.isArray(value.variables2) ? [...value.variables2] : ([]);
+            state.variables1 = Array.isArray(value.variables1) ? [...value.variables1] : [];
+            state.variables2 = Array.isArray(value.variables2) ? [...value.variables2] : [];
             state.enabled = value.enabled ? {...value.enabled} : {};
             state.options = value.options ? {...value.options} : {};
+        }
+        else
+        {
+            state.id = null;
+            state.mode = MODE_VARIABLE;
+            state.period = 1000;
+            state.control = '';
+            state.shadow = 'shadow';
+            state.title = '';
+            state.panel = '';
+            state.variables1 = [];
+            state.variables2 = [];
+            state.enabled = {};
+            state.options = {};
         }
     },
     {immediate: true, deep: true}
