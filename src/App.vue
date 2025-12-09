@@ -54,32 +54,6 @@ const about = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const themeSet = () => {
-
-    const label = document.querySelector('label[for="C2D68371"] i');
-
-    if(state.theme === 'dark')
-    {
-        document.documentElement.dataset.bsTheme = 'dark';
-
-        localStorage.setItem('nyx-lab-theme', 'dark');
-
-        label.classList.add   ('bi-moon-stars');
-        label.classList.remove('bi-sun');
-    }
-    else
-    {
-        document.documentElement.dataset.bsTheme = 'light';
-
-        localStorage.setItem('nyx-lab-theme', 'light');
-
-        label.classList.remove('bi-moon-stars');
-        label.classList.add   ('bi-sun');
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -212,8 +186,6 @@ onMounted(() => {
 
     configStore.init();
 
-    themeSet();
-
     /*----------------------------------------------------------------------------------------------------------------*/
 });
 
@@ -224,10 +196,6 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
     <!-- HEADER                                                                                                      -->
-    <!-- *********************************************************************************************************** -->
-
-    <input class="btn-check" type="checkbox" :true-value="'dark'" :false-value="'light'" id="C2D68371" v-model="state.theme" @change="themeSet" />
-
     <!-- *********************************************************************************************************** -->
 
     <nav class="navbar navbar-expand nyx-bg1 py-0">
@@ -263,29 +231,19 @@ onMounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <div class="d-flex ms-2 py-2" v-if="configStore.globals.weatherWidgetHTML || configStore.globals.seeingWidgetHTML">
+            <div class="d-flex ms-2 py-2">
 
                 <button class="btn btn-sm me-1" type="button" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)" v-if="configStore.globals.weatherWidgetHTML">
                     <i class="bi bi-cloud-moon-fill"></i>
                 </button>
 
-                <button class="btn btn-sm me-0" type="button" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)" v-if="configStore.globals.seeingWidgetHTML">
+                <button class="btn btn-sm me-1" type="button" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)" v-if="configStore.globals.seeingWidgetHTML">
                     <i class="bi bi-stars"></i>
                 </button>
 
-            </div>
-
-            <!-- *************************************************************************************************** -->
-
-            <div class="d-flex ms-2 py-2">
-
-                <button class="btn btn-sm me-1" type="button" @click="about()">
+                <button class="btn btn-sm me-0" type="button" @click="about()">
                     <i class="bi bi-question"></i>
                 </button>
-
-                <label class="btn btn-sm me-0" for="C2D68371">
-                    <i class="bi bi-moon-stars"></i>
-                </label>
 
             </div>
 

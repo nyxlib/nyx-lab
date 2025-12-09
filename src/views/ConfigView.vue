@@ -125,11 +125,23 @@ onMounted(() => {
                             </div>
                             <div class="card-body">
 
-                                <div class="mb-0">
-                                    <label class="form-label" for="A4703928">Window title</label>
-                                    <input class="form-control form-control-sm" type="text" name="windowTitle" placeholder="Window title" id="A4703928" v-model="configStore.globals.windowTitle" />
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3 mb-md-0">
+                                            <label class="form-label" for="A4703928">Window title</label>
+                                            <input class="form-control form-control-sm" type="text" name="windowTitle" placeholder="Window title" id="A4703928" v-model="configStore.globals.windowTitle" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-0 mb-md-0">
+                                            <label class="form-label" for="EDED8D84">Window theme</label>
+                                            <select class="form-select form-select-sm" name="windowTheme" id="EDED8D84" v-model="configStore.globals.windowTheme">
+                                                <option value="light">Light</option>
+                                                <option value="dark">Dark</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
 
