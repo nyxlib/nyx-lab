@@ -211,11 +211,11 @@ onUnmounted(() => {
 
     <teleport to="#nyx_home_buttons">
 
-        <button class="btn btn-sm btn-outline-primary ms-0" type="button" :disabled="!nyxStore.isConnected" @click="canvasEl.show(null)">
+        <button class="btn btn-sm btn-outline-primary ms-0" type="button" :disabled="!nyxStore.isConnected" @click="/*--------*/canvasEl/*--------*/.show()">
             <i class="bi bi-list"></i>
         </button>
 
-        <button class="btn btn-sm btn-outline-primary ms-2" type="button" :disabled="!nyxStore.isConnected" @click="newEditWidget(null)">
+        <button class="btn btn-sm btn-outline-primary ms-2" type="button" :disabled="!nyxStore.isConnected || panel.locked" @click="newEditWidget()">
             <i class="bi bi-plus-lg"></i> New widget
         </button>
 
