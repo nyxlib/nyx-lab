@@ -289,6 +289,8 @@ onMounted(() => {
 
             <template #button>
 
+                <!-- *********************************************************************************************** -->
+
                 <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 85px;" @click="configStore.import()">
                     <i class="bi bi-upload"></i> Import
                 </button>
@@ -297,13 +299,17 @@ onMounted(() => {
                     <i class="bi bi-download"></i> Export
                 </button>
 
-                <button class="btn btn-sm btn-outline-warning me-2" type="button" style="width: 85px;" @click="configStore.load()">
+                <!-- *********************************************************************************************** -->
+
+                <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.load()">
                     <i class="bi bi-x-lg"></i> Reload
                 </button>
 
-                <button class="btn btn-sm btn-success xxxxxxx me-0" type="button" style="width: 85px;" @click="configStore.save()">
+                <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.save()">
                     <i class="bi bi-check-lg"></i> Save
                 </button>
+
+                <!-- *********************************************************************************************** -->
 
             </template>
 

@@ -211,7 +211,7 @@ onUnmounted(() => {
 
     <teleport to="#nyx_home_buttons">
 
-        <button class="btn btn-sm btn-outline-primary ms-0" type="button" :disabled="!nyxStore.isConnected" @click="/*--------*/canvasEl/*--------*/.show()">
+        <button class="btn btn-sm btn-outline-primary ms-0" type="button" :disabled="!nyxStore.isConnected" @click="canvasEl.show()">
             <i class="bi bi-list"></i>
         </button>
 
@@ -219,7 +219,7 @@ onUnmounted(() => {
             <i class="bi bi-plus-lg"></i> New widget
         </button>
 
-        <button class="btn btn-sm btn-outline-success ms-2" type="button" :disabled="!nyxStore.isConnected" @click="configStore.save()">
+        <button class="btn btn-sm btn-outline-success ms-2" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!nyxStore.isConnected" @click="configStore.save()">
             <i class="bi bi-check-lg"></i> Save dashboards
         </button>
 
