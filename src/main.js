@@ -14,14 +14,14 @@ import {setup} from 'vue-nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import App from './App.vue';
-import router from './router';
+import App from '@/App.vue';
+import router from '@/router';
 
-import dialog from './plugins/dialog';
-import geoloc from './plugins/geoloc';
-import input from './plugins/input';
+import dialog from '@/plugins/dialog';
+import geoloc from '@/plugins/geoloc';
+import input from '@/plugins/input';
 
-import addon from './plugins/addon';
+import addon from '@/plugins/addon';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

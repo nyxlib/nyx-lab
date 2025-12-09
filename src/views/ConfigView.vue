@@ -7,12 +7,12 @@ import * as marked from 'marked';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useConfigStore from '../stores/config';
+import useConfigStore from '@/stores/config';
 
-import UserDashboardTable from '../components/UserDashboardTable.vue';
-import AddonTable from '../components/AddonTable.vue';
-import CacheTable from '../components/CacheTable.vue';
-import WebPageTable from '../components/WebPageTable.vue';
+import UserDashboardTable from '@/components/config/UserDashboardTable.vue';
+import AddonTable from '@/components/config/AddonTable.vue';
+import CacheTable from '@/components/config/CacheTable.vue';
+import WebPageTable from '@/components/config/WebPageTable.vue';
 
 import license from '../assets/license.txt?raw';
 
@@ -112,7 +112,7 @@ onMounted(() => {
             <!-- SERVICES                                                                                            -->
             <!-- *************************************************************************************************** -->
 
-            <tab-pane title="Main">
+            <tab-pane title="Nyx Lab">
 
                 <div class="row">
                     <div class="col-lg-6">

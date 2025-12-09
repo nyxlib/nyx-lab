@@ -40,6 +40,20 @@ body[data-environment="tauri"][data-maximized="false"] > #nyx_lab {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+.nyx-bg1,
+.nav-pills .nav-link:not(.active) {
+
+    background-color: rgb(var(--bs-body-bg-rgb));
+}
+
+.nyx-bg2
+/*-----------------------------*/ {
+
+    background-color: rgb(var(--bs-body-color-rgb), 0.03);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 input:invalid {
 
     background-color: var(--bs-danger-bg-subtle);
@@ -73,16 +87,7 @@ input:invalid {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.nav-pills .nav-link:not(.active) {
-
-    background-color: var(--bs-body-bg);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 [data-tauri-drag-region] .navbar-text {
-
-    color: white;
 
     white-space: nowrap;
 
@@ -96,30 +101,19 @@ input:invalid {
 [data-tauri-drag-region] .form-control,
 [data-tauri-drag-region] label[for="C2D68371"] {
 
-    color: white;
-
     white-space: nowrap;
 
-    border-color: rgb(10, 89, 204);
-
-    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
+    border-color: rgba(var(--bs-dark-rgb), 0.3);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-[data-tauri-drag-region] input::placeholder {
-
-    color: rgba(255, 255, 255, 0.75);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-[data-tauri-drag-region] .btn-secondary { background-color: var(--bs-secondary); }
-[data-tauri-drag-region] .btn-success { background-color: var(--bs-success); }
-[data-tauri-drag-region] .btn-danger { background-color: var(--bs-danger); }
-[data-tauri-drag-region] .btn-warning { background-color: var(--bs-warning); }
-[data-tauri-drag-region] .btn-info { background-color: var(--bs-info); }
-[data-tauri-drag-region] .btn-light { background-color: var(--bs-light); }
-[data-tauri-drag-region] .btn-dark { background-color: var(--bs-dark); }
+[data-tauri-drag-region] .btn-secondary { background-color: var(--bs-secondary); border: none; }
+[data-tauri-drag-region] .btn-success { background-color: var(--bs-success); border: none; }
+[data-tauri-drag-region] .btn-danger { background-color: var(--bs-danger); border: none; }
+[data-tauri-drag-region] .btn-warning { background-color: var(--bs-warning); border: none; }
+[data-tauri-drag-region] .btn-info { background-color: var(--bs-info); border: none; }
+[data-tauri-drag-region] .btn-light { background-color: var(--bs-light); border: none; }
+[data-tauri-drag-region] .btn-dark { background-color: var(--bs-dark); border: none; }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

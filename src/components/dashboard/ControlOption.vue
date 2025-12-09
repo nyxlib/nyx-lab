@@ -5,7 +5,7 @@
 
 import {ref, watch, onMounted} from 'vue';
 
-import * as uuid from 'uuid';
+import {v4 as uuid} from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -25,18 +25,18 @@ const props = defineProps({
     },
     min: {
         type: Number,
-        default: NaN,
         required: false,
+        default: Number.NaN,
     },
     max: {
         type: Number,
-        default: NaN,
         required: false,
+        default: Number.NaN,
     },
     step: {
         type: Number,
-        default: NaN,
         required: false,
+        default: Number.NaN,
     },
     defaultValue: {
         type: [Boolean, Number, String],
@@ -50,7 +50,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const uid = uuid.v4();
+const uid = uuid();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -62,13 +62,17 @@ const value = ref(props.modelValue ?? props.defaultValue);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-watch(() => props.modelValue, (_value) => {
+watch(
+    () => props.modelValue,
+    (_value) => {
 
-    if(value.value !== _value)
-    {
-        value.value = _value;
-    }
-});
+        if(value.value !== _value)
+        {
+            value.value = _value;
+        }
+    },
+    {immediate: true, deep: false},
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
