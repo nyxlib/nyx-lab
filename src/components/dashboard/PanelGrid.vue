@@ -220,7 +220,7 @@ onUnmounted(() => {
         </button>
 
         <button class="btn btn-sm btn-outline-success ms-2" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!nyxStore.isConnected" @click="configStore.save()">
-            <i class="bi bi-check-lg"></i> Save dashboards
+            <i class="bi bi-check-lg"></i> Save changes
         </button>
 
     </teleport>
