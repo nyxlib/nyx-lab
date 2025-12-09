@@ -109,13 +109,29 @@ onMounted(() => {
         <nav-tabs>
 
             <!-- *************************************************************************************************** -->
-            <!-- SERVICES                                                                                            -->
+            <!-- NYX LAB                                                                                             -->
             <!-- *************************************************************************************************** -->
 
             <tab-pane title="Nyx Lab">
 
                 <div class="row">
                     <div class="col-lg-6">
+
+                        <!-- *************************************************************************************** -->
+
+                        <div class="shadow card mb-3">
+                            <div class="card-header">
+                                <i class="bi bi-window"></i> Nyx Lab
+                            </div>
+                            <div class="card-body">
+
+                                <div class="mb-0">
+                                    <label class="form-label" for="A4703928">Window title</label>
+                                    <input class="form-control form-control-sm" type="text" name="windowTitle" placeholder="Window title" id="A4703928" v-model="configStore.globals.windowTitle" />
+                                </div>
+
+                            </div>
+                        </div>
 
                         <!-- *************************************************************************************** -->
 

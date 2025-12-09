@@ -13,6 +13,8 @@ import router from '@/router';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const DEFAULT_GLOBALS = {
+    windowTitle: 'Nyx Lab',
+    /**/
     mqttURL: '',
     nssURL: '',
     mqttUsername: '',
