@@ -8,8 +8,12 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes: [
         {
-            name: 'home',
             path: '/',
+            redirect: '/home',
+        },
+        {
+            name: 'home',
+            path: '/home',
             component: () => import('./views/HomeView.vue'),
         },
         {
