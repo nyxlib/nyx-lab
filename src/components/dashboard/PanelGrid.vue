@@ -186,7 +186,7 @@ onUnmounted(() => {
             <div :class="['grid-stack-item-content', widget.shadow, 'card', 'h-100', 'w-100', 'm-0']">
                 <div class="card-header px-3 py-1">
                     <span>
-                        {{ widget.title || 'Ø' }}
+                        {{ widget.title || '/' }}
                     </span>
                     <span :class="{'d-none': locked}">
                       <i class="bi bi-pencil me-1" style="cursor: pointer;" @click="newEditWidget(widget.id)"></i>
@@ -238,7 +238,7 @@ onUnmounted(() => {
     <control-canvas :widgets="widgets" ref="canvasEl" />
 
     <!-- *********************************************************************************************************** -->
-    <!-- MODAL                                                                                                        -->
+    <!-- MODAL                                                                                                       -->
     <!-- *********************************************************************************************************** -->
 
     <control-modal ref="modalEl" v-model="configStore.globals.interfaceWidgets[state.currentWidgetId]" />
