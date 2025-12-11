@@ -17,14 +17,14 @@ const router = createRouter({
             component: () => import('./views/HomeView.vue'),
         },
         {
-            name: 'external',
-            path: '/external/:id',
-            component: () => import('./views/ExternalView.vue'),
-        },
-        {
             name: 'config',
             path: '/config/',
             component: () => import('./views/ConfigView.vue'),
+        },
+        {
+            name: 'external',
+            path: '/external/:id',
+            component: () => import('./views/ExternalView.vue'),
         },
     ],
 });
