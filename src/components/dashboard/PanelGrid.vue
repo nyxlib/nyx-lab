@@ -185,8 +185,10 @@ onUnmounted(() => {
         >
             <div :class="['grid-stack-item-content', widget.shadow, 'card', 'h-100', 'w-100', 'm-0']">
                 <div class="card-header px-3 py-1">
-                    <span>{{ widget.title }}</span>
-                    <span :class="{ 'd-none': locked}">
+                    <span>
+                        {{ widget.title || 'Ø' }}
+                    </span>
+                    <span :class="{'d-none': locked}">
                       <i class="bi bi-pencil me-1" style="cursor: pointer;" @click="newEditWidget(widget.id)"></i>
                       <i class="bi bi-x-lg me-0" style="cursor: pointer;" @click="closeWidget(widget.id)"></i>
                     </span>
