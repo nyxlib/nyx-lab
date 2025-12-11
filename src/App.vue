@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject, reactive, computed, onMounted} from 'vue';
+import {ref, inject, reactive, computed, onMounted} from 'vue';
 
 import {Window, getCurrentWindow} from '@tauri-apps/api/window';
 
@@ -19,7 +19,7 @@ import icons from '@/assets/icons.json';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const HAS_TAURI_AND_NOT_MOBILE = typeof window['__TAURI__'] !== 'undefined' && !['android', 'ios'].includes(window['__NYX_OS_TYPE__']);
+const HAS_TAURI_AND_NOT_MOBILE = window['__TAURI__'] !== undefined && !['android', 'ios'].includes(window['__NYX_OS_TYPE__']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -42,6 +42,10 @@ const state = reactive({
 const appPanels = computed(() => Object.values(configStore.appPanels).sort((x, y) => x.descr.rank - y.descr.rank));
 
 const webPages = computed(() => Object.values(configStore.globals.webPages).sort((x, y) => x.rank - y.rank));
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const modalEl = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -102,7 +106,7 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Modal.getOrCreateInstance(document.getElementById('A7E11E2F')).show();
+    Modal.getOrCreateInstance(modalEl.value).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -339,6 +343,53 @@ onMounted(() => {
         <!-- ******************************************************************************************************* -->
 
     </div>
+
+    <!-- *********************************************************************************************************** -->
+    <!-- MODAL                                                                                                       -->
+    <!-- *********************************************************************************************************** -->
+
+    <teleport to="body">
+
+        <!-- ******************************************************************************************************* -->
+
+        <div class="modal" tabindex="-1" ref="modalEl">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+
+                    <!-- ******************************************************************************************* -->
+
+                    <div class="modal-header px-3 py-2">
+
+                        <span>
+                            <span id="F10F4898"></span>
+                            [
+                                <a class="btn btn-xs btn-primary" target="_blank" id="E9F2EAA2">
+                                    <i class="bi bi-link-45deg"></i> <span id="DC2D5B47"></span>
+                                </a>
+                            ]
+                        </span>
+
+                        <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+
+                    </div>
+
+                    <!-- ******************************************************************************************* -->
+
+                    <div class="modal-body px-3 py-2">
+
+                        <div class="text-center" id="C7F2FB8E"></div>
+
+                    </div>
+
+                    <!-- ******************************************************************************************* -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ******************************************************************************************************* -->
+
+    </teleport>
 
     <!-- *********************************************************************************************************** -->
 
