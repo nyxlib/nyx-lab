@@ -51,6 +51,10 @@ const widgets = computed(() => Object.values(configStore.globals.interfaceWidget
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const locked = computed(() => props.panel.locked || !nyxStore.isConnected);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const canvasEl = ref(null);
 
 const modalEl = ref(null);
@@ -82,7 +86,7 @@ const closeWidget = (id) => {
 
             const el = gridEl.value.querySelector(`[data-id="${id}"]`);
 
-            if(el && grid)
+            if(el)
             {
                 grid.removeWidget(el, true);
             }
@@ -175,14 +179,14 @@ onUnmounted(() => {
             :gs-y="widget.y"
             :gs-w="widget.w"
             :gs-h="widget.h"
-            :gs-no-move="panel.locked ? 'true' : undefined"
-            :gs-no-resize="panel.locked ? 'true' : undefined"
+            :gs-no-move="locked ? 'true' : undefined"
+            :gs-no-resize="locked ? 'true' : undefined"
             v-for="widget in widgets" :key="widget.id"
         >
             <div :class="['grid-stack-item-content', widget.shadow, 'card', 'h-100', 'w-100', 'm-0']">
                 <div class="card-header px-3 py-1">
                     <span>{{ widget.title }}</span>
-                    <span :class="{ 'd-none': panel.locked }">
+                    <span :class="{ 'd-none': locked}">
                       <i class="bi bi-pencil me-1" style="cursor: pointer;" @click="newEditWidget(widget.id)"></i>
                       <i class="bi bi-x-lg me-0" style="cursor: pointer;" @click="closeWidget(widget.id)"></i>
                     </span>
