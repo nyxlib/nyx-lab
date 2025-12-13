@@ -26,7 +26,7 @@ function _register(app, path, name)
 {
     const module = window[name]?.default;
 
-    if(typeof module !== 'undefined')
+    if(module !== undefined)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -51,7 +51,7 @@ function _load(app, path)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof window['__TAURI__'] !== 'undefined') {
+    if(window['__TAURI__'] !== undefined) {
         path = path.replace('addon://', 'http://localhost:7878/repo/');
     }
     else {
@@ -132,6 +132,16 @@ function _load(app, path)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _registerVuePlugin = (app, plugin) => {
+
+    if(plugin)
+    {
+        app.use(plugin);
+    }
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -254,6 +264,8 @@ export default {
             configStore: useConfigStore,
             /**/
             newId: () => uuid.v4().substring(0, 13),
+            /**/
+            registerVuePlugin: (plugin) => _registerVuePlugin(app, plugin),
             /**/
             registerConfPanel: _registerConfPanel_func,
             registerAppPanel: _registerAppPanel_func,
