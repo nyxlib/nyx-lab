@@ -237,15 +237,15 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-2">
 
-                <button class="btn btn-sm me-1" type="button" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)" v-if="configStore.globals.weatherWidgetHTML">
+                <button class="btn btn-sm btn-outline-secondary me-1" type="button" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)" v-if="configStore.globals.weatherWidgetHTML">
                     <i class="bi bi-cloud-moon-fill"></i>
                 </button>
 
-                <button class="btn btn-sm me-1" type="button" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)" v-if="configStore.globals.seeingWidgetHTML">
+                <button class="btn btn-sm btn-outline-secondary me-1" type="button" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)" v-if="configStore.globals.seeingWidgetHTML">
                     <i class="bi bi-stars"></i>
                 </button>
 
-                <button class="btn btn-sm me-0" type="button" @click="about()">
+                <button class="btn btn-sm btn-outline-secondary me-0" type="button" @click="about()">
                     <i class="bi bi-question"></i>
                 </button>
 

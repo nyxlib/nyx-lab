@@ -99,23 +99,12 @@ input:invalid {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-[data-tauri-drag-region] .btn,
 [data-tauri-drag-region] .form-control {
 
     white-space: nowrap;
 
     border-color: rgba(var(--bs-dark-rgb), 0.3);
 }
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-[data-tauri-drag-region] .btn-secondary { background-color: var(--bs-secondary); }
-[data-tauri-drag-region] .btn-success { background-color: var(--bs-success); }
-[data-tauri-drag-region] .btn-danger { background-color: var(--bs-danger); }
-[data-tauri-drag-region] .btn-warning { background-color: var(--bs-warning); }
-[data-tauri-drag-region] .btn-info { background-color: var(--bs-info); }
-[data-tauri-drag-region] .btn-light { background-color: var(--bs-light); }
-[data-tauri-drag-region] .btn-dark { background-color: var(--bs-dark); }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
