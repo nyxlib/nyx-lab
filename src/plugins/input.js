@@ -30,7 +30,7 @@ export default {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                toggleEl.classList.add(...['bi', 'bi-eye-fill', 'text-secondary', 'position-absolute']);
+                toggleEl.classList.add('bi', 'bi-eye-fill', 'text-secondary', 'position-absolute');
 
                 toggleEl.style.setProperty('right', '1.0rem');
                 toggleEl.style.setProperty('bottom', '0.2rem');

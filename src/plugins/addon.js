@@ -97,7 +97,7 @@ function _load(app, path)
                         }
                         catch(_)
                         {
-                            reject('corrupted addon');
+                            reject(new Error('Corrupted addon'));
                         }
                     });
 
@@ -105,7 +105,7 @@ function _load(app, path)
 
                     script.addEventListener('error', () => {
 
-                        reject('corrupted addon');
+                        reject(new Error('Corrupted addon'));
                     });
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -122,9 +122,9 @@ function _load(app, path)
 
                     /*------------------------------------------------------------------------------------------------*/
                 }
-                else {
-
-                    reject('missing metadata');
+                else
+                {
+                    reject(new Error('Missing metadata'));
                 }
             });
         });
@@ -132,16 +132,6 @@ function _load(app, path)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const _registerVuePlugin = (app, plugin) => {
-
-    if(plugin)
-    {
-        app.use(plugin);
-    }
-};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -264,8 +254,6 @@ export default {
             configStore: useConfigStore,
             /**/
             newId: () => uuid.v4().substring(0, 13),
-            /**/
-            registerVuePlugin: (plugin) => _registerVuePlugin(app, plugin),
             /**/
             registerConfPanel: _registerConfPanel_func,
             registerAppPanel: _registerAppPanel_func,

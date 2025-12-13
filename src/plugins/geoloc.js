@@ -17,16 +17,16 @@ const getErrorMessage = (error) => {
     switch(error.code)
     {
         case error.PERMISSION_DENIED:
-            return 'Geolocation: permission denied.';
+            return 'Permission denied.';
 
         case error.POSITION_UNAVAILABLE:
-            return 'Geolocation: position unavailable.';
+            return 'Position unavailable.';
 
         case error.TIMEOUT:
-            return 'Geolocation: timeout.';
+            return 'Timeout.';
 
         default:
-            return 'Geolocation: unknown error.';
+            return 'Unknown error.';
     }
 };
 
@@ -36,7 +36,7 @@ const _getGeolocation_step2 = (resolve, reject) => {
 
     geolocation.getCurrentPosition(OPTIONS).then(resolve).catch((error) => {
 
-        reject(getErrorMessage(error));
+        reject(new Error(getErrorMessage(error)));
     });
 };
 
@@ -46,7 +46,7 @@ const _getGeolocation = () => {
 
     return new Promise((resolve, reject) => {
 
-        if(typeof window['__TAURI__'] !== 'undefined')
+        if(window['__TAURI__'] !== undefined)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -58,7 +58,7 @@ const _getGeolocation = () => {
 
                         if(permissions.location !== 'granted')
                         {
-                            reject('Geolocation: permission denied.');
+                            reject(new Error('Permission denied.'));
                         }
                         else
                         {
@@ -82,13 +82,13 @@ const _getGeolocation = () => {
             {
                 navigator.geolocation.getCurrentPosition(resolve, (error) => {
 
-                    reject(getErrorMessage(error));
+                    reject(new Error(getErrorMessage(error)));
 
                 }, OPTIONS);
             }
             else
             {
-                reject('Geolocation: not supported.');
+                reject(new Error('Not supported.'));
             }
 
             /*--------------------------------------------------------------------------------------------------------*/

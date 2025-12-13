@@ -114,9 +114,9 @@ const _unlock = () => {
 /* DIALOGS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _notify_step2 = (body, title) => {
+const _notify_step2 = (title, body) => {
 
-    if(typeof window['__TAURI__'] !== 'undefined')
+    if(window['__TAURI__'] !== undefined)
     {
         notification.sendNotification({
             title: title,
@@ -146,7 +146,7 @@ const _notify = (body, title) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof window['__TAURI__'] !== 'undefined')
+    if(window['__TAURI__'] !== undefined)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -170,7 +170,7 @@ const _notify = (body, title) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
-    else if('Notification' in window)
+    else if('Notification' in /* NOSONAR */ window)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -220,7 +220,7 @@ const _success = (message) => {
     _notify(message, 'Success');
     _unlock();
 
-    return {then: () => {}};
+    return Promise.resolve();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -245,7 +245,7 @@ const _warning = (message) => {
     _notify(message, 'Warning');
     _unlock();
 
-    return {then: () => {}};
+    return Promise.resolve();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -270,14 +270,14 @@ const _error = (message) => {
     _notify(message, 'Error');
     _unlock();
 
-    return {then: () => {}};
+    return Promise.resolve();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const _show = (message, title, type = null) => {
 
-    if(typeof window['__TAURI__'] !== 'undefined')
+    if(window['__TAURI__'] !== undefined)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -304,7 +304,7 @@ const _confirm = (message, title, type = null) => {
 
     return new Promise((resolve) => {
 
-        if(typeof window['__TAURI__'] !== 'undefined')
+        if(window['__TAURI__'] !== undefined)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -329,7 +329,7 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
     return new Promise((resolve, reject) => {
 
-        if(typeof window['__TAURI__'] !== 'undefined')
+        if(window['__TAURI__'] !== undefined)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -351,7 +351,7 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
                 }
                 else
                 {
-                    reject('empty path');
+                    reject(new Error('No selected file'));
                 }
             });
 
@@ -377,26 +377,19 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
                 if(file)
                 {
-                    const reader = new FileReader();
+                    file.text().catch(reject).then((text) => {
 
-                    reader.onload = (e) => {
-
-                        resolve([e.target.result, null]);
-                    };
-
-                    reader.onabort = reject;
-                    reader.onerror = reject;
-
-                    reader.readAsText(file);
+                        resolve([text, null]);
+                    });
                 }
                 else
                 {
-                    reject();
+                    reject(new Error('No selected file'));
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                document.body.removeChild(el);
+                el.remove();
 
                 /*----------------------------------------------------------------------------------------------------*/
             });
@@ -407,11 +400,11 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                reject();
+                reject(new Error('Operation cancelled'));
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                document.body.removeChild(el);
+                el.remove();
 
                 /*----------------------------------------------------------------------------------------------------*/
             });
@@ -435,7 +428,7 @@ const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
 
     return new Promise((resolve, reject) => {
 
-        if(typeof window['__TAURI__'] !== 'undefined')
+        if(window['__TAURI__'] !== undefined)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -458,9 +451,8 @@ const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
                 }
                 else
                 {
-                    reject('empty path');
+                    reject(new Error('Empty path'));
                 }
-
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -477,9 +469,9 @@ const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
             el.download = defaultPath;
             el.style.display = 'none';
 
-            document.body.appendChild(el);
+            document.body.appendChild(el);  /* NOSONAR */
             el.click();
-            document.body.removeChild(el);
+            document.body.removeChild(el);  /* NOSONAR */
 
             resolve(null);
 
