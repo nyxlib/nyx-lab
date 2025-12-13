@@ -38,6 +38,14 @@
         "geolocation:allow-check-permissions",
         "geolocation:allow-request-permissions",
         "geolocation:deny-get-current-position",
+        {
+            "identifier": "http:default",
+            "allow": [
+                {
+                    "url": "https://addons.nyxlib.org/*"
+                }
+            ]
+        },
         "notification:allow-notify",
         "notification:allow-request-permission",
         "notification:allow-is-permission-granted",
