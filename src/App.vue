@@ -332,7 +332,7 @@ onMounted(() => {
 
         <div class="nyx-bg2" style="width: calc(100% - 4rem);">
 
-            <div class="overflow-hidden nyx-bg1 h-100 w-100" style="border-top-left-radius: var(--bs-border-radius);">
+            <div class="overflow-hidden nyx-bg1 h-100 w-100" style="clip-path: inset(0 0 0 0 round var(--bs-border-radius) 0 0 0);">
 
                 <router-view :key="$route.path" />
 
