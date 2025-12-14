@@ -32,6 +32,9 @@
     },
     "bundle": {
         "active": true,
+        "externalBin": [
+            "binaries/nyx-gen"
+        ],
         "targets": [
             "appimage",
             "dmg",

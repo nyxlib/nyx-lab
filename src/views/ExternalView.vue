@@ -21,6 +21,8 @@ const route = useRoute();
 
 const url = route.params.id in configStore.globals.webPages ? configStore.globals.webPages[route.params.id].url : '';
 
+const title = route.params.id in configStore.globals.webPages ? configStore.globals.webPages[route.params.id].title : '';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
 
@@ -28,7 +30,7 @@ const url = route.params.id in configStore.globals.webPages ? configStore.global
 
     <!-- *********************************************************************************************************** -->
 
-    <iframe class="h-100 w-100" :src="url"></iframe>
+    <iframe class="h-100 w-100" :src="url" :title="title"></iframe>
 
     <!-- *********************************************************************************************************** -->
 

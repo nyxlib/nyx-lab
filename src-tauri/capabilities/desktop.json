@@ -50,6 +50,17 @@
         "notification:allow-request-permission",
         "notification:allow-is-permission-granted",
         "os:default",
+        {
+            "identifier": "shell:allow-execute",
+            "allow": [
+                {
+                    "name": "binaries/nyx-gen",
+                    "cmd": "binaries/nyx-gen",
+                    "args": true,
+                    "sidecar": true
+                }
+            ]
+        },
         "shell:allow-open",
         "store:allow-load",
         "store:allow-keys",

@@ -223,13 +223,13 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-2">
 
-                <button class="btn btn-sm btn-success me-0" type="button" v-if="nyxStore.isConnected">
+                <span class="badge text-bg-success py-1" v-if="nyxStore.isConnected">
                     <i class="bi bi-lightning-charge"></i> connected
-                </button>
+                </span>
 
-                <button class="btn btn-sm btn-secondary me-0" type="button" v-if="!nyxStore.isConnected">
+                <span class="badge text-bg-secondary py-1" v-if="!nyxStore.isConnected">
                     <i class="bi bi-lightning-charge"></i> disconnected
-                </button>
+                </span>
 
             </div>
 

@@ -54,9 +54,9 @@ const checkMQTTConnection = () => {
 
         dialog.show(message, 'Testing MQTT broker', 'info');
 
-    }).catch((message) => {
+    }).catch((error) => {
 
-        dialog.show(message, 'Testing MQTT broker', 'error');
+        dialog.show(error, 'Testing MQTT broker', 'error');
     });
 };
 
@@ -68,9 +68,9 @@ const checkNSSConnection = () => {
 
         dialog.show(message, 'Testing Nyx-Stream', 'info');
 
-    }).catch((message) => {
+    }).catch((error) => {
 
-        dialog.show(message, 'Testing Nyx-Stream', 'error');
+        dialog.show(error, 'Testing Nyx-Stream', 'error');
     });
 };
 
@@ -284,42 +284,42 @@ onMounted(() => {
             </template>
 
             <!-- *************************************************************************************************** -->
-            <!-- BUTTONS                                                                                             -->
-            <!-- *************************************************************************************************** -->
-
-            <template #button>
-
-                <!-- *********************************************************************************************** -->
-
-                <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 85px;" @click="configStore.import()">
-                    <i class="bi bi-upload"></i> Import
-                </button>
-
-                <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 85px;" @click="configStore.export()">
-                    <i class="bi bi-download"></i> Export
-                </button>
-
-                <!-- *********************************************************************************************** -->
-
-                <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.load()">
-                    <i class="bi bi-x-lg"></i> Reload
-                </button>
-
-                <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.save()">
-                    <i class="bi bi-check-lg"></i> Save
-                </button>
-
-                <!-- *********************************************************************************************** -->
-
-            </template>
-
-            <!-- *************************************************************************************************** -->
 
         </nav-tabs>
 
         <!--*********************************************************************************************************-->
 
     </div>
+
+    <!-- *************************************************************************************************** -->
+    <!-- BUTTONS                                                                                             -->
+    <!-- *************************************************************************************************** -->
+
+    <teleport to="#nyx_toolbar">
+
+        <!-- *********************************************************************************************** -->
+
+        <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 85px;" @click="configStore.import()">
+            <i class="bi bi-upload"></i> Import
+        </button>
+
+        <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 85px;" @click="configStore.export()">
+            <i class="bi bi-download"></i> Export
+        </button>
+
+        <!-- *********************************************************************************************** -->
+
+        <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.load()">
+            <i class="bi bi-x-lg"></i> Reload
+        </button>
+
+        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.save()">
+            <i class="bi bi-check-lg"></i> Save
+        </button>
+
+        <!-- *********************************************************************************************** -->
+
+    </teleport>
 
     <!-- *********************************************************************************************************** -->
 
