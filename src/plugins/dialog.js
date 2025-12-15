@@ -133,21 +133,26 @@ const _notify_step2 = (title, body) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _notify = (body, title) => {
+const _notify = (message, title) => {
 
-    if(!body)
+    if(!message)
     {
         return;
     }
 
-    if(!(body instanceof String))
+    if(!(message instanceof String))
     {
-        body = body.toString();
+        message = message.toString();
+    }
+
+    if(!(title instanceof String))
+    {
+        title = title.toString();
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    console.log(`title: ${title}, body: ${body}`);
+    console.log(`title: ${title}, body: ${message}`);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -163,13 +168,13 @@ const _notify = (body, title) => {
 
                     if(permission === 'granted')
                     {
-                        _notify_step2(title, body);
+                        _notify_step2(title, message);
                     }
                 });
             }
             else
             {
-                _notify_step2(title, body);
+                _notify_step2(title, message);
             }
         });
 
@@ -187,13 +192,13 @@ const _notify = (body, title) => {
 
                     if(permission === 'granted')
                     {
-                        _notify_step2(title, body);
+                        _notify_step2(title, message);
                     }
                 });
             }
             else
             {
-                _notify_step2(title, body);
+                _notify_step2(title, message);
             }
         });
 
@@ -282,6 +287,18 @@ const _error = (message) => {
 
 const _show = (message, title, type = null) => {
 
+    if(!(message instanceof String))
+    {
+        message = message.toString();
+    }
+
+    if(!(title instanceof String))
+    {
+        title = title.toString();
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     if(window['__TAURI__'] !== undefined)
     {
         /*------------------------------------------------------------------------------------------------------------*/
@@ -301,6 +318,8 @@ const _show = (message, title, type = null) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
