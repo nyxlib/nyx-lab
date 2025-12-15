@@ -43,7 +43,7 @@ body[data-environment="tauri"][data-maximized="false"] > #nyx_lab {
 .nyx-bg1,
 .nav-pills .nav-link:not(.active) {
 
-    background-color: rgb(var(--bs-body-bg-rgb));
+    background-color: rgba(var(--bs-body-bg-rgb), 1.000);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -51,14 +51,14 @@ body[data-environment="tauri"][data-maximized="false"] > #nyx_lab {
 .nyx-bg2
 /*-----------------------------*/ {
 
-    background-color: rgb(var(--bs-body-color-rgb), 0.03);
+    background-color: rgba(var(--bs-body-color-rgb), 0.03);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 input:invalid {
 
-    background-color: var(--bs-danger-bg-subtle);
+    background-color: rgba(var(--bs-danger-rgb), 0.25);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
