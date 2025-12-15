@@ -76,17 +76,14 @@ app.use(addon);
 
 router.beforeEach(() => {
 
-    if(/android|iPad|iPhone/i.test(navigator.userAgent))
-    {
-        setTimeout(() => {
+    setTimeout(() => {
 
-            document.querySelectorAll('[data-bs-original-title]').forEach((tooltip) => {
+        document.querySelectorAll('[data-bs-original-title]').forEach((tooltip) => {
 
-                __NYX_BOOTSTRAP__.Tooltip.getInstance(tooltip)?.hide();
-            });
+            __NYX_BOOTSTRAP__.Tooltip.getInstance(tooltip)?.hide();
+        });
 
-        }, 1000);
-    }
+    }, 1000);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/

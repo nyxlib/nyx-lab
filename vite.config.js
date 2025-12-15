@@ -32,9 +32,11 @@ export default defineConfig({
     resolve: {
         dedupe: [
             '@vueform/multiselect',
+            '@popperjs/core',
+            'vuedraggable',
+            'bootstrap',
             'marked',
-            'pinia',
-            'vuedraggable'
+            'pinia'
         ],
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
