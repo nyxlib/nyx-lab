@@ -63,6 +63,10 @@ fn start_addon_proxy(app: &mut App)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
+        let cors = warp::cors().allow_any_origin();
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         let proxy = warp::path::full().and(warp::method()).and(warp::header::headers_cloned()).and(warp::body::bytes()).and_then(move |path: warp::filters::path::FullPath, method: warp::http::Method, headers: warp::http::HeaderMap, body: Bytes| {
 
             let client = client.clone();
@@ -229,7 +233,7 @@ fn start_addon_proxy(app: &mut App)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        warp::serve(proxy).run(([0, 0, 0, 0], 7878)).await;
+        warp::serve(proxy.with(cors)).run(([0, 0, 0, 0], 7878)).await;
 
         /*------------------------------------------------------------------------------------------------------------*/
     });
