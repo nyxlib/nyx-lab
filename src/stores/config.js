@@ -14,7 +14,7 @@ import router from '@/router';
 
 const DEFAULT_GLOBALS = {
     windowTitle: 'Nyx Lab',
-    windowTheme: 'dark',
+    windowTheme: localStorage.getItem('window-theme') || 'dark',
     /**/
     mqttURL: '',
     nssURL: '',
@@ -114,6 +114,8 @@ const useConfigStore = defineStore('config', {
             watch(() => this.globals.windowTheme, (value) => {
 
                 document.documentElement.dataset.bsTheme = value;
+
+                localStorage.setItem('window-theme', value);
 
             }, {immediate: true, deep: false});
 
