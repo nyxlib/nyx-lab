@@ -377,7 +377,11 @@ onMounted(() => {
 
                     <div class="modal-body px-3 py-2">
 
-                        <div class="text-center" id="C7F2FB8E"></div>
+                        <div class="text-center" id="C7F2FB8E">
+
+                            <!-- DYNAMIC -->
+
+                        </div>
 
                     </div>
 

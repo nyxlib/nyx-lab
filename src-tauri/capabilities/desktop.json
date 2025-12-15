@@ -37,7 +37,8 @@
         "fs:allow-app-write",
         "geolocation:allow-check-permissions",
         "geolocation:allow-request-permissions",
-        "geolocation:deny-get-current-position",
+        "geolocation:allow-get-current-position",
+        "geolocation:allow-watch-position",
         {
             "identifier": "http:default",
             "allow": [
