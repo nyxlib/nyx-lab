@@ -8,11 +8,12 @@
 .idea/codeStyles/
 
 dist
-addons
 target
+node_modules
+
 src-tauri/gen
 src-tauri/icons
-node_modules
+src-tauri/binaries
 
 Cargo.lock
 package-lock.json
