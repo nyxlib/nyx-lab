@@ -49,6 +49,9 @@ jobs:
                     rustc --version
                     cargo --version
 
+                    mkdir -p ./src-tauri/binaries/
+                    curl https://nyxlib.org/download/linux/x86_64/nyx-gen > ./src-tauri/binaries/"nyx-gen-$(rustc -Vv | grep '^host:' | cut -f 2 -d ' ')"
+
                     npm install
                     npm run tauri-prod
 
