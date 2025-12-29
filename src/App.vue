@@ -284,7 +284,7 @@ onMounted(() => {
         <!-- MENU                                                                                                    -->
         <!-- ******************************************************************************************************* -->
 
-        <ul class="nav nav-pills flex-column overflow-x-hidden overflow-y-scroll nyx-bg2 px-2">
+        <ul class="nav nav-pills flex-column overflow-x-hidden overflow-y-scroll nyx-bg2 px-2" style="width: 4.5rem;">
 
             <!-- *************************************************************************************************** -->
 
@@ -330,7 +330,7 @@ onMounted(() => {
         <!-- BODY                                                                                                    -->
         <!-- ******************************************************************************************************* -->
 
-        <div class="nyx-bg2" style="width: calc(100% - 4rem);">
+        <div class="nyx-bg2" style="width: calc(100% - 4.5rem);">
 
             <div class="overflow-hidden nyx-bg1 h-100 w-100" style="clip-path: inset(0 0 0 0 round var(--bs-border-radius) 0 0 0);">
 
