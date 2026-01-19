@@ -1,11 +1,13 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, computed, reactive, onMounted, onUnmounted} from 'vue';
+import {ref, inject, computed, nextTick, reactive, onMounted, onUnmounted} from 'vue';
 
 import {useNyxStore, NyxGroup} from 'vue-nyx';
 
 import {GridStack} from 'gridstack';
+
+import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -69,7 +71,7 @@ let grid = null;
 
 const newEditWidget = (id = null) => {
 
-    state.currentWidgetId = id;
+    state.currentWidgetId = id || uuid.v4();
 
     modalEl.value.show();
 };
@@ -86,7 +88,7 @@ const closeWidget = (id) => {
 
             const el = gridEl.value.querySelector(`[data-id="${id}"]`);
 
-            if(el)
+            if(el && grid)
             {
                 grid.removeWidget(el, true);
             }
@@ -96,6 +98,21 @@ const closeWidget = (id) => {
             delete configStore.globals.interfaceWidgets[id];
 
             /*--------------------------------------------------------------------------------------------------------*/
+        }
+    });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const createWidget = (id) => {
+
+    nextTick(() => {
+
+        const el = gridEl.value?.querySelector(`[data-id="${id}"]`);
+
+        if(el && grid)
+        {
+            grid.makeWidget(el);
         }
     });
 };
@@ -221,7 +238,7 @@ onUnmounted(() => {
     <!-- MODAL                                                                                                       -->
     <!-- *********************************************************************************************************** -->
 
-    <control-modal ref="modalEl" v-model="configStore.globals.interfaceWidgets[state.currentWidgetId]" />
+    <control-modal :widget-id="state.currentWidgetId" ref="modalEl" v-model="configStore.globals.interfaceWidgets[state.currentWidgetId]" @created="createWidget" />
 
     <!-- *********************************************************************************************************** -->
     <!-- BUTTONS                                                                                                     -->

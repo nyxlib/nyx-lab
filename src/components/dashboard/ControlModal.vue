@@ -53,6 +53,11 @@ const CONTROLS = [
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
+    widgetId: {
+        type: String,
+        required: false,
+        default: null
+    },
     modelValue: {
         type: Object,
         required: false,
@@ -62,7 +67,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['created', 'update:modelValue']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -179,19 +184,39 @@ const hide = () => {
 
 const submit = () => {
 
-    const oldWidget = props.modelValue || {};
+    if(props.widgetId)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    const newWidget = {
-        ...state,
-        x: oldWidget.x ?? 0,
-        y: oldWidget.y ?? 0,
-        h: oldWidget.h ?? 1,
-        w: oldWidget.w ?? 1,
-    };
+        const oldWidget = props.modelValue || {};
 
-    emit('update:modelValue', newWidget);
+        const newWidget = {
+            ...state,
+            x: oldWidget.x ?? 0,
+            y: oldWidget.y ?? 0,
+            h: oldWidget.h ?? 4,
+            w: oldWidget.w ?? 6,
+        };
 
-    hide();
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        emit('update:modelValue', newWidget);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(newWidget.id != props.widgetId)
+        {
+            newWidget.id = props.widgetId;
+
+            emit('created', props.widgetId);
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        hide();
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
