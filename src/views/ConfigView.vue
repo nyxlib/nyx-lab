@@ -177,7 +177,7 @@ onMounted(() => {
                                     <div class="col-md-6">
                                         <div class="mb-3 mb-md-0">
                                             <label class="form-label" for="A45F11A0">Username<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="mqtt-server username" id="A45F11A0" v-model="configStore.globals.mqttUsername" />
+                                            <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="mqtt-server username" v-xxxxxxxx-xxxxxx id="A45F11A0" v-model="configStore.globals.mqttUsername" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
