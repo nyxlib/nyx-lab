@@ -120,8 +120,8 @@ const userDashboardEnabled = (userDashboard) => {
                     <label class="form-check-label" for="A925CE04">Show Nyx interfaces</label>
                 </div>
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="A925CE04" v-model="configStore.globals.showUserInterfaces">
-                    <label class="form-check-label" for="A925CE04">Show user dashboards</label>
+                    <input class="form-check-input" type="checkbox" role="switch" id="ABE1DE12" v-model="configStore.globals.showUserInterfaces">
+                    <label class="form-check-label" for="ABE1DE12">Show user dashboards</label>
                 </div>
             </div>
         </div>
