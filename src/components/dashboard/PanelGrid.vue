@@ -86,7 +86,7 @@ const closeWidget = (id) => {
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            const el = gridEl.value.querySelector(`[data-id="${id}"]`);
+            const el = gridEl.value?.querySelector(`[data-id="${id}"]`);
 
             if(el && grid)
             {
@@ -112,7 +112,10 @@ const createWidget = (id) => {
 
         if(el && grid)
         {
-            grid.makeWidget(el);
+            grid.makeWidget(el, {
+                noMove: false,
+                noResize: false,
+            });
         }
     });
 };
