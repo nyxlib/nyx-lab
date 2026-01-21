@@ -19,7 +19,9 @@ const DEFAULT_GLOBALS = {
     mqttURL: '',
     nssURL: '',
     mqttUsername: '',
+    askMQTTUsername: false,
     mqttPassword: '',
+    askMQTTPassword: false,
     /**/
     showNyxInterfaces: true,
     showUserInterfaces: false,

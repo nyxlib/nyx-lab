@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject, computed, reactive} from 'vue';
+import {ref, inject, computed, reactive} from 'vue';
 
 import {useNyxStore} from 'vue-nyx';
 
@@ -10,6 +10,7 @@ import {useNyxStore} from 'vue-nyx';
 import useConfigStore from '@/stores/config';
 
 import PanelGrid from '@/components/dashboard/PanelGrid.vue';
+import CredentialsModal from '@/components/dashboard/CredentialsModal.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -36,24 +37,47 @@ const state = reactive({
 const panels = computed(() => Object.values(configStore.globals.interfacePanels).filter((panel) => panel.enabled).sort((a, b) => a.rank - b.rank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const modalEl = ref(null);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const connect_step2 = (credentials) => {
+
+    mqtt.update(
+        configStore.globals.mqttURL,
+        credentials.username,
+        credentials.password,
+    );
+
+    nss.update(
+        configStore.globals.nssURL,
+        credentials.username,
+        credentials.password,
+    );
+};
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const connect = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mqtt.update(
-        configStore.globals.mqttURL,
-        configStore.globals.mqttUsername,
-        configStore.globals.mqttPassword
-    );
-
-    nss.update(
-        configStore.globals.nssURL,
-        configStore.globals.mqttUsername,
-        configStore.globals.mqttPassword
-    );
+    if(!configStore.globals.askMQTTUsername
+       &&
+       !configStore.globals.askMQTTPassword
+    ) {
+        connect_step2({
+            username: configStore.globals.mqttUsername,
+            password: configStore.globals.mqttPassword,
+        });
+    }
+    else
+    {
+        modalEl.value.show();
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -138,6 +162,12 @@ const enableBLOBsAndStreams = (panel, enabled) => {
         </nyx-dashboard>
 
     </div>
+
+    <!-- *********************************************************************************************************** -->
+    <!-- MODAL                                                                                                       -->
+    <!-- *********************************************************************************************************** -->
+
+    <credentials-modal ref="modalEl" @connect="connect_step2" />
 
     <!-- *********************************************************************************************************** -->
 
