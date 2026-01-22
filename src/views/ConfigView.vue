@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {reactive, computed, onMounted, inject} from 'vue';
+import {watch, inject, reactive, computed, onMounted} from 'vue';
 
 import * as marked from 'marked';
 
@@ -73,6 +73,22 @@ const checkNSSConnection = () => {
         dialog.show(error, 'Testing Nyx-Stream', 'error');
     });
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+watch(() => configStore.globals.askMQTTUsername, (ask) => {
+
+    if(ask) {
+        configStore.globals.mqttUsername = '';
+    }
+});
+
+watch(() => configStore.globals.askMQTTPassword, (ask) => {
+
+    if(ask) {
+        configStore.globals.mqttPassword = '';
+    }
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */

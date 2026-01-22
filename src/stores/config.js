@@ -57,9 +57,9 @@ const confDup = (src, def) => {
 
     const result = {};
 
-    if(typeof src === 'object'
-        &&
-        typeof def === 'object'
+    if(Object.prototype.toString.call(src) === '[object Object]'
+       &&
+       Object.prototype.toString.call(def) === '[object Object]'
     ) {
         Object.keys(def).forEach((key) => { result[key] = deepClone((key in src) ? src[key] : def[key]); });
     }
@@ -487,14 +487,20 @@ const useConfigStore = defineStore('config', {
 
         import()
         {
-            this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).then(([json, _]) => this._loadConfig(json)).catch(this.dialog.error);
+            this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then(([json]) => {
+
+                this._loadConfig(json);
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         load()
         {
-            this._loadConfig(localStorage.getItem('nyx-lab-config'));
+            Promise.resolve(localStorage.getItem('nyx-lab-config')).then((json) => {
+
+                this._loadConfig(json);
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -520,13 +526,14 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(false).then((json) => {
 
-                localStorage.setItem('nyx-lab-config', json.toString());
+                Promise.resolve(localStorage.setItem('nyx-lab-config', json.toString())).then(() => {
 
-                setTimeout(() => {
+                    setTimeout(() => {
 
-                    this.modified = false;
+                        this.modified = false;
 
-                }, 500);
+                    }, 500);
+                });
             });
         },
 
