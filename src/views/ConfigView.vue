@@ -14,7 +14,7 @@ import AddonTable from '@/components/config/AddonTable.vue';
 import CacheTable from '@/components/config/CacheTable.vue';
 import WebPageTable from '@/components/config/WebPageTable.vue';
 
-import license from '../assets/license.txt?raw';
+import license from '@/assets/license.txt?raw';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */

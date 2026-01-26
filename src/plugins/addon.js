@@ -8,9 +8,9 @@ import {useNyxStore} from 'vue-nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import router from '../router';
+import router from '@/router';
 
-import useConfigStore from '../stores/config';
+import useConfigStore from '@/stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
