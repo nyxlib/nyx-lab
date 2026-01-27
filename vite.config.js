@@ -31,8 +31,10 @@ export default defineConfig({
     },
     resolve: {
         dedupe: [
+            'chartjs-adapter-date-fns',
             '@vueform/multiselect',
             '@popperjs/core',
+            'chart.js/auto',
             'vuedraggable',
             'bootstrap',
             'marked',

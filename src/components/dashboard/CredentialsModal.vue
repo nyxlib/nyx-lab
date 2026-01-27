@@ -133,7 +133,7 @@ onUnmounted(() => {
                             <div class="col-lg-9">
                                 <div class="mb-3" v-if="configStore.globals.askMQTTUsername">
                                     <label class="form-label" for="A45F11A0">Username</label>
-                                    <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="mqtt-server username" v-xxxxxxxx-xxxxxx id="A45F11A0" v-model="state.username" />
+                                    <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="mqtt-server username" x-xxxxxxxx-xxxxxx id="A45F11A0" v-model="state.username" />
                                 </div>
                                 <div class="mb-3" v-if="configStore.globals.askMQTTPassword">
                                     <label class="form-label" for="A4245C17">Password</label>

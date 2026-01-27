@@ -24,7 +24,20 @@ export default {
             'default-variable-control',
             'Variable vs Time',
             'variable',
-            [],
+            [
+                {
+                    type: 'number',
+                    name: 'y-min',
+                    label: 'Y min',
+                    defaultValue: null
+                },
+                {
+                    type: 'number',
+                    name: 'y-max',
+                    label: 'Y max',
+                    defaultValue: null
+                },
+            ],
             VariableCtrl
         );
 
@@ -35,7 +48,32 @@ export default {
             'default-scatter-control',
             'Variable vs Variable',
             'scatter',
-            [],
+            [
+                {
+                    type: 'number',
+                    name: 'x-min',
+                    label: 'X min',
+                    defaultValue: null
+                },
+                {
+                    type: 'number',
+                    name: 'x-max',
+                    label: 'X max',
+                    defaultValue: null
+                },
+                {
+                    type: 'number',
+                    name: 'y-min',
+                    label: 'Y min',
+                    defaultValue: null
+                },
+                {
+                    type: 'number',
+                    name: 'y-max',
+                    label: 'Y max',
+                    defaultValue: null
+                },
+            ],
             ScatterCtrl
         );
 

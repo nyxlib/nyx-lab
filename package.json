@@ -33,6 +33,8 @@
         "@types/bootstrap": "^5.2.10",
         "@vueform/multiselect": "^2.6.11",
         "bootstrap": "^5.3.8",
+        "chart.js": "^4.5.1",
+        "chartjs-adapter-date-fns": "^3.0.0",
         "gridstack": "^12.4.2",
         "marked": "^17.0.1",
         "pinia": "^3.0.4",
