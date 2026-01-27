@@ -7,6 +7,8 @@ import {useNyxStore} from 'vue-nyx';
 
 import {Chart} from 'chart.js/auto';
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 import 'chartjs-adapter-date-fns';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -234,6 +236,15 @@ onMounted(() => {
             scales: {
                 x: {
                     type: 'time',
+                    time: {
+                        displayFormats: {
+                            millisecond: 'HH:mm:ss.SSS',
+                            second: 'HH:mm:ss',
+                            minute: 'HH:mm',
+                            hour: 'HH:mm',
+                            day: 'dd/MM HH:mm'
+                        }
+                    }
                 },
                 y: {
                     min: props.options['y-min'],
@@ -250,8 +261,8 @@ onMounted(() => {
                 },
                 tooltip: {
                     enabled: false
-                },
-            },
+                }
+            }
         }
     });
 
