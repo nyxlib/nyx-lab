@@ -281,9 +281,9 @@ onMounted(() => {
                     stepped: 'after'
                 },
                 point: {
-                    radius: 0,
-                    hitRadius: 0,
-                    hoverRadius: 0
+                    radius: 0.0,
+                    hitRadius: 0.0,
+                    hoverRadius: 0.0
                 }
             },
             scales: {

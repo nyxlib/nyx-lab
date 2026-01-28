@@ -242,6 +242,13 @@ onMounted(() => {
             animation: false,
             responsive: true,
             maintainAspectRatio: false,
+            elements: {
+                point: {
+                    radius: 1.5,
+                    hitRadius: 0.0,
+                    hoverRadius: 0.0
+                }
+            },
             scales: {
                 x: {
                     min: props.options['x-min'],
