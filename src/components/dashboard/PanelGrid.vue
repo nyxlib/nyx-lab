@@ -39,10 +39,6 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const NB_COLUMNS = 64;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const state = reactive({
     currentWidgetId: null,
 });
@@ -62,6 +58,8 @@ const canvasEl = ref(null);
 const modalEl = ref(null);
 
 const gridEl = ref(null);
+
+let observer = null;
 
 let grid = null;
 
@@ -142,10 +140,49 @@ const getControl = (widget) => {
 
 onMounted(() => {
 
-    grid = GridStack.init({float: true, margin: 0, column: NB_COLUMNS, disableOneColumnMode: true}, gridEl.value);
+    const CELL_WIDTH = 24;
+    const MIN_COLS = 16;
+    const SNAP = 4;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const getColumns = () => {
+
+        const width = gridEl.value?.clientWidth ?? 0;
+
+        return Math.max(MIN_COLS, Math.floor(width / CELL_WIDTH));
+    };
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    grid = GridStack.init({float: true, margin: 0, column: getColumns(), disableOneColumnMode: true}, gridEl.value);
 
     if(grid)
     {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        let lastCols = 0;
+
+        const updateColumns = () => {
+
+            const cols = Math.max(MIN_COLS, Math.floor(getColumns() / SNAP) * SNAP);
+
+            if(cols !== lastCols)
+            {
+                lastCols = cols;
+
+                grid.column(cols, 'none');
+            }
+        };
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        observer = new ResizeObserver(updateColumns);
+
+        observer.observe(gridEl.value);
+
+        updateColumns();
+
         /*------------------------------------------------------------------------------------------------------------*/
 
         const updateWidget = (el) => {
@@ -177,11 +214,15 @@ onMounted(() => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onUnmounted(() => {
+
+    observer?.disconnect(false);
 
     grid?.destroy(false);
 });
