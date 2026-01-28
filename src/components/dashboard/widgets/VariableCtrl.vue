@@ -1,4 +1,3 @@
-<!--suppress FallThroughInSwitchStatementJS -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -72,8 +71,9 @@ const initDatasets = () => {
     chart.data.datasets = props.variables1.map((variable) => {
 
         const dataset = {
-            data: [/*--*/],
             label: variable,
+            showLine: true,
+            data: [],
         };
 
         datasets[variable] =  dataset ;
@@ -151,11 +151,6 @@ const initWatches = () => {
                         {
                             lastVals[variable] = val;
 
-                            dataset.data.push({
-                                x: now,
-                                y: val,
-                            });
-
                             if(dataset.data.length === 1)
                             {
                                 dataset.data.push({
@@ -163,6 +158,11 @@ const initWatches = () => {
                                     y: val,
                                 });
                             }
+
+                            dataset.data.push({
+                                x: now,
+                                y: val,
+                            });
                         }
 
                         /*--------------------------------------------------------------------------------------------*/
@@ -329,8 +329,6 @@ onBeforeUnmount(() => {
 
     clearInterval(interval);
 
-    interval = null;
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     stopWatches();
@@ -338,8 +336,6 @@ onBeforeUnmount(() => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     chart?.destroy();
-
-    chart = null;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 });
