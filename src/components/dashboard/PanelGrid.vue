@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, computed, nextTick, reactive, onMounted, onUnmounted} from 'vue';
+import {ref, inject, computed, nextTick, reactive, onMounted, onBeforeUnmount} from 'vue';
 
 import {useNyxStore, NyxGroup} from 'vue-nyx';
 
@@ -220,7 +220,7 @@ onMounted(() => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
 
     observer?.disconnect(false);
 
