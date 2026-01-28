@@ -306,8 +306,8 @@ onMounted(() => {
             maintainAspectRatio: false,
             elements: {
                 line: {
-                    stepped: 'after',
                     borderWidth: 1,
+                    stepped: 'after'
                 },
                 point: {
                     radius: 0,
