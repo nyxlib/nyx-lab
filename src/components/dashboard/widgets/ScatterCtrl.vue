@@ -128,8 +128,8 @@ const initWatches = () => {
 
         const plotIfReady = () => {
 
-            const x = lastVals1[i];
-            const y = lastVals2[i];
+            const x = lastVals2[i];
+            const y = lastVals1[i];
 
             if(x !== undefined && y !== undefined)
             {
