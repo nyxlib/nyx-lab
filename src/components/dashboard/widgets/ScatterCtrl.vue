@@ -239,12 +239,16 @@ onMounted(() => {
             maintainAspectRatio: false,
             scales: {
                 x: {
+                    min: props.options['x-min'],
+                    max: props.options['y-max'],
                     title: {
                         display: true,
                         text: props.options['x-axis-label']
                     },
                 },
                 y: {
+                    min: props.options['y-min'],
+                    max: props.options['y-max'],
                     title: {
                         display: true,
                         text: props.options['y-axis-label']
