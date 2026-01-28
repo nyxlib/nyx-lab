@@ -140,7 +140,7 @@ const getControl = (widget) => {
 
 onMounted(() => {
 
-    const CELL_WIDTH = 24;
+    const CELL_WIDTH_PX = 24;
     const MIN_COLS = 16;
     const SNAP = 4;
 
@@ -150,7 +150,7 @@ onMounted(() => {
 
         const width = gridEl.value?.clientWidth ?? 0;
 
-        return Math.max(MIN_COLS, Math.floor(width / CELL_WIDTH));
+        return Math.max(MIN_COLS, Math.floor(width / CELL_WIDTH_PX));
     };
 
     /*----------------------------------------------------------------------------------------------------------------*/
