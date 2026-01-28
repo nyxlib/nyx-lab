@@ -129,8 +129,6 @@ const isValid = computed(() => (
     &&
     !!state.panel
     &&
-    !!state.title
-    &&
     !!state.control
     &&
     (
@@ -192,11 +190,15 @@ const submit = () => {
 
         const newWidget = {
             ...state,
-            x: oldWidget.x ?? 0,
-            y: oldWidget.y ?? 0,
-            h: oldWidget.h ?? 4,
-            w: oldWidget.w ?? 6,
+            x: oldWidget.x ?? null,
+            y: oldWidget.y ?? null,
+            h: oldWidget.h ?? 1 * 8,
+            w: oldWidget.w ?? 2 * 8,
         };
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        newWidget.variables1.forEach((variable) => newWidget.enabled[variable] ??= true);
 
         /*------------------------------------------------------------------------------------------------------------*/
 

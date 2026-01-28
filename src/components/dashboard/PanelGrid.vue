@@ -88,7 +88,7 @@ const closeWidget = (id) => {
 
             const el = gridEl.value?.querySelector(`[data-id="${id}"]`);
 
-            if(el && grid)
+            if(el)
             {
                 grid.removeWidget(el, true);
             }
@@ -110,11 +110,16 @@ const createWidget = (id) => {
 
         const el = gridEl.value?.querySelector(`[data-id="${id}"]`);
 
-        if(el && grid)
+        const widget = configStore.globals.interfaceWidgets[id];
+
+        if(el && widget)
         {
-            grid.makeWidget(el, {
+            grid.update(grid.makeWidget(el), {
+                w: widget.w,
+                h: widget.h,
                 noMove: false,
                 noResize: false,
+                autoPosition: true,
             });
         }
     });
@@ -195,10 +200,10 @@ onUnmounted(() => {
         <div
             class="grid-stack-item"
             :data-id="widget.id"
-            :gs-x="widget.x"
-            :gs-y="widget.y"
-            :gs-w="widget.w"
-            :gs-h="widget.h"
+            :gs-x="widget.x ?? undefined"
+            :gs-y="widget.y ?? undefined"
+            :gs-w="widget.w ?? undefined"
+            :gs-h="widget.h ?? undefined"
             :gs-no-move="locked ? 'true' : undefined"
             :gs-no-resize="locked ? 'true' : undefined"
             v-for="widget in widgets" :key="widget.id"
