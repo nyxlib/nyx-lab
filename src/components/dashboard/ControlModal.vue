@@ -30,6 +30,7 @@ const MODE_SCATTER = 'scatter';
 const MODE_BLOB = 'blob';
 const MODE_STREAM = 'stream';
 const MODE_COMMAND = 'command';
+const MODE_OTHER = 'other';
 
 const MODES = [
     {value: MODE_VARIABLE, label: 'Variable'},
@@ -37,6 +38,7 @@ const MODES = [
     {value: MODE_BLOB, label: 'BLOB'},
     {value: MODE_STREAM, label: 'Stream'},
     {value: MODE_COMMAND, label: 'Command'},
+    {value: MODE_OTHER, label: 'Other'},
 ];
 
 const SHADOWS = [
