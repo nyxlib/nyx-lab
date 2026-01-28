@@ -69,7 +69,8 @@ const initDatasets = () => {
     for(let i = 0; i < n; i++)
     {
         chart.data.datasets.push({
-            label: `${props.variables1[i]} / ${props.variables2[i]}`,
+            id: `${props.variables1[i]} / ${props.variables2[i]}`,
+            label: `${props.variables1[i].split(':').pop()} / ${props.variables2[i].split(':').pop()}`,
             showLine: false,
             data: [],
         });
@@ -201,7 +202,7 @@ const initEnabled = () => {
 
     for(const dataset of chart.data.datasets)
     {
-        dataset.hidden = !props.enabled[dataset.label];
+        dataset.hidden = !props.enabled[dataset.id];
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
