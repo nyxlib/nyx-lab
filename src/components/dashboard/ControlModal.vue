@@ -200,7 +200,7 @@ const submit = () => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        /**/ if(newWidget.mode in [MODE_VARIABLE, MODE_STREAM])
+        /**/ if([MODE_VARIABLE, MODE_STREAM].includes(newWidget.mode))
         {
             const n = newWidget.variables1.length;
 
@@ -209,7 +209,7 @@ const submit = () => {
                 newWidget.enabled[`${newWidget.variables1[i]}`] ??= true;
             }
         }
-        else if(newWidget.mode in [MODE_SCATTER])
+        else if([MODE_SCATTER].includes(newWidget.mode))
         {
             const n = Math.min(newWidget.variables1.length, newWidget.variables2.length);
 
