@@ -198,7 +198,24 @@ const submit = () => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        newWidget.variables1.forEach((variable) => newWidget.enabled[variable] ??= true);
+        /**/ if(newWidget.mode in [MODE_VARIABLE, MODE_STREAM])
+        {
+            const n = newWidget.variables1.length;
+
+            for(let i = 0; i < n; i++)
+            {
+                newWidget.enabled[`${newWidget.variables1[i]}`] ??= true;
+            }
+        }
+        else if(newWidget.mode in [MODE_SCATTER])
+        {
+            const n = Math.min(newWidget.variables1.length, newWidget.variables2.length);
+
+            for(let i = 0; i < n; i++)
+            {
+                newWidget.enabled[`${newWidget.variables1[i]} / ${newWidget.variables2[i]}`] ??= true;
+            }
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
 

@@ -48,11 +48,10 @@ let interval = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let stops = {};
+const stops = [];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let datasets = {};
 let lastVals = {};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -63,24 +62,22 @@ const initDatasets = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    datasets = {};
+    chart.data.datasets = [];
+
     lastVals = {};
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.data.datasets = props.variables1.map((variable) => {
-
-        const dataset = {
-            label: variable,
+    for(let i = 0; i < props.variables1.length; i++)
+    {
+        chart.data.datasets.push({
+            label: props.variables1[i],
             showLine: true,
             data: [],
-        };
+        });
 
-        datasets[variable] =  dataset ;
-        lastVals[variable] = undefined;
-
-        return dataset;
-    });
+        lastVals[i] = undefined;
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -99,14 +96,14 @@ const stopWatches = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(const variable in stops)
+    for(const stop in stops)
     {
-        stops[variable]();
+        stop();
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    stops = {};
+    stops.length = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -121,13 +118,13 @@ const initWatches = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(const variable of props.variables1)
+    for(let i = 0; i < props.variables1.length; i++)
     {
-        const def = nyxStore.resolve(variable);
+        const def = nyxStore.resolve(props.variables1[i]);
 
         if(def !== undefined)
         {
-            stops[variable] = watch(() => def.$, () => {
+            stops.push(watch(() => def.$, () => {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -137,7 +134,7 @@ const initWatches = () => {
                 {
                     /*------------------------------------------------------------------------------------------------*/
 
-                    const dataset = datasets[variable];
+                    const dataset = chart.data.datasets[i];
 
                     if(dataset !== undefined)
                     {
@@ -147,11 +144,11 @@ const initWatches = () => {
 
                         /*--------------------------------------------------------------------------------------------*/
 
-                        if(lastVals[variable] !== val)
+                        if(lastVals[i] !== val)
                         {
-                            lastVals[variable] = val;
+                            lastVals[i] = val;
 
-                            if(dataset.data.length === 1)
+                            if(dataset.data.length === 0)
                             {
                                 dataset.data.push({
                                     x: now,
@@ -176,7 +173,7 @@ const initWatches = () => {
                 /*----------------------------------------------------------------------------------------------------*/
             }, {
                 immediate: true
-            });
+            }));
         }
     }
 
@@ -223,13 +220,13 @@ const initTick = () => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(const variable of props.variables1)
+        for(let i = 0; i < props.variables1.length; i++)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            const dataset = datasets[variable];
+            const dataset = chart.data.datasets[i];
 
-            if(dataset !== undefined && dataset.data.length > 0)
+            if(dataset && dataset.data.length > 0)
             {
                 dataset.data[dataset.data.length - 1].x = now;
             }
@@ -288,7 +285,11 @@ onMounted(() => {
                             hour: 'HH:mm',
                             day: 'dd/MM HH:mm'
                         }
-                    }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    },
                 },
                 y: {
                     min: props.options['y-min'],
