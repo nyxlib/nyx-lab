@@ -14,7 +14,7 @@ import defaultControls from '@/default-controls.js';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const DEFAULT_GLOBALS = {
+const DEFAULT_GLOBALS = Object.freeze({
     windowTitle: 'Nyx Lab',
     windowTheme: localStorage.getItem('window-theme') || 'dark',
     /**/
@@ -33,7 +33,7 @@ const DEFAULT_GLOBALS = {
     devices: {},
     addons: {},
     webPages: {},
-};
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
