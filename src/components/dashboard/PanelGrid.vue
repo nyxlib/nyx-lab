@@ -45,6 +45,10 @@ const state = reactive({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const controlById = computed(() => new Map(Object.values(configStore.controls).flatMap((x) => x.ctrls).map((x) => [x.id, x.component ?? null])));
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const widgets = computed(() => Object.values(configStore.globals.interfaceWidgets).filter((x) => x.panel === props.panel.id));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -121,17 +125,6 @@ const createWidget = (id) => {
             });
         }
     });
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const getControl = (widget) => {
-
-    const controls = Object.values(configStore.controls).flatMap((controls) => controls.ctrls);
-
-    const control = controls.find((x) => x.id === widget.control);
-
-    return control?.component ?? null;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -271,7 +264,7 @@ onBeforeUnmount(() => {
 
                     <!-- ******************************************************************************************* -->
 
-                    <component v-else-if="getControl(widget)" v-bind="widget" :is="getControl(widget)" />
+                    <component v-else-if="controlById.get(widget.control)" v-bind="widget" :is="controlById.get(widget.control)" />
 
                     <!-- ******************************************************************************************* -->
 
