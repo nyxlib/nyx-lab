@@ -38,7 +38,7 @@
         "gridstack": "^12.4.2",
         "marked": "^17.0.1",
         "pinia": "^3.0.4",
-        "simple-icons": "^16.2.0",
+        "simple-icons": "^16.6.1",
         "uuid": "^13.0.0",
         "vue": "^3.5.27",
         "vue-nyx": "github:nyxlib/nyx-vue",
