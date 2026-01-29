@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, watchEffect, onMounted, onUnmounted} from 'vue';
+import {ref, watch, inject, onMounted, onUnmounted} from 'vue';
 
 import draggable from 'vuedraggable';
 
@@ -39,10 +39,11 @@ const emit = defineEmits(['search']);
 
 const sortedAddons = ref([]);
 
-watchEffect(() => {
+watch(() => props.addons, () => {
 
     sortedAddons.value = Object.values(props.addons).sort((a, b) => a.rank - b.rank);
-});
+
+}, {immediate: true, deep: false});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

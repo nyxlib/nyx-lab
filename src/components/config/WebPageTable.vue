@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, watchEffect} from 'vue';
+import {ref, watch, inject} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -36,10 +36,11 @@ const emit = defineEmits(['search']);
 
 const sortedWebPages = ref([]);
 
-watchEffect(() => {
+watch(() => props.webPages, () => {
 
     sortedWebPages.value = Object.values(props.webPages).sort((a, b) => a.rank - b.rank);
-});
+
+}, {immediate: true, deep: false});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */

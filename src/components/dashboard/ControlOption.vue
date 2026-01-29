@@ -58,17 +58,14 @@ const value = ref(props.modelValue ?? props.defaultValue);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-watch(
-    () => props.modelValue,
-    (_value) => {
+watch(() => props.modelValue, (_value) => {
 
-        if(value.value !== _value)
-        {
-            value.value = _value;
-        }
-    },
-    {immediate: true, deep: false},
-);
+    if(value.value !== _value)
+    {
+        value.value = _value;
+    }
+
+}, {immediate: true, deep: false});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

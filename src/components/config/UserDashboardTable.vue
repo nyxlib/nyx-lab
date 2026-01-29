@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, watchEffect} from 'vue';
+import {ref, watch} from 'vue';
 
 import draggable from 'vuedraggable';
 
@@ -34,10 +34,11 @@ const props = defineProps({
 
 const sortedInterfacePanels = ref([]);
 
-watchEffect(() => {
+watch(() => props.userDashboards, () => {
 
     sortedInterfacePanels.value = Object.values(props.userDashboards).sort((a, b) => a.rank - b.rank);
-});
+
+}, {immediate: true, deep: false});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
