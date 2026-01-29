@@ -74,13 +74,13 @@ const emit = defineEmits(['created', 'update:modelValue']);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const state = reactive({
-    id: '',
-    mode: MODE_VARIABLE,
-    period: 1000,
-    control: '',
-    shadow: 'shadow',
-    title: '',
-    panel: '',
+    id: null,
+    mode: null,
+    maxPoints: null,
+    control: null,
+    shadow: null,
+    title: null,
+    panel: null,
     variables1: [],
     variables2: [],
     enabled: {},
@@ -89,40 +89,35 @@ const state = reactive({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-watch(
-    () => props.modelValue,
-    (value) => {
-        if(value)
-        {
-            state.id = value.id ?? null;
-            state.mode = value.mode ?? MODE_VARIABLE;
-            state.period = value.period ?? 1000;
-            state.control = value.control ?? '';
-            state.shadow = value.shadow ?? 'shadow';
-            state.title = value.title ?? '';
-            state.panel = value.panel ?? '';
-            state.variables1 = Array.isArray(value.variables1) ? [...value.variables1] : [];
-            state.variables2 = Array.isArray(value.variables2) ? [...value.variables2] : [];
-            state.enabled = value.enabled ? {...value.enabled} : {};
-            state.options = value.options ? {...value.options} : {};
-        }
-        else
-        {
-            state.id = null;
-            state.mode = MODE_VARIABLE;
-            state.period = 1000;
-            state.control = '';
-            state.shadow = 'shadow';
-            state.title = '';
-            state.panel = '';
-            state.variables1 = [];
-            state.variables2 = [];
-            state.enabled = {};
-            state.options = {};
-        }
-    },
-    {immediate: true, deep: true}
-);
+const DEFAULTS = Object.freeze({
+    id: null,
+    mode: MODE_VARIABLE,
+    maxPoints: 1000,
+    control: '',
+    shadow: 'shadow-sm',
+    title: '',
+    panel: '',
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+watch(() => props.modelValue, (value) => {
+
+    const v = value ?? DEFAULTS;
+
+    state.id = v.id ?? DEFAULTS.id;
+    state.mode = v.mode ?? DEFAULTS.mode;
+    state.maxPoints = v.maxPoints ?? DEFAULTS.maxPoints;
+    state.control = v.control ?? DEFAULTS.control;
+    state.shadow = v.shadow ?? DEFAULTS.shadow;
+    state.title = v.title ?? DEFAULTS.title;
+    state.panel = v.panel ?? DEFAULTS.panel;
+    state.variables1 = Array.isArray(v.variables1) ? [...v.variables1] : [];
+    state.variables2 = Array.isArray(v.variables2) ? [...v.variables2] : [];
+    state.enabled = v.enabled ? {...v.enabled} : {};
+    state.options = v.options ? {...v.options} : {};
+
+}, {immediate: true});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -192,6 +187,7 @@ const submit = () => {
 
         const newWidget = {
             ...state,
+            id: props.widgetId,
             x: oldWidget.x ?? null,
             y: oldWidget.y ?? null,
             h: oldWidget.h ?? 1 * 8,
@@ -225,10 +221,8 @@ const submit = () => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(newWidget.id != props.widgetId)
+        if(!props.modelValue?.id)
         {
-            newWidget.id = props.widgetId;
-
             emit('created', props.widgetId);
         }
 
@@ -260,7 +254,7 @@ onMounted(() => {
 
 onUnmounted(() => {
 
-    modalInstance = /*-------------*/ null /*-------------*/;
+    modalInstance?.dispose();
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -312,8 +306,8 @@ onUnmounted(() => {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="E9549BAB">Period [ms]</label>
-                                            <input class="form-control form-control-sm" type="number" min="1" step="1" placeholder="Period" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER && state.mode !== MODE_STREAM" :required="true" id="E9549BAB" v-model="state.period" />
+                                            <label class="form-label" for="E9549BAB">Max points</label>
+                                            <input class="form-control form-control-sm" type="number" min="1" step="1" placeholder="Period" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER && state.mode !== MODE_STREAM" :required="true" id="E9549BAB" v-model.number="state.maxPoints" />
                                         </div>
                                     </div>
                                 </div>

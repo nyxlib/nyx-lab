@@ -28,6 +28,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    maxPoints: {
+        type: Number,
+        required: true,
+    },
     options: {
         type: Object,
         required: true,
@@ -147,7 +151,7 @@ const initWatches = () => {
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    if(dataset.data.length > 1000)
+                    if(dataset.data.length > props.maxPoints)
                     {
                         dataset.data.shift();
                     }
