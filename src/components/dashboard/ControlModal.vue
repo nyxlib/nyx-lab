@@ -26,7 +26,8 @@ const nyxStore = useNyxStore();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const MODE_VARIABLE = 'variable';
-const MODE_SCATTER = 'scatter';
+const MODE_SCATTER_2D = 'scatter2d';
+const MODE_SCATTER_3D = 'scatter3d';
 const MODE_BLOB = 'blob';
 const MODE_STREAM = 'stream';
 const MODE_COMMAND = 'command';
@@ -34,7 +35,8 @@ const MODE_OTHER = 'other';
 
 const MODES = [
     {value: MODE_VARIABLE, label: 'Variable'},
-    {value: MODE_SCATTER, label: 'Scatter'},
+    {value: MODE_SCATTER_2D, label: 'Scatter 2D'},
+    {value: MODE_SCATTER_3D, label: 'Scatter 3D'},
     {value: MODE_BLOB, label: 'BLOB'},
     {value: MODE_STREAM, label: 'Stream'},
     {value: MODE_COMMAND, label: 'Command'},
@@ -83,6 +85,7 @@ const state = reactive({
     panel: null,
     variables1: [],
     variables2: [],
+    variables3: [],
     enabled: {},
     options: {},
 });
@@ -114,6 +117,7 @@ watch(() => props.modelValue, (value) => {
     state.panel = v.panel ?? DEFAULTS.panel;
     state.variables1 = Array.isArray(v.variables1) ? [...v.variables1] : [];
     state.variables2 = Array.isArray(v.variables2) ? [...v.variables2] : [];
+    state.variables3 = Array.isArray(v.variables3) ? [...v.variables3] : [];
     state.enabled = v.enabled ? {...v.enabled} : {};
     state.options = v.options ? {...v.options} : {};
 
@@ -129,9 +133,9 @@ const isValid = computed(() => (
     !!state.control
     &&
     (
-        (state.mode !== MODE_SCATTER && state.variables1.length > 0 /*--------------------------------------------------*/)
+        (state.mode !== MODE_SCATTER_2D && state.variables1.length > 0 /*--------------------------------------------------*/)
         ||
-        (state.mode === MODE_SCATTER && state.variables1.length > 0 && state.variables1.length === state.variables2.length)
+        (state.mode === MODE_SCATTER_2D && state.variables1.length > 0 && state.variables1.length === state.variables2.length)
     )
 ));
 
@@ -205,13 +209,22 @@ const submit = () => {
                 newWidget.enabled[`${newWidget.variables1[i]}`] ??= true;
             }
         }
-        else if([MODE_SCATTER].includes(newWidget.mode))
+        else if([MODE_SCATTER_2D].includes(newWidget.mode))
         {
             const n = Math.min(newWidget.variables1.length, newWidget.variables2.length);
 
             for(let i = 0; i < n; i++)
             {
                 newWidget.enabled[`${newWidget.variables1[i]} / ${newWidget.variables2[i]}`] ??= true;
+            }
+        }
+        else if([MODE_SCATTER_3D].includes(newWidget.mode))
+        {
+            const n = Math.min(newWidget.variables1.length, newWidget.variables2.length, newWidget.variables3.length);
+
+            for(let i = 0; i < n; i++)
+            {
+                newWidget.enabled[`${newWidget.variables1[i]} / ${newWidget.variables2[i]} / ${newWidget.variables3[i]}`] ??= true;
             }
         }
 
@@ -307,7 +320,7 @@ onUnmounted(() => {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="E9549BAB">Max points</label>
-                                            <input class="form-control form-control-sm" type="number" min="1" step="1" placeholder="Period" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER && state.mode !== MODE_STREAM" :required="true" id="E9549BAB" v-model.number="state.maxPoints" />
+                                            <input class="form-control form-control-sm" type="number" min="1" step="1" placeholder="Period" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER_2D && state.mode !== MODE_STREAM" :required="true" id="E9549BAB" v-model.number="state.maxPoints" />
                                         </div>
                                     </div>
                                 </div>
@@ -348,30 +361,55 @@ onUnmounted(() => {
 
                                 <!-- ******************************************************************************* -->
 
-                                <div class="mb-3" v-if="state.mode === MODE_VARIABLE ">
+                                <div class="mb-3" v-if="state.mode === MODE_VARIABLE">
                                     <label class="form-label" for="BBA0018F">Variable</label>
                                     <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="BBA0018F" v-model="state.variables1" />
                                 </div>
 
-                                <div class="mb-3" v-if="state.mode === MODE_SCATTER">
+                                <!-- -->
+
+                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_2D">
                                     <label class="form-label" for="C6F79530">Y variable</label>
                                     <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables1" />
                                 </div>
 
-                                <div class="mb-3" v-if="state.mode === MODE_SCATTER">
+                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_2D">
                                     <label class="form-label" for="EFE4DF78">X variable</label>
                                     <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="EFE4DF78" v-model="state.variables2" />
                                 </div>
+
+                                <!-- -->
+
+                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_3D">
+                                    <label class="form-label" for="C6F79530">Z variable</label>
+                                    <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables1" />
+                                </div>
+
+                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_3D">
+                                    <label class="form-label" for="C6F79530">Y variable</label>
+                                    <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables2" />
+                                </div>
+
+                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_3D">
+                                    <label class="form-label" for="C6F79530">X variable</label>
+                                    <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables3" />
+                                </div>
+
+                                <!-- -->
 
                                 <div class="mb-3" v-if="state.mode === MODE_BLOB">
                                     <label class="form-label" for="D2B9498A">BLOB</label>
                                     <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.blobDefs" id="D2B9498A" v-model="state.variables1" />
                                 </div>
 
+                                <!-- -->
+
                                 <div class="mb-3" v-if="state.mode === MODE_STREAM">
                                     <label class="form-label" for="BAFEAE75">Stream</label>
                                     <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.streamDefs" id="BAFEAE75" v-model="state.variables1" />
                                 </div>
+
+                                <!-- -->
 
                                 <div class="mb-3" v-if="state.mode === MODE_COMMAND">
                                     <label class="form-label" for="A0FFDC95">Command</label>

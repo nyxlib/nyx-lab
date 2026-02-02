@@ -102,7 +102,7 @@ onUnmounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="list-group-item" v-if="['scatter'].includes(widget.mode)">
+                        <div class="list-group-item" v-if="['scatter2d'].includes(widget.mode)">
                             <div class="ms-1 me-auto">
                                 <div class="fw-bold">
                                     {{ widget.title || '/' }}
@@ -111,6 +111,22 @@ onUnmounted(() => {
                                     <input class="form-check-input" type="checkbox" :id="`FE664D_${index1}${index2}`" v-model="widget.enabled[`${widget.variables1[index2 - 1]} / ${widget.variables2[index2 - 1]}`]">
                                     <label class="form-check-label" :for="`FE664D_${index1}${index2}`">
                                         {{ widget.variables1[index2 - 1] }} / {{ widget.variables2[index2 - 1] }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
+                        <div class="list-group-item" v-if="['scatter3d'].includes(widget.mode)">
+                            <div class="ms-1 me-auto">
+                                <div class="fw-bold">
+                                    {{ widget.title || '/' }}
+                                </div>
+                                <div class="form-check form-switch" v-for="index2 in Math.min(widget.variables1.length, widget.variables2.length, widget.variables3.length)" :key="index2">
+                                    <input class="form-check-input" type="checkbox" :id="`FE664D_${index1}${index2}`" v-model="widget.enabled[`${widget.variables1[index2 - 1]} / ${widget.variables2[index2 - 1]} / ${widget.variables3[index2 - 1]}`]">
+                                    <label class="form-check-label" :for="`FE664D_${index1}${index2}`">
+                                        {{ widget.variables1[index2 - 1] }} / {{ widget.variables2[index2 - 1] }} / {{ widget.variables3[index2 - 1] }}
                                     </label>
                                 </div>
                             </div>

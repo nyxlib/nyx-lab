@@ -259,7 +259,7 @@ onMounted(() => {
                     max: props.options['x-max'],
                     title: {
                         display: true,
-                        text: 'Value'
+                        text: 'X value'
                     },
                 },
                 y: {
@@ -267,7 +267,7 @@ onMounted(() => {
                     max: props.options['y-max'],
                     title: {
                         display: true,
-                        text: 'Value'
+                        text: 'Y value'
                     },
                 }
             },
