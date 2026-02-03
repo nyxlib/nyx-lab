@@ -41,6 +41,7 @@
         "plotly.js-dist-min": "^3.3.1",
         "simple-icons": "^16.6.1",
         "uuid": "^13.0.0",
+        "vis-graph3d": "^7.0.2",
         "vue": "^3.5.27",
         "vue-nyx": "github:nyxlib/nyx-vue",
         "vue-router": "^4.6.4",
