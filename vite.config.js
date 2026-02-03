@@ -35,6 +35,7 @@ export default defineConfig({
             '@vueform/multiselect',
             '@popperjs/core',
             'chart.js/auto',
+            'vis-graph3d',
             'vuedraggable',
             'bootstrap',
             'marked',
