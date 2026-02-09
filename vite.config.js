@@ -33,10 +33,10 @@ export default defineConfig({
         dedupe: [
             'chartjs-adapter-date-fns',
             '@vueform/multiselect',
+            'plotly.js-dist-min',
             '@popperjs/core',
             'chart.js/auto',
             'vuedraggable',
-            'vis-graph3d',
             'bootstrap',
             'marked',
             'pinia'
