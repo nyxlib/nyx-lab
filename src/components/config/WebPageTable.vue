@@ -40,7 +40,7 @@ watch(() => props.webPages, () => {
 
     sortedWebPages.value = Object.values(props.webPages).sort((a, b) => a.rank - b.rank);
 
-}, {immediate: true, deep: false});
+}, {immediate: true, deep: true});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */

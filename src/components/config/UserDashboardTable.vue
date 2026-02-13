@@ -38,7 +38,7 @@ watch(() => props.userDashboards, () => {
 
     sortedInterfacePanels.value = Object.values(props.userDashboards).sort((a, b) => a.rank - b.rank);
 
-}, {immediate: true, deep: false});
+}, {immediate: true, deep: true});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */

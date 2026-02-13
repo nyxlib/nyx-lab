@@ -43,7 +43,7 @@ watch(() => props.addons, () => {
 
     sortedAddons.value = Object.values(props.addons).sort((a, b) => a.rank - b.rank);
 
-}, {immediate: true, deep: false});
+}, {immediate: true, deep: true});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
