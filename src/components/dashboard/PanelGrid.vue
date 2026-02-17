@@ -58,9 +58,7 @@ const locked = computed(() => props.panel.locked || !nyxStore.isConnected);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const canvasEl = ref(null);
-
 const modalEl = ref(null);
-
 const gridEl = ref(null);
 
 let observer = null;
