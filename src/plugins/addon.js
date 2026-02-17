@@ -210,24 +210,21 @@ const _execFunction_func = (addonName, funcName, ...args) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _updateVariables_func = (name1, name2, fractionDigits) => {
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const nyxStore = useNyxStore();
-    const configStore = useConfigStore();
+const _updateVariables_func = (variable) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     try
     {
-        if(configStore.globals[name2])
+        if(variable.mode === 'var')
         {
-            const def = nyxStore.resolve(configStore.globals[name2]);
+            const nyxStore = useNyxStore();
 
-            if(def?.$)
+            const def = nyxStore.resolve(variable.var);
+
+            if(def)
             {
-                configStore.globals[name1] = Number(Number(def.$).toFixed(fractionDigits));
+                variable.val = nyxStore.getValue(def);
             }
         }
     }
