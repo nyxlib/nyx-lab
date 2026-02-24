@@ -34,12 +34,18 @@ export default defineConfig({
             'chartjs-adapter-date-fns',
             '@vueform/multiselect',
             'plotly.js-dist-min',
+            'd3-geo-projection',
             '@popperjs/core',
-            'chart.js/auto',
+            'd3-selection',
             'vuedraggable',
             'bootstrap',
+            'chart.js',
+            'date-fns',
+            'd3-zoom',
             'marked',
-            'pinia'
+            'pinia',
+            'uuid',
+            'd3'
         ],
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
