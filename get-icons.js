@@ -12,7 +12,7 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-function readSVG(inFile, size)
+function readSVG(inFile, size, prefix)
 {
     return new Promise((resolve, reject) => {
 
@@ -25,7 +25,14 @@ function readSVG(inFile, size)
                 return;
             }
 
-            resolve(data.replace(/<svg [^>]+>/g, `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 ${size} ${size}">`).replace(/<title>[^<]*<\/title>/, ''));
+            data = data.replace(/<!-- [^>]+>/g, '').replace(/<class="[^"]+"/g, '').replace(/[ \t]+</g, '<').replace(/>[ \t]+/g, '>');
+
+            if(prefix !== 'lu') {
+                resolve(data.replace(/<svg [^>]+>/g, `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 ${size} ${size}">`).replace(/<title>[^<]*<\/title>/, ''));
+            }
+            else {
+                resolve(data.replace(/<svg [^>]+>/g, `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 ${size} ${size}">`).replace(/<title>[^<]*<\/title>/, ''));
+            }
         });
     });
 }
@@ -68,7 +75,7 @@ function getIcons(icons, prefix, size, inDir, outDir)
 
                     const destPath = path.join(outDir, `${prefix}-${file}`);
 
-                    readSVG(path.join(inDir, file), size).then((svg) => {
+                    readSVG(path.join(inDir, file), size, prefix).then((svg) => {
 
                         icons[path.basename(destPath, '.svg')] = svg;
 
@@ -112,12 +119,20 @@ getIcons(
         path.join(__dirname, 'public', 'icons'),
     ).then(() => {
 
-        fs.writeFile(path.join(__dirname, 'src', 'assets', 'icons.json'), JSON.stringify(icons), 'utf8', (err) => {
+        getIcons(
+            icons,
+            'lu', 24,
+            path.join(__dirname, 'node_modules', 'lucide-static', 'icons'),
+            path.join(__dirname, 'public', 'icons'),
+        ).then(() => {
 
-            if(err)
-            {
-                console.error('Error', err);
-            }
+            fs.writeFile(path.join(__dirname, 'src', 'assets', 'icons.json'), JSON.stringify(icons), 'utf8', (err) => {
+
+                if(err)
+                {
+                    console.error('Error', err);
+                }
+            });
         });
     });
 });

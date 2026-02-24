@@ -23,6 +23,13 @@ export default defineConfig({
                 entryFileNames: 'dashboard.js',
                 chunkFileNames: 'chunks/[hash].js',
                 assetFileNames: 'assets/[hash].[ext]',
+                manualChunks(id)
+                {
+                    if(id.endsWith('/src/assets/icons.json'))
+                    {
+                        return 'icons';
+                    }
+                },
             }
         }
     },
@@ -35,6 +42,7 @@ export default defineConfig({
             '@vueform/multiselect',
             'plotly.js-dist-min',
             'd3-geo-projection',
+            'bootstrap-icon',
             '@popperjs/core',
             'd3-selection',
             'vuedraggable',
