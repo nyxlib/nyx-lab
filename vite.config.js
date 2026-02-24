@@ -20,7 +20,7 @@ export default defineConfig({
         minify: true,
         rollupOptions: {
             output: {
-                entryFileNames: 'dashboard.js',
+                entryFileNames: 'lab.js',
                 chunkFileNames: 'chunks/[hash].js',
                 assetFileNames: 'assets/[hash].[ext]',
                 manualChunks(id)

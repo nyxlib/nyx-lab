@@ -43,7 +43,7 @@ function getIcons(icons, prefix, size, inDir, outDir)
 {
     return new Promise((resolve) => {
 
-        fs.mkdir(outDir, {recursive: true}, (err) => {
+        fs.readdir(inDir, (err, files) => {
 
             if(err)
             {
@@ -52,51 +52,39 @@ function getIcons(icons, prefix, size, inDir, outDir)
                 return;
             }
 
-            fs.readdir(inDir, (err, files) => {
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                if(err)
-                {
-                    console.error('Error', err);
+            files = files.filter((file) => file.endsWith('.svg'));
 
-                    return;
-                }
+            files.sort();
 
-                /*----------------------------------------------------------------------------------------------------*/
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                files = files.filter((file) => file.endsWith('.svg'));
+            let i = files.length;
 
-                files.sort();
+            files.forEach((file) => {
 
-                /*----------------------------------------------------------------------------------------------------*/
+                readSVG(path.join(inDir, file), size, prefix).then((svg) => {
 
-                let i = files.length;
+                    icons[path.basename(`${prefix}-${file}`, '.svg')] = svg;
 
-                files.forEach((file) => {
+                    if(--i === 0)
+                    {
+                        resolve();
+                    }
 
-                    const destPath = path.join(outDir, `${prefix}-${file}`);
+                }).catch((e) => {
 
-                    readSVG(path.join(inDir, file), size, prefix).then((svg) => {
+                    console.error(e);
 
-                        icons[path.basename(destPath, '.svg')] = svg;
-
-                        if(--i === 0)
-                        {
-                            resolve();
-                        }
-
-                    }).catch((e) => {
-
-                        console.error(e);
-
-                        if(--i === 0)
-                        {
-                            resolve();
-                        }
-                    });
+                    if(--i === 0)
+                    {
+                        resolve();
+                    }
                 });
-
-                /*----------------------------------------------------------------------------------------------------*/
             });
+
+            /*--------------------------------------------------------------------------------------------------------*/
         });
     });
 }
