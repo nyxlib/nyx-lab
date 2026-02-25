@@ -258,15 +258,15 @@ onMounted(() => {
 
                     <nav-tabs>
 
-                        <tab-pane title="Addons">
+                        <tab-pane title="Addons" icon="plugin">
                             <addon-table class="shadow-sm" :addons="configStore.globals.addons" :console="configStore.console" @search="() => { state.indexMode = true; }" />
                         </tab-pane>
 
-                        <tab-pane title="Web pages">
+                        <tab-pane title="Web pages" icon="web">
                             <web-page-table class="shadow-sm" :web-pages="configStore.globals.webPages" @search="() => { state.indexMode = true; }" />
                         </tab-pane>
 
-                        <tab-pane title="Cache" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
+                        <tab-pane title="Cache" icon="recycle" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
                             <cache-table class="shadow-sm" v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 
