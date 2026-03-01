@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, watch, computed, reactive, onMounted, onUnmounted} from 'vue';
+import {ref, watch, computed, reactive, onMounted, onBeforeUnmount} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -265,7 +265,7 @@ onMounted(() => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
 
     modalInstance?.dispose();
 });
