@@ -13,7 +13,7 @@ const props = defineProps({
     type: {
         type: String,
         required: true,
-        validator: (value) => ['bool', 'number', 'string'].includes(value.trim()),
+        validator: (value) => ['boolean', 'number', 'string'].includes(value.trim()),
     },
     name: {
         type: String,
@@ -96,7 +96,7 @@ onMounted(() => {
     <!-- BOOL                                                                                                        -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="row mb-2" v-if="props.type.toLowerCase() === 'bool'">
+    <div class="row mb-2" v-if="props.type.toLowerCase() === 'boolean'">
         <label class="col-sm-3 col-form-label" :for="uid">
             {{ props.label }}
         </label>

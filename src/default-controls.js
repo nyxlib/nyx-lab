@@ -38,6 +38,12 @@ export default {
                     label: 'Y max',
                     defaultValue: null
                 },
+                {
+                    type: 'boolean',
+                    name: 'y-logarithmic',
+                    label: 'Y logarithmic',
+                    defaultValue: false
+                }
             ],
             VariableCtrl
         );
@@ -63,6 +69,12 @@ export default {
                     defaultValue: null
                 },
                 {
+                    type: 'boolean',
+                    name: 'x-logarithmic',
+                    label: 'X logarithmic',
+                    defaultValue: false
+                },
+                {
                     type: 'number',
                     name: 'y-min',
                     label: 'Y min',
@@ -74,6 +86,12 @@ export default {
                     label: 'Y max',
                     defaultValue: null
                 },
+                {
+                    type: 'boolean',
+                    name: 'y-logarithmic',
+                    label: 'Y logarithmic',
+                    defaultValue: false
+                }
             ],
             Scatter2DCtrl
         );
@@ -99,6 +117,12 @@ export default {
                     defaultValue: null
                 },
                 {
+                    type: 'boolean',
+                    name: 'x-logarithmic',
+                    label: 'X logarithmic',
+                    defaultValue: false
+                },
+                {
                     type: 'number',
                     name: 'y-min',
                     label: 'Y min',
@@ -109,6 +133,12 @@ export default {
                     name: 'y-max',
                     label: 'Y max',
                     defaultValue: null
+                },
+                {
+                    type: 'boolean',
+                    name: 'y-logarithmic',
+                    label: 'Y logarithmic',
+                    defaultValue: false
                 },
                 {
                     type: 'number',
@@ -122,6 +152,12 @@ export default {
                     label: 'Z max',
                     defaultValue: null
                 },
+                {
+                    type: 'boolean',
+                    name: 'z-logarithmic',
+                    label: 'Z logarithmic',
+                    defaultValue: false
+                }
             ],
             Scatter3DCtrl
         );
