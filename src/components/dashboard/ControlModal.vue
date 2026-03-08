@@ -86,6 +86,9 @@ const state = reactive({
     variables1: [],
     variables2: [],
     variables3: [],
+    title1: null,
+    title2: null,
+    title3: null,
     enabled: {},
     options: {},
 });
@@ -100,6 +103,9 @@ const DEFAULTS = Object.freeze({
     shadow: 'shadow-sm',
     title: '',
     panel: '',
+    title1: '',
+    title2: '',
+    title3: '',
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -118,6 +124,9 @@ watch(() => props.modelValue, (value) => {
     state.variables1 = Array.isArray(v.variables1) ? [...v.variables1] : [];
     state.variables2 = Array.isArray(v.variables2) ? [...v.variables2] : [];
     state.variables3 = Array.isArray(v.variables3) ? [...v.variables3] : [];
+    state.title1 = v.title1 ?? DEFAULTS.title1;
+    state.title2 = v.title2 ?? DEFAULTS.title2;
+    state.title3 = v.title3 ?? DEFAULTS.title3;
     state.enabled = v.enabled ? {...v.enabled} : {};
     state.options = v.options ? {...v.options} : {};
 
@@ -353,7 +362,7 @@ onBeforeUnmount(() => {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="F938E61B">Title</label>
+                                            <label class="form-label" for="F938E61B">Plot title</label>
                                             <input class="form-control form-control-sm" type="text" placeholder="Plot title" id="F938E61B" v-model="state.title" />
                                         </div>
                                     </div>
@@ -361,38 +370,98 @@ onBeforeUnmount(() => {
 
                                 <!-- ******************************************************************************* -->
 
-                                <div class="mb-3" v-if="state.mode === MODE_VARIABLE">
-                                    <label class="form-label" for="BBA0018F">Variable</label>
-                                    <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="BBA0018F" v-model="state.variables1" />
+                                <div class="row" v-if="state.mode === MODE_VARIABLE">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="BBA0018F">Y variable</label>
+                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="BBA0018F" v-model="state.variables1" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="B4020B86">Y title</label>
+                                            <input class="form-control form-control-sm" type="text" placeholder="Y title" id="B4020B86" v-model="state.title1" />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- -->
 
-                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_2D">
-                                    <label class="form-label" for="C6F79530">Y variable</label>
-                                    <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables1" />
+                                <div class="row" v-if="state.mode === MODE_SCATTER_2D">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C6F79530">Y variable</label>
+                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables1" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="AA0001B6">Y title</label>
+                                            <input class="form-control form-control-sm" type="text" placeholder="Y title" id="AA0001B6" v-model="state.title1" />
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_2D">
-                                    <label class="form-label" for="EFE4DF78">X variable</label>
-                                    <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="EFE4DF78" v-model="state.variables2" />
+                                <div class="row" v-if="state.mode === MODE_SCATTER_2D">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="EFE4DF78">X variable</label>
+                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="EFE4DF78" v-model="state.variables2" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="BD117B6E">X title</label>
+                                            <input class="form-control form-control-sm" type="text" placeholder="X title" id="BD117B6E" v-model="state.title2" />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- -->
 
-                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_3D">
-                                    <label class="form-label" for="C6F79530">Z variable</label>
-                                    <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables1" />
+                                <div class="row" v-if="state.mode === MODE_SCATTER_3D">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C6F79530">Z variable</label>
+                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables1" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="B4020B86">Z title</label>
+                                            <input class="form-control form-control-sm" type="text" placeholder="Y title" id="B4020B86" v-model="state.title1" />
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_3D">
-                                    <label class="form-label" for="C6F79530">Y variable</label>
-                                    <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables2" />
+                                <div class="row" v-if="state.mode === MODE_SCATTER_3D">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C6F79530">Y variable</label>
+                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables2" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="DD2ABF65">Y title</label>
+                                            <input class="form-control form-control-sm" type="text" placeholder="Y title" id="DD2ABF65" v-model="state.title2" />
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="mb-3" v-if="state.mode === MODE_SCATTER_3D">
-                                    <label class="form-label" for="C6F79530">X variable</label>
-                                    <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables3" />
+                                <div class="row" v-if="state.mode === MODE_SCATTER_3D">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="C6F79530">X variable</label>
+                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables3" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="B318A291">X title</label>
+                                            <input class="form-control form-control-sm" type="text" placeholder="Y title" id="B318A291" v-model="state.title3" />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- -->
