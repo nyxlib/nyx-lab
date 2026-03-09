@@ -62,6 +62,10 @@ let updateScheduled = false;
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const scheduleUpdate = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -319,6 +323,12 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    const textColor = getCssVar('--bs-body-color');
+
+    const borderColor = getCssVar('--bs-border-color');
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     chartInstance = new Chart(canvasEl.value, {
         type: 'line',
         data: {
@@ -354,8 +364,15 @@ onMounted(() => {
                     },
                     title: {
                         display: true,
+                        color: textColor,
                         text: 'Time'
                     },
+                    ticks: {
+                        color: textColor,
+                    },
+                    grid: {
+                        color: borderColor,
+                    }
                 },
                 y: {
                     min: props.options['y-min'],
@@ -363,7 +380,14 @@ onMounted(() => {
                     type: props.options['y-log'] ? 'logarithmic' : 'linear',
                     title: {
                         display: true,
+                        color: textColor,
                     },
+                    ticks: {
+                        color: textColor,
+                    },
+                    grid: {
+                        color: borderColor,
+                    }
                 }
             },
             plugins: {

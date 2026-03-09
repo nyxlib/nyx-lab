@@ -126,9 +126,11 @@ const getAxisOption = (name, minKey, maxKey) => {
         name: name,
         nameTextStyle: {
             color: textColor,
+            fontFamily: 'var(--bs-body-font-family)',
         },
         axisLabel: {
             color: textColor,
+            fontFamily: 'var(--bs-body-font-family)',
         },
         axisLine: {
             lineStyle: {
