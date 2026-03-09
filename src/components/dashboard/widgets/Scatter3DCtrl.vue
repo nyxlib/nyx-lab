@@ -238,7 +238,7 @@ const buildOption = () => ({
     grid3D: {
         viewControl: {
             projection: 'perspective',
-            zoomSensitivity: 5.0,
+            zoomSensitivity: 3.0,
         },
     },
     series: buildSeriesList(),
