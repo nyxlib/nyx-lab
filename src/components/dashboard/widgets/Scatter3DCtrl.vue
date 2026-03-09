@@ -115,13 +115,19 @@ const getAxisOption = (name, minKey, maxKey) => {
         type: 'value',
         name: name,
         axisLine: {
-            show: true,
+            lineStyle: {
+                width: 1,
+            },
         },
         axisTick: {
-            show: true,
+            lineStyle: {
+                width: 1,
+            },
         },
         splitLine: {
-            show: true,
+            lineStyle: {
+                width: 1,
+            },
         },
     };
 
