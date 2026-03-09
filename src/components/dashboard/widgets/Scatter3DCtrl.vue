@@ -153,6 +153,7 @@ const getAxisOption = (name, minKey, maxKey) => {
         axisPointer: {
             lineStyle: {
                 width: 1,
+                opacity: 0.5,
                 color: borderColor,
             },
             label: {
@@ -237,6 +238,7 @@ const buildOption = () => ({
     grid3D: {
         viewControl: {
             projection: 'perspective',
+            zoomSensitivity: 5.0,
         },
     },
     series: buildSeriesList(),
