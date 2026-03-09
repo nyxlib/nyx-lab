@@ -98,6 +98,10 @@ const getSeriesId = (i) => `${props.variables1[i]} / ${props.variables2[i]} / ${
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const toFiniteNumber = (v) => {
 
     const x = (typeof v === 'string') ? Number(v) : v;
@@ -111,22 +115,50 @@ const getAxisOption = (name, minKey, maxKey) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    const textColor = getCssVar('--bs-body-color');
+
+    const borderColor = getCssVar('--bs-border-color');
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     const out = {
         type: 'value',
         name: name,
+        nameTextStyle: {
+            color: textColor,
+        },
+        axisLabel: {
+            color: textColor,
+        },
         axisLine: {
             lineStyle: {
                 width: 1,
+                opacity: 0.8,
+                color: borderColor,
             },
         },
         axisTick: {
             lineStyle: {
                 width: 1,
+                opacity: 0.8,
+                color: borderColor,
             },
         },
         splitLine: {
             lineStyle: {
                 width: 1,
+                opacity: 0.8,
+                color: borderColor,
+            },
+        },
+        axisPointer: {
+            lineStyle: {
+                width: 1,
+                opacity: 0.8,
+                color: borderColor,
+            },
+            label: {
+                show: false,
             },
         },
     };
