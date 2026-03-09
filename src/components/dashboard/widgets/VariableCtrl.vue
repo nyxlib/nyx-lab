@@ -317,7 +317,7 @@ onMounted(() => {
                 y: {
                     min: props.options['y-min'],
                     max: props.options['y-max'],
-                    type: props.options['y-logarithmic'] ? 'logarithmic' : 'linear',
+                    type: props.options['y-log'] ? 'logarithmic' : 'linear',
                     title: {
                         display: true,
                     },

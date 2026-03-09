@@ -40,8 +40,8 @@ export default {
                 },
                 {
                     type: 'boolean',
-                    name: 'y-logarithmic',
-                    label: 'Y logarithmic',
+                    name: 'y-log',
+                    label: 'Y log scale',
                     defaultValue: false
                 }
             ],
@@ -70,8 +70,8 @@ export default {
                 },
                 {
                     type: 'boolean',
-                    name: 'x-logarithmic',
-                    label: 'X logarithmic',
+                    name: 'x-log',
+                    label: 'X log scale',
                     defaultValue: false
                 },
                 {
@@ -88,8 +88,8 @@ export default {
                 },
                 {
                     type: 'boolean',
-                    name: 'y-logarithmic',
-                    label: 'Y logarithmic',
+                    name: 'y-log',
+                    label: 'Y log scale',
                     defaultValue: false
                 }
             ],
