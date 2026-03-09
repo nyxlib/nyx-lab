@@ -135,28 +135,24 @@ const getAxisOption = (name, minKey, maxKey) => {
         axisLine: {
             lineStyle: {
                 width: 1,
-                opacity: 0.8,
                 color: borderColor,
             },
         },
         axisTick: {
             lineStyle: {
                 width: 1,
-                opacity: 0.8,
                 color: borderColor,
             },
         },
         splitLine: {
             lineStyle: {
                 width: 1,
-                opacity: 0.8,
                 color: borderColor,
             },
         },
         axisPointer: {
             lineStyle: {
                 width: 1,
-                opacity: 0.8,
                 color: borderColor,
             },
             label: {
