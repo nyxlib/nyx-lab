@@ -50,7 +50,7 @@ const props = defineProps({
 
 const canvasEl = ref(null);
 
-let chart = null;
+let chartInstance = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -69,7 +69,7 @@ const initDatasets = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.data.datasets = [];
+    chartInstance.data.datasets = [];
 
     lastVals1.clear();
     lastVals2.clear();
@@ -80,7 +80,7 @@ const initDatasets = () => {
 
     for(let i = 0; i < n; i++)
     {
-        chart.data.datasets.push({
+        chartInstance.data.datasets.push({
             id: `${props.variables1[i]} / ${props.variables2[i]}`,
             label: `${props.variables1[i].split(':').pop()} / ${props.variables2[i].split(':').pop()}`,
             showLine: false,
@@ -93,7 +93,7 @@ const initDatasets = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.update('none');
+    chartInstance.update('none');
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -146,7 +146,7 @@ const initWatches = () => {
 
             if(x !== undefined && y !== undefined)
             {
-                const dataset = chart.data.datasets[i];
+                const dataset = chartInstance.data.datasets[i];
 
                 if(dataset)
                 {
@@ -166,7 +166,7 @@ const initWatches = () => {
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    chart.update('none');
+                    chartInstance.update('none');
 
                     /*------------------------------------------------------------------------------------------------*/
                 }
@@ -225,13 +225,13 @@ const initTitles = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.options.scales.y.title.text = props.title1 || 'Y value';
+    chartInstance.options.scales.y.title.text = props.title1 || 'Y value';
 
-    chart.options.scales.x.title.text = props.title2 || 'X value';
+    chartInstance.options.scales.x.title.text = props.title2 || 'X value';
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.update('none');
+    chartInstance.update('none');
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -242,14 +242,14 @@ const initEnabled = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(const dataset of chart.data.datasets)
+    for(const dataset of chartInstance.data.datasets)
     {
         dataset.hidden = !props.enabled[dataset.id];
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.update('none');
+    chartInstance.update('none');
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -262,7 +262,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart = new Chart(canvasEl.value, {
+    chartInstance = new Chart(canvasEl.value, {
         type: 'scatter',
         data: {
             datasets: []
@@ -332,7 +332,7 @@ onBeforeUnmount(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart?.destroy();
+    chartInstance?.destroy();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 });

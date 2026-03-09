@@ -42,7 +42,7 @@ const props = defineProps({
 
 const canvasEl = ref(null);
 
-let chart = null;
+let chartInstance = null;
 
 let interval = null;
 
@@ -62,7 +62,7 @@ const initDatasets = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.data.datasets = [];
+    chartInstance.data.datasets = [];
 
     lastVals.clear();
 
@@ -70,7 +70,7 @@ const initDatasets = () => {
 
     for(let i = 0; i < props.variables1.length; i++)
     {
-        chart.data.datasets.push({
+        chartInstance.data.datasets.push({
             id: props.variables1[i],
             label: props.variables1[i].split(':').pop(),
             showLine: true,
@@ -82,7 +82,7 @@ const initDatasets = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.update('none');
+    chartInstance.update('none');
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -135,7 +135,7 @@ const initWatches = () => {
                 {
                     /*------------------------------------------------------------------------------------------------*/
 
-                    const dataset = chart.data.datasets[i];
+                    const dataset = chartInstance.data.datasets[i];
 
                     if(dataset !== undefined)
                     {
@@ -180,7 +180,7 @@ const initWatches = () => {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                chart.update('none');
+                chartInstance.update('none');
 
                 /*----------------------------------------------------------------------------------------------------*/
             }, {
@@ -198,11 +198,11 @@ const initTitle = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.options.scales.y.title.text = props.title1 || 'Value';
+    chartInstance.options.scales.y.title.text = props.title1 || 'Value';
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.update('none');
+    chartInstance.update('none');
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -213,14 +213,14 @@ const initEnabled = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(const dataset of chart.data.datasets)
+    for(const dataset of chartInstance.data.datasets)
     {
         dataset.hidden = !props.enabled[dataset.id];
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart.update('none');
+    chartInstance.update('none');
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -247,7 +247,7 @@ const initTick = () => {
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            const dataset = chart.data.datasets[i];
+            const dataset = chartInstance.data.datasets[i];
 
             if(dataset && dataset.data.length > 0)
             {
@@ -259,7 +259,7 @@ const initTick = () => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        chart.update('none');
+        chartInstance.update('none');
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -276,7 +276,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart = new Chart(canvasEl.value, {
+    chartInstance = new Chart(canvasEl.value, {
         type: 'line',
         data: {
             labels: [],
@@ -361,7 +361,7 @@ onBeforeUnmount(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart?.destroy();
+    chartInstance?.destroy();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 });
