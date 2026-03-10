@@ -214,7 +214,6 @@ const buildSeriesList = () => {
             id: getSeriesId(i),
             type: 'scatter3D',
             name: '',
-            silent: true,
             symbolSize: 5,
             data: getSeriesData(i),
         });
@@ -251,7 +250,6 @@ const setChartOption = (option, notMerge = false) => {
     chartInstance.setOption(option, {
         notMerge: notMerge,
         lazyUpdate: true,
-        silent: true,
     });
 };
 
