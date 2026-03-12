@@ -16,7 +16,7 @@ import defaultControls from '@/default-controls.js';
 
 const DEFAULT_GLOBALS = {
     windowTitle: 'Nyx Lab',
-    windowTheme: localStorage.getItem('window-theme') || 'dark',
+    windowTheme: localStorage.getItem('theme') || 'dark',
     /**/
     mqttURL: '',
     nssURL: '',
@@ -119,7 +119,7 @@ const useConfigStore = defineStore('config', {
 
                 document.documentElement.dataset.bsTheme = value;
 
-                localStorage.setItem('window-theme', value);
+                localStorage.setItem('theme', value);
 
             }, {immediate: true, deep: false});
 
