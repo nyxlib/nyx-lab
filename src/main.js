@@ -2,13 +2,15 @@
 
 import * as Vue from 'vue';
 
-import * as gridstack from 'gridstack';
-
 import * as VueRouter from 'vue-router';
+
+import * as gridstack from 'gridstack';
 
 import * as os from '@tauri-apps/plugin-os';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+import {Tooltip} from 'bootstrap';
 
 import {setup} from 'vue-nyx';
 
@@ -25,35 +27,35 @@ import addon from '@/plugins/addon';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-window.__NYX_VUE__        = Vue      ;
-window.__NYX_VUE_ROUTER__ = VueRouter;
+globalThis.__NYX_VUE__        = Vue      ;
+globalThis.__NYX_VUE_ROUTER__ = VueRouter;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-if(typeof window['__TAURI__'] === 'undefined')
+if(window['__TAURI__'] === undefined)
 {
     /**/ if (/linux/i.test(navigator.userAgent)) {
-        window.__NYX_OS_TYPE__ = 'linux';
+        globalThis.__NYX_OS_TYPE__ = 'linux';
     }
     else if (/macintosh/i.test(navigator.userAgent)) {
-        window.__NYX_OS_TYPE__ = 'macos';
+        globalThis.__NYX_OS_TYPE__ = 'macos';
     }
     else if (/windows/i.test(navigator.userAgent)) {
-        window.__NYX_OS_TYPE__ = 'windows';
+        globalThis.__NYX_OS_TYPE__ = 'windows';
     }
     else if(/android/i.test(navigator.userAgent)) {
-        window.__NYX_OS_TYPE__ = 'android';
+        globalThis.__NYX_OS_TYPE__ = 'android';
     }
     else if(/ipad|iphone/i.test(navigator.userAgent)) {
-        window.__NYX_OS_TYPE__ = 'ios';
+        globalThis.__NYX_OS_TYPE__ = 'ios';
     }
     else {
-        window.__NYX_OS_TYPE__ = 'unknown';
+        globalThis.__NYX_OS_TYPE__ = 'unknown';
     }
 }
 else
 {
-    window.__NYX_OS_TYPE__ = os.type();
+    globalThis.__NYX_OS_TYPE__ = os.type();
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -80,7 +82,7 @@ router.beforeEach(() => {
 
         document.querySelectorAll('[data-bs-original-title]').forEach((tooltip) => {
 
-            __NYX_BOOTSTRAP__.Tooltip.getInstance(tooltip)?.hide();
+            Tooltip.getInstance(tooltip)?.hide();
         });
 
     }, 1000);
@@ -96,7 +98,7 @@ app.directive('tooltip', {
 
         if(title)
         {
-            new __NYX_BOOTSTRAP__.Tooltip(el, {
+            new Tooltip(el, {
                 fallbackPlacements: ['right'],
                 placement: 'right',
                 trigger: 'hover',

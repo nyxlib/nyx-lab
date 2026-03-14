@@ -19,7 +19,11 @@ import icons from '@/assets/icons.json';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const HAS_TAURI_AND_NOT_MOBILE = window['__TAURI__'] !== undefined && !['android', 'ios'].includes(window['__NYX_OS_TYPE__']);
+const HAS_TAURI = window['__TAURI__'] !== undefined;
+
+const HAS_ELECTRON = window['__ELECTRON__'] !== undefined;
+
+const IS_DESKTOP = (HAS_TAURI || HAS_ELECTRON) && !['android', 'ios'].includes(window['__NYX_OS_TYPE__']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -94,7 +98,7 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
             script.src   = child.src  ;
             script.async = child.async;
 
-            temp.removeChild(child);
+            child.remove();
 
             target.appendChild(script);
         }
@@ -112,6 +116,142 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const desktopIsMaximized = () => {
+
+    if(HAS_TAURI)
+    {
+        return getCurrentWindow().isMaximized();
+    }
+
+    if(HAS_ELECTRON)
+    {
+        return globalThis.__ELECTRON__.isMaximized();
+    }
+
+    return Promise.resolve(false);
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const desktopMinimize = () => {
+
+    if(HAS_TAURI)
+    {
+        return getCurrentWindow().minimize();
+    }
+
+    if(HAS_ELECTRON)
+    {
+        return globalThis.__ELECTRON__.minimize();
+    }
+
+    return Promise.resolve();
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const desktopToggleMaximize = () => {
+
+    if(HAS_TAURI)
+    {
+        return getCurrentWindow().toggleMaximize();
+    }
+
+    if(HAS_ELECTRON)
+    {
+        return globalThis.__ELECTRON__.toggleMaximize();
+    }
+
+    return Promise.resolve();
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const desktopClose = () => {
+
+    if(HAS_TAURI)
+    {
+        return getCurrentWindow().close();
+    }
+
+    if(HAS_ELECTRON)
+    {
+        return globalThis.__ELECTRON__.close();
+    }
+
+    return Promise.resolve();
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const desktopDestroy = () => {
+
+    if(HAS_TAURI)
+    {
+        return getCurrentWindow().destroy();
+    }
+
+    if(HAS_ELECTRON)
+    {
+        return globalThis.__ELECTRON__.destroy();
+    }
+
+    return Promise.resolve();
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const desktopListenCloseRequested = (callback) => {
+
+    if(HAS_TAURI)
+    {
+        return Window.getByLabel('main').then((mainWindow) => mainWindow.listen('tauri://close-requested', callback));
+    }
+
+    if(HAS_ELECTRON)
+    {
+        return Promise.resolve(globalThis.__ELECTRON__.onCloseRequested(callback));
+    }
+
+    return Promise.resolve();
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const desktopUpdateWindow = () => {
+
+    desktopIsMaximized().catch(() => {}).then((maximized) => {
+
+        if(maximized) {
+            document.body.dataset.maximized = 'true';
+        } else {
+            document.body.dataset.maximized = 'false';
+        }
+    });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const desktopHandleCloseRequested = () => {
+
+    if(configStore.modified)
+    {
+        dialog.confirm('Are you sure you want to close?', 'Nyx Lab').then((choice) => {
+
+            if(choice)
+            {
+                desktopDestroy();
+            }
+        });
+    }
+    else
+    {
+        desktopDestroy();
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -119,34 +259,31 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(!HAS_TAURI_AND_NOT_MOBILE)
+    if(!IS_DESKTOP)
     {
         document.body.dataset.environment = 'browser';
     }
     else
     {
-        document.body.dataset.environment = 'tauri';
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        /**/ if(HAS_TAURI)
+        {
+            document.body.dataset.environment = 'tauri';
+        }
+        else if(HAS_ELECTRON)
+        {
+            document.body.dataset.environment = 'electron';
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const updateWindow = () => {
-
-            getCurrentWindow().isMaximized().catch(() => {}).then((maximized) => {
-
-                if(maximized) {
-                    document.body.dataset.maximized = 'true';
-                } else {
-                    document.body.dataset.maximized = 'false';
-                }
-            });
-        };
-
         window.addEventListener('resize', () => {
 
-            updateWindow();
+            desktopUpdateWindow();
         });
 
-        updateWindow();
+        desktopUpdateWindow();
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -154,31 +291,15 @@ onMounted(() => {
 
             if(e.target.tagName.toLowerCase() === 'div')
             {
-                getCurrentWindow().toggleMaximize();
+                desktopToggleMaximize();
             }
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        Window.getByLabel('main').then((mainWindow) => {
+        desktopListenCloseRequested(() => {
 
-            mainWindow.listen('tauri://close-requested', () => {
-
-                if(configStore.modified)
-                {
-                    dialog.confirm('Are you sure you want to close?', 'Nyx Lab').then((choice) => {
-
-                        if(choice)
-                        {
-                            mainWindow.destroy();
-                        }
-                    });
-                }
-                else
-                {
-                    mainWindow.destroy();
-                }
-            });
+            desktopHandleCloseRequested();
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -255,15 +376,15 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-2">
 
-                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!HAS_TAURI_AND_NOT_MOBILE" @click="() => getCurrentWindow().minimize()">
+                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!IS_DESKTOP" @click="desktopMinimize">
                     <i class="bi bi-dash-lg"></i>
                 </button>
 
-                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!HAS_TAURI_AND_NOT_MOBILE" @click="() => getCurrentWindow().toggleMaximize()">
+                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!IS_DESKTOP" @click="desktopToggleMaximize">
                     <i class="bi bi-collection"></i>
                 </button>
 
-                <button class="btn btn-sm border-0 me-0" type="button" :hidden="!HAS_TAURI_AND_NOT_MOBILE" @click="() => getCurrentWindow().close()">
+                <button class="btn btn-sm border-0 me-0" type="button" :hidden="!IS_DESKTOP" @click="desktopClose">
                     <i class="bi bi-x-lg"></i>
                 </button>
 

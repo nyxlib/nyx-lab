@@ -30,7 +30,8 @@ html, body,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-body[data-environment="tauri"][data-maximized="false"]::after {
+body[data-environment="tauri"][data-maximized="false"]::after,
+body[data-environment="electron"][data-maximized="false"]::after {
 
     content: "";
     position: absolute;
@@ -45,7 +46,8 @@ body[data-environment="tauri"][data-maximized="false"]::after {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-body[data-environment="tauri"][data-maximized="false"] > #nyx_lab {
+body[data-environment="tauri"][data-maximized="false"] > #nyx_lab,
+body[data-environment="electron"][data-maximized="false"] > #nyx_lab {
 
     border: 1px var(--bs-secondary-border-subtle) solid;
 
@@ -117,6 +119,27 @@ label,
 .btn-group > .btn {
 
     margin-bottom: 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+[data-tauri-drag-region] {
+
+    -webkit-app-region: drag;
+
+    app-region: drag;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+[data-tauri-drag-region] a,
+[data-tauri-drag-region] input,
+[data-tauri-drag-region] button,
+[data-tauri-drag-region] select {
+
+    -webkit-app-region: no-drag;
+
+    app-region: no-drag;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

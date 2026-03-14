@@ -1,0 +1,14 @@
+{
+    "name": "nyx-lab",
+    "version": "1.0.0",
+    "description": "Nyx Lab",
+    "main": "main.js",
+    "scripts": {
+        "electron-start": "electron ."
+    },
+    "author": "Jérôme Odier",
+    "license": "GPL-3.0-or-later",
+    "devDependencies": {
+        "electron": "^41.0.2"
+    }
+}
