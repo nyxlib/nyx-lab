@@ -29,6 +29,8 @@ const createWindow = () => {
 
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
 
+    //mainWindow.loadURL('https://nyxlib.org/lab/');
+
     //mainWindow.webContents.openDevTools();
 
     mainWindow.maximize();
