@@ -41,6 +41,7 @@ export default defineConfig({
             'chartjs-adapter-date-fns',
             '@vueform/multiselect',
             'd3-geo-projection',
+            'air-datepicker',
             'bootstrap-icon',
             '@popperjs/core',
             'd3-selection',
