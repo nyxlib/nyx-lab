@@ -4,9 +4,9 @@
     "description": "Nyx Lab",
     "main": "main.js",
     "scripts": {
-        "electron-start": "electron .",
-        "electron-make": "electron-forge make",
-        "electron-package": "electron-forge package"
+        "electron-start": "rm -fr ./dist/ && cp -R ../dist/ . && electron .",
+        "electron-make": "rm -fr ./dist/ && cp -R ../dist/ . && electron-forge make",
+        "electron-package": "rm -fr ./dist/ && cp -R ../dist/ . && electron-forge package"
     },
     "author": "Jérôme Odier",
     "license": "GPL-3.0-or-later",
