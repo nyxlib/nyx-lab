@@ -5,8 +5,8 @@
     "main": "main.js",
     "scripts": {
         "electron-start": "electron .",
-        "package": "electron-forge package",
-        "make": "electron-forge make"
+        "electron-make": "electron-forge make",
+        "electron-package": "electron-forge package"
     },
     "author": "Jérôme Odier",
     "license": "GPL-3.0-or-later",
