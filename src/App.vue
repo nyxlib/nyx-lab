@@ -117,19 +117,6 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const desktopIsMaximized = () => {
-
-    if(HAS_TAURI) {
-        getCurrentWindow().isMaximized();
-    }
-
-    if(HAS_ELECTRON) {
-        globalThis.__ELECTRON__.isMaximized();
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const desktopMinimize = () => {
 
     if(HAS_TAURI) {
@@ -152,6 +139,21 @@ const desktopToggleMaximize = () => {
     if(HAS_ELECTRON) {
         globalThis.__ELECTRON__.toggleMaximize();
     }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const desktopIsMaximized = () => {
+
+    if(HAS_TAURI) {
+        return getCurrentWindow().isMaximized();
+    }
+
+    if(HAS_ELECTRON) {
+        return globalThis.__ELECTRON__.isMaximized();
+    }
+
+    return Promise.resolve(false);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -184,17 +186,13 @@ const desktopDestroy = () => {
 
 const desktopListenCloseRequested = (callback) => {
 
-    if(HAS_TAURI)
-    {
-        return Window.getByLabel('main').then((mainWindow) => mainWindow.listen('tauri://close-requested', callback));
+    if(HAS_TAURI) {
+        Window.getByLabel('main').then((mainWindow) => mainWindow.listen('tauri://close-requested', callback));
     }
 
-    if(HAS_ELECTRON)
-    {
-        return Promise.resolve(globalThis.__ELECTRON__.onCloseRequested(callback));
+    if(HAS_ELECTRON) {
+        globalThis.__ELECTRON__.onCloseRequested(callback);
     }
-
-    return Promise.resolve();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

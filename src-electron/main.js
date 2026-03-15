@@ -31,7 +31,7 @@ const createWindow = () => {
 
     mainWindow.loadURL('https://nyxlib.org/lab/').then(() => {
 
-        //mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
 
         mainWindow.maximize();
 
@@ -74,28 +74,37 @@ app.on('window-all-closed', () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-ipcMain.handle('nyx:window:toggleMaximize', () => {
+ipcMain.handle('nyx:window:minimize', () => {
 
-    if(!mainWindow)
-    {
-        return false;
-    }
-
-    if(mainWindow.isMaximized())
-    {
-        return mainWindow.unmaximize();
-    }
-    else
-    {
-        return mainWindow.maximize();
-    }
+    mainWindow?.minimize();
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-ipcMain.handle('nyx:window:minimize', () => {
+ipcMain.handle('nyx:window:maximize', () => {
 
-    mainWindow?.minimize();
+    mainWindow?.maximize();
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:window:toggleMaximize', () => {
+
+    if(mainWindow)
+    {
+        if(mainWindow.isMaximized())
+        {
+            mainWindow.unmaximize();
+            return false;
+        }
+        else
+        {
+            mainWindow.maximize();
+            return true;
+        }
+    }
+
+    return false;
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
