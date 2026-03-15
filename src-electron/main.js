@@ -27,11 +27,11 @@ const createWindow = () => {
         },
     });
 
-  //mainWindow.loadFile(path.join(__dirname, '/dist/index.html')).then(() => {
+    //mainWindow.loadFile(path.join(__dirname, '../dist/index.html')).then(() => {
 
     mainWindow.loadURL('https://nyxlib.org/lab/').then(() => {
 
-        mainWindow.webContents.openDevTools();
+        //mainWindow.webContents.openDevTools();
 
         mainWindow.maximize();
 

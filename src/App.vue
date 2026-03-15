@@ -153,7 +153,7 @@ const desktopIsMaximized = () => {
         return globalThis.__ELECTRON__.isMaximized();
     }
 
-    return Promise.resolve(false);
+    return Promise.reject();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

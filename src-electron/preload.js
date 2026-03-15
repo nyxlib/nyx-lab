@@ -24,11 +24,13 @@ contextBridge.exposeInMainWorld('__ELECTRON__', {
 
     onCloseRequested: (callback) => {
 
-        ipcRenderer.addListener('nyx://close-requested', callback);
+        const listener = () => callback();
+
+        ipcRenderer.addListener('nyx://close-requested', listener);
 
         return () => {
 
-            ipcRenderer.removeListener('nyx://close-requested', callback);
+            ipcRenderer.removeListener('nyx://close-requested', listener);
         };
     },
 
