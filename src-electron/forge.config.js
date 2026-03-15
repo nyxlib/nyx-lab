@@ -1,4 +1,5 @@
 module.exports = {
+    outDir: './target/',
     packagerConfig: {
         asar: true,
     },
@@ -6,10 +7,6 @@ module.exports = {
         {
             name: '@electron-forge/maker-zip',
             platforms: ['linux'],
-        },
-        {
-            name: '@electron-forge/maker-deb',
-            config: {},
         },
         {
             name: '@reforged/maker-appimage',
