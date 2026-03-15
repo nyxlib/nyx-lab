@@ -385,7 +385,7 @@ onMounted(() => {
         <!-- MENU                                                                                                    -->
         <!-- ******************************************************************************************************* -->
 
-        <ul class="nav nav-pills flex-column overflow-x-hidden overflow-y-scroll nyx-bg2 px-2" style="width: 4.5rem;" id="nyx_menu">
+        <ul class="nav nav-pills flex-column flex-nowrap overflow-x-hidden overflow-y-scroll nyx-bg2 px-2" style="width: 4.5rem;" id="nyx_menu">
 
             <!-- *************************************************************************************************** -->
 
