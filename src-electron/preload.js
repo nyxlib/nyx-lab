@@ -24,7 +24,7 @@ contextBridge.exposeInMainWorld('__ELECTRON__', {
 
     onCloseRequested: (callback) => {
 
-        ipcRenderer.on('nyx://close-requested', callback);
+        ipcRenderer.addListener('nyx://close-requested', callback);
 
         return () => {
 

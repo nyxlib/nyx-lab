@@ -2,7 +2,7 @@
 
 const {app, ipcMain, BrowserWindow} = require('electron');
 
-const path = require('path');
+const path = require('node:path');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -27,15 +27,16 @@ const createWindow = () => {
         },
     });
 
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
+  //mainWindow.loadFile(path.join(__dirname, '/dist/index.html')).then(() => {
 
-    //mainWindow.loadURL('https://nyxlib.org/lab/');
+    mainWindow.loadURL('https://nyxlib.org/lab/').then(() => {
 
-    //mainWindow.webContents.openDevTools();
+        //mainWindow.webContents.openDevTools();
 
-    mainWindow.maximize();
+        mainWindow.maximize();
 
-    mainWindow.show();
+        mainWindow.show();
+    });
 
     /*------------------------------------------------------------------------------------------------------------*/
 
@@ -73,13 +74,6 @@ app.on('window-all-closed', () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-ipcMain.handle('nyx:window:minimize', () => {
-
-    mainWindow?.minimize();
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 ipcMain.handle('nyx:window:toggleMaximize', () => {
 
     if(!mainWindow)
@@ -89,14 +83,19 @@ ipcMain.handle('nyx:window:toggleMaximize', () => {
 
     if(mainWindow.isMaximized())
     {
-        mainWindow.unmaximize();
-        return false;
+        return mainWindow.unmaximize();
     }
     else
     {
-        mainWindow.maximize();
-        return true;
+        return mainWindow.maximize();
     }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:window:minimize', () => {
+
+    mainWindow?.minimize();
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/

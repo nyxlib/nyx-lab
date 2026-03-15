@@ -119,85 +119,65 @@ const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
 
 const desktopIsMaximized = () => {
 
-    if(HAS_TAURI)
-    {
-        return getCurrentWindow().isMaximized();
+    if(HAS_TAURI) {
+        getCurrentWindow().isMaximized();
     }
 
-    if(HAS_ELECTRON)
-    {
-        return globalThis.__ELECTRON__.isMaximized();
+    if(HAS_ELECTRON) {
+        globalThis.__ELECTRON__.isMaximized();
     }
-
-    return Promise.resolve(false);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const desktopMinimize = () => {
 
-    if(HAS_TAURI)
-    {
-        return getCurrentWindow().minimize();
+    if(HAS_TAURI) {
+        getCurrentWindow().minimize();
     }
 
-    if(HAS_ELECTRON)
-    {
-        return globalThis.__ELECTRON__.minimize();
+    if(HAS_ELECTRON) {
+        globalThis.__ELECTRON__.minimize();
     }
-
-    return Promise.resolve();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const desktopToggleMaximize = () => {
 
-    if(HAS_TAURI)
-    {
-        return getCurrentWindow().toggleMaximize();
+    if(HAS_TAURI) {
+        getCurrentWindow().toggleMaximize();
     }
 
-    if(HAS_ELECTRON)
-    {
-        return globalThis.__ELECTRON__.toggleMaximize();
+    if(HAS_ELECTRON) {
+        globalThis.__ELECTRON__.toggleMaximize();
     }
-
-    return Promise.resolve();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const desktopClose = () => {
 
-    if(HAS_TAURI)
-    {
-        return getCurrentWindow().close();
+    if(HAS_TAURI) {
+        getCurrentWindow().close();
     }
 
-    if(HAS_ELECTRON)
-    {
-        return globalThis.__ELECTRON__.close();
+    if(HAS_ELECTRON) {
+        globalThis.__ELECTRON__.close();
     }
-
-    return Promise.resolve();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const desktopDestroy = () => {
 
-    if(HAS_TAURI)
-    {
-        return getCurrentWindow().destroy();
+    if(HAS_TAURI) {
+        getCurrentWindow().destroy();
     }
 
-    if(HAS_ELECTRON)
-    {
-        return globalThis.__ELECTRON__.destroy();
+    if(HAS_ELECTRON) {
+        globalThis.__ELECTRON__.destroy();
     }
-
-    return Promise.resolve();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
