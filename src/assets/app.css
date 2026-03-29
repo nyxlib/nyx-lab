@@ -17,8 +17,6 @@
 html, body,
 #nyx_lab {
 
-    background-color: transparent;
-
     height: 100%;
     width: 100%;
 
@@ -50,9 +48,6 @@ body[data-environment="tauri"][data-maximized="false"] > #nyx_lab,
 body[data-environment="electron"][data-maximized="false"] > #nyx_lab {
 
     border: 1px var(--bs-secondary-border-subtle) solid;
-
-    border-top-left-radius: 11px;
-    border-top-right-radius: 11px;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
