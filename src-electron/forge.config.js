@@ -1,9 +1,15 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const path = require('node:path');
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 module.exports = {
     outDir: './target/',
     packagerConfig: {
         asar: true,
+        executableName: 'nyx-lab',
+        icon: path.resolve(__dirname, 'icon.svg'),
     },
     makers: [
         {
@@ -13,7 +19,7 @@ module.exports = {
         {
             name: '@reforged/maker-appimage',
             config: {
-                icon: 'icon.svg'
+                icon: path.resolve(__dirname, 'icon.svg'),
             },
         },
     ],

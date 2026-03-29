@@ -453,7 +453,7 @@ const useConfigStore = defineStore('config', {
 
         import()
         {
-            this.dialog.open('config.nyx', 'application/json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then(([json]) => {
+            this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then(([json]) => {
 
                 this._loadConfig(json);
 
@@ -473,7 +473,7 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                return this.dialog.save('config.nyx', 'application/json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json.toString());
+                return this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json.toString());
 
             }).then(() => {
 
