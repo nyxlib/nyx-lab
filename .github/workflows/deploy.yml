@@ -43,6 +43,7 @@ jobs:
                     node --version
                     mono --version
                     wine --version
+                    wine64 --version
 
                     npm install && npm run app-prod
 
