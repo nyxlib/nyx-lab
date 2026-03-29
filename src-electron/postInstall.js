@@ -37,13 +37,13 @@ const installLinux = () => {
 
     /*------------------------------------------------------------------------------------------------------------*/
 
+    const iconDir = path.join(home, '.local', 'share', 'icons', 'hicolor', 'scalable', 'apps');
     const mimeDir = path.join(home, '.local', 'share', 'mime', 'packages');
     const appDir = path.join(home, '.local', 'share', 'applications');
-    const iconDir = path.join(home, '.local', 'share', 'icons');
 
-    const mimeFile = path.join(mimeDir, 'nyx-lab.xml');
+    const iconFile = path.join(iconDir, /**/ 'nyx-lab.svg' /**/);
+    const mimeFile = path.join(mimeDir, /**/ 'nyx-lab.xml' /**/);
     const appFile = path.join(appDir, 'nyx-lab.desktop');
-    const iconFile = path.join(iconDir, 'nyx-lab.svg');
 
     /*------------------------------------------------------------------------------------------------------------*/
 
@@ -74,6 +74,15 @@ NoDisplay=false
     fs.mkdirSync(mimeDir, {recursive: true});
     fs.mkdirSync(appDir, {recursive: true});
     fs.mkdirSync(iconDir, {recursive: true});
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const bundledIconFile = path.join(__dirname, 'icon.svg');
+
+    if(fs.existsSync(bundledIconFile))
+    {
+        fs.copyFileSync(bundledIconFile, iconFile);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -114,15 +123,6 @@ NoDisplay=false
         {
             console.warn(`update-desktop-database failed: ${e}`);
         }
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const bundledIconFile = path.join(__dirname, 'icon.svg');
-
-    if(fs.existsSync(bundledIconFile))
-    {
-        fs.copyFileSync(bundledIconFile, iconFile);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
