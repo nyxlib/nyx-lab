@@ -19,9 +19,9 @@ const route = useRoute();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const url = route.params.id in configStore.globals.webPages ? configStore.globals.webPages[route.params.id].url : '';
+const url = route.params.id in configStore.globals.addons ? configStore.globals.addons[route.params.id].url : '';
 
-const title = route.params.id in configStore.globals.webPages ? configStore.globals.webPages[route.params.id].title : '';
+const title = route.params.id in configStore.globals.addons ? configStore.globals.addons[route.params.id].title : '';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>

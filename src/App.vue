@@ -43,9 +43,31 @@ const state = reactive({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const appPanels = computed(() => Object.values(configStore.appPanels).sort((x, y) => x.descr.rank - y.descr.rank));
+const menuEntries = computed(() => [
 
-const webPages = computed(() => Object.values(configStore.globals.webPages).sort((x, y) => x.rank - y.rank));
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    ...Object.values(configStore.appPanels).flatMap((appPanel) => appPanel.panels.map((panel, idx) => ({
+        id: `panel_${appPanel.descr.id}_${idx}`,
+        rank: appPanel.descr.rank,
+        path: panel.path,
+        title: panel.title,
+        logo: panel.logo,
+    }))),
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    ...Object.values(configStore.globals.addons).filter((addon) => addon.type === 'page' && (addon.url.startsWith('http://') || addon.url.startsWith('https://')) && addon.enabled).map((addon) => ({
+        key: `page_${addon.id}`,
+        rank: addon.rank,
+        path: `/external/${addon.id}`,
+        title: addon.title,
+        logo: icons[addon.icon || 'bi-question'],
+    })),
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+].sort((x, y) => x.rank - y.rank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -408,19 +430,9 @@ onMounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <template v-for="appPanel in appPanels" :key="appPanel.addon.id">
-                <li class="nav-item" :title="panel.title" v-tooltip v-for="(panel, idx) in appPanel.panels" :key="`${appPanel.addon.id}_${idx}`">
-                    <router-link class="nav-link rounded-1 mt-2" active-class="active" :to="panel.path" style="padding: 0.8rem 1.0rem;" v-html="panel.logo" />
-                </li>
-            </template>
-
-            <!-- *************************************************************************************************** -->
-
-            <template v-for="webPage in webPages" :key="webPage.id">
-                <li class="nav-item" :title="webPage.title" v-tooltip v-if="(webPage.url.startsWith('http://') || webPage.url.startsWith('https://')) && webPage.enabled">
-                    <router-link class="nav-link rounded-1 mt-2" active-class="active" :to="`/external/${webPage.id}`" style="padding: 0.8rem 1.0rem;" v-html="icons[webPage.icon || 'bi-question']" />
-                </li>
-            </template>
+            <li class="nav-item" :title="entry.title" v-tooltip v-for="entry in menuEntries" :key="entry.id">
+                <router-link class="nav-link rounded-1 mt-2" active-class="active" :to="entry.path" style="padding: 0.8rem 1.0rem;" v-html="entry.logo" />
+            </li>
 
             <!-- *************************************************************************************************** -->
 

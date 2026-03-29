@@ -4,6 +4,8 @@
 
 import {ref, watch, inject, onMounted, onUnmounted} from 'vue';
 
+import Multiselect from '@vueform/multiselect';
+
 import draggable from 'vuedraggable';
 
 import * as uuid from 'uuid';
@@ -11,6 +13,8 @@ import * as uuid from 'uuid';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import ConsoleModal from '@/components/config/ConsoleModal.vue';
+
+import icons from '@/assets/icons.json';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -86,10 +90,56 @@ const addonAppend = (url = null) => {
         props.addons[id] = {
             id: id,
             rank: rank,
+            type: 'addon',
             url: url,
             zombie: false,
             enabled: !!url,
             started: false,
+        };
+
+        if(url) {
+            dialog.success(`Addon "${url}" successfully installed!`);
+        }
+    }
+    else
+    {
+        if(url) {
+            dialog.warning(`Addon "${url}" already installed!`);
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const pageAppend = (url = null) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    url = (url || '').trim();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const found = Object.values(props.addons).some((addon) => addon.url === url);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(!found)
+    {
+        const id = uuid.v4();
+
+        const rank = Date.now();
+
+        props.addons[id] = {
+            id: id,
+            rank: rank,
+            type: 'page',
+            url: '',
+            title: '?',
+            icon: 'bi-question',
+            zombie: false,
+            enabled: false,
         };
 
         if(url) {
@@ -167,7 +217,11 @@ onUnmounted(() => {
             [
             <button class="btn btn-xs btn-primary me-1" type="button" @click="() => addonAppend()">
                 <i class="bi bi-plus-lg"></i>
-                Add
+                Add addon
+            </button>
+            <button class="btn btn-xs btn-primary me-1" type="button" @click="() => pageAppend()">
+                <i class="bi bi-plus-lg"></i>
+                Add page
             </button>
             <button class="btn btn-xs btn-primary me-1" type="button" @click="() => addonSearch()">
                 <i class="bi bi-search"></i>
@@ -195,6 +249,12 @@ onUnmounted(() => {
                         <th class="text-center" style="width: auto;">
                             URL
                         </th>
+                        <th class="text-center" style="width: auto;">
+                            Title
+                        </th>
+                        <th class="text-center" style="width: 200px;">
+                            Icon
+                        </th>
                         <th class="text-center" style="width: 105px;">
                             Enabled
                         </th>
@@ -217,7 +277,13 @@ onUnmounted(() => {
                                 </button>
                             </td>
                             <td class="text-start">
-                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" v-model="addon.url" />
+                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'xxxxx'" v-model="addon.url" />
+                            </td>
+                            <td class="text-start">
+                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'addon'" v-model="addon.title" />
+                            </td>
+                            <td class="text-start">
+                                <multiselect :options="Object.keys(icons)" :searchable="true" :limit="100" :disabled="addon.type === 'addon'" v-model="addon.icon"></multiselect>
                             </td>
                             <td class="text-center">
                                 <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>

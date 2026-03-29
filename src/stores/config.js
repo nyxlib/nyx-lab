@@ -32,7 +32,6 @@ const DEFAULT_GLOBALS = {
     /**/
     devices: {},
     addons: {},
-    webPages: {},
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -254,14 +253,7 @@ const useConfigStore = defineStore('config', {
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(!addonDescrs || Object.keys(addonDescrs).length === 0)
-            {
-                return Promise.resolve();
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            return Promise.allSettled(Object.values(addonDescrs).sort((x, y) => x.rank - y.rank).map((addonDescr) => {
+            return Promise.allSettled(Object.values(addonDescrs).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((addonDescr) => {
 
                 try
                 {
@@ -270,6 +262,7 @@ const useConfigStore = defineStore('config', {
                         this._init(addon, name, do_init);
 
                         this.console.push(`Loading addon '${addonDescr.url}': [OKAY]`);
+
                     }).catch((e) => {
 
                         this.console.push(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
@@ -288,7 +281,7 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        startStopExts(addonDescrs, webPageDescrs, interfacePanelDescrs)
+        startStopExts(addonDescrs, interfacePanelDescrs)
         {
             /*--------------------------------------------------------------------------------------------------------*/
             /* INTERFACE PANELS                                                                                       */
@@ -303,20 +296,13 @@ const useConfigStore = defineStore('config', {
             /* WEB PAGES                                                                                              */
             /*--------------------------------------------------------------------------------------------------------*/
 
-            Object.values(webPageDescrs).filter((x) => x.zombie).forEach((zombie) => {
+            Object.values(addonDescrs).filter((x) => x.type === 'page' && x.zombie).forEach((zombie) => {
 
-                delete webPageDescrs[zombie.id];
+                delete addonDescrs[zombie.id];
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
             /* ADDONS                                                                                                 */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            if(!addonDescrs || Object.keys(addonDescrs).length === 0)
-            {
-                return Promise.resolve();
-            }
-
             /*--------------------------------------------------------------------------------------------------------*/
 
             const zombies = [];
@@ -327,7 +313,7 @@ const useConfigStore = defineStore('config', {
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            return Promise.allSettled(Object.values(addonDescrs).sort((x, y) => x.rank - y.rank).map((addonDescr) => {
+            return Promise.allSettled(Object.values(addonDescrs).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((addonDescr) => {
 
                 if(addonDescr.zombie)
                 {
@@ -386,7 +372,7 @@ const useConfigStore = defineStore('config', {
 
                     this.globals = confDup(tmp_globals, DEFAULT_GLOBALS);
 
-                    return this.startStopExts(this.globals.addons, this.globals.webPages, this.globals.interfacePanels);
+                    return this.startStopExts(this.globals.addons, this.globals.interfacePanels);
 
                 }).then(() => {
 
@@ -427,7 +413,7 @@ const useConfigStore = defineStore('config', {
 
                 this.globals = confDup(this.globals, DEFAULT_GLOBALS);
 
-                return this.startStopExts(this.globals.addons, this.globals.webPages, this.globals.interfacePanels);
+                return this.startStopExts(this.globals.addons, this.globals.interfacePanels);
 
             }).then(() => {
 

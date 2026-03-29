@@ -12,7 +12,6 @@ import useConfigStore from '@/stores/config';
 import UserDashboardTable from '@/components/config/UserDashboardTable.vue';
 import AddonTable from '@/components/config/AddonTable.vue';
 import CacheTable from '@/components/config/CacheTable.vue';
-import WebPageTable from '@/components/config/WebPageTable.vue';
 
 import license from '@/assets/license.txt?raw';
 
@@ -260,12 +259,8 @@ onMounted(() => {
 
                     <nav-tabs>
 
-                        <tab-pane title="Addons" icon="plugin">
+                        <tab-pane title="Addons and pages" icon="plugin">
                             <addon-table class="shadow-sm" :addons="configStore.globals.addons" :console="configStore.console" @search="() => { state.indexMode = true; }" />
-                        </tab-pane>
-
-                        <tab-pane title="Web pages" icon="web">
-                            <web-page-table class="shadow-sm" :web-pages="configStore.globals.webPages" @search="() => { state.indexMode = true; }" />
                         </tab-pane>
 
                         <tab-pane title="Cache" icon="recycle" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI || HAS_ELECTRON">
