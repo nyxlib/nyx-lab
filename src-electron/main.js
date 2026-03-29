@@ -9,7 +9,7 @@ const path = require('node:path');
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const {
-    setupCache,
+    initCache,
     listCachedFiles,
     deleteCachedFile,
     deleteCachedFiles,
@@ -169,7 +169,7 @@ app.whenReady().then(() => {
 
     installLinux();
 
-    return setupCache();
+    return initCache();
 
 }).then(() => {
 
