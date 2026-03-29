@@ -289,7 +289,7 @@ onUnmounted(() => {
                                 <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>
                             </td>
                             <td class="text-center">
-                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': addon.started, 'text-secondary': !addon.started}]"></i>
+                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (addon.type === 'addon' && addon.started) || (addon.type === 'page' && addon.enabled && addon.url), 'text-secondary': !((addon.type === 'addon' && addon.started) || (addon.type === 'page' && addon.enabled && addon.url))}]"></i>
                             </td>
                         </tr>
                     </template>
