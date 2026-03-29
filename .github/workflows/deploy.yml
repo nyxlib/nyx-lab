@@ -27,6 +27,13 @@ jobs:
                     sudo apt-get install -y curl rsync openssh-client
                     sudo apt-get install -y wine64 wine32 mono-runtime
 
+                    WINE_DIR="$(dirname "$(command -v wine)")"
+
+                    if [ ! -e "$WINE_DIR/wine64" ]
+                    then
+                        sudo ln -s "$WINE_DIR/wine" "$WINE_DIR/wine64"
+                    fi
+
             -   name: Install Node toolchain
                 shell: bash
                 run: |
