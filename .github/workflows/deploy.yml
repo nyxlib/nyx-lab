@@ -23,8 +23,7 @@ jobs:
             -   name: Install system dependencies
                 run: |
                     sudo apt-get update
-                    sudo apt-get install -y file wget curl rsync openssh-client build-essential
-                    sudo apt-get install -y libssl-dev libgtk-3-dev librsvg2-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev libjavascriptcoregtk-6.0-dev
+                    sudo apt-get install -y file wget curl rsync openssh-client
 
             -   name: Install Node toolchain
                 shell: bash
@@ -33,27 +32,17 @@ jobs:
                     source "${HOME}/.nvm/nvm.sh"
                     nvm install --lts
 
-            -   name: Install Rust toolchain
-                shell: bash
-                run: |
-                    curl -fsSL https://sh.rustup.rs | bash -s -- -y
-
-            -   name: Build project 1/2
+            -   name: Build project
                 shell: bash
                 run: |
                     source "${HOME}/.nvm/nvm.sh"
-                    source "${HOME}/.cargo/env"
 
                     npm --version
                     node --version
-                    rustc --version
-                    cargo --version
 
-                    mkdir -p ./src-tauri/binaries/
-                    curl https://nyxlib.org/download/linux/x86_64/nyx-gen > ./src-tauri/binaries/"nyx-gen-$(rustc -Vv | grep '^host:' | cut -f 2 -d ' ')"
+                    npm install && npm run app-prod
 
-                    npm install
-                    npm run tauri-prod
+                    cd src-electron && npm install && npm run electron-make
 
             -   name: Deploy project
                 shell: bash
@@ -76,4 +65,4 @@ jobs:
 
                     rsync -avz --delete ./dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/lab/"
 
-                    scp ./src-tauri/target/release/bundle/appimage/nyx-lab_*.AppImage "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/linux/x86_64/nyx-lab.AppImage"
+                    scp ./src-electron/target/make/AppImage/x64/nyx-lab-*.AppImage "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/linux/x86_64/nyx-lab.AppImage"
