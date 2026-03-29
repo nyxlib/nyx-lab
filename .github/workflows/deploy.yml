@@ -22,8 +22,10 @@ jobs:
 
             -   name: Install system dependencies
                 run: |
+                    sudo dpkg --add-architecture i386
                     sudo apt-get update
-                    sudo apt-get install -y file wget curl rsync openssh-client
+                    sudo apt-get install -y curl rsync openssh-client
+                    sudo apt-get install -y wine64 wine32 mono-complete
 
             -   name: Install Node toolchain
                 shell: bash
@@ -42,7 +44,7 @@ jobs:
 
                     npm install && npm run app-prod
 
-                    cd src-electron && npm install && npm run electron-make
+                    cd src-electron && npm install && npm run electron-make && npm run electron-make --platform=win32
 
             -   name: Deploy project
                 shell: bash

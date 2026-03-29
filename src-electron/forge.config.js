@@ -18,6 +18,12 @@ module.exports = {
                 icon: path.resolve(__dirname, 'icon.svg'),
             },
         },
+        {
+            name: '@electron-forge/maker-squirrel',
+            config: {
+
+            },
+        },
     ],
 };
 
