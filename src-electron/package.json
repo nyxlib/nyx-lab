@@ -5,8 +5,8 @@
     "main": "main.js",
     "scripts": {
         "electron-start": "rm -fr ./dist/ && cp -R ../dist/ . && electron .",
-        "electron-make": "rm -fr ./dist/ && cp -R ../dist/ . && electron-forge make",
-        "electron-package": "rm -fr ./dist/ && cp -R ../dist/ . && electron-forge package"
+        "electron-make-linux": "rm -fr ./dist/ && cp -R ../dist/ . && electron-forge make --platform=linux --arch=x64",
+        "electron-make-windows": "rm -fr ./dist/ && cp -R ../dist/ . && electron-forge make --platform=win32 --arch=x64"
     },
     "author": "Jérôme Odier",
     "license": "GPL-3.0-or-later",
