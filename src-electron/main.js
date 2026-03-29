@@ -1,8 +1,31 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const {app, ipcMain, BrowserWindow} = require('electron');
+const {app, ipcMain, protocol, BrowserWindow} = require('electron');
 
 const path = require('node:path');
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const {
+    setupCache,
+    listCachedFiles,
+    deleteCachedFile,
+    deleteCachedFiles,
+} = require('./cache');
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+protocol.registerSchemesAsPrivileged([
+    {
+        scheme: 'nyx',
+        privileges: {
+            standard: true,
+            secure: true,
+            supportFetchAPI: true,
+            stream: true,
+        },
+    },
+]);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -29,9 +52,7 @@ const createWindow = () => {
 
     mainWindow.loadFile(path.join(__dirname, './dist/index.html')).then(() => {
 
-    //mainWindow.loadURL('https://nyxlib.org/lab/').then(() => {
-
-        //mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
 
         mainWindow.maximize();
 
@@ -54,14 +75,17 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
 
-    createWindow();
+    setupCache().then(() => {
 
-    app.on('activate', () => {
+        createWindow();
 
-        if(BrowserWindow.getAllWindows().length === 0)
-        {
-            createWindow();
-        }
+        app.on('activate', () => {
+
+            if(BrowserWindow.getAllWindows().length === 0)
+            {
+                createWindow();
+            }
+        });
     });
 });
 
@@ -108,6 +132,8 @@ ipcMain.handle('nyx:window:toggleMaximize', () => {
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* IPC - APPLICATION                                                                                                  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 ipcMain.handle('nyx:window:isMaximized', () => {
 
@@ -126,6 +152,29 @@ ipcMain.handle('nyx:window:close', () => {
 ipcMain.handle('nyx:window:destroy', () => {
 
     mainWindow?.destroy();
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* IPC - ADDON CACHE                                                                                                  */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:addons:deleteCachedFile', (_, pathname) => {
+
+    return deleteCachedFile(pathname);
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:addons:deleteCachedFiles', () => {
+
+    return deleteCachedFiles();
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:addons:listCachedFiles', () => {
+
+    return listCachedFiles();
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/

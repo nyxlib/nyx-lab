@@ -8,6 +8,10 @@ import * as fs from '@tauri-apps/plugin-fs';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const HAS_TAURI = window['__TAURI__'] !== undefined;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const Notification_isPermissionGranted = () => Promise.resolve(Notification.permission === 'granted');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -116,7 +120,7 @@ const _unlock = () => {
 
 const _notify_step2 = (title, body) => {
 
-    if(window['__TAURI__'] !== undefined)
+    if(HAS_TAURI)
     {
         notification.sendNotification({
             title: title,
@@ -140,14 +144,14 @@ const _notify = (message, title) => {
         return;
     }
 
-    if(!(message instanceof String))
+    if(typeof message !== 'string')
     {
-        message = message.toString();
+        message = String(message);
     }
 
-    if(!(title instanceof String))
+    if(typeof title !== 'string')
     {
-        title = title.toString();
+        title = String(title);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -156,7 +160,7 @@ const _notify = (message, title) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(window['__TAURI__'] !== undefined)
+    if(HAS_TAURI)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -212,7 +216,7 @@ const _notify = (message, title) => {
 
 const _success = (message) => {
 
-    const el = document.querySelector('[data-tauri-drag-region]').closest('.navbar');
+    const el = document.querySelector('[data-tauri-drag-region]')?.closest('.navbar');
 
     if(el)
     {
@@ -237,7 +241,7 @@ const _success = (message) => {
 
 const _warning = (message) => {
 
-    const el = document.querySelector('[data-tauri-drag-region]').closest('.navbar');
+    const el = document.querySelector('[data-tauri-drag-region]')?.closest('.navbar');
 
     if(el)
     {
@@ -262,7 +266,7 @@ const _warning = (message) => {
 
 const _error = (message) => {
 
-    const el = document.querySelector('[data-tauri-drag-region]').closest('.navbar');
+    const el = document.querySelector('[data-tauri-drag-region]')?.closest('.navbar');
 
     if(el)
     {
@@ -287,19 +291,19 @@ const _error = (message) => {
 
 const _show = (message, title, type = null) => {
 
-    if(!(message instanceof String))
+    if(typeof message !== 'string')
     {
-        message = message.toString();
+        message = String(message);
     }
 
-    if(!(title instanceof String))
+    if(typeof title !== 'string')
     {
-        title = title.toString();
+        title = String(title);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(window['__TAURI__'] !== undefined)
+    if(HAS_TAURI)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -326,63 +330,62 @@ const _show = (message, title, type = null) => {
 
 const _confirm = (message, title, type = null) => {
 
-    return new Promise((resolve) => {
+    if(HAS_TAURI)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        if(window['__TAURI__'] !== undefined)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
+        return dialog.confirm(message, {title: title, kind: type || 'info'});
 
-            dialog.confirm(message, {title: title, kind: type || 'info'}).then(resolve);
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-        else
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
+        return Promise.resolve(confirm(message));
 
-            resolve(confirm(message));
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-    });
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
-    return new Promise((resolve, reject) => {
+    if(HAS_TAURI)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        if(window['__TAURI__'] !== undefined)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
+        return dialog.open({
+            multiple: false,
+            defaultPath: defaultPath,
+            filters: [{
+                name: typeName,
+                extensions: typeExts,
+            }]
+        }).then((filename) => {
 
-            dialog.open({
-                multiple: false,
-                defaultPath: defaultPath,
-                filters: [{
-                    name: typeName,
-                    extensions: typeExts,
-                }]
-            }).catch(reject).then((path) => {
+            if(filename)
+            {
+                return fs.readTextFile(filename).then((text) => {
 
-                if(path)
-                {
-                    fs.readTextFile(path).catch(reject).then((text) => {
+                    return [text, filename];
+                });
+            }
+            else
+            {
+                throw new Error('Operation cancelled');
+            }
+        });
 
-                        resolve([text, path]);
-                    });
-                }
-                else
-                {
-                    reject(new Error('No selected file'));
-                }
-            });
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-        else
-        {
+        return new Promise((resolve, reject) => {
+
             /*--------------------------------------------------------------------------------------------------------*/
 
             const el = document.createElement('input');
@@ -401,14 +404,15 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
                 if(file)
                 {
-                    file.text().catch(reject).then((text) => {
+                    file.text().then((text) => {
 
                         resolve([text, null]);
-                    });
+
+                    }, reject);
                 }
                 else
                 {
-                    reject(new Error('No selected file'));
+                    reject(new Error('Operation cancelled'));
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -442,66 +446,67 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
             el.click();
 
             /*--------------------------------------------------------------------------------------------------------*/
-        }
-    });
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
 
-    return new Promise((resolve, reject) => {
+    if(HAS_TAURI)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        if(window['__TAURI__'] !== undefined)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            dialog.save({
-                defaultPath: defaultPath,
-                filters: [
-                    {
-                        name: typeName,
-                        extensions: typeExts,
-                    },
-                ],
-            }).catch(reject).then((path) => {
-
-                if(path)
+        return dialog.save({
+            defaultPath: defaultPath,
+            filters: [
                 {
-                    fs.writeTextFile(path, contents).catch(reject).then(() => {
+                    name: typeName,
+                    extensions: typeExts,
+                },
+            ],
+        }).then((filename) => {
 
-                        resolve(path);
-                    });
-                }
-                else
-                {
-                    reject(new Error('Empty path'));
-                }
-            });
+            if(filename)
+            {
+                return fs.writeTextFile(filename, contents).then(() => {
 
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-        else
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
+                    return filename;
+                });
+            }
+            else
+            {
+                throw new Error('Operation cancelled');
+            }
+        });
 
-            const blob = new Blob([contents], {type: typeMime});
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-            const el = document.createElement('a');
+        const blob = new Blob([contents], {type: typeMime});
 
-            el.href = URL.createObjectURL(blob);
-            el.download = defaultPath;
-            el.style.display = 'none';
+        const el = document.createElement('a');
 
-            document.body.appendChild(el);  /* NOSONAR */
-            el.click();
-            document.body.removeChild(el);  /* NOSONAR */
+        el.href = URL.createObjectURL(blob);
+        el.download = defaultPath;
+        el.style.display = 'none';
 
-            resolve(null);
+        document.body.appendChild(el);  /* NOSONAR */
+        el.click();
+        document.body.removeChild(el);  /* NOSONAR */
 
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-    });
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        return Promise.resolve(null);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -512,7 +517,7 @@ export default {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        document.body.innerHTML += _LOCKER_HTML;
+        document.body.insertAdjacentHTML('beforeend', _LOCKER_HTML);
 
         /*------------------------------------------------------------------------------------------------------------*/
 

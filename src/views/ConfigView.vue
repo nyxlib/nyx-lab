@@ -22,6 +22,8 @@ import license from '@/assets/license.txt?raw';
 
 const HAS_TAURI = window['__TAURI__'] !== undefined;
 
+const HAS_ELECTRON = window['__ELECTRON__'] !== undefined;
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const configStore = useConfigStore();
@@ -266,7 +268,7 @@ onMounted(() => {
                             <web-page-table class="shadow-sm" :web-pages="configStore.globals.webPages" @search="() => { state.indexMode = true; }" />
                         </tab-pane>
 
-                        <tab-pane title="Cache" icon="recycle" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI">
+                        <tab-pane title="Cache" icon="recycle" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI || HAS_ELECTRON">
                             <cache-table class="shadow-sm" v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 

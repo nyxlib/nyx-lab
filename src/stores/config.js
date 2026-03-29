@@ -252,60 +252,38 @@ const useConfigStore = defineStore('config', {
 
         initAddons(addonDescrs)
         {
-            return new Promise((resolve) => {
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                /*----------------------------------------------------------------------------------------------------*/
+            if(!addonDescrs || Object.keys(addonDescrs).length === 0)
+            {
+                return Promise.resolve();
+            }
 
-                if(!addonDescrs || Object.keys(addonDescrs).length === 0)
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            return Promise.allSettled(Object.values(addonDescrs).sort((x, y) => x.rank - y.rank).map((addonDescr) => {
+
+                try
                 {
-                    resolve();
+                    return this.addon.load(addonDescr.url).then(([addon, name, do_init]) => {
 
-                    return;
-                }
+                        this._init(addon, name, do_init);
 
-                /*----------------------------------------------------------------------------------------------------*/
+                        this.console.push(`Loading addon '${addonDescr.url}': [OKAY]`);
+                    }).catch((e) => {
 
-                let n = 0;
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                for(const addonDescr of Object.values(addonDescrs).sort((x, y) => x.rank - y.rank))
-                {
-                    n++;
-
-                    try
-                    {
-                        this.addon.load(addonDescr.url).then(([addon, name, do_init]) => {
-
-                            this._init(addon, name, do_init);
-
-                            this.console.push(`Loading addon '${addonDescr.url}': [OKAY]`);
-
-                            if(--n === 0) {
-                                resolve();
-                            }
-
-                        }).catch((e) => {
-
-                            this.console.push(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
-
-                            if(--n === 0) {
-                                resolve();
-                            }
-                        });
-                    }
-                    catch(e)
-                    {
                         this.console.push(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
-
-                        if(--n === 0) {
-                            resolve();
-                        }
-                    }
+                    });
                 }
+                catch(e)
+                {
+                    this.console.push(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
 
-                /*----------------------------------------------------------------------------------------------------*/
-            });
+                    return Promise.resolve();
+                }
+            }));
+
+            /*--------------------------------------------------------------------------------------------------------*/
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -334,86 +312,57 @@ const useConfigStore = defineStore('config', {
             /* ADDONS                                                                                                 */
             /*--------------------------------------------------------------------------------------------------------*/
 
-            return new Promise((resolve) => {
+            if(!addonDescrs || Object.keys(addonDescrs).length === 0)
+            {
+                return Promise.resolve();
+            }
 
-                /*----------------------------------------------------------------------------------------------------*/
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                if(!addonDescrs || Object.keys(addonDescrs).length === 0)
+            const zombies = [];
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            this._startStop({}, defaultControls, 'default-controls', true);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            return Promise.allSettled(Object.values(addonDescrs).sort((x, y) => x.rank - y.rank).map((addonDescr) => {
+
+                if(addonDescr.zombie)
                 {
-                    resolve();
+                    zombies.push(addonDescr);
 
-                    return;
+                    addonDescr.enabled = false;
                 }
 
-                /*----------------------------------------------------------------------------------------------------*/
+                addonDescr.started = false;
 
-                const zombies = [];
-
-                const cleanup = () => {
-
-                    for(const zombie of zombies)
-                    {
-                        delete addonDescrs[zombie.id];
-                    }
-
-                    resolve();
-                };
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                let n = 0;
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                this._startStop({}, defaultControls, 'default-controls', true);
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                for(const addonDescr of Object.values(addonDescrs).sort((x, y) => x.rank - y.rank))
+                try
                 {
-                    if(addonDescr.zombie)
-                    {
-                        zombies.push(addonDescr);
+                    return this.addon.load(addonDescr.url).then(([addon, name]) => {
 
-                        addonDescr.enabled = false;
-                    }
+                        addonDescr.started = addonDescr.enabled;
 
-                    addonDescr.started = false;
+                        this._startStop(addonDescr, addon, name, addonDescr.started);
 
-                    n++;
+                    }).catch((e) => {
 
-                    try
-                    {
-                        this.addon.load(addonDescr.url).then(([addon, name, _]) => {
-
-                            addonDescr.started = addonDescr.enabled;
-
-                            this._startStop(addonDescr, addon, name, addonDescr.started);
-
-                            if(--n === 0) {
-                                cleanup();
-                            }
-
-                        }).catch((e) => {
-
-                            this.console.push(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
-
-                            if(--n === 0) {
-                                cleanup();
-                            }
-                        });
-                    }
-                    catch(e)
-                    {
                         this.console.push(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
-
-                        if(--n === 0) {
-                            cleanup();
-                        }
-                    }
+                    });
                 }
+                catch(e)
+                {
+                    this.console.push(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
 
-                /*----------------------------------------------------------------------------------------------------*/
+                    return Promise.resolve();
+                }
+            })).then(() => {
+
+                for(const zombie of zombies)
+                {
+                    delete addonDescrs[zombie.id];
+                }
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -437,18 +386,25 @@ const useConfigStore = defineStore('config', {
 
                     this.globals = confDup(tmp_globals, DEFAULT_GLOBALS);
 
-                    this.startStopExts(this.globals.addons, this.globals.webPages, this.globals.interfacePanels).then(() => {
+                    return this.startStopExts(this.globals.addons, this.globals.webPages, this.globals.interfacePanels);
 
-                        setTimeout(() => {
+                }).then(() => {
 
-                            this.modified = false;
+                    setTimeout(() => {
 
-                        }, 500);
+                        this.modified = false;
 
-                        this.dialog.success();
+                    }, 500);
 
-                        this.dialog.unlock();
-                    });
+                    this.dialog.success();
+
+                    this.dialog.unlock();
+
+                }).catch((e) => {
+
+                    this.dialog.error(e);
+
+                    this.dialog.unlock();
                 });
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -467,25 +423,29 @@ const useConfigStore = defineStore('config', {
         {
             this.dialog.lock();
 
-            return new Promise((resolve) => {
+            return this.initAddons(this.globals.addons).then(() => {
 
-                /*----------------------------------------------------------------------------------------------------*/
+                this.globals = confDup(this.globals, DEFAULT_GLOBALS);
 
-                this.initAddons(this.globals.addons).then(() => {
+                return this.startStopExts(this.globals.addons, this.globals.webPages, this.globals.interfacePanels);
 
-                    this.globals = confDup(this.globals, DEFAULT_GLOBALS);
+            }).then(() => {
 
-                    this.startStopExts(this.globals.addons, this.globals.webPages, this.globals.interfacePanels).then(() => {
+                const json = JSON.stringify(this.globals, null, indent ? 2 : 0);
 
-                        resolve(JSON.stringify(this.globals, null, indent ? 2 : 0));
+                this.dialog.success();
 
-                        this.dialog.success();
+                this.dialog.unlock();
 
-                        this.dialog.unlock();
-                    });
-                });
+                return json;
 
-                /*----------------------------------------------------------------------------------------------------*/
+            }).catch((e) => {
+
+                this.dialog.error(e);
+
+                this.dialog.unlock();
+
+                throw e;
             });
         },
 
@@ -493,20 +453,18 @@ const useConfigStore = defineStore('config', {
 
         import()
         {
-            this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).catch(this.dialog.error).then(([json]) => {
+            this.dialog.open('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json']).then(([json]) => {
 
                 this._loadConfig(json);
-            });
+
+            }, this.dialog.error);
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         load()
         {
-            Promise.resolve(localStorage.getItem('nyx-lab-config')).then((json) => {
-
-                this._loadConfig(json);
-            });
+            this._loadConfig(localStorage.getItem('nyx-lab-config'));
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -515,15 +473,17 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], json.toString()).catch(this.dialog.error).then(() => {
+                return this.dialog.save('config.json', 'application/json;charset=utf-8', 'JSON Files', ['json'], json.toString());
 
-                    setTimeout(() => {
+            }).then(() => {
 
-                        this.modified = false;
+                setTimeout(() => {
 
-                    }, 500);
-                });
-            });
+                    this.modified = false;
+
+                }, 500);
+
+            }, this.dialog.error);
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -532,15 +492,15 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(false).then((json) => {
 
-                Promise.resolve(localStorage.setItem('nyx-lab-config', json.toString())).then(() => {
+                localStorage.setItem('nyx-lab-config', json.toString());
 
-                    setTimeout(() => {
+                setTimeout(() => {
 
-                        this.modified = false;
+                    this.modified = false;
 
-                    }, 500);
-                });
-            });
+                }, 500);
+
+            }, this.dialog.error);
         },
 
         /*------------------------------------------------------------------------------------------------------------*/

@@ -9,6 +9,16 @@ import {load} from '@tauri-apps/plugin-store';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const UNITS = ['B', 'kB', 'MB', 'GB', 'TB'];
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const HAS_TAURI = window['__TAURI__'] !== undefined;
+
+const HAS_ELECTRON = window['__ELECTRON__'] !== undefined;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const dialog = inject('dialog');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -19,15 +29,58 @@ const filenames = ref([]);
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const formatSize = (bytes) => {
+
+    const i = Math.min(
+        UNITS.length - 1,
+        Math.floor(Math.log(bytes || 1) / Math.log(1024))
+    );
+
+    return `${(bytes / Math.pow(1024, i)).toFixed(i === 0 ? 0 : 1)} ${UNITS[i]}`;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const getFilenames = () => {
 
-    dialog.lock();
+    /**/ if(HAS_TAURI)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    load('nyx-addons-store.json').then((store) => {
+        dialog.lock();
 
-        store.keys().then((keys) => {
+        load('nyx-addons-store.json').then((store) => {
 
-            filenames.value = keys;
+            store.keys().then((keys) => {
+
+                filenames.value = keys;
+
+                dialog.success();
+                dialog.unlock();
+
+            }).catch((e) => {
+
+                dialog.error(e);
+                dialog.unlock();
+            });
+
+        }).catch((e) => {
+
+            dialog.error(e);
+            dialog.unlock();
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else if(HAS_ELECTRON)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        dialog.lock();
+
+        __ELECTRON__.listCachedFiles().then((files) => {
+
+            filenames.value = files;
 
             dialog.success();
             dialog.unlock();
@@ -38,11 +91,8 @@ const getFilenames = () => {
             dialog.unlock();
         });
 
-    }).catch((e) => {
-
-        dialog.error(e);
-        dialog.unlock();
-    });
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -53,13 +103,43 @@ const delFilenames = () => {
 
         if(choice)
         {
-            dialog.lock();
+            /**/ if(HAS_TAURI)
+            {
+                /*----------------------------------------------------------------------------------------------------*/
 
-            load('nyx-addons-store.json').then((store) => {
+                dialog.lock();
 
-                filenames.value = [];
+                load('nyx-addons-store.json').then((store) => {
 
-                store.clear().then(() => {
+                    filenames.value = [];
+
+                    store.clear().then(() => {
+
+                        location.reload();
+
+                    }).catch((e) => {
+
+                        dialog.error(e);
+                        dialog.unlock();
+                    });
+
+                }).catch((e) => {
+
+                    dialog.error(e);
+                    dialog.unlock();
+                });
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+            else if(HAS_ELECTRON)
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+
+                dialog.lock();
+
+                __ELECTRON__.deleteCachedFiles().then(() => {
+
+                    filenames.value = [];
 
                     location.reload();
 
@@ -69,11 +149,8 @@ const delFilenames = () => {
                     dialog.unlock();
                 });
 
-            }).catch((e) => {
-
-                dialog.error(e);
-                dialog.unlock();
-            });
+                /*----------------------------------------------------------------------------------------------------*/
+            }
         }
     });
 };
@@ -86,13 +163,44 @@ const delFilename = (filename) => {
 
         if(choice)
         {
-            dialog.lock();
+            /**/ if(HAS_TAURI)
+            {
+                /*----------------------------------------------------------------------------------------------------*/
 
-            load('nyx-addons-store.json').then((store) => {
+                dialog.lock();
 
-                store.delete(filename).then(() => {
+                load('nyx-addons-store.json').then((store) => {
 
-                    filenames.value = filenames.value.filter((x) => x !== filename);
+                    store.delete(filename).then(() => {
+
+                        filenames.value = filenames.value.filter((x) => x !== filename);
+
+                        dialog.success();
+                        dialog.unlock();
+
+                    }).catch((e) => {
+
+                        dialog.error(e);
+                        dialog.unlock();
+                    });
+
+                }).catch((e) => {
+
+                    dialog.error(e);
+                    dialog.unlock();
+                });
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+            else if(HAS_ELECTRON)
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+
+                dialog.lock();
+
+                __ELECTRON__.deleteCachedFile(filename).then(() => {
+
+                    filenames.value = filenames.value.filter((x) => x.path !== filename);
 
                     dialog.success();
                     dialog.unlock();
@@ -103,11 +211,8 @@ const delFilename = (filename) => {
                     dialog.unlock();
                 });
 
-            }).catch((e) => {
-
-                dialog.error(e);
-                dialog.unlock();
-            });
+                /*----------------------------------------------------------------------------------------------------*/
+            }
         }
     });
 };
@@ -150,18 +255,24 @@ onMounted(() => {
                 <thead>
                     <tr>
                         <th>Filename</th>
+                        <th>Size</th>
                         <th>Tools</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="filename in filenames" :key="filename">
+                    <tr v-for="filename in filenames" :key="filename.path">
                         <td>
-                            <a class="btn btn-sm btn-link" :href="filename" target="_blank">
-                                {{ filename }}
+                            <a class="btn btn-sm btn-link" :href="`https://addons.nyxlib.org/repo${filename.path}`" target="_blank">
+                                addon:/{{ filename.path }}
                             </a>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-link" type="button" @click="delFilename(filename)">
+                            <a class="btn btn-sm btn-link" :href="`https://addons.nyxlib.org/repo${filename.path}`" target="_blank">
+                                {{ formatSize(filename.size) }}
+                            </a>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-link" type="button" @click="delFilename(filename.path)">
                                 <i class="bi bi-trash2 text-danger"></i>
                             </button>
                         </td>

@@ -7,6 +7,8 @@ const {ipcRenderer, contextBridge} = require('electron');
 contextBridge.exposeInMainWorld('__ELECTRON__', {
 
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* APPLICATION                                                                                                    */
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     minimize: () => ipcRenderer.invoke('nyx:window:minimize'),
 
@@ -33,6 +35,16 @@ contextBridge.exposeInMainWorld('__ELECTRON__', {
             ipcRenderer.removeListener('nyx://close-requested', listener);
         };
     },
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* ADDON CACHE                                                                                                    */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    deleteCachedFile: (pathname) => ipcRenderer.invoke('nyx:addons:deleteCachedFile', pathname),
+
+    deleteCachedFiles: () => ipcRenderer.invoke('nyx:addons:deleteCachedFiles'),
+
+    listCachedFiles: () => ipcRenderer.invoke('nyx:addons:listCachedFiles'),
 
     /*----------------------------------------------------------------------------------------------------------------*/
 });

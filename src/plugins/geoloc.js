@@ -4,6 +4,10 @@ import * as geolocation from '@tauri-apps/plugin-geolocation';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const HAS_TAURI = window['__TAURI__'] !== undefined;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const OPTIONS = {
     enableHighAccuracy: true,
     maximumAge: 0x00,
@@ -32,51 +36,43 @@ const getErrorMessage = (error) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _getGeolocation_step2 = (resolve, reject) => {
-
-    geolocation.getCurrentPosition(OPTIONS).then(resolve).catch((error) => {
-
-        reject(new Error(getErrorMessage(error)));
-    });
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const _getGeolocation = () => {
 
-    return new Promise((resolve, reject) => {
+    if(HAS_TAURI)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        if(window['__TAURI__'] !== undefined)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
+        return geolocation.checkPermissions().then((permissions) => {
 
-            geolocation.checkPermissions().then((permissions) => {
+            if(['prompt', 'prompt-with-rationale'].includes(permissions.location))
+            {
+                return geolocation.requestPermissions(['location']).then((permissions) => {
 
-                if(['prompt', 'prompt-with-rationale'].includes(permissions.location))
-                {
-                    geolocation.requestPermissions(['location']).then((permissions) => {
+                    if(permissions.location !== 'granted')
+                    {
+                        throw new Error('Permission denied.');
+                    }
 
-                        if(permissions.location !== 'granted')
-                        {
-                            reject(new Error('Permission denied.'));
-                        }
-                        else
-                        {
-                            _getGeolocation_step2(resolve, reject);
-                        }
+                    return geolocation.getCurrentPosition(OPTIONS).catch((error) => {
+
+                        throw new Error(getErrorMessage(error));
                     });
-                }
-                else
-                {
-                    _getGeolocation_step2(resolve, reject);
-                }
-            });
+                });
+            }
 
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-        else
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
+            return geolocation.getCurrentPosition(OPTIONS).catch((error) => {
+
+                throw new Error(getErrorMessage(error));
+            });
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        return new Promise((resolve, reject) => {
 
             if(typeof navigator.geolocation === 'object')
             {
@@ -90,10 +86,10 @@ const _getGeolocation = () => {
             {
                 reject(new Error('Not supported.'));
             }
+        });
 
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-    });
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

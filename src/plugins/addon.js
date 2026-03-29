@@ -51,7 +51,10 @@ function _load(app, path)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(window['__TAURI__'] !== undefined) {
+    /**/ if(window['__ELECTRON__'] !== undefined) {
+        path = path.replace('addon://', 'nyx://addons/');
+    }
+    else if(window[/**/'__TAURI__'/**/] !== undefined) {
         path = path.replace('addon://', 'http://localhost:7878/repo/');
     }
     else {
