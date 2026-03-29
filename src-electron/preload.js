@@ -37,6 +37,23 @@ contextBridge.exposeInMainWorld('__ELECTRON__', {
     },
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    onOpenConfigRequested: (callback) => {
+
+        const listener = (_event, config, filename) => callback(
+            config,
+            filename
+        );
+
+        ipcRenderer.addListener('nyx://open-config-requested', listener);
+
+        return () => {
+
+            ipcRenderer.removeListener('nyx://open-config-requested', listener);
+        };
+    },
+
+    /*----------------------------------------------------------------------------------------------------------------*/
     /* ADDON CACHE                                                                                                    */
     /*----------------------------------------------------------------------------------------------------------------*/
 

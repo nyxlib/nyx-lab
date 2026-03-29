@@ -2,6 +2,8 @@
 
 const {app, ipcMain, protocol, BrowserWindow} = require('electron');
 
+const fsp = require('node:fs/promises');
+
 const path = require('node:path');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -19,21 +21,68 @@ protocol.registerSchemesAsPrivileged([
     {
         scheme: 'nyx',
         privileges: {
-            standard: true,
-            secure: true,
-            supportFetchAPI: true,
             stream: true,
+            secure: true,
+            standard: true,
+            supportFetchAPI: true,
         },
     },
 ]);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+let canClose = false;
 
 let mainWindow = null;
 
+let pendingConfig = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* HELPERS                                                                                                            */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const sendPendingConfig = () => {
+
+    if(pendingConfig && mainWindow)
+    {
+        mainWindow.webContents.send(
+            'nyx://open-config-requested',
+            pendingConfig.config,
+            pendingConfig.filename
+        );
+
+        pendingConfig = null;
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const handleIncomingConfigPath = (filename) => {
+
+    fsp.readFile(filename, 'utf8').then((config) => {
+
+        pendingConfig = {
+            config: config,
+            filename: filename,
+        };
+
+        sendPendingConfig();
+
+    }).catch((e) => {
+
+        console.error(`Failed to load config '${filename}':`, e);
+    });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* WINDOW                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const createWindow = () => {
+
+    canClose = false;
 
     mainWindow = new BrowserWindow({
         height: 800,
@@ -52,40 +101,78 @@ const createWindow = () => {
 
     mainWindow.loadFile(path.join(__dirname, './dist/index.html')).then(() => {
 
-        mainWindow.webContents.openDevTools();
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        //mainWindow.webContents.openDevTools();
 
         mainWindow.maximize();
 
         mainWindow.show();
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        sendPendingConfig();
+
+        for(const arg of process.argv.slice(process.defaultApp ? 2 : 1))
+        {
+            if(arg && !arg.startsWith('-') && /\.(nyx|json)$/i.test(arg))
+            {
+                handleIncomingConfigPath(path.resolve(arg));
+            }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
     });
 
-    /*------------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     mainWindow.on('close', (e) => {
 
-        e.preventDefault();
+        if(!canClose)
+        {
+            e.preventDefault();
 
-        mainWindow.webContents.send('nyx://close-requested');
+            mainWindow.webContents.send('nyx://close-requested');
+        }
     });
 
-    /*------------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    mainWindow.on('closed', () => {
+
+        mainWindow = null;
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* APPLICATION                                                                                                        */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+app.on('open-file', (event, filename) => {
+
+    event.preventDefault();
+
+    handleIncomingConfigPath(filename);
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 app.whenReady().then(() => {
 
-    setupCache().then(() => {
+    return setupCache();
 
-        createWindow();
+}).then(() => {
 
-        app.on('activate', () => {
+    createWindow();
 
-            if(BrowserWindow.getAllWindows().length === 0)
-            {
-                createWindow();
-            }
-        });
+    app.on('activate', () => {
+
+        if(BrowserWindow.getAllWindows().length === 0)
+        {
+            createWindow();
+        }
     });
 });
 
@@ -96,6 +183,8 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* IPC - WINDOW                                                                                                       */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 ipcMain.handle('nyx:window:minimize', () => {
@@ -119,11 +208,13 @@ ipcMain.handle('nyx:window:toggleMaximize', () => {
         if(mainWindow.isMaximized())
         {
             mainWindow.unmaximize();
+
             return false;
         }
         else
         {
             mainWindow.maximize();
+
             return true;
         }
     }
@@ -131,8 +222,6 @@ ipcMain.handle('nyx:window:toggleMaximize', () => {
     return false;
 });
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* IPC - APPLICATION                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 ipcMain.handle('nyx:window:isMaximized', () => {
@@ -144,12 +233,16 @@ ipcMain.handle('nyx:window:isMaximized', () => {
 
 ipcMain.handle('nyx:window:close', () => {
 
+    canClose = true;
+
     mainWindow?.close();
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 ipcMain.handle('nyx:window:destroy', () => {
+
+    canClose = true;
 
     mainWindow?.destroy();
 });

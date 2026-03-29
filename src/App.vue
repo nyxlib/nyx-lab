@@ -184,13 +184,17 @@ const desktopDestroy = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const desktopListenCloseRequested = (callback) => {
+const desktopListenners = (callback) => {
 
-    if(HAS_TAURI) {
+    if(HAS_TAURI)
+    {
         Window.getByLabel('main').then((mainWindow) => mainWindow.listen('tauri://close-requested', callback));
     }
 
-    if(HAS_ELECTRON) {
+    if(HAS_ELECTRON)
+    {
+        globalThis.__ELECTRON__.onOpenConfigRequested(configStore._loadConfig);
+
         globalThis.__ELECTRON__.onCloseRequested(callback);
     }
 };
@@ -275,10 +279,7 @@ onMounted(() => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        desktopListenCloseRequested(() => {
-
-            desktopHandleCloseRequested();
-        });
+        desktopListenners(desktopHandleCloseRequested);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
