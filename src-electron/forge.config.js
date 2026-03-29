@@ -13,10 +13,6 @@ module.exports = {
     },
     makers: [
         {
-            name: '@electron-forge/maker-zip',
-            platforms: ['linux'],
-        },
-        {
             name: '@reforged/maker-appimage',
             config: {
                 icon: path.resolve(__dirname, 'icon.svg'),
