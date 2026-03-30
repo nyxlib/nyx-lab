@@ -100,7 +100,7 @@ jobs:
 
                     npm run electron-linux
 
-                    scp "./src-electron/target/make/AppImage/x64/nyx-lab-*.AppImage" "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/linux/x86_64/nyx-lab.AppImage"
+                    scp ./src-electron/target/make/AppImage/x64/nyx-lab-*.AppImage "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/linux/x86_64/nyx-lab.AppImage"
 
                     ####################################################################################################
 
@@ -111,7 +111,7 @@ jobs:
 
                     npm run electron-windows
 
-                    scp "./src-electron/target/make/squirrel.windows/x64/nyx-lab-*.exe" "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/windows/x86_64/nyx-lab-setup.exe"
+                    scp ./src-electron/target/make/squirrel.windows/x64/nyx-lab-*.exe "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/windows/x86_64/nyx-lab.exe"
 
                     ####################################################################################################
 
