@@ -206,7 +206,7 @@ const desktopDestroy = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const desktopListenners = (callback) => {
+const desktopListeners = (callback) => {
 
     if(HAS_TAURI)
     {
@@ -301,7 +301,7 @@ onMounted(() => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        desktopListenners(desktopHandleCloseRequested);
+        desktopListeners(desktopHandleCloseRequested);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }

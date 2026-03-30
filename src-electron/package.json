@@ -3,19 +3,54 @@
     "version": "1.0.0",
     "description": "Nyx Lab Desktop",
     "main": "main.js",
-    "scripts": {
-        "electron-start": "rm -fr ./dist/ && cp -R ../dist/ . && electron .",
-        "electron-make-linux": "rm -fr ./dist/ && cp -R ../dist/ . && electron-forge make --platform=linux --arch=x64",
-        "electron-make-windows": "rm -fr ./dist/ && cp -R ../dist/ . && electron-forge make --platform=win32 --arch=x64"
-    },
     "author": "Jérôme Odier",
     "license": "GPL-3.0-or-later",
+    "scripts": {
+        "electron-start": "electron .",
+        "electron-make-linux": "electron-builder --linux AppImage",
+        "electron-make-windows": "electron-builder --win portable"
+    },
+    "build": {
+        "appId": "org.nyxlib.lab",
+        "productName": "Nyx Lab Desktop",
+        "asar": true,
+        "artifactName": "${name}-${version}.${ext}",
+        "directories": {
+            "output": "target"
+        },
+        "files": [
+            {
+                "from": ".",
+                "to": ".",
+                "filter": [
+                    "**/*",
+                    "!target/**"
+                ]
+            },
+            {
+                "from": "../dist",
+                "to": "dist",
+                "filter": [
+                    "**/*"
+                ]
+            }
+        ],
+        "linux": {
+            "target": [
+                "AppImage"
+            ],
+            "category": "Science",
+            "icon": "icon.svg"
+        },
+        "win": {
+            "target": [
+                "portable"
+            ],
+            "icon": "icon.ico"
+        }
+    },
     "devDependencies": {
-        "@electron-forge/cli": "^7.11.1",
-        "@electron-forge/maker-zip": "^7.11.1",
-        "@electron-forge/maker-squirrel": "^7.11.1",
-        "@reforged/maker-appimage": "^5.2.0",
-        "electron": "^41.1.0"
+        "electron": "41.1.0",
+        "electron-builder": "^26.8.1"
     }
 }
-

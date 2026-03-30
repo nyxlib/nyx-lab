@@ -88,7 +88,11 @@ const handleIncomingConfigPath = (filename) => {
 
 const createWindow = () => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     canClose = false;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     mainWindow = new BrowserWindow({
         height: 800,
@@ -105,11 +109,17 @@ const createWindow = () => {
         },
     });
 
-    mainWindow.loadFile(path.join(__dirname, './dist/index.html')).then(() => {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const indexPath = app.isPackaged ? path.join(__dirname, 'dist', 'index.html')
+                                     : path.join(__dirname, '..', 'dist', 'index.html')
+    ;
+
+    mainWindow.loadFile(indexPath).then(() => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        //mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
 
         mainWindow.maximize();
 
