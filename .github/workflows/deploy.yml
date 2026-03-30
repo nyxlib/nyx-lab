@@ -13,6 +13,11 @@ jobs:
     build:
         runs-on: ubuntu-latest
 
+        env:
+            SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+            DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+
         steps:
             -   name: Checkout repository
                 uses: actions/checkout@v5
@@ -20,11 +25,13 @@ jobs:
                     submodules: recursive
                     fetch-depth: 1
 
-            -   name: Install system dependencies
+            -   name: Install toolchains
                 run: |
                     ####################################################################################################
 
                     sudo dpkg --add-architecture i386
+
+                    ####################################################################################################
 
                     sudo apt-get update
                     sudo apt-get install -y curl rsync openssh-client
@@ -41,46 +48,15 @@ jobs:
 
                     ####################################################################################################
 
-            -   name: Install Node toolchain
-                shell: bash
-                run: |
-                    ####################################################################################################
-
                     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
                     source "${HOME}/.nvm/nvm.sh"
                     nvm install --lts
 
                     ####################################################################################################
 
-            -   name: Build project
+            -   name: Setup SSH
                 shell: bash
-                run: |
-                    ####################################################################################################
 
-                    source "${HOME}/.nvm/nvm.sh"
-
-                    npm --version
-                    node --version
-                    mono --version
-                    wine --version
-                    wine64 --version
-
-                    ####################################################################################################
-
-                    npm install
-
-                    npm run electron-linux
-
-                    npm run electron-windows
-
-                    ####################################################################################################
-
-            -   name: Deploy project
-                shell: bash
-                env:
-                    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-                    DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-                    DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
                 run: |
                     ####################################################################################################
 
@@ -98,10 +74,52 @@ jobs:
 
                     ####################################################################################################
 
-                    rsync -avz --delete ./dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/lab/"
+            -   name: Setup project
+                shell: bash
+                run: |
+                    ####################################################################################################
+
+                    source "${HOME}/.nvm/nvm.sh"
+
+                    npm --version
+                    node --version
+                    mono --version
+                    wine --version
+                    wine64 --version
+
+                    ####################################################################################################
+
+                    npm install
+
+                    ####################################################################################################
+
+            -   name: Build and deploy Nyx Lab Desktop for Linux
+                shell: bash
+                run: |
+                    ####################################################################################################
+
+                    npm run electron-linux
 
                     scp "./src-electron/target/make/AppImage/x64/nyx-lab-*.AppImage" "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/linux/x86_64/nyx-lab.AppImage"
 
+                    ####################################################################################################
+
+            -   name: Build and deploy Nyx Lab Desktop for Windows
+                shell: bash
+                run: |
+                    ####################################################################################################
+
+                    npm run electron-windows
+
                     scp "./src-electron/target/make/squirrel.windows/x64/nyx-lab-*.exe" "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/windows/x86_64/nyx-lab-setup.exe"
+
+                    ####################################################################################################
+
+            -   name: Deploy Nyx Lab Web
+                shell: bash
+                run: |
+                    ####################################################################################################
+
+                    rsync -avz --delete ./dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/lab/"
 
                     ####################################################################################################
