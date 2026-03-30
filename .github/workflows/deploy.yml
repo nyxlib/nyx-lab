@@ -55,6 +55,8 @@ jobs:
 
                     npm install && npm run app-prod
 
+                    cd src-electron && npm install && npm run electron-make-linux && npm run electron-make-linux
+
                     cd src-electron && npm install && npm run electron-make-linux && npm run electron-make-windows
 
             -   name: Deploy project
