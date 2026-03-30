@@ -53,11 +53,11 @@ jobs:
                     wine --version
                     wine64 --version
 
-                    npm install && npm run app-prod
+                    npm install
 
-                    cd src-electron && npm install && npm run electron-make-linux && npm run electron-make-linux
+                    npm run electron-linux
 
-                    cd src-electron && npm install && npm run electron-make-linux && npm run electron-make-windows
+                    npm run electron-windows
 
             -   name: Deploy project
                 shell: bash
