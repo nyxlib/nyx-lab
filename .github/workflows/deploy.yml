@@ -22,11 +22,15 @@ jobs:
 
             -   name: Install system dependencies
                 run: |
+                    ####################################################################################################
+
                     sudo dpkg --add-architecture i386
 
                     sudo apt-get update
                     sudo apt-get install -y curl rsync openssh-client
                     sudo apt-get install -y wine64 wine32 mono-complete
+
+                    ####################################################################################################
 
                     WINE_DIR="$(dirname "$(command -v wine)")"
 
@@ -35,16 +39,24 @@ jobs:
                         sudo ln -s "$WINE_DIR/wine" "$WINE_DIR/wine64"
                     fi
 
+                    ####################################################################################################
+
             -   name: Install Node toolchain
                 shell: bash
                 run: |
+                    ####################################################################################################
+
                     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
                     source "${HOME}/.nvm/nvm.sh"
                     nvm install --lts
 
+                    ####################################################################################################
+
             -   name: Build project
                 shell: bash
                 run: |
+                    ####################################################################################################
+
                     source "${HOME}/.nvm/nvm.sh"
 
                     npm --version
@@ -53,11 +65,15 @@ jobs:
                     wine --version
                     wine64 --version
 
+                    ####################################################################################################
+
                     npm install
 
                     npm run electron-linux
 
                     npm run electron-windows
+
+                    ####################################################################################################
 
             -   name: Deploy project
                 shell: bash
@@ -66,6 +82,8 @@ jobs:
                     DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
                     DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
                 run: |
+                    ####################################################################################################
+
                     mkdir -p ~/.ssh/
                     chmod 700 ~/.ssh/
 
@@ -78,8 +96,12 @@ jobs:
                     ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts
                     chmod 644 ~/.ssh/known_hosts
 
+                    ####################################################################################################
+
                     rsync -avz --delete ./dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/lab/"
 
                     scp "./src-electron/target/make/AppImage/x64/nyx-lab-*.AppImage" "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/linux/x86_64/nyx-lab.AppImage"
 
                     scp "./src-electron/target/make/squirrel.windows/x64/nyx-lab-*.exe" "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/windows/x86_64/nyx-lab-setup.exe"
+
+                    ####################################################################################################
