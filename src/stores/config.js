@@ -137,21 +137,25 @@ const _safeJSONStringify = (json, indent) => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const getDefaultConfig = () => ({
+    /* CONFIGURATION */
+    globals: deepClone(DEFAULT_GLOBALS),
+    modified: false,
+    /* ADDONS */
+    confPanels: {},
+    appPanels: {},
+    controls: {},
+    functions: {},
+    console: []
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* STORE                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const useConfigStore = defineStore('config', {
-    state: () => ({
-        /* CONFIGURATION */
-        globals: deepClone(DEFAULT_GLOBALS),
-        modified: false,
-        /* ADDONS */
-        confPanels: {},
-        appPanels: {},
-        controls: {},
-        functions: {},
-        console: []
-    }),
+    state: getDefaultConfig,
     getters: {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -491,42 +495,54 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        _setNotModified()
+        _confirm(f)
         {
-            setTimeout(() => {
+            if(this.modified)
+            {
+                this.dialog.confirm('Are you sure you want to discard your changes?', 'Nyx Lab').then((choice) => {
 
-                this.modified = false;
+                    if(choice)
+                    {
+                        f();
+                    }
+                });
+            }
+            else
+            {
+                f();
+            }
+        },
 
-            }, 500);
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        new()
+        {
+            this._confirm(() => {
+
+                _safeSetItem('nyx-lab-config', '{}').then(() => {
+
+                    Object.assign(this, getDefaultConfig());
+                });
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         import()
         {
-            this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then(([json]) => {
+            this._confirm(() => {
 
-                this._loadConfig(json).then((json) => {
+                this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then(([json]) => {
 
-                    _safeSetItem('nyx-lab-config', json.toString()).then(() => {
+                    this._loadConfig(json).then((json) => {
 
-                        this._setNotModified();
+                        _safeSetItem('nyx-lab-config', json.toString()).then(() => {
+
+                            this.modified = false;
+                        });
                     });
-                });
 
-            }, this.dialog.error);
-        },
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        load()
-        {
-            _safeGetItem('nyx-lab-config').then((value) => {
-
-                this._loadConfig(value).then(() => {
-
-                    this._setNotModified();
-                });
+                }, this.dialog.error);
             });
         },
 
@@ -536,9 +552,9 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json.toString()).then(() => {
+                this.dialog.apply('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json.toString()).then(() => {
 
-                    this._setNotModified();
+                    this.modified = false;
 
                 }, this.dialog.error);
             });
@@ -546,13 +562,29 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        save()
+        load()
+        {
+            this._confirm(() => {
+
+                _safeGetItem('nyx-lab-config').then((value) => {
+
+                    this._loadConfig(value).then(() => {
+
+                        this.modified = false;
+                    });
+                });
+            });
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        apply()
         {
             this._saveConfig(false).then((json) => {
 
                 _safeSetItem('nyx-lab-config', json.toString()).then(() => {
 
-                    this._setNotModified();
+                    this.modified = false;
                 });
             });
         },

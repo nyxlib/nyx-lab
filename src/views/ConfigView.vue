@@ -324,6 +324,12 @@ onMounted(() => {
 
         <!-- *********************************************************************************************** -->
 
+        <button class="btn btn-sm btn-outline-primary me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.new()">
+            <i class="bi bi-plus-lg"></i> New
+        </button>
+
+        <!-- *********************************************************************************************** -->
+
         <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 85px;" @click="configStore.import()">
             <i class="bi bi-upload"></i> Import
         </button>
@@ -334,12 +340,16 @@ onMounted(() => {
 
         <!-- *********************************************************************************************** -->
 
+        <span class="navbar-text me-2">-</span>
+
+        <!-- *********************************************************************************************** -->
+
         <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.load()">
             <i class="bi bi-x-lg"></i> Reload
         </button>
 
-        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.save()">
-            <i class="bi bi-check-lg"></i> Save
+        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.apply()">
+            <i class="bi bi-check-lg"></i> Apply
         </button>
 
         <!-- *********************************************************************************************** -->

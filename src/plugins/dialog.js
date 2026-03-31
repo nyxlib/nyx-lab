@@ -460,7 +460,7 @@ const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        return dialog.save({
+        return dialog.apply({
             defaultPath: defaultPath,
             filters: [
                 {
@@ -537,7 +537,7 @@ export default {
             confirm: _confirm,
             /**/
             open: _open,
-            save: _save,
+            apply: _save,
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
