@@ -298,8 +298,8 @@ onBeforeUnmount(() => {
             <i class="bi bi-plus-lg"></i> New widget
         </button>
 
-        <button class="btn btn-sm btn-outline-success ms-2" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!nyxStore.isConnected" @click="configStore.apply()">
-            <i class="bi bi-check-lg"></i> Apply changes
+        <button class="btn btn-sm btn-outline-success ms-2" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!nyxStore.isConnected" @click="configStore.persist()">
+            <i class="bi bi-check-lg"></i> Persist changes
         </button>
 
     </teleport>

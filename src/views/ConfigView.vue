@@ -348,8 +348,8 @@ onMounted(() => {
             <i class="bi bi-x-lg"></i> Reload
         </button>
 
-        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.apply()">
-            <i class="bi bi-check-lg"></i> Apply
+        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 85px;" @click="configStore.persist()">
+            <i class="bi bi-check-lg"></i> Persist
         </button>
 
         <!-- *********************************************************************************************** -->

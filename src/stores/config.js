@@ -552,7 +552,7 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                this.dialog.apply('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json.toString()).then(() => {
+                this.dialog.persist('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json.toString()).then(() => {
 
                     this.modified = false;
 
@@ -578,7 +578,7 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        apply()
+        persist()
         {
             this._saveConfig(false).then((json) => {
 
