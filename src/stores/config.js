@@ -35,7 +35,7 @@ const DEFAULT_GLOBALS = {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FUNCTIONS                                                                                                          */
+/* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const deepClone = (obj) => {
@@ -66,6 +66,74 @@ const confDup = (src, def) => {
     }
 
     return result;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _safeGetItem = (key) => new Promise((resolve) => {
+
+    try
+    {
+        const value = localStorage.getItem(key);
+
+        resolve(value);
+    }
+    catch(e)
+    {
+        console.error(e);
+
+        resolve(null);
+    }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _safeSetItem = (key, value) => new Promise((resolve) => {
+
+    try
+    {
+        localStorage.setItem(key, value);
+
+        resolve(true);
+    }
+    catch(e)
+    {
+        console.error(e);
+
+        resolve(false);
+    }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _safeJSONParse = (json) => {
+
+    try
+    {
+        return JSON.parse(json || '{}');
+    }
+    catch(e)
+    {
+        console.error(e);
+
+        return {};
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _safeJSONStringify = (json, indent) => {
+
+    try
+    {
+        return JSON.stringify(json, null, indent ? 2 : 0);
+    }
+    catch(e)
+    {
+        console.error(e);
+
+        return '{}';
+    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -205,7 +273,7 @@ const useConfigStore = defineStore('config', {
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    for(const panel of this.appPanels[name]?.panels || [])
+                    for(const panel of this.appPanels[name]?.panels ?? [])
                     {
                         router.addRoute(panel);
                     }
@@ -219,7 +287,7 @@ const useConfigStore = defineStore('config', {
                 {
                     /*------------------------------------------------------------------------------------------------*/
 
-                    for(const panel of this.appPanels[name]?.panels || [])
+                    for(const panel of this.appPanels[name]?.panels ?? [])
                     {
                         router.removeRoute(panel.id);
                     }
@@ -253,7 +321,7 @@ const useConfigStore = defineStore('config', {
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            return Promise.allSettled(Object.values(addonDescrs).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((addonDescr) => {
+            return Promise.allSettled(Object.values(addonDescrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((addonDescr) => {
 
                 try
                 {
@@ -313,7 +381,7 @@ const useConfigStore = defineStore('config', {
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            return Promise.allSettled(Object.values(addonDescrs).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((addonDescr) => {
+            return Promise.allSettled(Object.values(addonDescrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((addonDescr) => {
 
                 if(addonDescr.zombie)
                 {
@@ -343,6 +411,7 @@ const useConfigStore = defineStore('config', {
 
                     return Promise.resolve();
                 }
+
             })).then(() => {
 
                 for(const zombie of zombies)
@@ -360,47 +429,32 @@ const useConfigStore = defineStore('config', {
         {
             this.dialog.lock();
 
-            try
-            {
-                /*----------------------------------------------------------------------------------------------------*/
+            const tmp_globals = _safeJSONParse(json);
 
-                const tmp_globals = JSON.parse(json || '{}');
+            return this.initAddons(tmp_globals.addons).then(() => {
 
-                /*----------------------------------------------------------------------------------------------------*/
+                this.globals = confDup(tmp_globals, DEFAULT_GLOBALS);
 
-                this.initAddons(tmp_globals.addons).then(() => {
+                return this.startStopExts(this.globals.addons, this.globals.interfacePanels);
 
-                    this.globals = confDup(tmp_globals, DEFAULT_GLOBALS);
+            }).then(() => {
 
-                    return this.startStopExts(this.globals.addons, this.globals.interfacePanels);
+                const json = _safeJSONStringify(this.globals, false);
 
-                }).then(() => {
+                this.dialog.success();
 
-                    setTimeout(() => {
+                return json;
 
-                        this.modified = false;
+            }).catch((e) => {
 
-                    }, 500);
-
-                    this.dialog.success();
-
-                    this.dialog.unlock();
-
-                }).catch((e) => {
-
-                    this.dialog.error(e);
-
-                    this.dialog.unlock();
-                });
-
-                /*----------------------------------------------------------------------------------------------------*/
-            }
-            catch(e)
-            {
                 this.dialog.error(e);
 
+                throw e;
+
+            }).finally(() => {
+
                 this.dialog.unlock();
-            }
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -417,11 +471,9 @@ const useConfigStore = defineStore('config', {
 
             }).then(() => {
 
-                const json = JSON.stringify(this.globals, null, indent ? 2 : 0);
+                const json = _safeJSONStringify(this.globals, indent);
 
                 this.dialog.success();
-
-                this.dialog.unlock();
 
                 return json;
 
@@ -429,10 +481,23 @@ const useConfigStore = defineStore('config', {
 
                 this.dialog.error(e);
 
-                this.dialog.unlock();
-
                 throw e;
+
+            }).finally(() => {
+
+                this.dialog.unlock();
             });
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        _setNotModified()
+        {
+            setTimeout(() => {
+
+                this.modified = false;
+
+            }, 500);
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -441,7 +506,13 @@ const useConfigStore = defineStore('config', {
         {
             this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then(([json]) => {
 
-                this._loadConfig(json);
+                this._loadConfig(json).then((json) => {
+
+                    _safeSetItem('nyx-lab-config', json.toString()).then(() => {
+
+                        this._setNotModified();
+                    });
+                });
 
             }, this.dialog.error);
         },
@@ -450,7 +521,13 @@ const useConfigStore = defineStore('config', {
 
         load()
         {
-            this._loadConfig(localStorage.getItem('nyx-lab-config'));
+            _safeGetItem('nyx-lab-config').then((value) => {
+
+                this._loadConfig(value).then(() => {
+
+                    this._setNotModified();
+                });
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -459,17 +536,12 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                return this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json.toString());
+                this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json.toString()).then(() => {
 
-            }).then(() => {
+                    this._setNotModified();
 
-                setTimeout(() => {
-
-                    this.modified = false;
-
-                }, 500);
-
-            }, this.dialog.error);
+                }, this.dialog.error);
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -478,15 +550,11 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(false).then((json) => {
 
-                localStorage.setItem('nyx-lab-config', json.toString());
+                _safeSetItem('nyx-lab-config', json.toString()).then(() => {
 
-                setTimeout(() => {
-
-                    this.modified = false;
-
-                }, 500);
-
-            }, this.dialog.error);
+                    this._setNotModified();
+                });
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/

@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, onMounted} from 'vue';
+import {ref, inject, computed, onMounted} from 'vue';
 
 import {load} from '@tauri-apps/plugin-store';
 
@@ -24,6 +24,17 @@ const dialog = inject('dialog');
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const filenames = ref([]);
+
+const filter = ref('');
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const filteredFilenames = computed(() => {
+
+    const f = filter.value.trim().toLowerCase();
+
+    return f ? filenames.value.filter((filename) => filename.path.toLowerCase().includes(f)) : filenames.value;
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -53,7 +64,11 @@ const getFilenames = () => {
 
             store.keys().then((keys) => {
 
-                filenames.value = keys;
+                filenames.value = keys.map((key) => ({
+
+                    path: key,
+                    size: 0x0,
+                }));
 
                 dialog.success();
                 dialog.unlock();
@@ -173,7 +188,7 @@ const delFilename = (filename) => {
 
                     store.delete(filename).then(() => {
 
-                        filenames.value = filenames.value.filter((x) => x !== filename);
+                        filenames.value = filenames.value.filter((x) => x.path !== filename);
 
                         dialog.success();
                         dialog.unlock();
@@ -251,34 +266,46 @@ onMounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <table class="table table-sm table-striped">
-                <thead>
-                    <tr>
-                        <th>Filename</th>
-                        <th>Size</th>
-                        <th>Tools</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="filename in filenames" :key="filename.path">
-                        <td>
-                            <a class="btn btn-sm btn-link" :href="`https://addons.nyxlib.org/repo${filename.path}`" target="_blank">
-                                addon:/{{ filename.path }}
-                            </a>
-                        </td>
-                        <td>
-                            <a class="btn btn-sm btn-link" :href="`https://addons.nyxlib.org/repo${filename.path}`" target="_blank">
-                                {{ formatSize(filename.size) }}
-                            </a>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-link" type="button" @click="delFilename(filename.path)">
-                                <i class="bi bi-trash2 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="input-group mb-2">
+                <span class="input-group-text">
+                    <i class="bi bi-funnel"></i>
+                    Filter
+                </span>
+                <input class="form-control" type="text" v-model="filter" />
+            </div>
+
+            <!-- *************************************************************************************************** -->
+
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>Size</th>
+                            <th>Tools</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="filename in filteredFilenames" :key="filename.path">
+                            <td>
+                                <a class="btn btn-sm btn-link" :href="`https://addons.nyxlib.org/repo${filename.path}`" target="_blank">
+                                    addon:/{{ filename.path }}
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-link" :href="`https://addons.nyxlib.org/repo${filename.path}`" target="_blank">
+                                    {{ formatSize(filename.size) }}
+                                </a>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-link" type="button" @click="delFilename(filename.path)">
+                                    <i class="bi bi-trash2 text-danger"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <!-- *************************************************************************************************** -->
 

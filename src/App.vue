@@ -84,61 +84,6 @@ const about = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const showModal = (widgetTitle, widgetName, widgetURL, widgetHTML) => {
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    widgetURL = widgetURL || 'javascript:void(0);';
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    document.getElementById('F10F4898').textContent = widgetTitle;
-
-    document.getElementById('DC2D5B47').textContent = widgetName;
-
-    document.getElementById('E9F2EAA2').href = widgetURL;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const target = document.getElementById('C7F2FB8E');
-
-    const temp = document.createElement('div');
-
-    target.innerHTML = /**/''/**/;
-    temp.innerHTML = widgetHTML;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    while(temp.firstChild)
-    {
-        const child = temp.firstChild;
-
-        if(child.tagName.toLowerCase() === 'script' && child.src?.trim())
-        {
-            const script = document.createElement(child.tagName);
-
-            script.src   = child.src  ;
-            script.async = child.async;
-
-            child.remove();
-
-            target.appendChild(script);
-        }
-        else
-        {
-            target.appendChild(child);
-        }
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    Modal.getOrCreateInstance(modalEl.value).show();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const desktopMinimize = () => {
 
     if(HAS_TAURI) {
@@ -359,14 +304,6 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-2">
 
-                <button class="btn btn-sm btn-outline-secondary me-1" type="button" @click="showModal('Weather', configStore.globals.weatherWidgetServiceName, configStore.globals.weatherWidgetServiceURL, configStore.globals.weatherWidgetHTML)" v-if="configStore.globals.weatherWidgetHTML">
-                    <i class="bi bi-cloud-moon-fill"></i>
-                </button>
-
-                <button class="btn btn-sm btn-outline-secondary me-1" type="button" @click="showModal('Seeing', configStore.globals.seeingWidgetServiceName, configStore.globals.seeingWidgetServiceURL, configStore.globals.seeingWidgetHTML)" v-if="configStore.globals.seeingWidgetHTML">
-                    <i class="bi bi-stars"></i>
-                </button>
-
                 <button class="btn btn-sm btn-outline-secondary me-0" type="button" @click="about()">
                     <i class="bi bi-question"></i>
                 </button>
@@ -455,57 +392,6 @@ onMounted(() => {
         <!-- ******************************************************************************************************* -->
 
     </div>
-
-    <!-- *********************************************************************************************************** -->
-    <!-- MODAL                                                                                                       -->
-    <!-- *********************************************************************************************************** -->
-
-    <teleport to="body">
-
-        <!-- ******************************************************************************************************* -->
-
-        <div class="modal" tabindex="-1" ref="modalEl">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-
-                    <!-- ******************************************************************************************* -->
-
-                    <div class="modal-header px-3 py-2">
-
-                        <span>
-                            <span id="F10F4898"></span>
-                            [
-                                <a class="btn btn-xs btn-primary" target="_blank" id="E9F2EAA2">
-                                    <i class="bi bi-link-45deg"></i> <span id="DC2D5B47"></span>
-                                </a>
-                            ]
-                        </span>
-
-                        <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
-
-                    </div>
-
-                    <!-- ******************************************************************************************* -->
-
-                    <div class="modal-body px-3 py-2">
-
-                        <div class="text-center" id="C7F2FB8E">
-
-                            <!-- DYNAMIC -->
-
-                        </div>
-
-                    </div>
-
-                    <!-- ******************************************************************************************* -->
-
-                </div>
-            </div>
-        </div>
-
-        <!-- ******************************************************************************************************* -->
-
-    </teleport>
 
     <!-- *********************************************************************************************************** -->
 
