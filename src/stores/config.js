@@ -536,7 +536,7 @@ const useConfigStore = defineStore('config', {
 
                     this._loadConfig(json).then((json) => {
 
-                        _safeSetItem('nyx-lab-config', json.toString()).then(() => {
+                        _safeSetItem('nyx-lab-config', json).then(() => {
 
                             this.modified = false;
                         });
@@ -552,7 +552,7 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                this.dialog.persist('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json.toString()).then(() => {
+                this.dialog.persist('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json).then(() => {
 
                     this.modified = false;
 
@@ -566,9 +566,9 @@ const useConfigStore = defineStore('config', {
         {
             this._confirm(() => {
 
-                _safeGetItem('nyx-lab-config').then((value) => {
+                _safeGetItem('nyx-lab-config').then((json) => {
 
-                    this._loadConfig(value).then(() => {
+                    this._loadConfig(json).then(() => {
 
                         this.modified = false;
                     });
@@ -582,7 +582,7 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(false).then((json) => {
 
-                _safeSetItem('nyx-lab-config', json.toString()).then(() => {
+                _safeSetItem('nyx-lab-config', json).then(() => {
 
                     this.modified = false;
                 });
