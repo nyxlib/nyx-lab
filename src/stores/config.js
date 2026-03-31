@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {watch, inject} from 'vue';
+import {watch, inject, nextTick} from 'vue';
 
 import {defineStore} from 'pinia';
 
@@ -16,7 +16,7 @@ import defaultControls from '@/default-controls.js';
 
 const DEFAULT_GLOBALS = {
     windowTitle: 'Nyx Lab',
-    windowTheme: localStorage.getItem('theme') || 'dark',
+    windowTheme: 'dark',
     /**/
     mqttURL: '',
     nssURL: '',
@@ -190,7 +190,7 @@ const useConfigStore = defineStore('config', {
 
                 document.documentElement.dataset.bsTheme = value;
 
-                localStorage.setItem('theme', value);
+                DEFAULT_GLOBALS.windowTheme = value;
 
             }, {immediate: true, deep: false});
 
@@ -204,7 +204,7 @@ const useConfigStore = defineStore('config', {
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            this.load();
+            this.rollback();
 
             /*--------------------------------------------------------------------------------------------------------*/
         },
@@ -515,13 +515,30 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
+        setUnmodified()
+        {
+            return nextTick().then(() => {
+
+                this.modified = false;
+            });
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         new()
         {
             this._confirm(() => {
 
+                this.dialog.lock();
+
                 _safeSetItem('nyx-lab-config', '{}').then(() => {
 
                     Object.assign(this, getDefaultConfig());
+
+                    this.setUnmodified().finally(() => {
+
+                        this.dialog.unlock();
+                    });
                 });
             });
         },
@@ -538,7 +555,7 @@ const useConfigStore = defineStore('config', {
 
                         _safeSetItem('nyx-lab-config', json).then(() => {
 
-                            this.modified = false;
+                            this.setUnmodified();
                         });
                     });
 
@@ -554,7 +571,7 @@ const useConfigStore = defineStore('config', {
 
                 this.dialog.persist('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json).then(() => {
 
-                    this.modified = false;
+                    this.setUnmodified();
 
                 }, this.dialog.error);
             });
@@ -562,7 +579,7 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        load()
+        rollback()
         {
             this._confirm(() => {
 
@@ -570,7 +587,7 @@ const useConfigStore = defineStore('config', {
 
                     this._loadConfig(json).then(() => {
 
-                        this.modified = false;
+                        this.setUnmodified();
                     });
                 });
             });
@@ -584,7 +601,7 @@ const useConfigStore = defineStore('config', {
 
                 _safeSetItem('nyx-lab-config', json).then(() => {
 
-                    this.modified = false;
+                    this.setUnmodified();
                 });
             });
         },
