@@ -237,67 +237,69 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <table class="table table-sm table-striped">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
 
-                <!-- *********************************************************************************************** -->
+                    <!-- ******************************************************************************************* -->
 
-                <thead>
-                    <tr>
-                        <th class="text-center" style="width: 110px;">
-                            Tools
-                        </th>
-                        <th class="text-center" style="width: auto;">
-                            URL
-                        </th>
-                        <th class="text-center" style="width: auto;">
-                            Title
-                        </th>
-                        <th class="text-center" style="width: 200px;">
-                            Icon
-                        </th>
-                        <th class="text-center" style="width: 105px;">
-                            Enabled
-                        </th>
-                        <th class="text-center" style="width: 060px;">
-                            Status
-                        </th>
-                    </tr>
-                </thead>
-
-                <!-- *********************************************************************************************** -->
-
-                <draggable tag="tbody" handle=".drag-handle" item-key="id" v-model="sortedAddons" @end="onDragEnd">
-                    <template #item="{element: addon}">
-                        <tr :key="addon.id">
-                            <td class="text-center">
-                                <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
-                                <button class="btn btn-sm btn-link" type="button" @click="addonZombie(addon)">
-                                    <i class="bi bi-trash2 text-danger" v-if="!addon.zombie"></i>
-                                    <i class="bi bi-recycle text-primary" v-if="addon.zombie"></i>
-                                </button>
-                            </td>
-                            <td class="text-start">
-                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'xxxxx'" v-model="addon.url" />
-                            </td>
-                            <td class="text-start">
-                                <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'addon'" v-model="addon.title" />
-                            </td>
-                            <td class="text-start">
-                                <multiselect :options="Object.keys(icons)" :searchable="true" :limit="100" :disabled="addon.type === 'addon'" v-model="addon.icon"></multiselect>
-                            </td>
-                            <td class="text-center">
-                                <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>
-                            </td>
-                            <td class="text-center">
-                                <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (addon.type === 'addon' && addon.started) || (addon.type === 'page' && addon.enabled && addon.url), 'text-secondary': !((addon.type === 'addon' && addon.started) || (addon.type === 'page' && addon.enabled && addon.url))}]"></i>
-                            </td>
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 110px;">
+                                Tools
+                            </th>
+                            <th class="text-center" style="width: auto;">
+                                URL
+                            </th>
+                            <th class="text-center" style="width: auto;">
+                                Title
+                            </th>
+                            <th class="text-center" style="width: 200px;">
+                                Icon
+                            </th>
+                            <th class="text-center" style="width: 105px;">
+                                Enabled
+                            </th>
+                            <th class="text-center" style="width: 060px;">
+                                Status
+                            </th>
                         </tr>
-                    </template>
-                </draggable>
+                    </thead>
 
-                <!-- *********************************************************************************************** -->
+                    <!-- ******************************************************************************************* -->
 
-            </table>
+                    <draggable tag="tbody" handle=".drag-handle" item-key="id" v-model="sortedAddons" @end="onDragEnd">
+                        <template #item="{element: addon}">
+                            <tr :key="addon.id">
+                                <td class="text-center">
+                                    <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
+                                    <button class="btn btn-sm btn-link" type="button" @click="addonZombie(addon)">
+                                        <i class="bi bi-trash2 text-danger" v-if="!addon.zombie"></i>
+                                        <i class="bi bi-recycle text-primary" v-if="addon.zombie"></i>
+                                    </button>
+                                </td>
+                                <td class="text-start">
+                                    <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'xxxxx'" v-model="addon.url" />
+                                </td>
+                                <td class="text-start">
+                                    <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'addon'" v-model="addon.title" />
+                                </td>
+                                <td class="text-start">
+                                    <multiselect :options="Object.keys(icons)" :searchable="true" :limit="100" :disabled="addon.type === 'addon'" v-model="addon.icon"></multiselect>
+                                </td>
+                                <td class="text-center">
+                                    <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>
+                                </td>
+                                <td class="text-center">
+                                    <i :class="['bi', 'bi-circle-fill', 'btn', 'btn-sm', 'btn-text', {'text-success': (addon.type === 'addon' && addon.started) || (addon.type === 'page' && addon.enabled && addon.url), 'text-secondary': !((addon.type === 'addon' && addon.started) || (addon.type === 'page' && addon.enabled && addon.url))}]"></i>
+                                </td>
+                            </tr>
+                        </template>
+                    </draggable>
+
+                    <!-- ******************************************************************************************* -->
+
+                </table>
+            </div>
 
             <!-- *************************************************************************************************** -->
 
