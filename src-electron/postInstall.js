@@ -9,10 +9,14 @@ const fs = require('node:fs');
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const escapeDesktopExec = (s) => s.replace(/\\/g, '\\\\')
-                                  .replace(/"/g, '\\"')
-                                  .replace(/\$/g, '\\$')
-                                  .replace(/`/g, '\\`')
+    .replace(/"/g, '\\"')
+    .replace(/\$/g, '\\$')
+    .replace(/`/g, '\\`')
 ;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const HOME = process.env.HOME;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -20,83 +24,153 @@ const installLinux = () => {
 
     /*------------------------------------------------------------------------------------------------------------*/
 
-    if(process.platform !== 'linux')
+    if(process.platform !== 'linux' || !HOME)
     {
         return;
     }
-
-    /*------------------------------------------------------------------------------------------------------------*/
-
-    const home = process.env.HOME;
-
-    if(!home)
-    {
-        return;
-    }
-
-    /*------------------------------------------------------------------------------------------------------------*/
-
-    const iconDir = path.join(home, '.local', 'share', 'icons', 'hicolor', 'scalable', 'apps');
-    const mimeDir = path.join(home, '.local', 'share', 'mime', 'packages');
-    const appDir = path.join(home, '.local', 'share', 'applications');
-
-    const iconFile = path.join(iconDir, /**/ 'nyx-lab.svg' /**/);
-    const mimeFile = path.join(mimeDir, /**/ 'nyx-lab.xml' /**/);
-    const appFile = path.join(appDir, 'nyx-lab.desktop');
-
-    /*------------------------------------------------------------------------------------------------------------*/
-
-    const mimeContent = `<?xml version="1.0" encoding="UTF-8"?>
-<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-    <mime-type type="application/vnd.nyx+json">
-        <comment>Nyx configuration file (JSON)</comment>
-        <glob pattern="*.nyx"/>
-    </mime-type>
-</mime-info>
-`;
-
-    /*------------------------------------------------------------------------------------------------------------*/
-
-    const appContent = `[Desktop Entry]
-Name=Nyx Lab
-Exec="${escapeDesktopExec(process.env.APPIMAGE || process.execPath)}" --no-sandbox %f
-Type=Application
-Terminal=false
-Categories=Science;
-MimeType=application/vnd.nyx+json;
-Icon=${iconFile}
-NoDisplay=false
-`;
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    const mimeRootDir = path.join(HOME, '.local', 'share', 'mime');
+
+    const iconRootDir = path.join(HOME, '.local', 'share', 'icons', 'hicolor');
+
+    /*------------------------------------------------------------------------------------------------------------*/
+
+    const newMimeContent = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">',
+        '    <mime-type type="application/vnd.nyx+json">',
+        '        <comment>Nyx configuration file</comment>',
+        '        <generic-icon name="application-vnd.nyx+json" />',
+        '        <glob pattern="*.nyx" />',
+        '    </mime-type>',
+        '</mime-info>',
+        ''
+    ].join('\n');
+
+    /*------------------------------------------------------------------------------------------------------------*/
+
+    const newAppContent = [
+        '[Desktop Entry]',
+        'Name=Nyx Lab',
+        `Exec="${escapeDesktopExec(process.env.APPIMAGE || process.execPath)}" --no-sandbox %f`,
+        'Type=Application',
+        'Terminal=false',
+        'Categories=Science;',
+        'MimeType=application/vnd.nyx+json;',
+        'Icon=nyx-lab',
+        'NoDisplay=false',
+        ''
+    ].join('\n');
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* INSTALL ICONS                                                                                                  */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(const size of [16, 24, 32, 48, 64, 72, 96, 128, 144, 256, 512])
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const mimeIconDir = path.join(iconRootDir, `${size}x${size}`, 'mimetypes');
+
+        fs.mkdirSync(mimeIconDir, {recursive: true});
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const mimeIconFileSrc = path.join(__dirname, 'icons', `file-icon${size}x${size}.png`);
+
+        const mimeIconFileDst = path.join(mimeIconDir, 'application-vnd.nyx+json.png');
+
+        if(fs.existsSync(mimeIconFileSrc))
+        {
+            fs.copyFileSync(mimeIconFileSrc, mimeIconFileDst);
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(true)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const mimeIconDir = path.join(iconRootDir, 'scalable', 'mimetypes');
+
+        fs.mkdirSync(mimeIconDir, {recursive: true});
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const mineIconFileSrc = path.join(__dirname, 'icons', 'file-icon.svg');
+
+        const mineIconFileDst = path.join(mimeIconDir, 'application-vnd.nyx+json.svg');
+
+        if(fs.existsSync(mineIconFileSrc))
+        {
+            fs.copyFileSync(mineIconFileSrc, mineIconFileDst);
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(const size of [16, 24, 32, 48, 64, 72, 96, 128, 144, 256, 512])
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const appIconDir = path.join(iconRootDir, `${size}x${size}`, 'apps');
+
+        fs.mkdirSync(appIconDir, {recursive: true});
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const appIconFileSrc = path.join(__dirname, 'icons', `app-icon${size}x${size}.png`);
+
+        const appIconFileDst = path.join(appIconDir, 'nyx-lab.png');
+
+        if(fs.existsSync(appIconFileSrc))
+        {
+            fs.copyFileSync(appIconFileSrc, appIconFileDst);
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(true)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const appIconDir = path.join(iconRootDir, 'scalable', 'apps');
+
+        fs.mkdirSync(appIconDir, {recursive: true});
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const appIconFileSrc = path.join(__dirname, 'icons', 'app-icon.svg');
+
+        const appIconFileDst = path.join(appIconDir, 'nyx-lab.svg');
+
+        if(fs.existsSync(appIconFileSrc))
+        {
+            fs.copyFileSync(appIconFileSrc, appIconFileDst);
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* INSTALL MIME                                                                                                   */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const mimeDir = path.join(HOME, '.local', 'share', 'mime', 'packages');
 
     fs.mkdirSync(mimeDir, {recursive: true});
-    fs.mkdirSync(appDir, {recursive: true});
-    fs.mkdirSync(iconDir, {recursive: true});
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const bundledIconFile = path.join(__dirname, 'icon.svg');
+    const mimeFile = path.join(mimeDir, /**/ 'nyx-lab.xml' /**/);
 
-    if(fs.existsSync(bundledIconFile))
+    const curMimeContent = fs.existsSync(mimeFile) ? fs.readFileSync(mimeFile, 'utf8') : null;
+
+    if(curMimeContent !== newMimeContent)
     {
-        fs.copyFileSync(bundledIconFile, iconFile);
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const currentMimeContent = fs.existsSync(mimeFile) ? fs.readFileSync(mimeFile, 'utf8') : null;
-    const currentAppContent = fs.existsSync(appFile) ? fs.readFileSync(appFile, 'utf8') : null;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const mimeRootDir = path.join(home, '.local', 'share', 'mime');
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(currentMimeContent !== mimeContent)
-    {
-        fs.writeFileSync(mimeFile, mimeContent, {encoding: 'utf8', mode: 0o644});
+        fs.writeFileSync(mimeFile, newMimeContent, {encoding: 'utf8', mode: 0o644});
 
         try
         {
@@ -109,10 +183,22 @@ NoDisplay=false
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* INSTALL APP                                                                                                    */
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(currentAppContent !== appContent)
+    const appDir = path.join(HOME, '.local', 'share', 'applications');
+
+    fs.mkdirSync(appDir, {recursive: true});
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const appFile = path.join(appDir, 'nyx-lab.desktop');
+
+    const curAppContent = fs.existsSync(appFile) ? fs.readFileSync(appFile, 'utf8') : null;
+
+    if(curAppContent !== newAppContent)
     {
-        fs.writeFileSync(appFile, appContent, {encoding: 'utf8', mode: 0o755});
+        fs.writeFileSync(appFile, newAppContent, {encoding: 'utf8', mode: 0o755});
 
         try
         {
@@ -124,6 +210,8 @@ NoDisplay=false
         }
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* MIME <-> APP                                                                                                   */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     try

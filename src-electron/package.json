@@ -40,13 +40,13 @@
                 "AppImage"
             ],
             "category": "Science",
-            "icon": "icon.svg"
+            "icon": "icons/app-icon.svg"
         },
         "win": {
             "target": [
                 "portable"
             ],
-            "icon": "icon.ico"
+            "icon": "icons/app-icon.ico"
         }
     },
     "devDependencies": {
