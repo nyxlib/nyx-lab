@@ -24,7 +24,8 @@
                 "to": ".",
                 "filter": [
                     "**/*",
-                    "!target/**"
+                    "!target/**",
+                    "!build-icons.sh"
                 ]
             },
             {
