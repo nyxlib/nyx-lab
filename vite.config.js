@@ -14,7 +14,7 @@ import eslintPlugin from 'vite-plugin-eslint';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const GIT_RELEASE = {
-    commitId: execSync('git rev-parse --short HEAD').toString().trim(),
+    gitCommit: execSync('git rev-parse --short HEAD').toString().trim(),
     date: new Date().toISOString(),
 };
 
