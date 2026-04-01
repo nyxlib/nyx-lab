@@ -2,6 +2,8 @@
 
 import { fileURLToPath, URL } from 'node:url';
 
+import { execSync } from 'node:child_process';
+
 import { defineConfig } from 'vite';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -11,9 +13,19 @@ import eslintPlugin from 'vite-plugin-eslint';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const GIT_RELEASE = {
+    commitId: execSync('git rev-parse --short HEAD').toString().trim(),
+    date: new Date().toISOString(),
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 // noinspection JSUnusedGlobalSymbols
 export default defineConfig({
     plugins: [vuePlugin(), eslintPlugin()],
+    define: {
+        __GIT_RELEASE__: JSON.stringify(GIT_RELEASE),
+    },
     base: './',
     build: {
         chunkSizeWarningLimit: 8000,

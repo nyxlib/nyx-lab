@@ -41,6 +41,10 @@ const panels = computed(() => Object.values(configStore.globals.interfacePanels)
 const modalEl = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const gitRelease = __GIT_RELEASE__;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -149,7 +153,19 @@ const enableBLOBsAndStreams = (panel, enabled) => {
 
             <!-- *************************************************************************************************** -->
 
-            <template v-if="configStore.globals.showUserInterfaces">
+            <template #home>
+
+                <small>
+
+                    Commit Id.: {{ gitRelease.commitId }}, date: {{ gitRelease.date?.split('T')[0] }}
+
+                </small>
+
+            </template>
+
+            <!-- *************************************************************************************************** -->
+
+            <template #panels v-if="configStore.globals.showUserInterfaces">
 
                 <tab-pane class="pt-3" :title="panel.title" v-for="panel in panels" :key="panel.id" @shown="enableBLOBsAndStreams(panel.id, true)" @hidden="enableBLOBsAndStreams(panel.id, false)">
 
