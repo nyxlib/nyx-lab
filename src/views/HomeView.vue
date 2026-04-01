@@ -157,7 +157,7 @@ const enableBLOBsAndStreams = (panel, enabled) => {
 
                 <small class="mt-1">
 
-                    GIT commit: <a :href="`https://github.com/nyxlib/nyx-lab/tree/${gitRelease.gitCommit}`" target="_blank">{{ gitRelease.gitCommit }}</a>, date: {{ gitRelease.date?.split('T')[0] }}
+                    GIT commit: <a :href="`https://github.com/nyxlib/nyx-lab/tree/${gitRelease.gitCommit}`" target="_blank">{{ gitRelease.gitBranch }} / {{ gitRelease.gitCommit }}</a>, build date: {{ gitRelease.date?.split('T')[0] }}
 
                 </small>
 
