@@ -537,6 +537,12 @@ const useConfigStore = defineStore('config', {
 
                     Object.assign(this, getDefaultConfig());
 
+                    this.confPanels = {};
+                    this.appPanels = {};
+                    this.controls = {};
+                    this.functions = {};
+                    this.console = [];
+
                     this.setUnmodified().finally(() => {
 
                         this.dialog.unlock();
