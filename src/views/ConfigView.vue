@@ -109,7 +109,7 @@ onMounted(() => {
 
     <template v-if="state.indexMode">
 
-        <button class="btn btn-light" type="button" style="z-index: 999999; position: absolute; top: 50px; right: 1rem;" @click="() => { state.indexMode = false; }">
+        <button class="btn btn-light" type="button" style="z-index: 999999; position: absolute; top: 58px; right: 1rem;" @click="() => { state.indexMode = false; }">
             <i class="bi bi-door-open"></i> Close addon index
         </button>
 
@@ -324,11 +324,9 @@ onMounted(() => {
 
         <!-- *********************************************************************************************** -->
 
-        <button class="btn btn-sm btn-outline-primary me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 90px;" @click="configStore.new()">
+        <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 90px;" @click="configStore.new()">
             <i class="bi bi-plus-lg"></i> New
         </button>
-
-        <!-- *********************************************************************************************** -->
 
         <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 90px;" @click="configStore.import()">
             <i class="bi bi-upload"></i> Import
@@ -344,11 +342,11 @@ onMounted(() => {
 
         <!-- *********************************************************************************************** -->
 
-        <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 90px;" @click="configStore.rollback()">
+        <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 90px;" :disabled="!configStore.modified" @click="configStore.rollback()">
             <i class="bi bi-x-lg"></i> Rollback
         </button>
 
-        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 90px;" @click="configStore.persist()">
+        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 90px;" :disabled="!configStore.modified" @click="configStore.persist()">
             <i class="bi bi-check-lg"></i> Persist
         </button>
 
