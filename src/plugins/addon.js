@@ -57,8 +57,6 @@ function _load(app, path)
 
     path = path.trim();
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     if(path === 'addon://default/latest/')
     {
         return Promise.resolve([defaultAddon, 'default', false]);

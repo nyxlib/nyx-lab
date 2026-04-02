@@ -45,7 +45,7 @@ const sortedAddons = ref([]);
 
 watch(() => props.addons, () => {
 
-    sortedAddons.value = Object.values(props.addons).sort((a, b) => a.rank - b.rank);
+    sortedAddons.value = Object.values(props.addons).filter((addon) => addon.id !== '94300404-2ea8-11f1-b3cc-83604f9dfd78').sort((a, b) => a.rank - b.rank);
 
 }, {immediate: true, deep: true});
 
