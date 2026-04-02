@@ -6,9 +6,7 @@ import {defineStore} from 'pinia';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import router from '@/router';
-
-import defaultControls from '@/default-controls.js';
+import addonFunctions from './addonFunctions.js';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -59,8 +57,8 @@ const confDup = (src, def) => {
     const result = {};
 
     if(Object.prototype.toString.call(src) === '[object Object]'
-       &&
-       Object.prototype.toString.call(def) === '[object Object]'
+        &&
+        Object.prototype.toString.call(def) === '[object Object]'
     ) {
         Object.keys(def).forEach((key) => { result[key] = deepClone((key in src) ? src[key] : def[key]); });
     }
@@ -137,40 +135,22 @@ const _safeJSONStringify = (json, indent) => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-const getDefaultConfig = () => ({
-    /* CONFIGURATION */
-    globals: deepClone(DEFAULT_GLOBALS),
-    modified: false,
-    /* ADDONS */
-    confPanels: {},
-    appPanels: {},
-    controls: {},
-    functions: {},
-    console: []
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* STORE                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const useConfigStore = defineStore('config', {
-    state: getDefaultConfig,
-    getters: {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        isAddonEnabled()
-        {
-            return (addonName) => {
-
-                const addon = this.globals.addons?.[addonName];
-
-                return addon?.enabled === true && addon?.zombie !== true;
-            };
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    },
+    state: () => ({
+        /* CONFIGURATION */
+        globals: deepClone(DEFAULT_GLOBALS),
+        /* RUNTIME */
+        modified: false,
+        /* ADDONS */
+        confPanels: {},
+        appPanels: {},
+        controls: {},
+        functions: {},
+        console: []
+    }),
     actions: {
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -194,7 +174,10 @@ const useConfigStore = defineStore('config', {
 
                 DEFAULT_GLOBALS.windowTheme = value;
 
-            }, {immediate: true, deep: false});
+            }, {
+                immediate: true,
+                deep: false,
+            });
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -202,7 +185,10 @@ const useConfigStore = defineStore('config', {
 
                 this.modified = true;
 
-            }, {immediate: false, deep: true});
+            }, {
+                immediate: false,
+                deep: true,
+            });
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -212,222 +198,8 @@ const useConfigStore = defineStore('config', {
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
-        /* CONFIG                                                                                                     */
-        /*------------------------------------------------------------------------------------------------------------*/
 
-        _init(addon, name, do_init)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* INIT                                                                                                   */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            if(do_init && typeof addon.init === 'function')
-            {
-                const TEMP_GLOBALS = {};
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                try {
-                    addon.init(TEMP_GLOBALS, this.addon, name);
-                }
-                catch(e) {
-                    this.console.push(e);
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                for(const key of Object.keys(TEMP_GLOBALS))
-                {
-                    if(!(key in this.globals)) this.globals[key] = TEMP_GLOBALS[key];
-
-                    if(!(key in DEFAULT_GLOBALS)) DEFAULT_GLOBALS[key] = TEMP_GLOBALS[key];
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        },
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        _startStop(descr, addon, name, do_start)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* START / STOP                                                                                           */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            if(do_start)
-            {
-                if(typeof addon.start === 'function')
-                {
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    this.confPanels[name] = {descr: descr, addon: addon, panels: []};
-                    this.appPanels[name] = {descr: descr, addon: addon, panels: []};
-                    this.controls[name] = {descr: descr, addon: addon, ctrls: []};
-                    this.functions[name] = {descr: descr, addon: addon, funcs: {}};
-
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    try {
-                        addon.start(this.addon, name);
-                    }
-                    catch(e) {
-                        this.console.push(e);
-                    }
-
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    for(const panel of this.appPanels[name]?.panels ?? [])
-                    {
-                        router.addRoute(panel);
-                    }
-
-                    /*------------------------------------------------------------------------------------------------*/
-                }
-            }
-            else
-            {
-                if(typeof addon.stop === 'function')
-                {
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    for(const panel of this.appPanels[name]?.panels ?? [])
-                    {
-                        router.removeRoute(panel.id);
-                    }
-
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    try {
-                        addon.stop(this.addon, name);
-                    }
-                    catch(e) {
-                        this.console.push(e);
-                    }
-
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    delete this.confPanels[name];
-                    delete this.appPanels[name];
-                    delete this.controls[name];
-                    delete this.functions[name];
-
-                    /*------------------------------------------------------------------------------------------------*/
-                }
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        },
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        initAddons(addonDescrs)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            return Promise.allSettled(Object.values(addonDescrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((addonDescr) => {
-
-                try
-                {
-                    return this.addon.load(addonDescr.url).then(([addon, name, do_init]) => {
-
-                        this._init(addon, name, do_init);
-
-                        this.console.push(`Loading addon '${addonDescr.url}': [OKAY]`);
-
-                    }).catch((e) => {
-
-                        this.console.push(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
-                    });
-                }
-                catch(e)
-                {
-                    this.console.push(`Loading addon '${addonDescr.url}': [ERROR]\n${e}`);
-
-                    return Promise.resolve();
-                }
-            }));
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        },
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        startStopExts(addonDescrs, interfacePanelDescrs)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* INTERFACE PANELS                                                                                       */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            Object.values(interfacePanelDescrs).filter((x) => x.zombie).forEach((zombie) => {
-
-                delete interfacePanelDescrs[zombie.id];
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* WEB PAGES                                                                                              */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            Object.values(addonDescrs).filter((x) => x.type === 'page' && x.zombie).forEach((zombie) => {
-
-                delete addonDescrs[zombie.id];
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* ADDONS                                                                                                 */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            const zombies = [];
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            this._startStop({}, defaultControls, 'default-controls', true);
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            return Promise.allSettled(Object.values(addonDescrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((addonDescr) => {
-
-                if(addonDescr.zombie)
-                {
-                    zombies.push(addonDescr);
-
-                    addonDescr.enabled = false;
-                }
-
-                addonDescr.started = false;
-
-                try
-                {
-                    return this.addon.load(addonDescr.url).then(([addon, name]) => {
-
-                        addonDescr.started = addonDescr.enabled;
-
-                        this._startStop(addonDescr, addon, name, addonDescr.started);
-
-                    }).catch((e) => {
-
-                        this.console.push(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
-                    });
-                }
-                catch(e)
-                {
-                    this.console.push(`${addonDescr.enabled ? 'Stopping' : 'Starting'} addon '${addonDescr.url}': [ERROR]\n${e}`);
-
-                    return Promise.resolve();
-                }
-
-            })).then(() => {
-
-                for(const zombie of zombies)
-                {
-                    delete addonDescrs[zombie.id];
-                }
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        },
+        ...addonFunctions(DEFAULT_GLOBALS),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -435,31 +207,40 @@ const useConfigStore = defineStore('config', {
         {
             this.dialog.lock();
 
-            const tmp_globals = _safeJSONParse(json);
+            return this.startStopAddons(this.globals.addons, this.globals.interfacePanels, true).finally(() => {
 
-            return this.initAddons(tmp_globals.addons).then(() => {
+                return this.finalAddons(this.globals.addons).finally(() => {
 
-                this.globals = confDup(tmp_globals, DEFAULT_GLOBALS);
+                    this.confPanels = {};
+                    this.appPanels = {};
+                    this.controls = {};
+                    this.functions = {};
 
-                return this.startStopExts(this.globals.addons, this.globals.interfacePanels);
+                    const tmp_globals = _safeJSONParse(json);
 
-            }).then(() => {
+                    return this.initAddons(tmp_globals.addons).finally(() => {
 
-                const json = _safeJSONStringify(this.globals, false);
+                        const next_globals = confDup(tmp_globals, DEFAULT_GLOBALS);
 
-                this.dialog.success();
+                        return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).finally(() => {
 
-                return json;
+                            const json = _safeJSONStringify(this.globals = next_globals, false);
 
-            }).catch((e) => {
+                            _safeSetItem('nyx-lab-config', json).then(() => {
 
-                this.dialog.error(e);
+                                this.dialog.success();
+                                this.dialog.unlock();
+                            });
 
-                throw e;
+                            nextTick().then(() => {
 
-            }).finally(() => {
+                                this.modified = false;
+                            });
 
-                this.dialog.unlock();
+                            return json;
+                        });
+                    });
+                });
             });
         },
 
@@ -469,29 +250,27 @@ const useConfigStore = defineStore('config', {
         {
             this.dialog.lock();
 
-            return this.initAddons(this.globals.addons).then(() => {
+            return this.initAddons(this.globals.addons).finally(() => {
 
-                this.globals = confDup(this.globals, DEFAULT_GLOBALS);
+                const next_globals = confDup(this.globals, DEFAULT_GLOBALS);
 
-                return this.startStopExts(this.globals.addons, this.globals.interfacePanels);
+                return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).finally(() => {
 
-            }).then(() => {
+                    const json = _safeJSONStringify(this.globals = next_globals, indent);
 
-                const json = _safeJSONStringify(this.globals, indent);
+                    _safeSetItem('nyx-lab-config', json).then(() => {
 
-                this.dialog.success();
+                        this.dialog.success();
+                        this.dialog.unlock();
+                    });
 
-                return json;
+                    nextTick().then(() => {
 
-            }).catch((e) => {
+                        this.modified = false;
+                    });
 
-                this.dialog.error(e);
-
-                throw e;
-
-            }).finally(() => {
-
-                this.dialog.unlock();
+                    return json;
+                });
             });
         },
 
@@ -517,37 +296,11 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        setUnmodified()
-        {
-            return nextTick().then(() => {
-
-                this.modified = false;
-            });
-        },
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
         new()
         {
             this._confirm(() => {
 
-                this.dialog.lock();
-
-                _safeSetItem('nyx-lab-config', '{}').then(() => {
-
-                    Object.assign(this, getDefaultConfig());
-
-                    this.confPanels = {};
-                    this.appPanels = {};
-                    this.controls = {};
-                    this.functions = {};
-                    this.console = [];
-
-                    this.setUnmodified().finally(() => {
-
-                        this.dialog.unlock();
-                    });
-                });
+                this._loadConfig('{}');
             });
         },
 
@@ -559,13 +312,7 @@ const useConfigStore = defineStore('config', {
 
                 this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then(([json]) => {
 
-                    this._loadConfig(json).then((json) => {
-
-                        _safeSetItem('nyx-lab-config', json).then(() => {
-
-                            this.setUnmodified();
-                        });
-                    });
+                    this._loadConfig(json);
 
                 }, this.dialog.error);
             });
@@ -577,11 +324,7 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                this.dialog.persist('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json).then(() => {
-
-                    this.setUnmodified();
-
-                }, this.dialog.error);
+                this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json).catch(this.dialog.error);
             });
         },
 
@@ -593,10 +336,7 @@ const useConfigStore = defineStore('config', {
 
                 _safeGetItem('nyx-lab-config').then((json) => {
 
-                    this._loadConfig(json).then(() => {
-
-                        this.setUnmodified();
-                    });
+                    this._loadConfig(json);
                 });
             });
         },
@@ -605,13 +345,7 @@ const useConfigStore = defineStore('config', {
 
         persist()
         {
-            this._saveConfig(false).then((json) => {
-
-                _safeSetItem('nyx-lab-config', json).then(() => {
-
-                    this.setUnmodified();
-                });
-            });
+            this._saveConfig(false);
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
