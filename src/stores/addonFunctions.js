@@ -6,27 +6,7 @@ import router from '@/router.js';
 
 async function allSettledSequential(iterable)
 {
-    const results = [];
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    for(const item of iterable)
-    {
-        try
-        {
-            const value = await (typeof item === 'function' ? item() : item);
-
-            results.push({status: 'fulfilled', value: value});
-        }
-        catch(reason)
-        {
-            results.push({status: 'rejected', reason: reason});
-        }
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    return results;
+    return Promise.allSettled(iterable);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -48,6 +28,8 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 const TEMP_GLOBALS = addon.TEMP_GLOBALS = {};
 
                 /*----------------------------------------------------------------------------------------------------*/
+
+                descr.started = false;
 
                 if(typeof addon.init === 'function')
                 {
@@ -91,6 +73,8 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     {
         return this.addon.load(descr.url).then(([addon, name, just_loaded]) => {
 
+            console.log('start: ' + name + ', started: ' + descr.started);
+
             if(!descr.started && !just_loaded)
             {
                 /*----------------------------------------------------------------------------------------------------*/
@@ -117,7 +101,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            descr.started = (name in this.confPanels);
+            descr.started = true;
 
             this.console.push(`Starting addon '${descr.url}': [OKAY]`);
 
@@ -132,6 +116,8 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     stopAddon(descr)
     {
         return this.addon.load(descr.url).then(([addon, name, just_loaded]) => {
+
+            console.log('stop: ' + name + ', started: ' + descr.started);
 
             if(descr.started && !just_loaded)
             {
@@ -159,7 +145,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            descr.started = !(name in this.confPanels);
+            descr.started = false;
 
             this.console.push(`Stopping addon '${descr.url}': [OKAY]`);
 

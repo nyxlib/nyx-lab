@@ -203,18 +203,13 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        _loadConfig(json)
+        _setConfig(globals, indent)
         {
             this.dialog.lock();
 
             return this.startStopAddons(this.globals.addons, this.globals.interfacePanels, true).then(() => {
 
-                this.confPanels = {};
-                this.appPanels = {};
-                this.controls = {};
-                this.functions = {};
-
-                const tmp_globals = this.sanitize(_safeJSONParse(json));
+                const tmp_globals = this.sanitize(globals);
 
                 return this.initAddons(tmp_globals.addons).then(() => {
 
@@ -222,53 +217,27 @@ const useConfigStore = defineStore('config', {
 
                     return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).then(() => {
 
-                        const json = _safeJSONStringify(this.globals = next_globals, false);
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        const json = _safeJSONStringify(this.globals = next_globals, indent);
+
+                        /*--------------------------------------------------------------------------------------------*/
 
                         _safeSetItem('nyx-lab-config', json).then(() => {
+
+                            nextTick().then(() => {
+
+                                this.modified = false;
+                            });
 
                             this.dialog.success();
                             this.dialog.unlock();
                         });
 
-                        nextTick().then(() => {
-
-                            this.modified = false;
-                        });
+                        /*--------------------------------------------------------------------------------------------*/
 
                         return json;
                     });
-                });
-            });
-        },
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        _saveConfig(indent)
-        {
-            this.dialog.lock();
-
-            const tmp_globals = this.sanitize(this.globals);
-
-            return this.initAddons(tmp_globals).then(() => {
-
-                const next_globals = confDup(tmp_globals, DEFAULT_GLOBALS);
-
-                return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).then(() => {
-
-                    const json = _safeJSONStringify(this.globals = next_globals, indent);
-
-                    _safeSetItem('nyx-lab-config', json).then(() => {
-
-                        this.dialog.success();
-                        this.dialog.unlock();
-                    });
-
-                    nextTick().then(() => {
-
-                        this.modified = false;
-                    });
-
-                    return json;
                 });
             });
         },
@@ -299,7 +268,7 @@ const useConfigStore = defineStore('config', {
         {
             this._confirm(() => {
 
-                this._loadConfig('{}');
+                this._setConfig({}, false);
             });
         },
 
@@ -311,7 +280,7 @@ const useConfigStore = defineStore('config', {
 
                 this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then(([json]) => {
 
-                    this._loadConfig(json);
+                    this._setConfig(_safeJSONParse(json), false);
 
                 }).catch((e) => {
 
@@ -324,7 +293,7 @@ const useConfigStore = defineStore('config', {
 
         export()
         {
-            this._saveConfig(true).then((json) => {
+            this._setConfig(this.globals, true).then((json) => {
 
                 this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json).catch((e) => {
 
@@ -341,7 +310,7 @@ const useConfigStore = defineStore('config', {
 
                 _safeGetItem('nyx-lab-config').then((json) => {
 
-                    this._loadConfig(json);
+                    this._setConfig(_safeJSONParse(json), false);
                 });
             });
         },
@@ -350,7 +319,7 @@ const useConfigStore = defineStore('config', {
 
         persist()
         {
-            this._saveConfig(false);
+            this._setConfig(this.globals, false);
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
