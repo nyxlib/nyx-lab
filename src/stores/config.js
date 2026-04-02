@@ -218,6 +218,16 @@ const useConfigStore = defineStore('config', {
 
                     const tmp_globals = _safeJSONParse(json);
 
+                    tmp_globals.addons['94300404-2ea8-11f1-b3cc-83604f9dfd78'] = {
+                        'id': '94300404-2ea8-11f1-b3cc-83604f9dfd78',
+                        'rank': -999,
+                        'type': 'addon',
+                        'url': 'addon://default/latest/',
+                        'zombie': false,
+                        'enabled': true,
+                        'started': false,
+                    };
+
                     return this.initAddons(tmp_globals.addons).finally(() => {
 
                         const next_globals = confDup(tmp_globals, DEFAULT_GLOBALS);
