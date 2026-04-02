@@ -29,17 +29,7 @@ const DEFAULT_GLOBALS = {
     interfaceWidgets: {},
     /**/
     devices: {},
-    addons: {
-        '94300404-2ea8-11f1-b3cc-83604f9dfd78': {
-            'id': '94300404-2ea8-11f1-b3cc-83604f9dfd78',
-            'rank': -999,
-            'type': 'addon',
-            'url': 'addon://default/latest/',
-            'zombie': false,
-            'enabled': true,
-            'started': false,
-        },
-    },
+    addons: {},
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -226,15 +216,11 @@ const useConfigStore = defineStore('config', {
                     this.controls = {};
                     this.functions = {};
 
-                    const tmp_globals = _safeJSONParse(json);
+                    const tmp_globals = this.sanitize(_safeJSONParse(json));
 
                     return this.initAddons(tmp_globals.addons).finally(() => {
 
                         const next_globals = confDup(tmp_globals, DEFAULT_GLOBALS);
-
-                        next_globals.addons['94300404-2ea8-11f1-b3cc-83604f9dfd78'] = (
-                            DEFAULT_GLOBALS.addons['94300404-2ea8-11f1-b3cc-83604f9dfd78']
-                        );
 
                         return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).finally(() => {
 

@@ -122,7 +122,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     initAddons(descrs)
     {
         return allSettledSequential(
-            Object.values(descrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => +(x.rank - y.rank)).map((addon) => this.initAddon(addon))
+            Object.values(descrs).filter((x) => x.type === 'addon').sort((x, y) => +(x.rank - y.rank)).map((addon) => this.initAddon(addon))
         );
     },
 
@@ -131,7 +131,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     finalAddons(descrs)
     {
         return allSettledSequential(
-            Object.values(descrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => -(x.rank - y.rank)).map((addon) => this.finalAddon(addon))
+            Object.values(descrs).filter((x) => x.type === 'addon').sort((x, y) => -(x.rank - y.rank)).map((addon) => this.finalAddon(addon))
         );
     },
 
@@ -227,7 +227,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        return allSettledSequential(Object.values(addonDescrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((descr) => {
+        return allSettledSequential(Object.values(addonDescrs).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((descr) => {
 
             if(descr.enabled && !descr.zombie && !closeAll) {
                 return this.startAddon(descr);
@@ -266,6 +266,43 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
             /*--------------------------------------------------------------------------------------------------------*/
         });
+    },
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* SANITIZE                                                                                                       */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    sanitize(globals)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(Object.prototype.toString.call(globals.addons) === '[object Object]')
+        {
+            Object.values(globals.addons).filter((x) => x.type === 'addon').forEach((descr) => {
+
+                descr.started = false;
+            });
+        }
+        else
+        {
+            globals.addons = {};
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        globals.addons['94300404-2ea8-11f1-b3cc-83604f9dfd78'] = {
+            'id': '94300404-2ea8-11f1-b3cc-83604f9dfd78',
+            'rank': -999,
+            'type': 'addon',
+            'url': 'addon://default/latest/',
+            'zombie': false,
+            'enabled': true,
+            'started': false,
+        };
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        return globals;
     },
 
     /*----------------------------------------------------------------------------------------------------------------*/
