@@ -49,8 +49,6 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                descr.started = false;
-
                 if(typeof addon.init === 'function')
                 {
                     addon.init(TEMP_GLOBALS, this.addon, name);
@@ -78,60 +76,10 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    finalAddon(descr)
-    {
-        return this.addon.load(descr.url).then(([addon, name, just_loaded]) => {
-
-            if(!just_loaded)
-            {
-                /*----------------------------------------------------------------------------------------------------*/
-
-                const TEMP_GLOBALS = addon.TEMP_GLOBALS ?? {};
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                descr.started = false;
-
-                if(typeof addon.final === 'function')
-                {
-                    addon.final(TEMP_GLOBALS, this.addon, name);
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                for(const key of Object.keys(TEMP_GLOBALS))
-                {
-                    if((key in this.globals)) delete this.globals[key];
-
-                    if((key in DEFAULT_GLOBALS)) delete DEFAULT_GLOBALS[key];
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-            }
-
-            this.console.push(`Finalizing addon '${descr.url}': [OKAY]`);
-
-        }).catch((e) => {
-
-            this.console.push(`Finalizing addon '${descr.url}': [ERROR]\n${e}`);
-        });
-    },
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     initAddons(descrs)
     {
         return allSettledSequential(
             Object.values(descrs).filter((x) => x.type === 'addon').sort((x, y) => +(x.rank - y.rank)).map((addon) => this.initAddon(addon))
-        );
-    },
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    finalAddons(descrs)
-    {
-        return allSettledSequential(
-            Object.values(descrs).filter((x) => x.type === 'addon').sort((x, y) => -(x.rank - y.rank)).map((addon) => this.finalAddon(addon))
         );
     },
 
@@ -169,7 +117,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            descr.started = true;
+            descr.started = (name in this.confPanels);
 
             this.console.push(`Starting addon '${descr.url}': [OKAY]`);
 
@@ -211,7 +159,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            descr.started = false;
+            descr.started = !(name in this.confPanels);
 
             this.console.push(`Stopping addon '${descr.url}': [OKAY]`);
 
@@ -244,28 +192,25 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     _cleanup(addonDescrs, interfacePanelDescrs)
     {
-        return Promise.allSettled(Object.values(addonDescrs).filter((x) => x.type === 'addon' && x.zombie).map((addon) => this.finalAddon(addon))).finally(() => {
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* UNINSTALL ZOMBIE ADDON                                                                                     */
+        /*------------------------------------------------------------------------------------------------------------*/
 
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* UNINSTALL ZOMBIE ADDON                                                                                 */
-            /*--------------------------------------------------------------------------------------------------------*/
+        Object.values(addonDescrs).filter((x) => x.zombie).forEach((descr) => {
 
-            Object.values(addonDescrs).filter((x) => x.zombie).forEach((descr) => {
-
-                delete addonDescrs[descr.id];
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* UNINSTALL ZOMBIE INTERFACE PANELS                                                                      */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            Object.values(interfacePanelDescrs).filter((x) => x.zombie).forEach((descr) => {
-
-                delete interfacePanelDescrs[descr.id];
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
+            delete addonDescrs[descr.id];
         });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* UNINSTALL ZOMBIE INTERFACE PANELS                                                                          */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        Object.values(interfacePanelDescrs).filter((x) => x.zombie).forEach((descr) => {
+
+            delete interfacePanelDescrs[descr.id];
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
     },
 
     /*----------------------------------------------------------------------------------------------------------------*/

@@ -207,38 +207,35 @@ const useConfigStore = defineStore('config', {
         {
             this.dialog.lock();
 
-            return this.startStopAddons(this.globals.addons, this.globals.interfacePanels, true).finally(() => {
+            return this.startStopAddons(this.globals.addons, this.globals.interfacePanels, true).then(() => {
 
-                return this.finalAddons(this.globals.addons).finally(() => {
+                this.confPanels = {};
+                this.appPanels = {};
+                this.controls = {};
+                this.functions = {};
 
-                    this.confPanels = {};
-                    this.appPanels = {};
-                    this.controls = {};
-                    this.functions = {};
+                const tmp_globals = this.sanitize(_safeJSONParse(json));
 
-                    const tmp_globals = this.sanitize(_safeJSONParse(json));
+                return this.initAddons(tmp_globals.addons).then(() => {
 
-                    return this.initAddons(tmp_globals.addons).finally(() => {
+                    const next_globals = confDup(tmp_globals, DEFAULT_GLOBALS);
 
-                        const next_globals = confDup(tmp_globals, DEFAULT_GLOBALS);
+                    return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).then(() => {
 
-                        return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).finally(() => {
+                        const json = _safeJSONStringify(this.globals = next_globals, false);
 
-                            const json = _safeJSONStringify(this.globals = next_globals, false);
+                        _safeSetItem('nyx-lab-config', json).then(() => {
 
-                            _safeSetItem('nyx-lab-config', json).then(() => {
-
-                                this.dialog.success();
-                                this.dialog.unlock();
-                            });
-
-                            nextTick().then(() => {
-
-                                this.modified = false;
-                            });
-
-                            return json;
+                            this.dialog.success();
+                            this.dialog.unlock();
                         });
+
+                        nextTick().then(() => {
+
+                            this.modified = false;
+                        });
+
+                        return json;
                     });
                 });
             });
@@ -250,11 +247,13 @@ const useConfigStore = defineStore('config', {
         {
             this.dialog.lock();
 
-            return this.initAddons(this.globals.addons).finally(() => {
+            const tmp_globals = this.sanitize(this.globals);
 
-                const next_globals = confDup(this.globals, DEFAULT_GLOBALS);
+            return this.initAddons(tmp_globals).then(() => {
 
-                return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).finally(() => {
+                const next_globals = confDup(tmp_globals, DEFAULT_GLOBALS);
+
+                return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).then(() => {
 
                     const json = _safeJSONStringify(this.globals = next_globals, indent);
 
