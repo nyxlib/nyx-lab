@@ -314,7 +314,10 @@ const useConfigStore = defineStore('config', {
 
                     this._loadConfig(json);
 
-                }, this.dialog.error);
+                }).catch((e) => {
+
+                    this.dialog.error(e);
+                });
             });
         },
 
@@ -324,7 +327,10 @@ const useConfigStore = defineStore('config', {
         {
             this._saveConfig(true).then((json) => {
 
-                this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json).catch(this.dialog.error);
+                this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json).catch((e) => {
+
+                    this.dialog.error(e);
+                });
             });
         },
 

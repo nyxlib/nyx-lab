@@ -22,14 +22,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 /*----------------------------------------------------------------------------------------------------*/
 
+                descr.started = false;
+
                 if(typeof addon.init === 'function')
                 {
-                    try {
-                        addon.init(TEMP_GLOBALS, this.addon, name);
-                    }
-                    catch(e) {
-                        this.console.push(e);
-                    }
+                    addon.init(TEMP_GLOBALS, this.addon, name);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -44,11 +41,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            this.console.push(`Initializing addon '${descr.url}': [OKAY]`);
+            /*this.console.push*/console.log(`Initializing addon '${descr.url}': [OKAY]`);
 
         }).catch((e) => {
 
-            this.console.push(`Initializing addon '${descr.url}': [ERROR]\n${e}`);
+            /*this.console.push*/console.log(`Initializing addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
 
@@ -66,14 +63,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 /*----------------------------------------------------------------------------------------------------*/
 
+                descr.started = false;
+
                 if(typeof addon.final === 'function')
                 {
-                    try {
-                        addon.final(TEMP_GLOBALS, this.addon, name);
-                    }
-                    catch(e) {
-                        this.console.push(e);
-                    }
+                    addon.final(TEMP_GLOBALS, this.addon, name);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -88,11 +82,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            this.console.push(`Finalizing addon '${descr.url}': [OKAY]`);
+            /*this.console.push*/console.log(`Finalizing addon '${descr.url}': [OKAY]`);
 
         }).catch((e) => {
 
-            this.console.push(`Finalizing addon '${descr.url}': [ERROR]\n${e}`);
+            /*this.console.push*/console.log(`Finalizing addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
 
@@ -101,7 +95,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     initAddons(descrs)
     {
         return Promise.allSettled(
-            Object.values(descrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => +(x.rank - y.rank)).map(this.initAddon)
+            Object.values(descrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => +(x.rank - y.rank)).map((addon) => this.initAddon(addon))
         );
     },
 
@@ -110,7 +104,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     finalAddons(descrs)
     {
         return Promise.allSettled(
-            Object.values(descrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => -(x.rank - y.rank)).map(this.finalAddon)
+            Object.values(descrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => -(x.rank - y.rank)).map((addon) => this.finalAddon(addon))
         );
     },
 
@@ -135,12 +129,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 if(typeof addon.start === 'function')
                 {
-                    try {
-                        addon.start(this.addon, name);
-                    }
-                    catch(e) {
-                        this.console.push(e);
-                    }
+                    addon.start(this.addon, name);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -155,11 +144,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
             descr.started = true;
 
-            this.console.push(`Starting addon '${descr.url}': [OKAY]`);
+            /*this.console.push*/console.log(`Starting addon '${descr.url}': [OKAY]`);
 
         }).catch((e) => {
 
-            this.console.push(`Starting addon '${descr.url}': [ERROR]\n${e}`);
+            /*this.console.push*/console.log(`Starting addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
 
@@ -182,12 +171,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 if(typeof addon.stop === 'function')
                 {
-                    try {
-                        addon.stop(this.addon, name);
-                    }
-                    catch(e) {
-                        this.console.push(e);
-                    }
+                    addon.stop(this.addon, name);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -202,11 +186,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
             descr.started = false;
 
-            this.console.push(`Stopping addon '${descr.url}': [OKAY]`);
+            /*this.console.push*/console.log(`Stopping addon '${descr.url}': [OKAY]`);
 
         }).catch((e) => {
 
-            this.console.push(`Stopping addon '${descr.url}': [ERROR]\n${e}`);
+            /*this.console.push*/console.log(`Stopping addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
 
@@ -218,12 +202,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
         return Promise.allSettled(Object.values(addonDescrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((descr) => {
 
-            if(closeAll || descr.zombie)
-            {
-                descr.enabled = false;
-            }
-
-            if(descr.enabled) {
+            if(descr.enabled && !descr.zombie && !closeAll) {
                 return this.startAddon(descr);
             } else {
                 return this.stopAddon(descr);
@@ -238,7 +217,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     _cleanup(addonDescrs, interfacePanelDescrs)
     {
-        return Promise.allSettled(Object.values(addonDescrs).filter((x) => x.type === 'addon' && x.zombie).map(this.finalAddon)).finally(() => {
+        return Promise.allSettled(Object.values(addonDescrs).filter((x) => x.type === 'addon' && x.zombie).map((addon) => this.finalAddon(addon))).finally(() => {
 
             /*--------------------------------------------------------------------------------------------------------*/
             /* UNINSTALL ZOMBIE ADDON                                                                                 */
