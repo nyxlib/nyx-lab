@@ -4,6 +4,33 @@ import router from '@/router.js';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+async function allSettledSequential(iterable)
+{
+    const results = [];
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(const item of iterable)
+    {
+        try
+        {
+            const value = await (typeof item === 'function' ? item() : item);
+
+            results.push({status: 'fulfilled', value: value});
+        }
+        catch(reason)
+        {
+            results.push({status: 'rejected', reason: reason});
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return results;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -41,11 +68,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            /*this.console.push*/console.log(`Initializing addon '${descr.url}': [OKAY]`);
+            this.console.push(`Initializing addon '${descr.url}': [OKAY]`);
 
         }).catch((e) => {
 
-            /*this.console.push*/console.log(`Initializing addon '${descr.url}': [ERROR]\n${e}`);
+            this.console.push(`Initializing addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
 
@@ -82,11 +109,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            /*this.console.push*/console.log(`Finalizing addon '${descr.url}': [OKAY]`);
+            this.console.push(`Finalizing addon '${descr.url}': [OKAY]`);
 
         }).catch((e) => {
 
-            /*this.console.push*/console.log(`Finalizing addon '${descr.url}': [ERROR]\n${e}`);
+            this.console.push(`Finalizing addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
 
@@ -94,7 +121,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     initAddons(descrs)
     {
-        return Promise.allSettled(
+        return allSettledSequential(
             Object.values(descrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => +(x.rank - y.rank)).map((addon) => this.initAddon(addon))
         );
     },
@@ -103,7 +130,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     finalAddons(descrs)
     {
-        return Promise.allSettled(
+        return allSettledSequential(
             Object.values(descrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => -(x.rank - y.rank)).map((addon) => this.finalAddon(addon))
         );
     },
@@ -144,11 +171,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
             descr.started = true;
 
-            /*this.console.push*/console.log(`Starting addon '${descr.url}': [OKAY]`);
+            this.console.push(`Starting addon '${descr.url}': [OKAY]`);
 
         }).catch((e) => {
 
-            /*this.console.push*/console.log(`Starting addon '${descr.url}': [ERROR]\n${e}`);
+            this.console.push(`Starting addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
 
@@ -186,11 +213,11 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
             descr.started = false;
 
-            /*this.console.push*/console.log(`Stopping addon '${descr.url}': [OKAY]`);
+            this.console.push(`Stopping addon '${descr.url}': [OKAY]`);
 
         }).catch((e) => {
 
-            /*this.console.push*/console.log(`Stopping addon '${descr.url}': [ERROR]\n${e}`);
+            this.console.push(`Stopping addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
 
@@ -200,7 +227,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        return Promise.allSettled(Object.values(addonDescrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((descr) => {
+        return allSettledSequential(Object.values(addonDescrs ?? []).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((descr) => {
 
             if(descr.enabled && !descr.zombie && !closeAll) {
                 return this.startAddon(descr);
