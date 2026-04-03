@@ -7,6 +7,7 @@
     "license": "GPL-3.0-or-later",
     "scripts": {
         "electron-start": "electron .",
+        "electron-make-macos": "electron-builder --mac dmg",
         "electron-make-linux": "electron-builder --linux AppImage",
         "electron-make-windows": "electron-builder --win portable"
     },
@@ -36,19 +37,19 @@
                 ]
             }
         ],
-        "linux": {
-            "target": [
-                "AppImage"
-            ],
-            "category": "Science",
-            "icon": "icons/app-icon.svg"
-        },
         "mac": {
             "target": [
                 "dmg"
             ],
             "category": "public.app-category.science",
             "icon": "icons/app-icon.icns"
+        },
+        "linux": {
+            "target": [
+                "AppImage"
+            ],
+            "category": "Science",
+            "icon": "icons/app-icon.svg"
         },
         "win": {
             "target": [

@@ -10,7 +10,7 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    build:
+    build-linux:
         runs-on: ubuntu-latest
 
         env:
@@ -120,5 +120,77 @@ jobs:
                     ####################################################################################################
 
                     rsync -avz --delete ./dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/lab/"
+
+                    ####################################################################################################
+
+    build-macos:
+        runs-on: macos-latest
+
+        env:
+            SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+            DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+
+        steps:
+            -   name: Checkout repository
+                uses: actions/checkout@v5
+                with:
+                    submodules: recursive
+                    fetch-depth: 1
+
+            -   name: Install toolchains
+                run: |
+                    ####################################################################################################
+
+                    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+                    source "${HOME}/.nvm/nvm.sh"
+                    nvm install --lts
+
+                    ####################################################################################################
+
+            -   name: Setup SSH
+                shell: bash
+
+                run: |
+                    ####################################################################################################
+
+                    mkdir -p ~/.ssh/
+                    chmod 700 ~/.ssh/
+
+                    echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+                    chmod 600 ~/.ssh/id_rsa
+
+                    eval "$(ssh-agent -s)"
+                    ssh-add ~/.ssh/id_rsa
+
+                    ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts
+                    chmod 644 ~/.ssh/known_hosts
+
+                    ####################################################################################################
+
+            -   name: Setup project
+                shell: bash
+                run: |
+                    ####################################################################################################
+
+                    source "${HOME}/.nvm/nvm.sh"
+
+                    npm --version
+                    node --version
+
+                    ####################################################################################################
+
+                    npm install
+
+                    ####################################################################################################
+
+            -   name: Build and deploy Nyx Lab Desktop for macOS
+                shell: bash
+                run: |
+                    ####################################################################################################
+
+                    npm run electron-macos
+
+                    scp ./src-electron/target/nyx-lab-*.dmg "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/download/macos/universal/nyx-lab.dmg"
 
                     ####################################################################################################
