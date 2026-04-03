@@ -291,8 +291,8 @@ const _show = (message, title, type = null) => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     return getRuntime().message(message, {
-        title: title,
-        kind: type || 'error'
+        title: title || '',
+        kind: type || 'info',
     }).catch((e) => {
 
         console.log(e);
