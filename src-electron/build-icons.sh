@@ -21,10 +21,10 @@ do
         "${SCRIPT_DIR}/icons/${base}.ico" \
         "${SCRIPT_DIR}/icons/${base}16x16.png" \
         "${SCRIPT_DIR}/icons/${base}32x32.png" \
+        "${SCRIPT_DIR}/icons/${base}48x48.png" \
+        "${SCRIPT_DIR}/icons/${base}64x64.png" \
         "${SCRIPT_DIR}/icons/${base}128x128.png" \
-        "${SCRIPT_DIR}/icons/${base}256x256.png" \
-        "${SCRIPT_DIR}/icons/${base}512x512.png" \
-        "${SCRIPT_DIR}/icons/${base}1024x1024.png"
+        "${SCRIPT_DIR}/icons/${base}256x256.png"
 
     png2icns \
         "${SCRIPT_DIR}/icons/${base}.icns" \
