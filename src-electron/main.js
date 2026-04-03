@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const {app, ipcMain, protocol, BrowserWindow} = require('electron');
+const {app, ipcMain, session, protocol, BrowserWindow} = require('electron');
 
 const fsp = require('node:fs/promises');
 
@@ -91,6 +91,22 @@ const createWindow = () => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     canClose = false;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const filter = {
+        urls: [
+            'https://tile.openstreetmap.org/*',
+            'https://*.tile.openstreetmap.org/*'
+        ]
+    };
+
+    session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+
+        details.requestHeaders['User-Agent'] = 'NyxLab/1.0.0 (+https://nyxlib.org)';
+
+        callback({requestHeaders: details.requestHeaders});
+    });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
