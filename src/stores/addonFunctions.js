@@ -4,9 +4,151 @@ import router from '@/router.js';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import defaultAddon from '../default-controls.js';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 async function allSettledSequential(iterable)
 {
-    return Promise.allSettled(iterable);
+    const results = [];
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(const item of iterable)
+    {
+        try
+        {
+            const value = await (typeof item === 'function' ? item() : item);
+
+            results.push({status: 'fulfilled', value: value});
+        }
+        catch(reason)
+        {
+            results.push({status: 'rejected', reason: reason});
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return results;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _addonDict = {};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+function _load(path)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    path = path.trim();
+
+    if(path === 'addon://default/latest/')
+    {
+        return Promise.resolve([defaultAddon, 'default', false]);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    /**/ if(window['__ELECTRON__'] !== undefined) {
+        path = path.replace('addon://', 'nyx://addons/');
+    }
+    else if(window[/**/'__TAURI__'/**/] !== undefined) {
+        path = path.replace('addon://', 'http://localhost:7878/repo/');
+    }
+    else {
+        path = path.replace('addon://', 'https://addons.nyxlib.org/repo/');
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return new Promise((resolve, reject) => {
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(path in _addonDict)
+        {
+            const name = _addonDict[path];
+
+            resolve([window[name].default, name, false]);
+
+            return;
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        fetch(`${path}/package.json?_=${Date.now()}`, {method: 'GET', mode: 'cors'}).catch(reject).then((response) => {
+
+            response.json().catch(reject).then((json) =>  {
+
+                if(json.main
+                   &&
+                   json.entry
+                ) {
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    const script = document.createElement('script');
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    script.addEventListener('load', () => {
+
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        const module = globalThis[json.entry]?.default;
+
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        if(module !== undefined)
+                        {
+                            _addonDict[path] = json.entry;
+
+                            resolve([module, json.entry, true]);
+                        }
+                        else
+                        {
+                            reject(new Error('Corrupted addon'));
+                        }
+
+                        /*--------------------------------------------------------------------------------------------*/
+                    });
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    script.addEventListener('error', () => {
+
+                        reject(new Error('Corrupted addon'));
+                    });
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    script.src = `${path}/${json.main}?_=${Date.now()}`;
+
+                    script.type = 'text/javascript';
+
+                    script.async = false;
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    document.head.appendChild(script);
+
+                    /*------------------------------------------------------------------------------------------------*/
+                }
+                else
+                {
+                    reject(new Error('Missing metadata'));
+                }
+            });
+        });
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -19,7 +161,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     initAddon(descr)
     {
-        return this.addon.load(descr.url).then(([addon, name, just_loaded]) => {
+        return _load(descr.url).then(([addon, name, just_loaded]) => {
 
             if(just_loaded)
             {
@@ -71,9 +213,9 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     startAddon(descr)
     {
-        return this.addon.load(descr.url).then(([addon, name, just_loaded]) => {
+        return _load(descr.url).then(([addon, name, just_loaded]) => {
 
-            console.log('start: ' + name + ', started: ' + descr.started);
+            let e = null;
 
             if(!descr.started && !just_loaded)
             {
@@ -86,9 +228,16 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if(typeof addon.start === 'function')
+                try
                 {
-                    addon.start(this.addon, name);
+                    if(typeof addon.start === 'function')
+                    {
+                        addon.start(this.addon, name);
+                    }
+                }
+                catch(f)
+                {
+                    e = f;
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -101,12 +250,20 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            descr.started = true;
-
-            this.console.push(`Starting addon '${descr.url}': [OKAY]`);
+            if(e == null)
+            {
+                descr.started = true;
+                this.console.push(`Starting addon '${descr.url}': [OKAY]`);
+            }
+            else
+            {
+                descr.started = false;
+                this.console.push(`Starting addon '${descr.url}': [ERROR]\n${e}`);
+            }
 
         }).catch((e) => {
 
+            descr.started = false;
             this.console.push(`Starting addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
@@ -115,13 +272,13 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     stopAddon(descr)
     {
-        return this.addon.load(descr.url).then(([addon, name, just_loaded]) => {
+        return _load(descr.url).then(([addon, name, just_loaded]) => {
 
-            console.log('stop: ' + name + ', started: ' + descr.started);
+            let e = null;
 
             if(descr.started && !just_loaded)
             {
-                /*----------------------------------------------------------------------------------------------------*/
+                /*------------------------------------------------------------------------------------------------*/
 
                 for(const panel of this.appPanels[name]?.panels ?? [])
                 {
@@ -130,9 +287,16 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if(typeof addon.stop === 'function')
+                try
                 {
-                    addon.stop(this.addon, name);
+                    if(typeof addon.stop === 'function')
+                    {
+                        addon.stop(this.addon, name);
+                    }
+                }
+                catch(f)
+                {
+                    e = f;
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -145,12 +309,22 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            descr.started = false;
+            /*--------------------------------------------------------------------------------------------------------*/
 
-            this.console.push(`Stopping addon '${descr.url}': [OKAY]`);
+            if(e == null)
+            {
+                descr.started = false;
+                this.console.push(`Stopping addon '${descr.url}': [OKAY]`);
+            }
+            else
+            {
+                descr.started = false;
+                this.console.push(`Stopping addon '${descr.url}': [ERROR]\n${e}`);
+            }
 
         }).catch((e) => {
 
+            descr.started = false;
             this.console.push(`Stopping addon '${descr.url}': [ERROR]\n${e}`);
         });
     },
