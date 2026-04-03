@@ -117,7 +117,7 @@ const _buildBrowserRuntime = () => ({
         el.type = /*-------*/ 'file' /*-------*/;
 
         el.accept = typeExts.map((x) => `.${x}`)
-            .join(',')
+                            .join(',')
         ;
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -308,19 +308,19 @@ const _buildElectronRuntime = () => ({
     /* DIALOG                                                                                                         */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    message: (message, options = {}) => _buildBrowserRuntime().message(message, options),
+    message: (message, options = {}) => globalThis.__ELECTRON__.message(message, options),
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    confirm: (message, options = {}) => _buildBrowserRuntime().confirm(message, options),
+    confirm: (message, options = {}) => globalThis.__ELECTRON__.confirm(message, options),
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    open: (defaultPath, typeMime, typeName, typeExts) => _buildBrowserRuntime().open(defaultPath, typeMime, typeName, typeExts),
+    open: (defaultPath, typeMime, typeName, typeExts) => globalThis.__ELECTRON__.open(defaultPath, typeMime, typeName, typeExts),
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    save: (defaultPath, typeMime, typeName, typeExts, contents) => _buildBrowserRuntime().save(defaultPath, typeMime, typeName, typeExts, contents),
+    save: (defaultPath, typeMime, typeName, typeExts, contents) => globalThis.__ELECTRON__.save(defaultPath, typeMime, typeName, typeExts, contents),
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GEOLOCATION                                                                                                    */
@@ -533,10 +533,6 @@ const _buildTauriRuntime = () => {
         /* ADDON CACHE                                                                                                */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* ADDON CACHE                                                                                                */
-        /*------------------------------------------------------------------------------------------------------------*/
-
         deleteCachedFile: (pathname) => {
 
             return import('@tauri-apps/plugin-store').then(({load}) => {
@@ -594,28 +590,22 @@ export const getRuntime = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(_runtime !== null)
+    if(_runtime === null)
     {
-        return _runtime;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    /**/ if(HAS_TAURI) {
-        _runtime = _buildTauriRuntime();
-    }
-    else if(HAS_ELECTRON) {
-        _runtime = _buildElectronRuntime();
-    }
-    else {
-        _runtime = _buildBrowserRuntime();
+        /**/ if(HAS_ELECTRON) {
+            _runtime = _buildElectronRuntime();
+        }
+        else if(HAS_TAURI) {
+           _runtime = _buildTauriRuntime();
+        }
+        else {
+            _runtime = _buildBrowserRuntime();
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     return _runtime;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

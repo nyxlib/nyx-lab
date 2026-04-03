@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const {app, ipcMain, session, protocol, BrowserWindow} = require('electron');
+const {app, dialog, ipcMain, session, protocol, BrowserWindow} = require('electron');
 
 const fsp = require('node:fs/promises');
 
@@ -282,7 +282,105 @@ ipcMain.handle('nyx:window:destroy', () => {
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* IPC - ADDON CACHE                                                                                                  */
+/* IPC - DIALOG                                                                                                       */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:dialog:message', async (_event, message, options = {}) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const result = await dialog.showMessageBox({
+        type: options.kind ?? 'info',
+        title: options.title ?? 'Information',
+        message: String(message),
+        buttons: ['OK'],
+        defaultId: 0,
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return result.response === 0;
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:dialog:confirm', async (_event, message, options = {}) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const result = await dialog.showMessageBox({
+        type: options.kind ?? 'question',
+        title: options.title ?? 'Confirmation',
+        message: String(message),
+        buttons: ['OK', 'Cancel'],
+        defaultId: 0,
+        cancelId: 1,
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return result.response === 0;
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:dialog:open', async (_event, defaultPath, typeName, typeExts) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const result = await dialog.showOpenDialog({
+        defaultPath: defaultPath || undefined,
+        filters: [{
+            name: typeName,
+            extensions: typeExts,
+        }],
+        properties: ['openFile'],
+    });
+
+    if(result.canceled || result.filePaths.length === 0)
+    {
+        throw new Error('Operation cancelled');
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const text = await fsp.readFile(result.filePaths[0], 'utf8');
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return [text, result.filePaths[0]];
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:dialog:save', async (_event, defaultPath, typeName, typeExts, contents) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const result = await dialog.showSaveDialog({
+        defaultPath: defaultPath || undefined,
+        filters: [{
+            name: typeName,
+            extensions: typeExts,
+        }],
+    });
+
+    if(result.canceled || !result.filePath)
+    {
+        throw new Error('Operation cancelled');
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    await fsp.writeFile(result.filePath, contents, 'utf8');
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return result.filePath;
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* IPC - CACHE                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 ipcMain.handle('nyx:addons:deleteCachedFile', (_, pathname) => {

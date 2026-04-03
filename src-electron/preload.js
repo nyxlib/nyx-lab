@@ -18,11 +18,11 @@ contextBridge.exposeInMainWorld('__ELECTRON__', {
 
     isMaximized: () => ipcRenderer.invoke('nyx:window:isMaximized'),
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     close: () => ipcRenderer.invoke('nyx:window:close'),
 
     destroy: () => ipcRenderer.invoke('nyx:window:destroy'),
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     onCloseRequested: (callback) => {
 
@@ -54,7 +54,19 @@ contextBridge.exposeInMainWorld('__ELECTRON__', {
     },
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* ADDON CACHE                                                                                                    */
+    /* DIALOG                                                                                                         */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    message: (message, options) => ipcRenderer.invoke('nyx:dialog:message', message, options),
+
+    confirm: (message, options) => ipcRenderer.invoke('nyx:dialog:confirm', message, options),
+
+    open: (defaultPath, _typeMime, typeName, typeExts) => ipcRenderer.invoke('nyx:dialog:open', defaultPath, typeName, typeExts),
+
+    save: (defaultPath, _typeMime, typeName, typeExts, contents) => ipcRenderer.invoke('nyx:dialog:save', defaultPath, typeName, typeExts, contents),
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* CACHE                                                                                                          */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     deleteCachedFile: (pathname) => ipcRenderer.invoke('nyx:addons:deleteCachedFile', pathname),
