@@ -14,7 +14,7 @@ import addonFunctions from './addon.js';
 
 const DEFAULT_GLOBALS = {
     windowTitle: 'Nyx Lab',
-    windowTheme: localStorage.getItem('bsTheme') || 'dark',
+    windowTheme: localStorage.getItem('nyxLabTheme') || 'dark',
     /**/
     mqttURL: '',
     nssURL: '',
@@ -170,7 +170,7 @@ const useConfigStore = defineStore('config', {
 
                 document.documentElement.dataset.bsTheme = value;
 
-                localStorage.setItem('bsTheme', value);
+                localStorage.setItem('nyxLabTheme', value);
 
                 DEFAULT_GLOBALS.windowTheme = value;
 

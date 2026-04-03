@@ -250,7 +250,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 /*----------------------------------------------------------------------------------------------------*/
             }
 
-            if(e == null)
+            if(e === null)
             {
                 descr.started = true;
                 this.console.push(`Starting addon '${descr.url}': [OKAY]`);
@@ -311,7 +311,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(e == null)
+            if(e === null)
             {
                 descr.started = false;
                 this.console.push(`Stopping addon '${descr.url}': [OKAY]`);

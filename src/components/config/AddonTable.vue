@@ -284,7 +284,7 @@ onUnmounted(() => {
                                     <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'addon'" v-model="addon.title" />
                                 </td>
                                 <td class="text-start">
-                                    <multiselect :options="Object.keys(icons)" :searchable="true" :limit="100" :disabled="addon.type === 'addon'" v-model="addon.icon"></multiselect>
+                                    <multiselect :options="Object.keys(icons)" :searchable="true" :limit="100" append-to="body" :disabled="addon.type === 'addon'" v-model="addon.icon"></multiselect>
                                 </td>
                                 <td class="text-center">
                                     <button :class="['btn', 'btn-sm', {'btn-success': !addon.zombie && addon.enabled, 'btn-outline-success': !addon.zombie && !addon.enabled, 'btn-secondary': addon.zombie && addon.enabled, 'btn-outline-secondary': addon.zombie && !addon.enabled}]" type="button" @click="addonEnabled(addon)">Enabled</button>
