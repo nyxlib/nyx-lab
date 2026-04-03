@@ -8,11 +8,11 @@
         "type": "git",
         "url": "https://github.com/nyxlib/nyx-lab/"
     },
+    "private": true,
+    "type": "module",
     "workspaces": [
         "src-electron"
     ],
-    "type": "module",
-    "private": true,
     "scripts": {
         "lint": "eslint",
         "app-dev": "npm i --update vue-nyx && vite --port 1234 dev",
@@ -51,24 +51,24 @@
         "echarts": "^5.6.0",
         "echarts-gl": "^2.0.9",
         "gridstack": "^12.4.2",
-        "marked": "^17.0.2",
+        "marked": "^17.0.5",
         "pinia": "^3.0.4",
         "uuid": "^13.0.0",
-        "vue": "^3.5.28",
+        "vue": "^3.5.32",
         "vue-nyx": "github:nyxlib/nyx-vue",
-        "vue-router": "^4.6.4",
+        "vue-router": "^5.0.4",
         "vuedraggable": "^4.1.0"
     },
     "devDependencies": {
-        "@tauri-apps/cli": "^2.10.0",
+        "@tauri-apps/cli": "^2.10.1",
         "@types/bootstrap": "^5.2.10",
-        "@vitejs/plugin-vue": "^6.0.4",
-        "eslint": "^10.0.2",
-        "eslint-plugin-vue": "^10.6.0",
+        "@vitejs/plugin-vue": "^6.0.5",
+        "eslint": "^10.1.0",
+        "eslint-plugin-vue": "^10.8.0",
         "lucide-static": "^1.7.0",
-        "sass": "^1.97.3",
+        "sass": "^1.99.0",
         "simple-icons": "^16.14.0",
-        "vite": "^7.3.1",
+        "vite": "^8.0.3",
         "vite-plugin-eslint": "^1.8.1"
     }
 }
