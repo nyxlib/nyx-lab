@@ -339,7 +339,7 @@ ipcMain.handle('nyx:dialog:open', async (_event, defaultPath, typeName, typeExts
 
     if(result.canceled || result.filePaths.length === 0)
     {
-        throw new Error('Operation cancelled');
+        throw 'Operation cancelled';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -367,7 +367,7 @@ ipcMain.handle('nyx:dialog:save', async (_event, defaultPath, typeName, typeExts
 
     if(result.canceled || !result.filePath)
     {
-        throw new Error('Operation cancelled');
+        throw 'Operation cancelled';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
