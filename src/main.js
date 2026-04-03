@@ -98,7 +98,7 @@ app.directive('tooltip', {
 
         if(title)
         {
-            new Tooltip(el, {
+            /* NOSONAR */ new Tooltip(el, {
                 fallbackPlacements: ['right'],
                 placement: 'right',
                 trigger: 'hover',
