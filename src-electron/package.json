@@ -15,6 +15,7 @@
         "appId": "org.nyxlib.lab",
         "productName": "Nyx Lab Desktop",
         "asar": true,
+        "electronLanguages": ["en"],
         "artifactName": "${name}-${version}.${ext}",
         "directories": {
             "output": "target"
@@ -26,6 +27,7 @@
                 "filter": [
                     "**/*",
                     "!target/**",
+                    "!node_modules/**/*",
                     "!build-icons.sh"
                 ]
             },
@@ -59,7 +61,7 @@
         }
     },
     "devDependencies": {
-        "electron": "41.1.0",
+        "electron": "41.1.1",
         "electron-builder": "^26.8.1"
     }
 }
