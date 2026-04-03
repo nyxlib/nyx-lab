@@ -43,6 +43,13 @@
             "category": "Science",
             "icon": "icons/app-icon.svg"
         },
+        "mac": {
+            "target": [
+                "dmg"
+            ],
+            "category": "public.app-category.science",
+            "icon": "icons/app-icon.icns"
+        },
         "win": {
             "target": [
                 "portable"
