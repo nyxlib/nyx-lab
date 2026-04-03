@@ -19,9 +19,10 @@ import license from '@/assets/license.txt?raw';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const HAS_TAURI = window['__TAURI__'] !== undefined;
-
-const HAS_ELECTRON = window['__ELECTRON__'] !== undefined;
+const IS_DESKTOP = (window['__TAURI__'] !== undefined)
+                   ||
+                   (window['__ELECTRON__'] !== undefined)
+;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -263,7 +264,7 @@ onMounted(() => {
                             <addon-table class="shadow-sm" :addons="configStore.globals.addons" :console="configStore.console" @search="() => { state.indexMode = true; }" />
                         </tab-pane>
 
-                        <tab-pane title="Cache" icon="recycle" @shown="() => state.shownTabs.add('nyx-cache')" v-if="HAS_TAURI || HAS_ELECTRON">
+                        <tab-pane title="Cache" icon="recycle" @shown="() => state.shownTabs.add('nyx-cache')" v-if="IS_DESKTOP">
                             <cache-table class="shadow-sm" v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 

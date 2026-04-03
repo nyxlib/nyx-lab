@@ -1,30 +1,20 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, reactive, computed, onMounted} from 'vue';
-
-import {Window, getCurrentWindow} from '@tauri-apps/api/window';
+import {inject, reactive, computed, onMounted} from 'vue';
 
 import {useNyxStore} from 'vue-nyx';
-
-import {Modal} from 'bootstrap';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from '@/stores/config';
 
+import {getRuntime} from '@/runtimes.js';
+
 import icons from '@/assets/icons.json';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const HAS_TAURI = window['__TAURI__'] !== undefined;
-
-const HAS_ELECTRON = window['__ELECTRON__'] !== undefined;
-
-const IS_DESKTOP = (HAS_TAURI || HAS_ELECTRON) && !['android', 'ios'].includes(window['__NYX_OS_TYPE__']);
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const dialog = inject('dialog');
@@ -34,6 +24,10 @@ const dialog = inject('dialog');
 const configStore = useConfigStore();
 
 const nyxStore = useNyxStore();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const runtime = getRuntime();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -70,10 +64,6 @@ const menuEntries = computed(() => [
 ].sort((x, y) => x.rank - y.rank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-const modalEl = ref(null);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -92,93 +82,18 @@ const about = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const desktopMinimize = () => {
-
-    if(HAS_TAURI) {
-        getCurrentWindow().minimize();
-    }
-
-    if(HAS_ELECTRON) {
-        globalThis.__ELECTRON__.minimize();
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const desktopToggleMaximize = () => {
-
-    if(HAS_TAURI) {
-        getCurrentWindow().toggleMaximize();
-    }
-
-    if(HAS_ELECTRON) {
-        globalThis.__ELECTRON__.toggleMaximize();
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const desktopIsMaximized = () => {
-
-    if(HAS_TAURI) {
-        return getCurrentWindow().isMaximized();
-    }
-
-    if(HAS_ELECTRON) {
-        return globalThis.__ELECTRON__.isMaximized();
-    }
-
-    return Promise.reject();
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const desktopClose = () => {
-
-    if(HAS_TAURI) {
-        getCurrentWindow().close();
-    }
-
-    if(HAS_ELECTRON) {
-        globalThis.__ELECTRON__.close();
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const desktopDestroy = () => {
-
-    if(HAS_TAURI) {
-        getCurrentWindow().destroy();
-    }
-
-    if(HAS_ELECTRON) {
-        globalThis.__ELECTRON__.destroy();
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const desktopListeners = (callback) => {
 
-    if(HAS_TAURI)
-    {
-        Window.getByLabel('main').then((mainWindow) => mainWindow.listen('tauri://close-requested', callback));
-    }
+    runtime.onOpenConfigRequested(configStore._loadConfig);
 
-    if(HAS_ELECTRON)
-    {
-        globalThis.__ELECTRON__.onOpenConfigRequested(configStore._loadConfig);
-
-        globalThis.__ELECTRON__.onCloseRequested(callback);
-    }
+    runtime.onCloseRequested(callback);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const desktopUpdateWindow = () => {
 
-    desktopIsMaximized().catch(() => {}).then((maximized) => {
+    runtime.isMaximized().then((maximized) => {
 
         if(maximized) {
             document.body.dataset.maximized = 'true';
@@ -198,13 +113,13 @@ const desktopHandleCloseRequested = () => {
 
             if(choice)
             {
-                desktopDestroy();
+                runtime.destroy();
             }
         });
     }
     else
     {
-        desktopDestroy();
+        runtime.destroy();
     }
 };
 
@@ -216,22 +131,17 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(!IS_DESKTOP)
+    if(runtime.isBrowser)
     {
         document.body.dataset.environment = 'browser';
     }
-    else
+    else if(runtime.isMobile)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        /**/ if(HAS_TAURI)
-        {
-            document.body.dataset.environment = 'tauri';
-        }
-        else if(HAS_ELECTRON)
-        {
-            document.body.dataset.environment = 'electron';
-        }
+        document.body.dataset.environment = 'mobile';
+    }
+    else if(runtime.isDesktop)
+    {
+        document.body.dataset.environment = 'desktop';
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -248,7 +158,7 @@ onMounted(() => {
 
             if(e.target.tagName.toLowerCase() === 'div')
             {
-                desktopToggleMaximize();
+                runtime.toggleMaximize();
             }
         });
 
@@ -322,15 +232,15 @@ onMounted(() => {
 
             <div class="d-flex ms-2 py-2">
 
-                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!IS_DESKTOP" @click="desktopMinimize">
+                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!runtime.isDesktop" @click="runtime.minimize()">
                     <i class="bi bi-dash-lg"></i>
                 </button>
 
-                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!IS_DESKTOP" @click="desktopToggleMaximize">
+                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!runtime.isDesktop" @click="runtime.toggleMaximize()">
                     <i class="bi bi-collection"></i>
                 </button>
 
-                <button class="btn btn-sm border-0 me-0" type="button" :hidden="!IS_DESKTOP" @click="desktopClose">
+                <button class="btn btn-sm border-0 me-0" type="button" :hidden="!runtime.isDesktop" @click="runtime.close()">
                     <i class="bi bi-x-lg"></i>
                 </button>
 

@@ -1,10 +1,6 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import * as geolocation from '@tauri-apps/plugin-geolocation';
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const HAS_TAURI = window['__TAURI__'] !== undefined;
+import {getRuntime} from '@/runtimes.js';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -26,8 +22,8 @@ const getErrorMessage = (error) => {
         case error.POSITION_UNAVAILABLE:
             return 'Position unavailable.';
 
-        case error.TIMEOUT:
-            return 'Timeout.';
+        case error./*----*/ TIMEOUT /*----*/:
+            return /*----*/ 'Timeout.' /*----*/;
 
         default:
             return 'Unknown error.';
@@ -38,58 +34,37 @@ const getErrorMessage = (error) => {
 
 const _getGeolocation = () => {
 
-    if(HAS_TAURI)
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-        return geolocation.checkPermissions().then((permissions) => {
+    const runtime = getRuntime();
 
-            if(['prompt', 'prompt-with-rationale'].includes(permissions.location))
-            {
-                return geolocation.requestPermissions(['location']).then((permissions) => {
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-                    if(permissions.location !== 'granted')
-                    {
-                        throw new Error('Permission denied.');
-                    }
+    return runtime.checkGeolocationPermissions().then((permissions) => {
 
-                    return geolocation.getCurrentPosition(OPTIONS).catch((error) => {
+        if(['prompt', 'prompt-with-rationale'].includes(permissions.location))
+        {
+            return runtime.requestGeolocationPermissions(['location']).then((permissions) => {
 
-                        throw new Error(getErrorMessage(error));
-                    });
+                if(permissions.location !== 'granted')
+                {
+                    throw new Error('Permission denied.');
+                }
+
+                return runtime.getCurrentPosition(OPTIONS).catch((error) => {
+
+                    throw new Error(getErrorMessage(error));
                 });
-            }
-
-            return geolocation.getCurrentPosition(OPTIONS).catch((error) => {
-
-                throw new Error(getErrorMessage(error));
             });
+        }
+
+        return runtime.getCurrentPosition(OPTIONS).catch((error) => {
+
+            throw new Error(getErrorMessage(error));
         });
+    });
 
-        /*------------------------------------------------------------------------------------------------------------*/
-    }
-    else
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        return new Promise((resolve, reject) => {
-
-            if(typeof navigator.geolocation === 'object')
-            {
-                navigator.geolocation.getCurrentPosition(resolve, (error) => {
-
-                    reject(new Error(getErrorMessage(error)));
-
-                }, OPTIONS);
-            }
-            else
-            {
-                reject(new Error('Not supported.'));
-            }
-        });
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    }
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

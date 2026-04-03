@@ -22,7 +22,6 @@
                 "maximized": true,
                 "title": "Nyx Lab",
                 "decorations": false,
-                "transparent": true,
                 "url": "index.html"
             }
         ],

@@ -28,8 +28,7 @@ html, body,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-body[data-environment="tauri"][data-maximized="false"]::after,
-body[data-environment="electron"][data-maximized="false"]::after {
+body[data-environment="desktop"][data-maximized="false"]::after {
 
     content: "";
     position: absolute;
@@ -44,8 +43,7 @@ body[data-environment="electron"][data-maximized="false"]::after {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-body[data-environment="tauri"][data-maximized="false"] > #nyx_lab,
-body[data-environment="electron"][data-maximized="false"] > #nyx_lab {
+body[data-environment="desktop"][data-maximized="false"] > #nyx_lab {
 
     border: 1px var(--bs-secondary-border-subtle) solid;
 }
