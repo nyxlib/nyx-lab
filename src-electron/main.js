@@ -337,23 +337,21 @@ ipcMain.handle('nyx:dialog:open', async (_event, defaultPath, typeName, typeExts
         properties: ['openFile'],
     });
 
-    if(result.canceled || result.filePaths.length === 0)
+    if(!result.canceled && result.filePaths.length > 0)
     {
-        throw 'Operation cancelled';
+        const text = await fsp.readFile(result.filePaths[0], 'utf8');
+
+        return {text: text, name: result.filePaths[0]};
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const text = await fsp.readFile(result.filePaths[0], 'utf8');
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    return [text, result.filePaths[0]];
+    return null;
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-ipcMain.handle('nyx:dialog:save', async (_event, defaultPath, typeName, typeExts, contents) => {
+ipcMain.handle('nyx:dialog:save', async (_event, defaultPath, typeName, typeExts, text) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -363,20 +361,19 @@ ipcMain.handle('nyx:dialog:save', async (_event, defaultPath, typeName, typeExts
             name: typeName,
             extensions: typeExts,
         }],
+        properties: ['createDirectory'],
     });
 
-    if(result.canceled || !result.filePath)
+    if(!result.canceled && result.filePath)
     {
-        throw 'Operation cancelled';
+        await fsp.writeFile(result.filePath, text, 'utf8');
+
+        return {text: text, name: result.filePath};
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    await fsp.writeFile(result.filePath, contents, 'utf8');
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    return result.filePath;
+    return null;
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/

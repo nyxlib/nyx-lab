@@ -9,6 +9,8 @@ import * as marked from 'marked';
 
 import useConfigStore from '@/stores/config';
 
+import getRuntime from '@/runtimes.js';
+
 import UserDashboardTable from '@/components/config/UserDashboardTable.vue';
 import AddonTable from '@/components/config/AddonTable.vue';
 import CacheTable from '@/components/config/CacheTable.vue';
@@ -17,13 +19,6 @@ import license from '@/assets/license.txt?raw';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const IS_DESKTOP = (window['__TAURI__'] !== undefined)
-                   ||
-                   (window['__ELECTRON__'] !== undefined)
-;
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const configStore = useConfigStore();
@@ -264,7 +259,7 @@ onMounted(() => {
                             <addon-table class="shadow-sm" :addons="configStore.globals.addons" :console="configStore.console" @search="() => { state.indexMode = true; }" />
                         </tab-pane>
 
-                        <tab-pane title="Cache" icon="recycle" @shown="() => state.shownTabs.add('nyx-cache')" v-if="IS_DESKTOP">
+                        <tab-pane title="Cache" icon="recycle" @shown="() => state.shownTabs.add('nyx-cache')" v-if="getRuntime().isDesktop || getRuntime().isMobile">
                             <cache-table class="shadow-sm" v-if="state.shownTabs.has('nyx-cache')" />
                         </tab-pane>
 

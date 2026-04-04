@@ -6,8 +6,6 @@ import * as VueRouter from 'vue-router';
 
 import * as gridstack from 'gridstack';
 
-import * as os from '@tauri-apps/plugin-os';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {Tooltip} from 'bootstrap';
@@ -29,34 +27,6 @@ import addon from '@/plugins/addon';
 
 globalThis.__NYX_VUE__        = Vue      ;
 globalThis.__NYX_VUE_ROUTER__ = VueRouter;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-if(window['__TAURI__'] === undefined)
-{
-    /**/ if (/linux/i.test(navigator.userAgent)) {
-        globalThis.__NYX_OS_TYPE__ = 'linux';
-    }
-    else if (/macintosh/i.test(navigator.userAgent)) {
-        globalThis.__NYX_OS_TYPE__ = 'macos';
-    }
-    else if (/windows/i.test(navigator.userAgent)) {
-        globalThis.__NYX_OS_TYPE__ = 'windows';
-    }
-    else if(/android/i.test(navigator.userAgent)) {
-        globalThis.__NYX_OS_TYPE__ = 'android';
-    }
-    else if(/ipad|iphone/i.test(navigator.userAgent)) {
-        globalThis.__NYX_OS_TYPE__ = 'ios';
-    }
-    else {
-        globalThis.__NYX_OS_TYPE__ = 'unknown';
-    }
-}
-else
-{
-    globalThis.__NYX_OS_TYPE__ = os.type();
-}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {getRuntime} from '@/runtimes.js';
+import getRuntime from '@/runtimes.js';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -40,11 +40,11 @@ const _getGeolocation = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return runtime.checkGeolocationPermissions().then((permissions) => {
+    return runtime.geolocCheckPermissions().then((permissions) => {
 
         if(['prompt', 'prompt-with-rationale'].includes(permissions.location))
         {
-            return runtime.requestGeolocationPermissions(['location']).then((permissions) => {
+            return runtime.geolocRequestPermissions(['location']).then((permissions) => {
 
                 if(permissions.location !== 'granted')
                 {

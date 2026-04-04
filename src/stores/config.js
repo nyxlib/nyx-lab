@@ -278,13 +278,9 @@ const useConfigStore = defineStore('config', {
         {
             this._confirm(() => {
 
-                this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then(([json]) => {
+                this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then((file) => {
 
-                    this._setConfig(_safeJSONParse(json), false);
-
-                }).catch((e) => {
-
-                    this.dialog.error(e);
+                    this._setConfig(_safeJSONParse(file.text), false);
                 });
             });
         },
@@ -295,10 +291,7 @@ const useConfigStore = defineStore('config', {
         {
             this._setConfig(this.globals, true).then((json) => {
 
-                this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json).catch((e) => {
-
-                    this.dialog.error(e);
-                });
+                this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json);
             });
         },
 

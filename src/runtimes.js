@@ -3,6 +3,7 @@
 import {Window, getCurrentWindow} from '@tauri-apps/api/window';
 
 import * as fs from '@tauri-apps/plugin-fs';
+import * as os from '@tauri-apps/plugin-os';
 import * as dialog from '@tauri-apps/plugin-dialog';
 import * as geolocation from '@tauri-apps/plugin-geolocation';
 import * as notification from '@tauri-apps/plugin-notification';
@@ -18,8 +19,6 @@ let _runtime = null;
 const HAS_TAURI = window['__TAURI__'] !== undefined;
 
 const HAS_ELECTRON = window['__ELECTRON__'] !== undefined;
-
-const IS_MOBILE = ['android', 'ios'].includes(window['__NYX_OS_TYPE__']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* BROWSER RUNTIME                                                                                                    */
@@ -132,13 +131,13 @@ const _buildBrowserRuntime = () => ({
             {
                 file.text().then((text) => {
 
-                    resolve([text, null]);
+                    resolve({text: text, name: file.name});
 
                 }, reject);
             }
             else
             {
-                reject(new Error('Operation cancelled'));
+                resolve(null);
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -164,11 +163,11 @@ const _buildBrowserRuntime = () => ({
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    save: (defaultPath, typeMime, _typeName, _typeExts, contents) => {
+    save: (defaultPath, typeMime, _typeName, _typeExts, text) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const blob = new Blob([contents], {type: typeMime});
+        const blob = new Blob([text], {type: typeMime});
 
         const el = document.createElement('a');
 
@@ -186,7 +185,7 @@ const _buildBrowserRuntime = () => ({
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        return Promise.resolve(null);
+        return Promise.resolve({text: text, name: defaultPath});
 
         /*------------------------------------------------------------------------------------------------------------*/
     },
@@ -195,13 +194,13 @@ const _buildBrowserRuntime = () => ({
     /* GEOLOCATION                                                                                                    */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    checkGeolocationPermissions: () => Promise.resolve({
+    geolocCheckPermissions: () => Promise.resolve({
         location: 'prompt'
     }),
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    requestGeolocationPermissions: () => Promise.resolve({
+    geolocRequestPermissions: () => Promise.resolve({
         location: 'granted'
     }),
 
@@ -211,18 +210,16 @@ const _buildBrowserRuntime = () => ({
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(typeof navigator.geolocation !== 'object')
+        if(typeof navigator.geolocation === 'object')
         {
-            reject(new Error('Not supported.'));
+            navigator.geolocation.getCurrentPosition(resolve, reject, options);
 
             return;
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        navigator.geolocation.getCurrentPosition(resolve, reject, options);
-
-        /*------------------------------------------------------------------------------------------------------------*/
+        reject(new Error('Not supported.'));
     }),
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -326,11 +323,11 @@ const _buildElectronRuntime = () => ({
     /* GEOLOCATION                                                                                                    */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    checkGeolocationPermissions: () => _buildBrowserRuntime().checkGeolocationPermissions(),
+    geolocCheckPermissions: () => _buildBrowserRuntime().geolocCheckPermissions(),
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    requestGeolocationPermissions: () => _buildBrowserRuntime().requestGeolocationPermissions(),
+    geolocRequestPermissions: () => _buildBrowserRuntime().geolocRequestPermissions(),
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -361,7 +358,9 @@ const _buildTauriRuntime = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const appWindow = getCurrentWindow();
+    const isMobile = ['android', 'ios'].includes(os.type());
+
+    const window = getCurrentWindow();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -372,34 +371,34 @@ const _buildTauriRuntime = () => {
         /*------------------------------------------------------------------------------------------------------------*/
 
         isBrowser: false,
-        isDesktop: !IS_MOBILE,
-        isMobile: IS_MOBILE,
+        isDesktop: !isMobile,
+        isMobile: isMobile,
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* DESKTOP                                                                                                    */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        minimize: () => appWindow.minimize(),
+        minimize: () => window.minimize(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        maximize: () => appWindow.maximize(),
+        maximize: () => window.maximize(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        toggleMaximize: () => appWindow.toggleMaximize(),
+        toggleMaximize: () => window.toggleMaximize(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        isMaximized: () => appWindow.isMaximized(),
+        isMaximized: () => window.isMaximized(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        close: () => appWindow.close(),
+        close: () => window.close(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        destroy: () => appWindow.destroy(),
+        destroy: () => window.destroy(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -469,49 +468,48 @@ const _buildTauriRuntime = () => {
         open: (defaultPath, _typeMime, typeName, typeExts) => {
 
             return dialog.open({
-                multiple: false,
                 defaultPath: defaultPath,
                 filters: [{
                     name: typeName,
                     extensions: typeExts,
-                }]
-            }).then((filename) => {
+                }],
+                /**/ multiple /**/: false,
+            }).then((name) => {
 
-                if(filename)
+                if(name)
                 {
-                    return fs.readTextFile(filename).then((text) => {
+                    return fs.readTextFile(name).then((text) => {
 
-                        return [text, filename];
-
+                        return {text: text, name: name};
                     });
                 }
 
-                throw new Error('Operation cancelled');
+                return null;
             });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        save: (defaultPath, _typeMime, typeName, typeExts, contents) => {
+        save: (defaultPath, _typeMime, typeName, typeExts, text) => {
 
             return dialog.save({
                 defaultPath: defaultPath,
                 filters: [{
                     name: typeName,
                     extensions: typeExts,
-                }]
-            }).then((filename) => {
+                }],
+                canCreateDirectories: true,
+            }).then((name) => {
 
-                if(filename)
+                if(name)
                 {
-                    return fs.writeTextFile(filename, contents).then(() => {
+                    return fs.writeTextFile(name, text).then(() => {
 
-                        return filename;
-
+                        return {text: text, name: name};
                     });
                 }
 
-                throw new Error('Operation cancelled');
+                return null;
             });
         },
 
@@ -519,11 +517,11 @@ const _buildTauriRuntime = () => {
         /* GEOLOCATION                                                                                                */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        checkGeolocationPermissions: () => geolocation.checkPermissions(),
+        geolocCheckPermissions: () => geolocation.checkPermissions(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        requestGeolocationPermissions: (permissions) => geolocation.requestPermissions(permissions),
+        geolocRequestPermission: (permissions) => geolocation.requestPermissions(permissions),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -586,7 +584,7 @@ const _buildTauriRuntime = () => {
 /* EXPORTS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-export const getRuntime = () => {
+const getRuntime = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -607,5 +605,9 @@ export const getRuntime = () => {
 
     return _runtime;
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+export default getRuntime;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
