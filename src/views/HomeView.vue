@@ -9,8 +9,12 @@ import {useNyxStore} from 'vue-nyx';
 
 import useConfigStore from '@/stores/config';
 
+import getRuntime from '@/runtimes.js';
+
 import PanelGrid from '@/components/dashboard/PanelGrid.vue';
 import CredentialsModal from '@/components/dashboard/CredentialsModal.vue';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 import particles from '@/assets/particles.json';
 
@@ -147,12 +151,14 @@ const openConfig = () => {
 
 const openHelp = () => {
 
+    getRuntime().browse('https://nyxlib.org/');
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const openRepo = () => {
 
+    getRuntime().browse('https://github.com/nyxlib/');
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
