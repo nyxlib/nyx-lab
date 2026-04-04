@@ -19,6 +19,8 @@ const GIT_RELEASE = {
     date: new Date().toISOString(),
 };
 
+console.log(GIT_RELEASE);
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 // noinspection JSUnusedGlobalSymbols
