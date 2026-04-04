@@ -76,9 +76,6 @@ const about = () => {
         'https://nyxlib.org/',
         '',
         'Author: Jérôme ODIER <jerome.odier@lpsc.in2p3.fr>',
-        '',
-        `Git commit: ${__GIT_RELEASE__.gitBranch} / ${__GIT_RELEASE__.gitCommit}`,
-        `Build date: ${__GIT_RELEASE__.date?.split('T')[0]}`,
     ].join('\n'), 'About', 'info');
 };
 
