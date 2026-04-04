@@ -180,12 +180,7 @@ const openRepo = () => {
 
                 <!-- *********************************************************************************************** -->
 
-                <vue-particles
-                    class="position-absolute top-0 start-0 w-100 h-100"
-                    :options="particles"
-                    style="z-index: -1;"
-                    id="particles-js"
-                />
+                <vue-particles class="position-absolute top-0 start-0 w-100 h-100 z-n1" :options="particles" id="nyx-particles" />
 
                 <!-- *********************************************************************************************** -->
 
