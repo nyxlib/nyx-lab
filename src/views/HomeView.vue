@@ -12,6 +12,8 @@ import useConfigStore from '@/stores/config';
 import PanelGrid from '@/components/dashboard/PanelGrid.vue';
 import CredentialsModal from '@/components/dashboard/CredentialsModal.vue';
 
+import particles from '@/assets/particles.json';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -39,10 +41,6 @@ const panels = computed(() => Object.values(configStore.globals.interfacePanels)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const modalEl = ref(null);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const gitRelease = __GIT_RELEASE__;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -139,6 +137,25 @@ const enableBLOBsAndStreams = (panel, enabled) => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const openConfig = () => {
+
+    configStore.import();
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const openHelp = () => {
+
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const openRepo = () => {
+
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 </script>
 
 <template>
@@ -149,7 +166,7 @@ const enableBLOBsAndStreams = (panel, enabled) => {
 
     <div class="overflow-y-auto h-100 w-100 p-3">
 
-        <nyx-dashboard :show-devices="configStore.globals.showNyxInterfaces" @connect="connect" @disconnect="disconnect">
+        <nyx-dashboard class="position-relative" :show-devices="configStore.globals.showNyxInterfaces" @connect="connect" @disconnect="disconnect">
 
             <!-- *************************************************************************************************** -->
 
@@ -157,11 +174,12 @@ const enableBLOBsAndStreams = (panel, enabled) => {
 
                 <!-- *********************************************************************************************** -->
 
-                <div class="alert alert-secondary text-center w-50 mt-5">
-
-                    GIT commit: <a :href="`https://github.com/nyxlib/nyx-lab/tree/${gitRelease.gitCommit}`" target="_blank">{{ gitRelease.gitBranch }} / {{ gitRelease.gitCommit }}</a>, build date: {{ gitRelease.date?.split('T')[0] }}
-
-                </div>
+                <vue-particles
+                    class="position-absolute top-0 start-0 w-100 h-100"
+                    :options="particles"
+                    style="z-index: -1;"
+                    id="particles-js"
+                />
 
                 <!-- *********************************************************************************************** -->
 
@@ -170,27 +188,27 @@ const enableBLOBsAndStreams = (panel, enabled) => {
                     <!-- ******************************************************************************************* -->
 
                     <div class="col-md-4 d-flex flex-column align-items-center">
-                        <a class="btn btn-secondary d-flex align-items-center justify-content-center mb-2" href="/" style="width: 100px; height: 100px; border-radius: 50px;">
-                            <i class="bi bi-upload" style="font-size: 50px;"></i>
-                        </a>
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 90px; height: 90px; border-radius: 45px;" @click="openConfig()">
+                            <i class="bi bi-upload" style="font-size: 45px;"></i>
+                        </button>
                         <span>Open workspace</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
 
                     <div class="col-md-4 d-flex flex-column align-items-center">
-                        <a class="btn btn-secondary d-flex align-items-center justify-content-center mb-2" href="/" style="width: 100px; height: 100px; border-radius: 50px;">
-                            <i class="bi bi-book" style="font-size: 50px;"></i>
-                        </a>
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 90px; height: 90px; border-radius: 45px;" @click="openHelp()">
+                            <i class="bi bi-book" style="font-size: 45px;"></i>
+                        </button>
                         <span>Documentation</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
 
                     <div class="col-md-4 d-flex flex-column align-items-center">
-                        <a class="btn btn-secondary d-flex align-items-center justify-content-center mb-2" href="/" style="width: 100px; height: 100px; border-radius: 50px;">
-                            <i class="bi bi-github" style="font-size: 50px;"></i>
-                        </a>
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 90px; height: 90px; border-radius: 45px;" @click="openRepo()">
+                            <i class="bi bi-github" style="font-size: 45px;"></i>
+                        </button>
                         <span>Repository</span>
                     </div>
 

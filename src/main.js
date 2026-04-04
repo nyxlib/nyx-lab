@@ -4,9 +4,12 @@ import * as Vue from 'vue';
 
 import * as VueRouter from 'vue-router';
 
-import * as gridstack from 'gridstack';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+import Particles from '@tsparticles/vue3';
+import {loadSlim} from '@tsparticles/slim';
+
+import * as gridstack from 'gridstack';
 
 import {Tooltip} from 'bootstrap';
 
@@ -80,6 +83,15 @@ app.directive('tooltip', {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-app.mount('#nyx_lab');
+app.use(Particles, {
+
+    init: (engine) => {
+
+        loadSlim(engine).then(() => {
+
+            app.mount('#nyx_lab');
+        });
+    },
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
