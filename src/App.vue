@@ -82,23 +82,7 @@ const about = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const desktopListeners = (callback) => {
-
-    runtime.onOpenConfigRequested((text) => {
-
-        try
-        {
-            configStore._setConfig(JSON.parse(text));
-        }
-        catch(_) {}
-    });
-
-    runtime.onCloseRequested(callback);
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const desktopUpdateWindow = () => {
+const onUpdateWindow = () => {
 
     runtime.isMaximized().then((maximized) => {
 
@@ -112,26 +96,22 @@ const desktopUpdateWindow = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const desktopHandleCloseRequested = () => {
+const onCloseRequested = () => {
 
     if(configStore.modified)
     {
-        dialog.confirm('Are you sure you want to close?', 'Nyx Lab').then((choice) => {
+        return dialog.confirm('Are you sure you want to close?', 'Nyx Lab').then((choice) => {
 
-            if(!choice)
+            if(choice)
             {
-                return false;
+                runtime.destroy();
             }
-
-            runtime.destroy();
         });
     }
     else
     {
         runtime.destroy();
     }
-
-    return true;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -139,6 +119,24 @@ const desktopHandleCloseRequested = () => {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(() => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    runtime.onOpenConfigRequested((text) => {
+
+        try
+        {
+            configStore._setConfig(JSON.parse(text));
+        }
+        catch(e)
+        {
+            dialog.error(e);
+        }
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    runtime.onCloseRequested(onCloseRequested);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -158,10 +156,10 @@ onMounted(() => {
 
         window.addEventListener('resize', () => {
 
-            desktopUpdateWindow();
+            onUpdateWindow();
         });
 
-        desktopUpdateWindow();
+        onUpdateWindow();
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -172,10 +170,6 @@ onMounted(() => {
                 runtime.toggleMaximize();
             }
         });
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        desktopListeners(desktopHandleCloseRequested);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
