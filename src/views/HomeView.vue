@@ -155,11 +155,50 @@ const enableBLOBsAndStreams = (panel, enabled) => {
 
             <template #home>
 
-                <small class="mt-1">
+                <!-- *********************************************************************************************** -->
+
+                <div class="alert alert-secondary text-center w-50 mt-5">
 
                     GIT commit: <a :href="`https://github.com/nyxlib/nyx-lab/tree/${gitRelease.gitCommit}`" target="_blank">{{ gitRelease.gitBranch }} / {{ gitRelease.gitCommit }}</a>, build date: {{ gitRelease.date?.split('T')[0] }}
 
-                </small>
+                </div>
+
+                <!-- *********************************************************************************************** -->
+
+                <div class="row w-50 mt-5">
+
+                    <!-- ******************************************************************************************* -->
+
+                    <div class="col-md-4 d-flex flex-column align-items-center">
+                        <a class="btn btn-secondary d-flex align-items-center justify-content-center mb-2" href="/" style="width: 100px; height: 100px; border-radius: 50px;">
+                            <i class="bi bi-upload" style="font-size: 50px;"></i>
+                        </a>
+                        <span>Open workspace</span>
+                    </div>
+
+                    <!-- ******************************************************************************************* -->
+
+                    <div class="col-md-4 d-flex flex-column align-items-center">
+                        <a class="btn btn-secondary d-flex align-items-center justify-content-center mb-2" href="/" style="width: 100px; height: 100px; border-radius: 50px;">
+                            <i class="bi bi-book" style="font-size: 50px;"></i>
+                        </a>
+                        <span>Documentation</span>
+                    </div>
+
+                    <!-- ******************************************************************************************* -->
+
+                    <div class="col-md-4 d-flex flex-column align-items-center">
+                        <a class="btn btn-secondary d-flex align-items-center justify-content-center mb-2" href="/" style="width: 100px; height: 100px; border-radius: 50px;">
+                            <i class="bi bi-github" style="font-size: 50px;"></i>
+                        </a>
+                        <span>Repository</span>
+                    </div>
+
+                    <!-- ******************************************************************************************* -->
+
+                </div>
+
+                <!-- *********************************************************************************************** -->
 
             </template>
 
