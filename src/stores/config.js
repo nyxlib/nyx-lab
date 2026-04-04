@@ -203,7 +203,7 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        _setConfig(globals, indent)
+        _setConfig(globals, indent = false)
         {
             this.dialog.lock();
 

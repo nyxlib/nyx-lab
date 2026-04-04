@@ -84,7 +84,14 @@ const about = () => {
 
 const desktopListeners = (callback) => {
 
-    runtime.onOpenConfigRequested(configStore._loadConfig);
+    runtime.onOpenConfigRequested((text) => {
+
+        try
+        {
+            configStore._setConfig(JSON.parse(text));
+        }
+        catch(_) {}
+    });
 
     runtime.onCloseRequested(callback);
 };
@@ -111,16 +118,20 @@ const desktopHandleCloseRequested = () => {
     {
         dialog.confirm('Are you sure you want to close?', 'Nyx Lab').then((choice) => {
 
-            if(choice)
+            if(!choice)
             {
-                runtime.destroy();
+                return false;
             }
+
+            runtime.destroy();
         });
     }
     else
     {
         runtime.destroy();
     }
+
+    return true;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
