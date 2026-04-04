@@ -9,7 +9,7 @@ import {useNyxStore} from 'vue-nyx';
 
 import useConfigStore from '@/stores/config';
 
-import getRuntime from '@/runtimes.js';
+import getRuntime from '@/runtimes';
 
 import PanelGrid from '@/components/dashboard/PanelGrid.vue';
 import CredentialsModal from '@/components/dashboard/CredentialsModal.vue';

@@ -14,7 +14,7 @@ import * as uuid from 'uuid';
 import ControlCanvas from '@/components/dashboard/ControlCanvas.vue';
 import ControlModal from '@/components/dashboard/ControlModal.vue';
 
-import useConfigStore from '@/stores/config.js';
+import useConfigStore from '@/stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */

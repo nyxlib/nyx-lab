@@ -9,7 +9,9 @@ import {useNyxStore} from 'vue-nyx';
 
 import useConfigStore from '@/stores/config';
 
-import getRuntime from '@/runtimes.js';
+import getRuntime from '@/runtimes';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 import icons from '@/assets/icons.json';
 

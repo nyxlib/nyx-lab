@@ -13,7 +13,7 @@ import {Modal} from 'bootstrap';
 
 import ControlOption from '@/components/dashboard/ControlOption.vue';
 
-import useConfigStore from '@/stores/config.js';
+import useConfigStore from '@/stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */

@@ -9,11 +9,13 @@ import * as marked from 'marked';
 
 import useConfigStore from '@/stores/config';
 
-import getRuntime from '@/runtimes.js';
+import getRuntime from '@/runtimes';
 
 import UserDashboardTable from '@/components/config/UserDashboardTable.vue';
 import AddonTable from '@/components/config/AddonTable.vue';
 import CacheTable from '@/components/config/CacheTable.vue';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 import license from '@/assets/license.txt?raw';
 
