@@ -223,7 +223,7 @@ const openRepo = () => {
 
                 <!-- *********************************************************************************************** -->
 
-                <div class="position-absolute opacity-50 bottom-0" style="font-size: 0.9rem;">
+                <div class="position-absolute opacity-50" style="font-size: 0.9rem; bottom: -10px;">
 
                     Copyright © 2024-{{ new Date().getFullYear() }} <a href="https://nyxlib.org/" target="_blank">Nyx Lab</a> — <a href="https://odier.xyz/" target="_blank">Jérôme ODIER</a>, <a href="https://lpsc.in2p3.fr/" target="_blank">LPSC</a> / <a href="https://cnrs.fr/" target="_blank">CNRS</a>.
 
