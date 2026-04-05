@@ -280,7 +280,10 @@ const useConfigStore = defineStore('config', {
 
                 this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then((file) => {
 
-                    this._setConfig(_safeJSONParse(file.text), false);
+                    if(file)
+                    {
+                        this._setConfig(_safeJSONParse(file.text), false);
+                    }
                 });
             });
         },
