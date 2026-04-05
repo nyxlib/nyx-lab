@@ -4,7 +4,7 @@ import router from '@/router';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import defaultAddon from '@/components/dashboard/addon/default';
+import addonDefault from '@/components/dashboard/addon/default';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -49,13 +49,6 @@ function _load(path)
 
     path = path.trim();
 
-    if(path === 'addon://default/latest/')
-    {
-        return Promise.resolve([defaultAddon, 'default', false]);
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     /**/ if(window['__ELECTRON__'] !== undefined) {
         path = path.replace('addon://', 'nyx://addons/');
     }
@@ -74,9 +67,23 @@ function _load(path)
 
         if(path in _addonDict)
         {
-            const name = _addonDict[path];
+            resolve(_addonDict[path]);
 
-            resolve([window[name].default, name, false]);
+            return;
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(path.endsWith('/default/latest/'))
+        {
+            const addon = _addonDict[path] = {
+                path: path,
+                name: 'addon_default',
+                module: addonDefault,
+                initialized: false,
+            };
+
+            resolve(addon);
 
             return;
         }
@@ -101,15 +108,22 @@ function _load(path)
 
                         /*--------------------------------------------------------------------------------------------*/
 
-                        const module = globalThis[json.entry]?.default;
+                        const name = json.entry;
+
+                        const module = globalThis[name]?.default;
 
                         /*--------------------------------------------------------------------------------------------*/
 
                         if(module !== undefined)
                         {
-                            _addonDict[path] = json.entry;
+                            const addon = _addonDict[path] = {
+                                path: path,
+                                name: name,
+                                module: module,
+                                initialized: false,
+                            };
 
-                            resolve([module, json.entry, true]);
+                            resolve(addon);
                         }
                         else
                         {
@@ -159,33 +173,37 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     /* INITIALIZATION                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    initAddon(descr)
+    initAddon(globals, descr)
     {
-        return _load(descr.url).then(([addon, name, just_loaded]) => {
+        return _load(descr.url).then((addon) => {
 
-            if(just_loaded)
+            if(!addon.initialized)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                const TEMP_GLOBALS = addon.TEMP_GLOBALS = {};
+                const TEMP_GLOBALS = {};
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                descr.started = false;
-
-                if(typeof addon.init === 'function')
+                if(typeof addon.module.init === 'function')
                 {
-                    addon.init(TEMP_GLOBALS, this.addon, name);
+                    addon.module.init(TEMP_GLOBALS, this.addon, name);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
 
                 for(const key of Object.keys(TEMP_GLOBALS))
                 {
-                    if(!(key in this.globals)) this.globals[key] = TEMP_GLOBALS[key];
+                    if(!(key in globals)) globals[key] = TEMP_GLOBALS[key];
 
                     if(!(key in DEFAULT_GLOBALS)) DEFAULT_GLOBALS[key] = TEMP_GLOBALS[key];
                 }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                addon.initialized = true;
+
+                descr.started = false;
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -200,10 +218,10 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    initAddons(descrs)
+    initAddons(globals)
     {
         return allSettledSequential(
-            Object.values(descrs).filter((x) => x.type === 'addon').sort((x, y) => +(x.rank - y.rank)).map((addon) => this.initAddon(addon))
+            Object.values(globals.addons).filter((x) => x.type === 'addon').sort((x, y) => +(x.rank - y.rank)).map((addon) => this.initAddon(globals, addon))
         );
     },
 
@@ -213,26 +231,26 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     startAddon(descr)
     {
-        return _load(descr.url).then(([addon, name, just_loaded]) => {
+        return _load(descr.url).then((addon) => {
 
             let e = null;
 
-            if(!descr.started && !just_loaded)
+            if(addon.initialized && !descr.started)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                this.confPanels[name] = {descr: descr, addon: addon, panels: []};
-                this.appPanels[name] = {descr: descr, addon: addon, panels: []};
-                this.controls[name] = {descr: descr, addon: addon, ctrls: []};
-                this.functions[name] = {descr: descr, addon: addon, funcs: {}};
+                this.confPanels[addon.name] = {descr: descr, addon: addon, panels: []};
+                this.appPanels[addon.name] = {descr: descr, addon: addon, panels: []};
+                this.controls[addon.name] = {descr: descr, addon: addon, ctrls: []};
+                this.functions[addon.name] = {descr: descr, addon: addon, funcs: {}};
 
                 /*----------------------------------------------------------------------------------------------------*/
 
                 try
                 {
-                    if(typeof addon.start === 'function')
+                    if(typeof addon.module.start === 'function')
                     {
-                        addon.start(this.addon, name);
+                        addon.module.start(this.addon, addon.name);
                     }
                 }
                 catch(f)
@@ -242,7 +260,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                for(const panel of this.appPanels[name]?.panels ?? [])
+                for(const panel of this.appPanels[addon.name]?.panels ?? [])
                 {
                     router.addRoute(panel);
                 }
@@ -272,15 +290,15 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     stopAddon(descr)
     {
-        return _load(descr.url).then(([addon, name, just_loaded]) => {
+        return _load(descr.url).then((addon) => {
 
             let e = null;
 
-            if(descr.started && !just_loaded)
+            if(addon.initialized && descr.started)
             {
                 /*------------------------------------------------------------------------------------------------*/
 
-                for(const panel of this.appPanels[name]?.panels ?? [])
+                for(const panel of this.appPanels[addon.name]?.panels ?? [])
                 {
                     router.removeRoute(panel.id);
                 }
@@ -291,7 +309,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 {
                     if(typeof addon.stop === 'function')
                     {
-                        addon.stop(this.addon, name);
+                        addon.stop(this.addon, addon.name);
                     }
                 }
                 catch(f)
@@ -301,10 +319,10 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                delete this.confPanels[name];
-                delete this.appPanels[name];
-                delete this.controls[name];
-                delete this.functions[name];
+                delete this.confPanels[addon.name];
+                delete this.appPanels[addon.name];
+                delete this.controls[addon.name];
+                delete this.functions[addon.name];
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -381,16 +399,23 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(Object.prototype.toString.call(globals.addons) === '[object Object]')
+        if(Object.prototype.toString.call(globals) === '[object Object]')
         {
-            Object.values(globals.addons).filter((x) => x.type === 'addon').forEach((descr) => {
+            if(Object.prototype.toString.call(globals.addons) === '[object Object]')
+            {
+                Object.values(globals.addons).filter((x) => x.type === 'addon').forEach((descr) => {
 
-                descr.started = false;
-            });
+                    descr.started = false;
+                });
+            }
+            else
+            {
+                globals.addons = {};
+            }
         }
         else
         {
-            globals.addons = {};
+            globals = {addons: {}};
         }
 
         /*------------------------------------------------------------------------------------------------------------*/

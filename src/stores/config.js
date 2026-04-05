@@ -209,17 +209,17 @@ const useConfigStore = defineStore('config', {
 
             return this.startStopAddons(this.globals.addons, this.globals.interfacePanels, true).then(() => {
 
-                const tmp_globals = this.sanitize(globals);
+                const tmp1_globals = this.sanitize(globals);
 
-                return this.initAddons(tmp_globals.addons).then(() => {
+                return this.initAddons(tmp1_globals).then(() => {
 
-                    const next_globals = confDup(tmp_globals, DEFAULT_GLOBALS);
+                    const tmp2_globals = confDup(tmp1_globals, DEFAULT_GLOBALS);
 
-                    return this.startStopAddons(next_globals.addons, next_globals.interfacePanels, false).then(() => {
+                    return this.startStopAddons(tmp2_globals.addons, tmp2_globals.interfacePanels, false).then(() => {
 
                         /*--------------------------------------------------------------------------------------------*/
 
-                        const json = _safeJSONStringify(this.globals = next_globals, indent);
+                        const json = _safeJSONStringify(this.globals = tmp2_globals, indent);
 
                         /*--------------------------------------------------------------------------------------------*/
 
