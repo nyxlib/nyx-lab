@@ -246,15 +246,22 @@ const useConfigStore = defineStore('config', {
 
         _confirm(f)
         {
+            this.dialog.confirm('Are you sure you want to discard your changes?', 'Nyx Lab').then((choice) => {
+
+                if(choice)
+                {
+                    f();
+                }
+            });
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        _confirmIfModified(f)
+        {
             if(this.modified)
             {
-                this.dialog.confirm('Are you sure you want to discard your changes?', 'Nyx Lab').then((choice) => {
-
-                    if(choice)
-                    {
-                        f();
-                    }
-                });
+                this._confirm(f);
             }
             else
             {
@@ -302,7 +309,7 @@ const useConfigStore = defineStore('config', {
 
         rollback()
         {
-            this._confirm(() => {
+            this._confirmIfModified(() => {
 
                 _safeGetItem('nyx-lab-config').then((json) => {
 
