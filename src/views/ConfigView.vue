@@ -9,7 +9,7 @@ import * as marked from 'marked';
 
 import useConfigStore from '@/stores/config';
 
-import getRuntime from '@/runtimes';
+import getRuntime from '@/runtime';
 
 import UserDashboardTable from '@/components/config/UserDashboardTable.vue';
 import AddonTable from '@/components/config/AddonTable.vue';

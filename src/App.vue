@@ -9,7 +9,7 @@ import {useNyxStore} from 'vue-nyx';
 
 import useConfigStore from '@/stores/config';
 
-import getRuntime from '@/runtimes';
+import getRuntime from '@/runtime';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

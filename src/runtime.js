@@ -1,13 +1,15 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {Window, getCurrentWindow} from '@tauri-apps/api/window';
+import * as tauriWindow from '@tauri-apps/api/window';
 
-import * as fs from '@tauri-apps/plugin-fs';
-import * as os from '@tauri-apps/plugin-os';
-import * as shell from '@tauri-apps/plugin-shell';
-import * as dialog from '@tauri-apps/plugin-dialog';
-import * as geolocation from '@tauri-apps/plugin-geolocation';
-import * as notification from '@tauri-apps/plugin-notification';
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+import * as tauriFS from '@tauri-apps/plugin-fs';
+import * as tauriOS from '@tauri-apps/plugin-os';
+import * as tauriShell from '@tauri-apps/plugin-shell';
+import * as tauriDialog from '@tauri-apps/plugin-dialog';
+import * as tauriGeolocation from '@tauri-apps/plugin-geolocation';
+import * as tauriNotification from '@tauri-apps/plugin-notification';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -215,18 +217,17 @@ const _buildBrowserRuntime = () => ({
 
     getCurrentPosition: (options) => new Promise((resolve, reject) => {
 
-        /*------------------------------------------------------------------------------------------------------------*/
-
         if(typeof navigator.geolocation === 'object')
         {
-            navigator.geolocation.getCurrentPosition(resolve, reject, options);
-
-            return;
+            navigator.geolocation.getCurrentPosition(
+                resolve, reject,
+                options
+            );
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        reject(new Error('Not supported.'));
+        else
+        {
+            reject(new Error('Not supported.'));
+        }
     }),
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -336,15 +337,15 @@ const _buildElectronRuntime = () => ({
     /* GEOLOCATION                                                                                                    */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    geolocCheckPermissions: () => _buildBrowserRuntime().geolocCheckPermissions(),
+    geolocCheckPermissions: () => Promise.reject(new Error('Not supported.')),
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    geolocRequestPermissions: () => _buildBrowserRuntime().geolocRequestPermissions(),
+    geolocRequestPermissions: () => Promise.reject(new Error('Not supported.')),
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    getCurrentPosition: (options) => _buildBrowserRuntime().getCurrentPosition(options),
+    getCurrentPosition: () => Promise.reject(new Error('Not supported.')),
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* ADDON CACHE                                                                                                    */
@@ -371,9 +372,9 @@ const _buildTauriRuntime = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const isMobile = ['android', 'ios'].includes(os.type());
+    const isMobile = ['android', 'ios'].includes(tauriOS.type());
 
-    const window = getCurrentWindow();
+    const window = tauriWindow.getCurrentWindow();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -423,7 +424,7 @@ const _buildTauriRuntime = () => {
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            Window.getByLabel('main').then((mainWindow) => {
+            tauriWindow.Window.getByLabel('main').then((mainWindow) => {
 
                 return mainWindow.listen('tauri://close-requested', callback);
 
@@ -453,15 +454,15 @@ const _buildTauriRuntime = () => {
         /* NOTIFICATION                                                                                               */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        notifyIsPermissionGranted: () => notification.isPermissionGranted(),
+        notifyIsPermissionGranted: () => tauriNotification.isPermissionGranted(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        notifyRequestPermission: () => notification.requestPermission(),
+        notifyRequestPermission: () => tauriNotification.requestPermission(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        notifySend: (title, body) => notification.sendNotification({
+        notifySend: (title, body) => tauriNotification.sendNotification({
             title: title,
             body: body,
         }),
@@ -470,17 +471,17 @@ const _buildTauriRuntime = () => {
         /* DIALOG                                                                                                     */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        message: (message, options = {}) => dialog.message(message, options),
+        message: (message, options = {}) => tauriDialog.message(message, options),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        confirm: (message, options = {}) => dialog.confirm(message, options),
+        confirm: (message, options = {}) => tauriDialog.confirm(message, options),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         open: (defaultPath, _typeMime, typeName, typeExts) => {
 
-            return dialog.open({
+            return tauriDialog.open({
                 defaultPath: defaultPath,
                 filters: [{
                     name: typeName,
@@ -491,7 +492,7 @@ const _buildTauriRuntime = () => {
 
                 if(name)
                 {
-                    return fs.readTextFile(name).then((text) => {
+                    return tauriFS.readTextFile(name).then((text) => {
 
                         return {text: text, name: name};
                     });
@@ -505,7 +506,7 @@ const _buildTauriRuntime = () => {
 
         save: (defaultPath, _typeMime, typeName, typeExts, text) => {
 
-            return dialog.save({
+            return tauriDialog.save({
                 defaultPath: defaultPath,
                 filters: [{
                     name: typeName,
@@ -516,7 +517,7 @@ const _buildTauriRuntime = () => {
 
                 if(name)
                 {
-                    return fs.writeTextFile(name, text).then(() => {
+                    return tauriFS.writeTextFile(name, text).then(() => {
 
                         return {text: text, name: name};
                     });
@@ -530,21 +531,21 @@ const _buildTauriRuntime = () => {
         /* BROWSER                                                                                                    */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        browse: (url) => shell.open(url),
+        browse: (url) => tauriShell.open(url),
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* GEOLOCATION                                                                                                */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        geolocCheckPermissions: () => geolocation.checkPermissions(),
+        geolocCheckPermissions: () => tauriGeolocation.checkPermissions(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        geolocRequestPermission: (permissions) => geolocation.requestPermissions(permissions),
+        geolocRequestPermission: (permissions) => tauriGeolocation.requestPermissions(permissions),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        getCurrentPosition: (options) => geolocation.getCurrentPosition(options),
+        getCurrentPosition: (options) => tauriGeolocation.getCurrentPosition(options),
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* ADDON CACHE                                                                                                */
