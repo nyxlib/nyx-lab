@@ -203,23 +203,48 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        _setConfig(globals, indent = false)
+        _setConfig(globals, stopAll, indent = false)
         {
             this.dialog.lock();
 
-            return this.startStopAddons(this.globals.addons, this.globals.interfacePanels, true).then(() => {
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* STOP ADDONS                                                                                            */
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                const tmp1_globals = this.sanitize(globals);
+            const stopAddons = (f) => {
 
-                return this.initAddons(tmp1_globals).then(() => {
+                if(stopAll) {
 
-                    const tmp2_globals = confDup(tmp1_globals, DEFAULT_GLOBALS);
+                    return this.startStopAddons(this.globals.addons, this.globals.interfacePanels, true).then(() => {
 
-                    return this.startStopAddons(tmp2_globals.addons, tmp2_globals.interfacePanels, false).then(() => {
+                        return f();
+                    });
+                }
+                else {
+                    return f();
+                }
+            };
+
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* LOAD CONFIG & START ADDONS                                                                             */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            return stopAddons(() => {
+
+                const tmp_globals = this.sanitize(
+                    globals,
+                    stopAll
+                );
+
+                return this.initAddons(tmp_globals).then(() => {
+
+                    this.globals = confDup(tmp_globals, DEFAULT_GLOBALS);
+
+                    return this.startStopAddons(this.globals.addons, this.globals.interfacePanels, false).then(() => {
 
                         /*--------------------------------------------------------------------------------------------*/
 
-                        const json = _safeJSONStringify(this.globals = tmp2_globals, indent);
+                        const json = _safeJSONStringify(this.globals, indent);
 
                         /*--------------------------------------------------------------------------------------------*/
 
@@ -240,6 +265,8 @@ const useConfigStore = defineStore('config', {
                     });
                 });
             });
+
+            /*--------------------------------------------------------------------------------------------------------*/
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -259,12 +286,14 @@ const useConfigStore = defineStore('config', {
 
         _confirmIfModified(f)
         {
-            if(this.modified)
-            {
-                this._confirm(f);
+            if(this.modified) {
+
+                this._confirm(() => {
+
+                    f();
+                });
             }
-            else
-            {
+            else {
                 f();
             }
         },
@@ -275,7 +304,7 @@ const useConfigStore = defineStore('config', {
         {
             this._confirm(() => {
 
-                this._setConfig(null, false);
+                this._setConfig(null, true, false);
             });
         },
 
@@ -289,7 +318,7 @@ const useConfigStore = defineStore('config', {
 
                     if(file)
                     {
-                        this._setConfig(_safeJSONParse(file.text), false);
+                        this._setConfig(_safeJSONParse(file.text), true, false);
                     }
                 });
             });
@@ -299,7 +328,7 @@ const useConfigStore = defineStore('config', {
 
         export()
         {
-            this._setConfig(this.globals, true).then((json) => {
+            this._setConfig(this.globals, false,true).then((json) => {
 
                 this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json);
             });
@@ -313,12 +342,7 @@ const useConfigStore = defineStore('config', {
 
                 _safeGetItem('nyx-lab-config').then((json) => {
 
-                    this.globals = _safeJSONParse(json);
-
-                    nextTick().then(() => {
-
-                        this.modified = false;
-                    });
+                    this._setConfig(_safeJSONParse(json), false);
                 });
             });
         },
@@ -327,15 +351,7 @@ const useConfigStore = defineStore('config', {
 
         persist()
         {
-            const json = _safeJSONStringify(this.globals);
-
-            _safeSetItem('nyx-lab-config', json).then(() => {
-
-                nextTick().then(() => {
-
-                    this.modified = false;
-                });
-            });
+            this._setConfig(this.globals, false);
         },
 
         /*------------------------------------------------------------------------------------------------------------*/

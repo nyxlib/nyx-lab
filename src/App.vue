@@ -123,14 +123,7 @@ onMounted(() => {
 
     runtime.onOpenConfigRequested((text) => {
 
-        try
-        {
-            configStore._setConfig(JSON.parse(text));
-        }
-        catch(e)
-        {
-            dialog.error(e);
-        }
+        configStore._setConfig(JSON.parse(text), true);
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/

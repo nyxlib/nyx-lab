@@ -10,7 +10,7 @@ import addonDefault from '@/components/dashboard/addon/default';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _addonDict = {};
+const _ADDON_DICT = {};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* HELPERS                                                                                                            */
@@ -67,9 +67,9 @@ function _load(path)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(path in _addonDict)
+        if(path in _ADDON_DICT)
         {
-            resolve(_addonDict[path]);
+            resolve(_ADDON_DICT[path]);
 
             return;
         }
@@ -78,7 +78,7 @@ function _load(path)
 
         if(path.endsWith('/default/latest/'))
         {
-            const addon = _addonDict[path] = {
+            const addon = _ADDON_DICT[path] = {
                 path: path,
                 name: 'addon_default',
                 module: addonDefault,
@@ -118,7 +118,7 @@ function _load(path)
 
                         if(module !== undefined)
                         {
-                            const addon = _addonDict[path] = {
+                            const addon = _ADDON_DICT[path] = {
                                 path: path,
                                 name: name,
                                 module: module,
@@ -351,13 +351,13 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    startStopAddons(addonDescrs, interfacePanelDescrs, closeAll)
+    startStopAddons(addonDescrs, interfacePanelDescrs, stopAll)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
         return allSettledSequential(Object.values(addonDescrs).filter((x) => x.type === 'addon').sort((x, y) => x.rank - y.rank).map((descr) => {
 
-            if(descr.enabled && !descr.zombie && !closeAll) {
+            if(descr.enabled && !descr.zombie && !stopAll) {
                 return this.startAddon(descr);
             } else {
                 return this.stopAddon(descr);
@@ -397,7 +397,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
     /* SANITIZE                                                                                                       */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    sanitize(globals)
+    sanitize(globals, stopAll)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -405,10 +405,13 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
         {
             if(Object.prototype.toString.call(globals.addons) === '[object Object]')
             {
-                Object.values(globals.addons).filter((x) => x.type === 'addon').forEach((descr) => {
+                if(stopAll)
+                {
+                    Object.values(globals.addons).filter((x) => x.type === 'addon').forEach((descr) => {
 
-                    descr.started = false;
-                });
+                        descr.started = false;
+                    });
+                }
             }
             else
             {
