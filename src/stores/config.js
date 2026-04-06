@@ -275,7 +275,7 @@ const useConfigStore = defineStore('config', {
         {
             this._confirm(() => {
 
-                this._setConfig({}, false);
+                this._setConfig(null, false);
             });
         },
 
@@ -313,7 +313,12 @@ const useConfigStore = defineStore('config', {
 
                 _safeGetItem('nyx-lab-config').then((json) => {
 
-                    this._setConfig(_safeJSONParse(json), false);
+                    this.globals = _safeJSONParse(json);
+
+                    nextTick().then(() => {
+
+                        this.modified = false;
+                    });
                 });
             });
         },
@@ -322,7 +327,15 @@ const useConfigStore = defineStore('config', {
 
         persist()
         {
-            this._setConfig(this.globals, false);
+            const json = _safeJSONStringify(this.globals);
+
+            _safeSetItem('nyx-lab-config', json).then(() => {
+
+                nextTick().then(() => {
+
+                    this.modified = false;
+                });
+            });
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
