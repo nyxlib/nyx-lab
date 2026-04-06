@@ -89,7 +89,21 @@ const _execFunction_func = (addonName, funcName, ...args) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _updateVariables_func = (variable) => {
+const _getNyxValue_func = (variable) => {
+
+    return nyxStore.getValue(nyxStore.resolve(variable.var));
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _setNyxValue_func = (variable, value) => {
+
+    return nyxStore.setValue(nyxStore.resolve(variable.var), value);
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _synchronizeVariable_func = (variable) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -137,7 +151,10 @@ export default {
             hasAddon: _hasAddon_func,
             hasFunction: _hasFunction_func,
             execFunction: _execFunction_func,
-            updateVariables: _updateVariables_func,
+            /**/
+            getNyxValue: _getNyxValue_func,
+            setNyxValue: _setNyxValue_func,
+            synchronizeVariable: _synchronizeVariable_func,
         });
     }
 };
