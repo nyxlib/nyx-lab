@@ -200,7 +200,7 @@ const openRepo = () => {
                     <!-- ******************************************************************************************* -->
 
                     <div class="col-md-3 d-flex flex-column align-items-center">
-                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 80px; height: 80px; border-radius: 40px;" @click="newConfig()">
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 75px; height: 75px; border-radius: 40px;" @click="newConfig()">
                             <i class="bi bi-plus-lg" style="font-size: 40px;"></i>
                         </button>
                         <span>New workspace</span>
@@ -209,8 +209,8 @@ const openRepo = () => {
                     <!-- ******************************************************************************************* -->
 
                     <div class="col-md-3 d-flex flex-column align-items-center">
-                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 80px; height: 80px; border-radius: 40px;" @click="openConfig()">
-                            <i class="bi bi-upload" style="font-size: 40px;"></i>
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="openConfig()">
+                            <i class="bi bi-upload" style="font-size: 35px;"></i>
                         </button>
                         <span>Open workspace</span>
                     </div>
@@ -218,8 +218,8 @@ const openRepo = () => {
                     <!-- ******************************************************************************************* -->
 
                     <div class="col-md-3 d-flex flex-column align-items-center">
-                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 80px; height: 80px; border-radius: 40px;" @click="openHelp()">
-                            <i class="bi bi-book" style="font-size: 40px;"></i>
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="openHelp()">
+                            <i class="bi bi-book" style="font-size: 35px;"></i>
                         </button>
                         <span>Documentation</span>
                     </div>
@@ -227,8 +227,8 @@ const openRepo = () => {
                     <!-- ******************************************************************************************* -->
 
                     <div class="col-md-3 d-flex flex-column align-items-center">
-                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 80px; height: 80px; border-radius: 40px;" @click="openRepo()">
-                            <i class="bi bi-github" style="font-size: 40px;"></i>
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="openRepo()">
+                            <i class="bi bi-github" style="font-size: 35px;"></i>
                         </button>
                         <span>Repository</span>
                     </div>
