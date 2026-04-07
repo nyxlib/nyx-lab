@@ -143,6 +143,20 @@ const createWindow = () => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
+        mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+
+            if(!url.startsWith('http://localhost'))
+            {
+                shell.openExternal(url);
+
+                return {action: 'deny'};
+            }
+
+            return {action: 'allow'};
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         sendPendingConfig();
 
         for(const arg of process.argv.slice(process.defaultApp ? 2 : 1))
