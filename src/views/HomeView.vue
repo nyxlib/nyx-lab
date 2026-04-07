@@ -5,6 +5,8 @@ import {ref, inject, computed, reactive} from 'vue';
 
 import {useNyxStore} from 'vue-nyx';
 
+import * as uuid from 'uuid';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useConfigStore from '@/stores/config';
@@ -191,7 +193,7 @@ const openRepo = () => {
 
                 <!-- *********************************************************************************************** -->
 
-                <vue-particles class="position-absolute top-0 start-0 w-100 h-100 z-n1" :options="particles" id="nyx-particles" />
+                <vue-particles class="position-absolute top-0 start-0 w-100 h-100 z-n1" :options="particles" :id="uuid.v4()" />
 
                 <!-- *********************************************************************************************** -->
 
