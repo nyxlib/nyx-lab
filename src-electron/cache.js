@@ -10,7 +10,7 @@ const path = require('node:path');
 
 const NYX_ADDONS_URL = 'https://addons.nyxlib.org/repo';
 
-const NYX_CACHE_DIRNAME = 'nyx-addons-cache';
+const NYX_CACHE_DIRNAME = 'AddonCache';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
