@@ -7,9 +7,9 @@
     "license": "GPL-3.0-or-later",
     "scripts": {
         "electron-start": "electron .",
-        "electron-make-macos": "electron-builder --mac dmg",
-        "electron-make-linux": "electron-builder --linux AppImage",
-        "electron-make-windows": "electron-builder --win portable"
+        "electron-make-macos": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg",
+        "electron-make-linux": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --linux AppImage",
+        "electron-make-windows": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win portable"
     },
     "build": {
         "appId": "org.nyxlib.lab",
