@@ -147,7 +147,10 @@ const createWindow = () => {
 
             if(!url.startsWith('http://localhost'))
             {
-                shell.openExternal(url);
+                shell.openExternal(url).catch((error) => {
+
+                    console.error(error);
+                });
 
                 return {action: 'deny'};
             }
