@@ -7,54 +7,13 @@
 @import url("vue-nyx/style/vue-nyx.css");
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* BOOTSTRAP                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 :root {
 
     --bs-border-radius: 0.75rem;
     --bs-border-radius-sm: 0.75rem;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-html, body,
-#nyx_lab {
-
-    height: 100%;
-    width: 100%;
-
-    margin: 0;
-    padding: 0;
-
-    overflow: hidden;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-body[data-environment="desktop"][data-maximized="false"]::after {
-
-    content: "";
-    position: absolute;
-
-    bottom: 0;
-    right: 0;
-    width: 16px;
-    height: 16px;
-
-    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='rgb(127,127,127,0.75)' viewBox='0 0 18 18'><path d='M14.228 16.227a1 1 0 0 1-.707-1.707l1-1a1 1 0 0 1 1.416 1.414l-1 1a1 1 0 0 1-.707.293zm-5.638 0a1 1 0 0 1-.707-1.707l6.638-6.638a1 1 0 0 1 1.416 1.414l-6.638 6.638a1 1 0 0 1-.707.293zm-5.84 0a1 1 0 0 1-.707-1.707L14.52 2.043a1 1 0 1 1 1.415 1.414L3.457 15.934a1 1 0 0 1-.707.293z' /></svg>");
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-body[data-environment="desktop"][data-maximized="false"] > #nyx_lab {
-
-    border: 1px var(--bs-secondary-border-subtle) solid;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#nyx_menu::-webkit-scrollbar {
-
-    display: none;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -95,6 +54,7 @@ label,
 .modal,
 .offcanvas,
 .modal-backdrop,
+.spinner-backdrop,
 .offcanvas-backdrop {
 
     top: 47px !important;
@@ -117,11 +77,74 @@ label,
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* NYX LAB                                                                                                            */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+html, body,
+#nyx_lab {
+
+    height: 100%;
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+body[data-environment="desktop"][data-maximized="false"]::before {
+
+    content: "";
+    position: fixed;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    box-shadow: inset 0 0 0 1px var(--bs-border-color);
+
+    pointer-events: none;
+    z-index: 100000;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+body[data-environment="desktop"][data-maximized="false"]::after {
+
+    content: "";
+    position: fixed;
+
+    right: 0;
+    bottom: 0;
+    height: 16px;
+    width: 16px;
+
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='rgb(127,127,127,0.75)' viewBox='0 0 18 18'><path d='M14.228 16.227a1 1 0 0 1-.707-1.707l1-1a1 1 0 0 1 1.416 1.414l-1 1a1 1 0 0 1-.707.293zm-5.638 0a1 1 0 0 1-.707-1.707l6.638-6.638a1 1 0 0 1 1.416 1.414l-6.638 6.638a1 1 0 0 1-.707.293zm-5.84 0a1 1 0 0 1-.707-1.707L14.52 2.043a1 1 0 1 1 1.415 1.414L3.457 15.934a1 1 0 0 1-.707.293z' /></svg>");
+
+    pointer-events: none;
+    z-index: 100001;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#nyx_menu::-webkit-scrollbar {
+
+    display: none;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* DRAG REGION                                                                                                        */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 [data-tauri-drag-region] {
 
+    /*noinspection CssUnknownProperty*/
     -webkit-app-region: drag;
 
+    /*noinspection CssUnknownProperty*/
     app-region: drag;
 }
 
@@ -132,8 +155,10 @@ label,
 [data-tauri-drag-region] button,
 [data-tauri-drag-region] select {
 
+    /*noinspection CssUnknownProperty*/
     -webkit-app-region: no-drag;
 
+    /*noinspection CssUnknownProperty*/
     app-region: no-drag;
 }
 
@@ -147,6 +172,8 @@ label,
     padding-bottom: 0.25rem;
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* PULSING BUTTONS                                                                                                    */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .btn-success.pulse-btn,

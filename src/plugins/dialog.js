@@ -14,58 +14,12 @@ import getRuntime from '@/runtime';
 const _LOCKER_HTML = `
     <!-- *********************************************************************************************************** -->
 
-    <div id="DEC2F4DE">
+    <div class="spinner-backdrop justify-content-center position-fixed top-0 bottom-0 start-0 end-0 bg-body" style="display: none; z-index: 9999;">
         <div class="align-self-center text-center">
             <div class="spinner-border" style="width: 4rem; height: 4rem;"></div>
             <div class="display-4">please wait…</div>
         </div>
     </div>
-
-    <!-- *********************************************************************************************************** -->
-
-    <style>
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        #DEC2F4DE {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            display: none;
-            justify-content: center;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            position: fixed;
-
-            top: 0;
-            bottom: 0;
-
-            left: 0;
-            right: 0;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            z-index: 9999;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            background-color: var(--bs-body-bg);
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        body[data-environment="desktop"][data-maximized="false"] > #DEC2F4DE {
-
-            top: 48px !important;
-            bottom: 01px !important;
-
-            left: 01px !important;
-            right: 01px !important;
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    </style>
 
     <!-- *********************************************************************************************************** -->
 `;
@@ -82,7 +36,7 @@ const _lock = () => {
 
     if(_curLockCnt <= 0)
     {
-        document.getElementById('DEC2F4DE').style.display = 'flex';
+        document.getElementsByClassName('spinner-backdrop').forEach((x) => x.style.display = 'flex');
 
         _curLockCnt = 1;
     }
@@ -98,7 +52,7 @@ const _unlock = () => {
 
     if(_curLockCnt <= 1)
     {
-        document.getElementById('DEC2F4DE').style.display = 'none';
+        document.getElementsByClassName('spinner-backdrop').forEach((x) => x.style.display = 'none');
 
         _curLockCnt = 0;
     }
@@ -282,7 +236,7 @@ const _show = (message, title, options = {}) => {
     const dialogOptions = {
         theme: 'bootstrap-5',
         heightAuto: false,
-        width: 'min(48rem, calc(100vw - 2rem))',
+        width: 'min(800px, calc(100vw - 2rem))',
         customClass: {
             popup: 'modal-content rounded-3 shadow bg-body',
             confirmButton: 'btn btn-outline-success',
@@ -328,7 +282,7 @@ const _confirm = (message, title, options = {}) => {
     const dialogOptions = {
         theme: 'bootstrap-5',
         heightAuto: false,
-        width: 'min(48rem, calc(100vw - 2rem))',
+        width: 'min(800px, calc(100vw - 2rem))',
         customClass: {
             popup: 'modal-content rounded-3 shadow bg-body',
             confirmButton: 'btn btn-outline-success me-2',
