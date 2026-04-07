@@ -1,5 +1,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+@import url("sweetalert2/themes/bootstrap-5.css");
+
 @import url("gridstack/dist/gridstack.css");
 
 @import url("vue-nyx/style/vue-nyx.css");

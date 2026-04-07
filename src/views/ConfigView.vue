@@ -51,11 +51,11 @@ const checkMQTTConnection = () => {
 
     mqtt.check(configStore.globals.mqttURL, configStore.globals.mqttUsername, configStore.globals.mqttPassword).then((message) => {
 
-        dialog.show(message, 'Testing MQTT broker', 'info');
+        dialog.show(message, 'Testing MQTT broker', {icon: 'info'});
 
     }).catch((error) => {
 
-        dialog.show(error, 'Testing MQTT broker', 'error');
+        dialog.show(error, 'Testing MQTT broker', {icon: 'error'});
     });
 };
 
@@ -65,11 +65,11 @@ const checkNSSConnection = () => {
 
     nss.check(configStore.globals.nssURL, configStore.globals.nssUsername, configStore.globals.nssPassword).then((message) => {
 
-        dialog.show(message, 'Testing Nyx-Stream', 'info');
+        dialog.show(message, 'Testing Nyx-Stream', {icon: 'info'});
 
     }).catch((error) => {
 
-        dialog.show(error, 'Testing Nyx-Stream', 'error');
+        dialog.show(error, 'Testing Nyx-Stream', {icon: 'error'});
     });
 };
 

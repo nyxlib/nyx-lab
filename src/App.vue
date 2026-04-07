@@ -72,11 +72,12 @@ const menuEntries = computed(() => [
 const about = () => {
 
     dialog.show([
-        'Nyx Lab',
-        'https://nyxlib.org/',
-        '',
-        'Author: Jérôme ODIER <jerome.odier@lpsc.in2p3.fr>',
-    ].join('\n'), 'About', 'info');
+        '<h1>Nyx Lab</h1>',
+        '<br />',
+        '<a href="https://nyxlib.org/" target="_blank">https://nyxlib.org/</a>',
+        '<br /><br />',
+        'Author: Jérôme ODIER &lt;<a href="mailto:jerome.odier@lpsc.in2p3.fr">jerome.odier@lpsc.in2p3.fr</a>&gt;',
+    ].join('\n'), 'About', {icon: 'info', html: true});
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

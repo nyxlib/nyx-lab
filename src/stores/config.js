@@ -273,7 +273,7 @@ const useConfigStore = defineStore('config', {
 
         _confirm(f)
         {
-            this.dialog.confirm('Are you sure you want to discard your changes?', 'Nyx Lab').then((choice) => {
+            this.dialog.confirm('Are you sure you want to discard your changes?', 'Nyx Lab', {icon: 'question'}).then((choice) => {
 
                 if(choice)
                 {

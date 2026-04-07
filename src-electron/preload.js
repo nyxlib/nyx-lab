@@ -57,10 +57,6 @@ contextBridge.exposeInMainWorld('__ELECTRON__', {
     /* DIALOG                                                                                                         */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    message: (message, options) => ipcRenderer.invoke('nyx:dialog:message', message, options),
-
-    confirm: (message, options) => ipcRenderer.invoke('nyx:dialog:confirm', message, options),
-
     open: (defaultPath, _typeMime, typeName, typeExts) => ipcRenderer.invoke('nyx:dialog:open', defaultPath, typeName, typeExts),
 
     save: (defaultPath, _typeMime, typeName, typeExts, contents) => ipcRenderer.invoke('nyx:dialog:save', defaultPath, typeName, typeExts, contents),

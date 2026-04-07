@@ -1,5 +1,9 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import Swal from 'sweetalert2';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 import getRuntime from '@/runtime';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -259,7 +263,7 @@ const _error = (message) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _show = (message, title, type = null) => {
+const _show = (message, title, options = {}) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -275,12 +279,29 @@ const _show = (message, title, type = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return getRuntime().message(message, {
-        title: title || '',
-        kind: type || 'info',
-    }).catch((e) => {
+    const dialogOptions = {
+        theme: 'bootstrap-5',
+        heightAuto: false,
+        width: 'min(48rem, calc(100vw - 2rem))',
+        customClass: {
+            popup: 'modal-content rounded-3 shadow bg-body',
+            confirmButton: 'btn btn-outline-success',
+        },
+        buttonsStyling: false,
+        icon: options.icon,
+        title: title,
+    };
 
-        console.log(e);
+    if(options.html) {
+        dialogOptions.html = message;
+    }
+    else {
+        dialogOptions.text = message;
+    }
+
+    return Swal.fire(dialogOptions).then((result) => {
+
+        return true;
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -288,12 +309,50 @@ const _show = (message, title, type = null) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _confirm = (message, title, type = null) => {
+const _confirm = (message, title, options = {}) => {
 
-    return getRuntime().confirm(message, {
-        title: title || '',
-        kind: type || 'info'
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(typeof message !== 'string')
+    {
+        message = String(message);
+    }
+
+    if(typeof title !== 'string')
+    {
+        title = String(title);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const dialogOptions = {
+        theme: 'bootstrap-5',
+        heightAuto: false,
+        width: 'min(48rem, calc(100vw - 2rem))',
+        customClass: {
+            popup: 'modal-content rounded-3 shadow bg-body',
+            confirmButton: 'btn btn-outline-success me-2',
+            cancelButton: 'btn btn-danger me-0',
+        },
+        buttonsStyling: false,
+        showCancelButton: true,
+        icon: options.icon,
+        title: title,
+    };
+
+    if(options.html) {
+        dialogOptions.html = message;
+    }
+    else {
+        dialogOptions.text = message;
+    }
+
+    return Swal.fire(dialogOptions).then((result) => {
+
+        return result.isConfirmed;
     });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
