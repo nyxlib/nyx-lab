@@ -65,7 +65,7 @@ const sendPendingConfig = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const handleIncomingConfigPath = (filename) => {
+const handleConfigPath = (filename) => {
 
     fsp.readFile(filename, 'utf8').then((config) => {
 
@@ -143,11 +143,11 @@ const createWindow = () => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        mainWindow.webContents.setWindowOpenHandler((details) => {
 
-            if(!url.startsWith('http://localhost'))
+            if(!details.url.startsWith('http://localhost'))
             {
-                shell.openExternal(url).catch((error) => {
+                shell.openExternal(details.url).catch((error) => {
 
                     console.error(error);
                 });
@@ -166,7 +166,7 @@ const createWindow = () => {
         {
             if(arg && !arg.startsWith('-') && /\.(nyx|json)$/i.test(arg))
             {
-                handleIncomingConfigPath(path.resolve(arg));
+                handleConfigPath(path.resolve(arg));
             }
         }
 
@@ -203,11 +203,15 @@ const createWindow = () => {
 /* APPLICATION                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+console.log('userData:', app.getPath('userData'));
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 app.on('open-file', (event, filename) => {
 
     event.preventDefault();
 
-    handleIncomingConfigPath(filename);
+    handleConfigPath(filename);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
