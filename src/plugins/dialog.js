@@ -36,7 +36,7 @@ const _lock = () => {
 
     if(_curLockCnt <= 0)
     {
-        document.getElementsByClassName('spinner-backdrop').forEach((x) => x.style.display = 'flex');
+        document.querySelectorAll('.spinner-backdrop').forEach((x) => x.style.display = 'flex');
 
         _curLockCnt = 1;
     }
@@ -52,7 +52,7 @@ const _unlock = () => {
 
     if(_curLockCnt <= 1)
     {
-        document.getElementsByClassName('spinner-backdrop').forEach((x) => x.style.display = 'none');
+        document.querySelectorAll('.spinner-backdrop').forEach((x) => x.style.display = 'none');
 
         _curLockCnt = 0;
     }
@@ -66,37 +66,76 @@ const _unlock = () => {
 /* DIALOGS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _notify_step2 = (title, body) => {
+const _toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+    }
+});
 
-    return getRuntime().notifySend(title, body);
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _notify_fallback = (title, message) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    /** @type {import('sweetalert2').SweetAlertIcon} */
+    let icon;
+
+    switch(title)
+    {
+        case 'Success':
+            icon = 'success';
+            break;
+        case 'Warning':
+            icon = 'warning';
+            break;
+        case 'Error':
+            icon = 'error';
+            break;
+        default:
+            icon = 'info';
+            break;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return _toast.fire({
+        icon: icon,
+        title: title,
+        text: message,
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _notify = (message, title) => {
+const _notify = async (title, message) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(typeof title !== 'string')
+    {
+        title = title ? String(title) : '';
+    }
+
+    if(typeof message !== 'string')
+    {
+        message = message ? String(message) : '';
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(!message)
     {
-        return Promise.resolve();
+        return;
     }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(typeof message !== 'string')
-    {
-        message = String(message);
-    }
-
-    if(typeof title !== 'string')
-    {
-        title = String(title);
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    console.log(`title: ${title}, body: ${message}`);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -104,23 +143,26 @@ const _notify = (message, title) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return runtime.notifyIsPermissionGranted().then((granted) => {
-
-        if(!granted)
+    try
+    {
+        if(await runtime.notifyIsPermissionGranted())
         {
-            return runtime.notifyRequestPermission().then((permission) => {
+            runtime.notifySend(title, message);
+            return;
+        }
 
-                if(permission === 'granted')
-                {
-                    return _notify_step2(title, message);
-                }
-            });
-        }
-        else
+        if(await runtime.notifyRequestPermission() === 'granted')
         {
-            return _notify_step2(title, message);
+            runtime.notifySend(title, message);
+            return;
         }
-    });
+
+        return _notify_fallback(title, message);
+    }
+    catch
+    {
+        return _notify_fallback(title, message);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -150,7 +192,7 @@ const _success = (message) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return _notify(message, 'Success').then(_unlock);
+    return _notify('Success', message);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -180,7 +222,7 @@ const _warning = (message) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return _notify(message, 'Warning').then(_unlock);
+    return _notify('Warning', message);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -210,7 +252,7 @@ const _error = (message) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return _notify(message, 'Error').then(_unlock);
+    return _notify('Error', message);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -223,12 +265,12 @@ const _show = (message, title, options = {}) => {
 
     if(typeof message !== 'string')
     {
-        message = String(message);
+        message = message ? String(message) : '';
     }
 
     if(typeof title !== 'string')
     {
-        title = String(title);
+        title = title ? String(title) : '';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -253,7 +295,7 @@ const _show = (message, title, options = {}) => {
         dialogOptions.text = message;
     }
 
-    return Swal.fire(dialogOptions).then((result) => {
+    return Swal.fire(dialogOptions).then(() => {
 
         return true;
     });
@@ -269,12 +311,12 @@ const _confirm = (message, title, options = {}) => {
 
     if(typeof message !== 'string')
     {
-        message = String(message);
+        message = message ? String(message): '';
     }
 
     if(typeof title !== 'string')
     {
-        title = String(title);
+        title = title ? String(title) : '';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -331,7 +373,10 @@ export default {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        document.body.insertAdjacentHTML('beforeend', _LOCKER_HTML);
+        if(!document.querySelector('.spinner-backdrop'))
+        {
+            document.body.insertAdjacentHTML('beforeend', _LOCKER_HTML);
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
