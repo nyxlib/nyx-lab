@@ -12,9 +12,14 @@ import addonFunctions from '@/stores/addon';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const WINDOWS_THEME = localStorage.getItem('nyxLabTheme') || 'dark';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const DEFAULT_GLOBALS = {
     windowTitle: 'Nyx Lab',
-    windowTheme: localStorage.getItem('nyxLabTheme') || 'dark',
+    windowTheme: WINDOWS_THEME,
+    animateHomePage: true,
     /**/
     mqttURL: '',
     nssURL: '',

@@ -193,7 +193,7 @@ const openRepo = () => {
 
                 <!-- *********************************************************************************************** -->
 
-                <vue-particles class="position-absolute top-0 start-0 w-100 h-100 z-n1" :options="particles" :id="uuid.v4()" />
+                <vue-particles class="position-absolute top-0 start-0 w-100 h-100 z-n1" :options="particles" :id="uuid.v4()" v-if="configStore.globals.animateHomePage" />
 
                 <!-- *********************************************************************************************** -->
 

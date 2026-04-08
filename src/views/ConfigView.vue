@@ -142,13 +142,13 @@ onMounted(() => {
 
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <div class="mb-3 mb-md-0">
+                                        <div class="mb-3">
                                             <label class="form-label" for="A4703928">Window title</label>
                                             <input class="form-control form-control-sm" type="text" name="windowTitle" placeholder="Window title" id="A4703928" v-model="configStore.globals.windowTitle" />
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="mb-0 mb-md-0">
+                                        <div class="mb-3">
                                             <label class="form-label" for="EDED8D84">Window theme</label>
                                             <select class="form-select form-select-sm" name="windowTheme" id="EDED8D84" v-model="configStore.globals.windowTheme">
                                                 <option value="light">Light</option>
@@ -157,6 +157,12 @@ onMounted(() => {
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="E6CD96C0" v-model="configStore.globals.animateHomePage" />
+                                    <label class="form-check-label" for="E6CD96C0">Animate home page</label>
+                                </div>
+
                             </div>
                         </div>
 
@@ -190,7 +196,7 @@ onMounted(() => {
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="mb-3 mb-md-0">
+                                        <div class="mb-3">
                                             <label class="form-label" for="A45F11A0">Username<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="mqtt-server username" :disabled="configStore.globals.askMQTTUsername" x-xxxxxxxx-xxxxxx id="A45F11A0" v-model="configStore.globals.mqttUsername" />
                                         </div>
@@ -202,7 +208,7 @@ onMounted(() => {
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="mb-3 mb-md-0">
+                                        <div class="mb-3">
                                             <label class="form-label" for="A4245C17">Password<sup class="text-secondary">opt</sup></label>
                                             <input class="form-control form-control-sm" type="password" name="mqttPassword" placeholder="Password" autocomplete="mqtt-server current-password" :disabled="configStore.globals.askMQTTPassword" v-password-toggle id="A4245C17" v-model="configStore.globals.mqttPassword" />
                                         </div>
