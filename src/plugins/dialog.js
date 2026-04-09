@@ -11,14 +11,14 @@ import getRuntime from '@/runtime';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 // noinspection CssUnresolvedCustomProperty
-const _LOCKER_HTML = `
-    <div class="spinner-backdrop justify-content-center position-fixed top-0 bottom-0 start-0 end-0 bg-body" style="display: none; z-index: 9999;">
-        <div class="align-self-center text-center">
-            <div class="spinner-border" style="width: 4rem; height: 4rem;"></div>
-            <div class="display-4">please wait…</div>
-        </div>
-    </div>
-`;
+const _LOCKER_HTML = [
+    '<div class="spinner-backdrop justify-content-center position-fixed top-0 bottom-0 start-0 end-0 bg-body" style="display: none; z-index: 9999;">',
+    '    <div class="align-self-center text-center">',
+    '        <div class="spinner-border" style="width: 4rem; height: 4rem;"></div>',
+    '        <div class="display-4">please wait…</div>',
+    '    </div>',
+    '</div>',
+].join('\n');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

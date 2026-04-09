@@ -72,6 +72,8 @@ const about = () => {
         '<br />',
         '<a href="https://nyxlib.org/" target="_blank">https://nyxlib.org/</a>',
         '<br /><br />',
+        'Repository: <a href="https://github.com/nyxlib/nyx-lab/" target="_blank">https://github.com/nyxlib/nyx-lab/</a>',
+        '<br /><br />',
         'Author: Jérôme ODIER &lt;<a href="mailto:jerome.odier@lpsc.in2p3.fr">jerome.odier@lpsc.in2p3.fr</a>&gt;',
     ].join('\n'), 'About', {icon: 'info', html: true});
 };
