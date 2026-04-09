@@ -291,15 +291,19 @@ onBeforeUnmount(() => {
 
     <teleport to="#nyx_toolbar">
 
-        <button class="btn btn-sm btn-outline-primary ms-0" type="button" :disabled="!nyxStore.isConnected" @click="canvasEl.show()">
+        <button class="btn btn-sm btn-outline-primary me-2" type="button" :disabled="!nyxStore.isConnected" @click="canvasEl.show()">
             <i class="bi bi-list"></i>
         </button>
 
-        <button class="btn btn-sm btn-outline-primary ms-2" type="button" :disabled="!nyxStore.isConnected || panel.locked" @click="newEditWidget()">
+        <button class="btn btn-sm btn-outline-primary me-3" type="button" :disabled="!nyxStore.isConnected || panel.locked" @click="newEditWidget()">
             <i class="bi bi-plus-lg"></i> New widget
         </button>
 
-        <button class="btn btn-sm btn-outline-success ms-2" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!configStore.modified" @click="configStore.persist()">
+        <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!configStore.modified" @click="configStore.rollback()">
+            <i class="bi bi-x-lg"></i> Rollback changes
+        </button>
+
+        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!configStore.modified" @click="configStore.persist()">
             <i class="bi bi-check-lg"></i> Persist changes
         </button>
 

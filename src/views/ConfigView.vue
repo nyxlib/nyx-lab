@@ -338,8 +338,6 @@ onMounted(() => {
 
     <teleport to="#nyx_toolbar">
 
-        <!-- ******************************************************************************************************* -->
-
         <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 96px;" @click="configStore.new()">
             <i class="bi bi-plus-lg"></i> New
         </button>
@@ -348,15 +346,9 @@ onMounted(() => {
             <i class="bi bi-upload"></i> Import
         </button>
 
-        <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 96px;" @click="configStore.export()">
+        <button class="btn btn-sm btn-outline-primary me-3" type="button" style="width: 96px;" @click="configStore.export()">
             <i class="bi bi-download"></i> Export
         </button>
-
-        <!-- ******************************************************************************************************* -->
-
-        <span class="navbar-text me-2">-</span>
-
-        <!-- ******************************************************************************************************* -->
 
         <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 96px;" :disabled="!configStore.modified" @click="configStore.rollback()">
             <i class="bi bi-x-lg"></i> Rollback
@@ -365,8 +357,6 @@ onMounted(() => {
         <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 96px;" :disabled="!configStore.modified" @click="configStore.persist()">
             <i class="bi bi-check-lg"></i> Persist
         </button>
-
-        <!-- ******************************************************************************************************* -->
 
     </teleport>
 
