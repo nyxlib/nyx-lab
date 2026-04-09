@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
 
                     <!-- ******************************************************************************************* -->
 
-                    <form class="modal-body px-3 py-3" id="A8FAABB1" @submit.prevent="submit">
+                    <form class="modal-body px-3 py-3" id="B463358E" @submit.prevent="submit">
 
                         <div class="row">
                             <div class="col-lg-3 text-center d-none d-lg-block">
@@ -133,11 +133,11 @@ onBeforeUnmount(() => {
                             <div class="col-lg-9">
                                 <div class="mb-3" v-if="configStore.globals.askMQTTUsername">
                                     <label class="form-label" for="A45F11A0">Username</label>
-                                    <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="mqtt-server username" x-xxxxxxxx-xxxxxx id="A45F11A0" v-model="state.username" />
+                                    <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="username" x-xxxxxxxx-xxxxxx id="A45F11A0" v-model="state.username" />
                                 </div>
                                 <div class="mb-3" v-if="configStore.globals.askMQTTPassword">
                                     <label class="form-label" for="A4245C17">Password</label>
-                                    <input class="form-control form-control-sm" type="password" name="mqttPassword" placeholder="Password" autocomplete="mqtt-server current-password" v-password-toggle id="A4245C17" v-model="state.password" />
+                                    <input class="form-control form-control-sm" type="password" name="mqttPassword" placeholder="Password" autocomplete="current-password" v-password-toggle id="A4245C17" v-model="state.password" />
                                 </div>
                             </div>
                         </div>
@@ -152,7 +152,7 @@ onBeforeUnmount(() => {
                             <i class="bi bi-x-lg"></i> Cancel
                         </button>
 
-                        <button class="btn btn-success" type="submit" form="A8FAABB1">
+                        <button class="btn btn-success" type="submit" form="B463358E">
                             <i class="bi bi-check-lg"></i> Connect
                         </button>
 

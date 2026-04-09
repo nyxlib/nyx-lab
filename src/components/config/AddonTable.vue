@@ -42,16 +42,17 @@ const emit = defineEmits(['search']);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const sortedAddons = ref([]);
+const modalEl = ref(null);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* WATCHERS                                                                                                           */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 watch(() => props.addons, () => {
 
     sortedAddons.value = Object.values(props.addons).filter((addon) => addon.id !== '94300404-2ea8-11f1-b3cc-83604f9dfd78').sort((a, b) => a.rank - b.rank);
 
 }, {immediate: true, deep: true});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const modalEl = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -215,19 +216,19 @@ onUnmounted(() => {
         <div class="card-header px-3 py-2">
             Addons
             [
-            <button class="btn btn-xs btn-primary me-1" type="button" @click="() => addonAppend()">
+            <button class="btn btn-xs btn-primary me-1" type="button" @click="addonAppend()">
                 <i class="bi bi-plus-lg"></i>
                 Add addon
             </button>
-            <button class="btn btn-xs btn-primary me-1" type="button" @click="() => pageAppend()">
+            <button class="btn btn-xs btn-primary me-1" type="button" @click="pageAppend()">
                 <i class="bi bi-plus-lg"></i>
                 Add page
             </button>
-            <button class="btn btn-xs btn-primary me-1" type="button" @click="() => addonSearch()">
+            <button class="btn btn-xs btn-primary me-1" type="button" @click="addonSearch()">
                 <i class="bi bi-search"></i>
                 Search
             </button>
-            <button class="btn btn-xs btn-primary me-0" type="button" @click="() => showConsole()">
+            <button class="btn btn-xs btn-primary me-0" type="button" @click="showConsole()">
                 <i class="bi bi bi-card-text"></i>
                 Console
             </button>
@@ -278,7 +279,7 @@ onUnmounted(() => {
                                     </button>
                                 </td>
                                 <td class="text-start">
-                                    <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'xxxxx'" v-model="addon.url" />
+                                    <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'other'" v-model="addon.url" />
                                 </td>
                                 <td class="text-start">
                                     <input :class="['form-control', 'form-control-sm', {'text-decoration-line-through': addon.zombie}]" type="text" :disabled="addon.type === 'addon'" v-model="addon.title" />

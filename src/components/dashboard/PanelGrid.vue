@@ -45,6 +45,17 @@ const state = reactive({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const canvasEl = ref(null);
+const modalEl = ref(null);
+const gridEl = ref(null);
+
+let observer = null;
+let grid = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* COMPUTED                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const controlById = computed(() => new Map(Object.values(configStore.controls).flatMap((x) => x.ctrls).map((x) => [x.id, x.component ?? null])));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -54,16 +65,6 @@ const widgets = computed(() => Object.values(configStore.globals.interfaceWidget
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const locked = computed(() => props.panel.locked || !nyxStore.isConnected);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const canvasEl = ref(null);
-const modalEl = ref(null);
-const gridEl = ref(null);
-
-let observer = null;
-
-let grid = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -298,7 +299,7 @@ onBeforeUnmount(() => {
             <i class="bi bi-plus-lg"></i> New widget
         </button>
 
-        <button class="btn btn-sm btn-outline-success ms-2" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!nyxStore.isConnected || !configStore.modified" @click="configStore.persist()">
+        <button class="btn btn-sm btn-outline-success ms-2" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!configStore.modified" @click="configStore.persist()">
             <i class="bi bi-check-lg"></i> Persist changes
         </button>
 

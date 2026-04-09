@@ -56,6 +56,21 @@ const CONTROLS = [
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const DEFAULTS = Object.freeze({
+    id: null,
+    mode: MODE_VARIABLE,
+    maxPoints: 1000,
+    control: '',
+    shadow: 'shadow-sm',
+    title: '',
+    panel: '',
+    title1: '',
+    title2: '',
+    title3: '',
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const props = defineProps({
     widgetId: {
         type: String,
@@ -76,62 +91,22 @@ const emit = defineEmits(['created', 'update:modelValue']);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const state = reactive({
-    id: null,
-    mode: null,
-    maxPoints: null,
-    control: null,
-    shadow: null,
-    title: null,
-    panel: null,
+    ...DEFAULTS,
     variables1: [],
     variables2: [],
     variables3: [],
-    title1: null,
-    title2: null,
-    title3: null,
     enabled: {},
     options: {},
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const DEFAULTS = Object.freeze({
-    id: null,
-    mode: MODE_VARIABLE,
-    maxPoints: 1000,
-    control: '',
-    shadow: 'shadow-sm',
-    title: '',
-    panel: '',
-    title1: '',
-    title2: '',
-    title3: '',
-});
+const modalEl = ref(null);
+
+let modalInstance = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-watch(() => props.modelValue, (value) => {
-
-    const v = value ?? DEFAULTS;
-
-    state.id = v.id ?? DEFAULTS.id;
-    state.mode = v.mode ?? DEFAULTS.mode;
-    state.maxPoints = v.maxPoints ?? DEFAULTS.maxPoints;
-    state.control = v.control ?? DEFAULTS.control;
-    state.shadow = v.shadow ?? DEFAULTS.shadow;
-    state.title = v.title ?? DEFAULTS.title;
-    state.panel = v.panel ?? DEFAULTS.panel;
-    state.variables1 = Array.isArray(v.variables1) ? [...v.variables1] : [];
-    state.variables2 = Array.isArray(v.variables2) ? [...v.variables2] : [];
-    state.variables3 = Array.isArray(v.variables3) ? [...v.variables3] : [];
-    state.title1 = v.title1 ?? DEFAULTS.title1;
-    state.title2 = v.title2 ?? DEFAULTS.title2;
-    state.title3 = v.title3 ?? DEFAULTS.title3;
-    state.enabled = v.enabled ? {...v.enabled} : {};
-    state.options = v.options ? {...v.options} : {};
-
-}, {immediate: true});
-
+/* COMPUTED                                                                                                           */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const isValid = computed(() => (
@@ -167,10 +142,30 @@ const _controls = computed(() => Object.values(configStore.controls).flatMap((x)
 const _options = computed(() => Object.values(configStore.controls).flatMap((x) => x.ctrls).find((x) => x.id === state.control)?.options ?? []);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* WATCHERS                                                                                                           */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
-const modalEl = ref(null);
+watch(() => props.modelValue, (value) => {
 
-let modalInstance = null;
+    const v = value ?? DEFAULTS;
+
+    state.id = v.id ?? DEFAULTS.id;
+    state.mode = v.mode ?? DEFAULTS.mode;
+    state.maxPoints = v.maxPoints ?? DEFAULTS.maxPoints;
+    state.control = v.control ?? DEFAULTS.control;
+    state.shadow = v.shadow ?? DEFAULTS.shadow;
+    state.title = v.title ?? DEFAULTS.title;
+    state.panel = v.panel ?? DEFAULTS.panel;
+    state.variables1 = Array.isArray(v.variables1) ? [...v.variables1] : [];
+    state.variables2 = Array.isArray(v.variables2) ? [...v.variables2] : [];
+    state.variables3 = Array.isArray(v.variables3) ? [...v.variables3] : [];
+    state.title1 = v.title1 ?? DEFAULTS.title1;
+    state.title2 = v.title2 ?? DEFAULTS.title2;
+    state.title3 = v.title3 ?? DEFAULTS.title3;
+    state.enabled = v.enabled ? {...v.enabled} : {};
+    state.options = v.options ? {...v.options} : {};
+
+}, {immediate: true});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -422,14 +417,14 @@ onBeforeUnmount(() => {
                                 <div class="row" v-if="state.mode === MODE_SCATTER_3D">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="C6F79530">Z variable</label>
-                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables1" />
+                                            <label class="form-label" for="C8248234">Z variable</label>
+                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C8248234" v-model="state.variables1" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="B4020B86">Z title</label>
-                                            <input class="form-control form-control-sm" type="text" placeholder="Y title" id="B4020B86" v-model="state.title1" />
+                                            <label class="form-label" for="C10540B0">Z title</label>
+                                            <input class="form-control form-control-sm" type="text" placeholder="Y title" id="C10540B0" v-model="state.title1" />
                                         </div>
                                     </div>
                                 </div>
@@ -437,8 +432,8 @@ onBeforeUnmount(() => {
                                 <div class="row" v-if="state.mode === MODE_SCATTER_3D">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="C6F79530">Y variable</label>
-                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables2" />
+                                            <label class="form-label" for="B143F52E">Y variable</label>
+                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="B143F52E" v-model="state.variables2" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -452,8 +447,8 @@ onBeforeUnmount(() => {
                                 <div class="row" v-if="state.mode === MODE_SCATTER_3D">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="C6F79530">X variable</label>
-                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="C6F79530" v-model="state.variables3" />
+                                            <label class="form-label" for="A42306A6">X variable</label>
+                                            <multiselect mode="tags" :required="true" :searchable="true" :create-option="true" :allow-absent="true" :close-on-select="true" :options="nyxStore.variableDefs" id="A42306A6" v-model="state.variables3" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">

@@ -24,9 +24,10 @@ const runtime = getRuntime();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const filenames = ref([]);
-
 const filter = ref('');
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* COMPUTED                                                                                                           */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const filteredFilenames = computed(() => {
@@ -141,11 +142,11 @@ onMounted(() => {
         <div class="card-header px-3 py-2">
             Cache
             [
-            <button class="btn btn-xs btn-primary me-1" type="button" @click="getFilenames">
+            <button class="btn btn-xs btn-primary me-1" type="button" @click="getFilenames()">
                 <i class="bi bi-recycle"></i>
                 Reload cache
             </button>
-            <button class="btn btn-xs btn-danger me-0" type="button" @click="delFilenames">
+            <button class="btn btn-xs btn-danger me-0" type="button" @click="delFilenames()">
                 <i class="bi bi-trash2"></i>
                 Flush cache
             </button>

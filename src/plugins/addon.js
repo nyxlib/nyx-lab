@@ -79,7 +79,7 @@ const _execFunction_func = (addonName, funcName, ...args) => {
 
     if(typeof(f) !== 'function')
     {
-        throw new Error(`Unknown function: ${funcName}`);
+        throw new TypeError(`Unknown function: ${funcName}`);
     }
     else
     {

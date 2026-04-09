@@ -22,6 +22,8 @@ export default {
 
         app.directive('password-toggle', {
 
+            /*--------------------------------------------------------------------------------------------------------*/
+
             mounted(inputEl)
             {
                 /*----------------------------------------------------------------------------------------------------*/
@@ -35,7 +37,9 @@ export default {
                 toggleEl.style.setProperty('right', '1.0rem');
                 toggleEl.style.setProperty('bottom', '0.2rem');
 
-                toggleEl.addEventListener('click', () => {
+                /*----------------------------------------------------------------------------------------------------*/
+
+                const onClickFunc = () => {
 
                     /**/ if(inputEl.type !== 'password') {
                         toggleEl.classList.remove('bi-eye-slash-fill');
@@ -47,18 +51,33 @@ export default {
                         toggleEl.classList.add('bi-eye-slash-fill');
                         inputEl.type = 'text';
                     }
-                });
+                };
+
+                toggleEl.addEventListener('click', onClickFunc);
 
                 /*----------------------------------------------------------------------------------------------------*/
 
                 inputEl.parentElement.classList.add('position-relative');
-
                 inputEl.parentElement.appendChild(toggleEl);
 
+                inputEl.onClickFunc = onClickFunc;
+                inputEl.toggleEl = toggleEl;
                 inputEl.type = 'password';
 
                 /*----------------------------------------------------------------------------------------------------*/
+            },
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            unmounted(inputEl)
+            {
+                if(inputEl.toggleEl && inputEl.onClickFunc)
+                {
+                    inputEl.toggleEl.removeEventListener('click', inputEl.onClickFunc);
+                }
             }
+
+            /*--------------------------------------------------------------------------------------------------------*/
         });
 
         /*------------------------------------------------------------------------------------------------------------*/

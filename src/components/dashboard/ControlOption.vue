@@ -13,7 +13,7 @@ const props = defineProps({
     type: {
         type: String,
         required: true,
-        validator: (value) => ['boolean', 'number', 'string'].includes(value.trim()),
+        validator: (value) => ['boolean', 'number', 'string'].includes(value?.trim()),
     },
     name: {
         type: String,
@@ -44,7 +44,8 @@ const props = defineProps({
     },
     modelValue: {
         type: [Boolean, Number, String],
-        required: true,
+        required: false,
+        default: null,
     },
 });
 
@@ -54,28 +55,25 @@ const emit = defineEmits(['update:modelValue']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const value = ref(props.modelValue ?? props.defaultValue);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-watch(() => props.modelValue, (_value) => {
-
-    if(value.value !== _value)
-    {
-        value.value = _value;
-    }
-
-}, {immediate: true, deep: false});
+const valueRef = ref(props.modelValue ?? props.defaultValue);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const uid = uuid();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* INITIALIZATION                                                                                                     */
+/* WATCHERS                                                                                                           */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-/* TO BE CHECKED !!! */
+watch(() => props.modelValue, (value) => {
+
+    valueRef.value = value ?? props.defaultValue;
+
+}, {immediate: true});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* INITIALIZATION                                                                                                     */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(() => {
 
@@ -83,7 +81,7 @@ onMounted(() => {
        ||
        props.modelValue === undefined
     ) {
-        emit('update:modelValue', value.value);
+        emit('update:modelValue', valueRef.value);
     }
 });
 
@@ -102,13 +100,13 @@ onMounted(() => {
         </label>
         <div class="col-sm-9">
             <select class="form-select form-select-sm"
-                :value="String(value) === 'true' ? 'true' : 'false'"
-                :id="uid"
-                @change="(e) => {
-                    const _value = e.target.value === 'true';
-                    emit('update:modelValue', _value);
-                    value = _value;
-                }"
+                    :value="String(valueRef) === 'true' ? 'true' : 'false'"
+                    :id="uid"
+                    @change="(e) => {
+                        const value = e.target.value === 'true';
+                        emit('update:modelValue', value);
+                        valueRef.value = value;
+                    }"
             >
                 <option value="true">true</option>
                 <option value="false">false</option>
@@ -126,13 +124,16 @@ onMounted(() => {
         </label>
         <div class="col-sm-9">
             <input class="form-control form-control-sm" type="number"
-                   :value="value"
+                   :value="valueRef"
+                   :min="Number.isFinite(props.min) ? props.min : undefined"
+                   :max="Number.isFinite(props.max) ? props.max : undefined"
+                   :step="Number.isFinite(props.step) ? props.step : undefined"
                    :id="uid"
                    @input="(e) => {
-                    const _value = e.target.value.trim() ? e.target.valueAsNumber : null;
-                    emit('update:modelValue', _value);
-                    value = _value;
-                }"
+                        const value = e.target.value.trim() ? e.target.valueAsNumber : null;
+                        emit('update:modelValue', value);
+                        valueRef.value = value;
+                   }"
             />
         </div>
     </div>
@@ -147,13 +148,13 @@ onMounted(() => {
         </label>
         <div class="col-sm-9">
             <input class="form-control form-control-sm" type="text"
-                :value="value"
-                :id="uid"
-                @input="(e) => {
-                    const _value = e.target.value.trim() ? e.target.value.trim() : null;
-                    emit('update:modelValue', _value);
-                    value = _value;
-                }"
+                   :value="valueRef"
+                   :id="uid"
+                   @input="(e) => {
+                        const value = e.target.value.trim() ? e.target.value.trim() : null;
+                        emit('update:modelValue', value);
+                        valueRef.value = value;
+                   }"
             />
         </div>
     </div>

@@ -34,6 +34,10 @@ const props = defineProps({
 
 const sortedInterfacePanels = ref([]);
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* WATCHERS                                                                                                           */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 watch(() => props.userDashboards, () => {
 
     sortedInterfacePanels.value = Object.values(props.userDashboards).sort((a, b) => a.rank - b.rank);
@@ -109,7 +113,7 @@ const userDashboardEnabled = (userDashboard) => {
             <div>
                 <i class="bi bi-grid-1x2"></i> Dashboards
                 [
-                    <button class="btn btn-xs btn-primary me-0" type="button" @click="() => userDashboardAppend()">
+                    <button class="btn btn-xs btn-primary me-0" type="button" @click="userDashboardAppend()">
                         <i class="bi bi-plus-lg"></i>
                         Add
                     </button>

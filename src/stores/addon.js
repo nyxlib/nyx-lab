@@ -30,9 +30,9 @@ async function allSettledSequential(iterable)
 
             results.push({status: 'fulfilled', value: value});
         }
-        catch(reason)
+        catch(error)
         {
-            results.push({status: 'rejected', reason: reason});
+            results.push({status: 'rejected', reason: error});
         }
     }
 
@@ -255,9 +255,9 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                         addon.module.start(this.addon, addon.name);
                     }
                 }
-                catch(f)
+                catch(error)
                 {
-                    e = f;
+                    e = error;
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -314,9 +314,9 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                         addon.stop(this.addon, addon.name);
                     }
                 }
-                catch(f)
+                catch(error)
                 {
-                    e = f;
+                    e = error;
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/

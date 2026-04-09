@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {watch, inject, reactive, computed, onMounted} from 'vue';
+import {ref, watch, inject, reactive, computed, onMounted} from 'vue';
 
 import * as marked from 'marked';
 
@@ -17,7 +17,7 @@ import CacheTable from '@/components/config/CacheTable.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import license from '@/assets/license.txt?raw';
+import license from '@/assets/license.md?raw';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -41,7 +41,31 @@ const state = reactive({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const licenseRef = ref(null);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* COMPUTED                                                                                                           */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const confPanels = computed(() => Object.values(configStore.confPanels).sort((x, y) => x.descr.rank - y.descr.rank));
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* WATCHERS                                                                                                           */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+watch(() => configStore.globals.askMQTTUsername, (ask) => {
+
+    if(ask) {
+        configStore.globals.mqttUsername = '';
+    }
+});
+
+watch(() => configStore.globals.askMQTTPassword, (ask) => {
+
+    if(ask) {
+        configStore.globals.mqttPassword = '';
+    }
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -74,28 +98,16 @@ const checkNSSConnection = () => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-watch(() => configStore.globals.askMQTTUsername, (ask) => {
-
-    if(ask) {
-        configStore.globals.mqttUsername = '';
-    }
-});
-
-watch(() => configStore.globals.askMQTTPassword, (ask) => {
-
-    if(ask) {
-        configStore.globals.mqttPassword = '';
-    }
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(() => {
 
-    document.getElementById('nyx_license').innerHTML = marked.marked(license).replace('/<a /g', '<a target="_blank" ').replaceAll(/<h([1-6])>/g, (_, p1) => `<h${Number.parseInt(p1) + 1}>`).replaceAll(/<\/h([1-6])>/g, (_, p1) => `</h${Number.parseInt(p1) + 1}>`);
+    licenseRef.value.innerHTML = marked.marked(license)
+                                       .replaceAll('<a ', '<a target="_blank" rel="noopener noreferrer" ')
+                                       .replaceAll(/<h([1-6])>/g, (_, p1) => `<h${Math.min(Number.parseInt(p1, 10) + 1, 6)}>`)
+                                       .replaceAll(/<\/h([1-6])>/g, (_, p1) => `</h${Math.min(Number.parseInt(p1, 10) + 1, 6)}>`)
+    ;
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -177,8 +189,8 @@ onMounted(() => {
                                 <div class="mb-3">
                                     <label class="form-label" for="F3AB1470">MQTT Broker URL<!-- ********************************** --></label>
                                     <div class="input-group input-group-sm">
-                                        <input class="form-control form-control-sm" type="text" name="mqttURL" placeholder="Server URL, e.g. ws://localhost:8080/" autocomplete="mqtt-server url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
-                                        <button class="btn btn-primary" type="button" :disabled="!configStore.globals.mqttURL?.trim()" @click="checkMQTTConnection">
+                                        <input class="form-control form-control-sm" type="text" name="mqttURL" placeholder="Server URL, e.g. ws://localhost:8080/" autocomplete="url" id="F3AB1470" v-model="configStore.globals.mqttURL" />
+                                        <button class="btn btn-primary" type="button" :disabled="!configStore.globals.mqttURL?.trim()" @click="checkMQTTConnection()">
                                             <i class="bi bi-broadcast"></i> Check
                                         </button>
                                     </div>
@@ -187,8 +199,8 @@ onMounted(() => {
                                 <div class="mb-3">
                                     <label class="form-label" for="FCF446F6">Nyx-Stream Server URL<sup class="text-secondary">opt</sup></label>
                                     <div class="input-group input-group-sm">
-                                        <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL, e.g. ws://localhost:9999/" autocomplete="nss-server url" id="FCF446F6" v-model="configStore.globals.nssURL" />
-                                        <button class="btn btn-primary" type="button" :disabled="!configStore.globals.nssURL?.trim()" @click="checkNSSConnection">
+                                        <input class="form-control form-control-sm" type="text" name="nssURL" placeholder="Server URL, e.g. ws://localhost:9999/" autocomplete="url" id="FCF446F6" v-model="configStore.globals.nssURL" />
+                                        <button class="btn btn-primary" type="button" :disabled="!configStore.globals.nssURL?.trim()" @click="checkNSSConnection()">
                                             <i class="bi bi-broadcast"></i> Check
                                         </button>
                                     </div>
@@ -198,7 +210,7 @@ onMounted(() => {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="A45F11A0">Username<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="mqtt-server username" :disabled="configStore.globals.askMQTTUsername" x-xxxxxxxx-xxxxxx id="A45F11A0" v-model="configStore.globals.mqttUsername" />
+                                            <input class="form-control form-control-sm" type="text" name="mqttUsername" placeholder="Username" autocomplete="username" :disabled="configStore.globals.askMQTTUsername" x-xxxxxxxx-xxxxxx id="A45F11A0" v-model="configStore.globals.mqttUsername" />
                                         </div>
                                         <div class="mb-3 mb-md-0">
                                             <div class="form-check form-switch">
@@ -210,7 +222,7 @@ onMounted(() => {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="A4245C17">Password<sup class="text-secondary">opt</sup></label>
-                                            <input class="form-control form-control-sm" type="password" name="mqttPassword" placeholder="Password" autocomplete="mqtt-server current-password" :disabled="configStore.globals.askMQTTPassword" v-password-toggle id="A4245C17" v-model="configStore.globals.mqttPassword" />
+                                            <input class="form-control form-control-sm" type="password" name="mqttPassword" placeholder="Password" autocomplete="current-password" :disabled="configStore.globals.askMQTTPassword" v-password-toggle id="A4245C17" v-model="configStore.globals.mqttPassword" />
                                         </div>
                                         <div class="mb-0 mb-md-0">
                                             <div class="form-check form-switch">
@@ -241,7 +253,7 @@ onMounted(() => {
                             </div>
                             <div class="card-body">
 
-                                <div class="overflow-y-scroll" style="height: 500px;" id="nyx_license"></div>
+                                <div class="overflow-y-scroll" style="height: 500px;" ref="licenseRef"></div>
 
                             </div>
                         </div>
@@ -320,13 +332,13 @@ onMounted(() => {
 
     </div>
 
-    <!-- *************************************************************************************************** -->
-    <!-- BUTTONS                                                                                             -->
-    <!-- *************************************************************************************************** -->
+    <!-- *********************************************************************************************************** -->
+    <!-- BUTTONS                                                                                                     -->
+    <!-- *********************************************************************************************************** -->
 
     <teleport to="#nyx_toolbar">
 
-        <!-- *********************************************************************************************** -->
+        <!-- ******************************************************************************************************* -->
 
         <button class="btn btn-sm btn-outline-primary me-2" type="button" style="width: 96px;" @click="configStore.new()">
             <i class="bi bi-plus-lg"></i> New
@@ -340,11 +352,11 @@ onMounted(() => {
             <i class="bi bi-download"></i> Export
         </button>
 
-        <!-- *********************************************************************************************** -->
+        <!-- ******************************************************************************************************* -->
 
         <span class="navbar-text me-2">-</span>
 
-        <!-- *********************************************************************************************** -->
+        <!-- ******************************************************************************************************* -->
 
         <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 96px;" :disabled="!configStore.modified" @click="configStore.rollback()">
             <i class="bi bi-x-lg"></i> Rollback
@@ -354,7 +366,7 @@ onMounted(() => {
             <i class="bi bi-check-lg"></i> Persist
         </button>
 
-        <!-- *********************************************************************************************** -->
+        <!-- ******************************************************************************************************* -->
 
     </teleport>
 

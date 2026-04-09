@@ -44,13 +44,16 @@ const state = reactive({
     currentPanelId: null,
 });
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const panels = computed(() => Object.values(configStore.globals.interfacePanels).filter((panel) => panel.enabled).sort((a, b) => a.rank - b.rank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const modalEl = ref(null);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* COMPUTED                                                                                                           */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const panels = computed(() => Object.values(configStore.globals.interfacePanels).filter((panel) => panel.enabled).sort((a, b) => a.rank - b.rank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -162,16 +165,16 @@ const openConfig = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const openHelp = () => {
+const saveConfig = () => {
 
-    getRuntime().browse('https://nyxlib.org/');
+    configStore.export();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const openRepo = () => {
+const openHelp = () => {
 
-    getRuntime().browse('https://github.com/nyxlib/');
+    getRuntime().browse('https://nyxlib.org/solutions/nyx-lab/');
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -220,19 +223,19 @@ const openRepo = () => {
                     <!-- ******************************************************************************************* -->
 
                     <div class="col-md-3 d-flex flex-column align-items-center">
-                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="openHelp()">
-                            <i class="bi bi-book" style="font-size: 35px;"></i>
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="saveConfig()">
+                            <i class="bi bi-download" style="font-size: 35px;"></i>
                         </button>
-                        <span>Documentation</span>
+                        <span>Save workspace</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
 
                     <div class="col-md-3 d-flex flex-column align-items-center">
-                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="openRepo()">
-                            <i class="bi bi-github" style="font-size: 35px;"></i>
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="openHelp()">
+                            <i class="bi bi-book" style="font-size: 35px;"></i>
                         </button>
-                        <span>Repository</span>
+                        <span>Documentation</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
@@ -276,6 +279,18 @@ const openRepo = () => {
     <!-- *********************************************************************************************************** -->
 
     <credentials-modal ref="modalEl" @connect="connect_step2" />
+
+    <!-- *********************************************************************************************************** -->
+    <!-- BUTTONS                                                                                                     -->
+    <!-- *********************************************************************************************************** -->
+
+    <teleport to="#nyx_toolbar" v-if="!state.currentPanelId">
+
+        <button class="btn btn-sm btn-outline-success ms-2" :class="{'pulse-btn': configStore.modified}" type="button" :disabled="!configStore.modified" @click="configStore.persist()">
+            <i class="bi bi-check-lg"></i> Persist changes
+        </button>
+
+    </teleport>
 
     <!-- *********************************************************************************************************** -->
 
