@@ -70,7 +70,7 @@ const about = () => {
     dialog.show([
         '<h1>Nyx Lab</h1>',
         '<br />',
-        '<a href="https://nyxlib.org/" target="_blank">https://nyxlib.org/</a>',
+        'Website: <a href="https://nyxlib.org/" target="_blank">https://nyxlib.org/</a>',
         '<br /><br />',
         'Repository: <a href="https://github.com/nyxlib/nyx-lab/" target="_blank">https://github.com/nyxlib/nyx-lab/</a>',
         '<br /><br />',

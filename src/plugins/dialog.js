@@ -10,7 +10,6 @@ import getRuntime from '@/runtime';
 /* LOCK                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-// noinspection CssUnresolvedCustomProperty
 const _LOCKER_HTML = [
     '<div class="spinner-backdrop justify-content-center position-fixed top-0 bottom-0 start-0 end-0 bg-body" style="display: none; z-index: 9999;">',
     '    <div class="align-self-center text-center">',
