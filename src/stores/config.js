@@ -276,7 +276,20 @@ const useConfigStore = defineStore('config', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        _confirm(f)
+        _confirm_close_workspace(f)
+        {
+            this.dialog.confirm('Are you sure you want to close the current workspace?', 'Nyx Lab', {icon: 'question'}).then((choice) => {
+
+                if(choice)
+                {
+                    f();
+                }
+            });
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        _confirm_discard_changes(f)
         {
             this.dialog.confirm('Are you sure you want to discard your changes?', 'Nyx Lab', {icon: 'question'}).then((choice) => {
 
@@ -293,7 +306,7 @@ const useConfigStore = defineStore('config', {
         {
             if(this.modified) {
 
-                this._confirm(() => {
+                this._confirm_discard_changes(() => {
 
                     f();
                 });
@@ -307,7 +320,7 @@ const useConfigStore = defineStore('config', {
 
         new()
         {
-            this._confirm(() => {
+            this._confirm_close_workspace(() => {
 
                 this._setConfig(null, true, false);
             });
@@ -317,7 +330,7 @@ const useConfigStore = defineStore('config', {
 
         import()
         {
-            this._confirm(() => {
+            this._confirm_close_workspace(() => {
 
                 this.dialog.open('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json']).then((file) => {
 
