@@ -186,7 +186,7 @@ const openHelp = () => {
     <!-- DASHBOARD                                                                                                   -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="overflow-y-auto h-100 w-100 p-3">
+    <div class="overflow-y-hidden overflow-y-auto h-100 w-100 p-3">
 
         <nyx-dashboard class="position-relative" :show-devices="configStore.globals.showNyxInterfaces" @connect="connect" @disconnect="disconnect">
 

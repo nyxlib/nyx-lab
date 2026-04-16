@@ -119,17 +119,17 @@ onMounted(() => {
 
     <template v-if="state.indexMode">
 
-        <button class="btn btn-light" type="button" style="z-index: 999; position: absolute; top: 58px; right: 1rem;" @click="() => { state.indexMode = false; }">
+        <button class="btn btn-light" type="button" style="position: absolute; z-index: 999; top: 58px; right: 1rem;" @click="() => { state.indexMode = false; }">
             <i class="bi bi-door-open"></i> Close addon index
         </button>
 
-        <iframe src="https://addons.nyxlib.org/" title="Nyx Addon Index" style="height: 100%; width: 100%;" v-show="state.indexMode"></iframe>
+        <iframe class="h-100 w-100" src="https://addons.nyxlib.org/" title="Nyx Addon Index" v-show="state.indexMode"></iframe>
 
     </template>
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="overflow-y-auto h-100 w-100 p-3" v-show="!state.indexMode">
+    <div class="overflow-x-hidden overflow-y-auto h-100 w-100 p-3" v-show="!state.indexMode">
 
         <!--*********************************************************************************************************-->
 
