@@ -196,7 +196,7 @@ onMounted(() => {
 
             <button class="navbar-toggler my-2" type="button" data-bs-toggle="collapse" data-bs-target="#F6512D88">
 
-                <span class="navbar-toggler-icon"></span>
+                <i class="bi bi-list"></i>
 
             </button>
 
