@@ -244,11 +244,17 @@ const openHelp = () => {
 
                 <!-- *********************************************************************************************** -->
 
-                <div class="d-none d-md-block position-absolute opacity-50" style="font-size: 0.9rem; bottom: -10px;">
+                <div class="d-none2 d-md-block position-absolute text-center opacity-50" style="font-size: 0.9rem; bottom: -10px;">
 
-                    Copyright © 2024-{{ new Date().getFullYear() }} <a href="https://nyxlib.org/" target="_blank">Nyx Lab</a> — <a href="https://odier.xyz/" target="_blank">Jérôme ODIER</a>, <a href="https://lpsc.in2p3.fr/" target="_blank">LPSC</a> / <a href="https://cnrs.fr/" target="_blank">CNRS</a>.
+                    <span>
+                        © 2024-{{ new Date().getFullYear() }} <a href="https://nyxlib.org/" target="_blank">Nyx Lab</a> — <a href="https://odier.xyz/" target="_blank">Jérôme ODIER</a>, <a href="https://lpsc.in2p3.fr/" target="_blank">LPSC</a> / <a href="https://cnrs.fr/" target="_blank">CNRS</a>.
+                    </span>
 
-                    GIT commit: <a :href="`https://github.com/nyxlib/nyx-lab/tree/${GIT_RELEASE.gitCommit}`" target="_blank">{{ GIT_RELEASE.gitBranch }} / {{ GIT_RELEASE.gitCommit }}</a>, build date: {{ GIT_RELEASE.date?.split('T')[0] }}.
+                    <br class="d-lg-none">
+
+                    <span>
+                        GIT commit: <a :href="`https://github.com/nyxlib/nyx-lab/tree/${GIT_RELEASE.gitCommit}`" target="_blank">{{ GIT_RELEASE.gitBranch }} / {{ GIT_RELEASE.gitCommit }}</a>, build date: {{ GIT_RELEASE.date?.split('T')[0] }}.
+                    </span>
 
                 </div>
 
