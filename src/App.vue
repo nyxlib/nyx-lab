@@ -181,8 +181,8 @@ onMounted(() => {
     <!-- HEADER                                                                                                      -->
     <!-- *********************************************************************************************************** -->
 
-    <nav class="navbar navbar-expand-lg nyx-bg1 py-0">
-        <div class="container-fluid nyx-bg2 px-2" data-tauri-drag-region>
+    <nav class="navbar navbar-expand-lg py-0">
+        <div class="container-fluid px-2" data-tauri-drag-region>
 
             <!-- *************************************************************************************************** -->
 
@@ -267,13 +267,13 @@ onMounted(() => {
     <!-- BODY                                                                                                        -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="d-flex flex-row nyx-bg1" style="height: calc(100% - 3.0rem + 1px); width: 100%;">
+    <div id="nyx_main">
 
         <!-- ******************************************************************************************************* -->
         <!-- MENU                                                                                                    -->
         <!-- ******************************************************************************************************* -->
 
-        <ul class="nav nav-pills flex-column flex-nowrap overflow-x-hidden overflow-y-scroll nyx-bg2 px-2" style="width: 4rem;" id="nyx_menu">
+        <ul class="nav nav-pills flex-column flex-nowrap px-2" style="width: 4rem;" id="nyx_main_left">
 
             <!-- *************************************************************************************************** -->
 
@@ -309,13 +309,9 @@ onMounted(() => {
         <!-- BODY                                                                                                    -->
         <!-- ******************************************************************************************************* -->
 
-        <div class="nyx-bg2" style="width: calc(100% - 4rem);">
+        <div class="bg-body" style="clip-path: inset(0 0 0 0 round var(--bs-border-radius) 0 0 0);" id="nyx_main_right">
 
-            <div class="overflow-hidden nyx-bg1 h-100 w-100" style="clip-path: inset(0 0 0 0 round var(--bs-border-radius) 0 0 0);">
-
-                <router-view :key="$route.path" />
-
-            </div>
+            <router-view :key="$route.path" />
 
         </div>
 
