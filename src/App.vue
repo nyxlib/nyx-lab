@@ -181,7 +181,7 @@ onMounted(() => {
     <!-- HEADER                                                                                                      -->
     <!-- *********************************************************************************************************** -->
 
-    <nav class="navbar navbar-expand nyx-bg1 py-0">
+    <nav class="navbar navbar-expand-lg nyx-bg1 py-0">
         <div class="container-fluid nyx-bg2 px-2" data-tauri-drag-region>
 
             <!-- *************************************************************************************************** -->
@@ -194,51 +194,67 @@ onMounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <div class="d-flex ms-auto py-2" id="nyx_toolbar">
+            <button class="navbar-toggler my-2" type="button" data-bs-toggle="collapse" data-bs-target="#F6512D88">
 
-                <!-- DYNAMIC -->
+                <span class="navbar-toggler-icon"></span>
 
-            </div>
-
-            <!-- *************************************************************************************************** -->
-
-            <div class="d-flex ms-2 py-2">
-
-                <span class="badge text-bg-success py-1" v-if="nyxStore.isConnected">
-                    <i class="bi bi-power"></i> connected
-                </span>
-
-                <span class="badge text-bg-secondary py-1" v-if="!nyxStore.isConnected">
-                    <i class="bi bi-power"></i> disconnected
-                </span>
-
-            </div>
+            </button>
 
             <!-- *************************************************************************************************** -->
 
-            <div class="d-flex ms-2 py-2">
+            <div class="collapse navbar-collapse py-lg-2" id="F6512D88">
 
-                <button class="btn btn-sm btn-outline-secondary me-0" type="button" @click="about()">
-                    <i class="bi bi-question"></i>
-                </button>
+                <!-- *********************************************************************************************** -->
 
-            </div>
+                <div class="navbar-nav mb-2 mb-lg-0 ms-lg-auto" id="nyx_toolbar">
 
-            <!-- *************************************************************************************************** -->
+                    <!-- DYNAMIC -->
 
-            <div class="d-flex ms-2 py-2">
+                </div>
 
-                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!runtime.isDesktop" @click="runtime.minimize()">
-                    <i class="bi bi-dash-lg"></i>
-                </button>
+                <!-- *********************************************************************************************** -->
 
-                <button class="btn btn-sm border-0 me-1" type="button" :hidden="!runtime.isDesktop" @click="runtime.toggleMaximize()">
-                    <i class="bi bi-collection"></i>
-                </button>
+                <div class="navbar-nav mb-2 mb-lg-0 ms-lg-2">
 
-                <button class="btn btn-sm border-0 me-0" type="button" :hidden="!runtime.isDesktop" @click="runtime.close()">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+                    <span class="badge text-bg-success py-1" v-if="nyxStore.isConnected">
+                        <i class="bi bi-power"></i> connected
+                    </span>
+
+                    <span class="badge text-bg-secondary py-1" v-if="!nyxStore.isConnected">
+                        <i class="bi bi-power"></i> disconnected
+                    </span>
+
+                </div>
+
+                <!-- *********************************************************************************************** -->
+
+                <div class="navbar-nav mb-2 mb-lg-0 ms-lg-2">
+
+                    <button class="btn btn-sm btn-outline-secondary" type="button" @click="about()">
+                        <i class="bi bi-question"></i>
+                    </button>
+
+                </div>
+
+                <!-- *********************************************************************************************** -->
+
+                <div class="navbar-nav mb-0 mb-lg-0 ms-lg-2" v-if="runtime.isDesktop">
+
+                    <button class="btn btn-sm border-0 me-1" type="button" @click="runtime.minimize()">
+                        <i class="bi bi-dash-lg"></i>
+                    </button>
+
+                    <button class="btn btn-sm border-0 me-1" type="button" @click="runtime.toggleMaximize()">
+                        <i class="bi bi-collection"></i>
+                    </button>
+
+                    <button class="btn btn-sm border-0 me-0" type="button" @click="runtime.close()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+
+                </div>
+
+                <!-- *********************************************************************************************** -->
 
             </div>
 
