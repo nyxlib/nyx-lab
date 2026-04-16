@@ -153,6 +153,7 @@ body[data-environment="desktop"][data-maximized="false"]::after {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/*noinspection CssNonIntegerLengthInPixels*/
 @media (max-width: 991.98px) { /* < lg */
 
     #nyx_toolbar > *:not(:last-child) {
