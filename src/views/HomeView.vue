@@ -200,7 +200,7 @@ const openHelp = () => {
 
                 <!-- *********************************************************************************************** -->
 
-                <div class="row w-50 mt-5">
+                <div class="row w-50 my-5">
 
                     <!-- ******************************************************************************************* -->
 
@@ -244,7 +244,7 @@ const openHelp = () => {
 
                 <!-- *********************************************************************************************** -->
 
-                <div class="d-none2 d-md-block position-absolute text-center opacity-50" style="font-size: 0.9rem; bottom: -10px;">
+                <div class="d-none d-md-block position-absolute text-center opacity-50" style="font-size: 0.9rem; bottom: -10px;">
 
                     <span>
                         © 2024-{{ new Date().getFullYear() }} <a href="https://nyxlib.org/" target="_blank">Nyx Lab</a> — <a href="https://odier.xyz/" target="_blank">Jérôme ODIER</a>, <a href="https://lpsc.in2p3.fr/" target="_blank">LPSC</a> / <a href="https://cnrs.fr/" target="_blank">CNRS</a>.
