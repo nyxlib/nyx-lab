@@ -208,7 +208,7 @@ const openHelp = () => {
                         <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 75px; height: 75px; border-radius: 40px;" @click="newConfig()">
                             <i class="bi bi-plus-lg" style="font-size: 40px;"></i>
                         </button>
-                        <span class="text-center">New workspace</span>
+                        <span class="text-center mb-2">New workspace</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
@@ -217,7 +217,7 @@ const openHelp = () => {
                         <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="openConfig()">
                             <i class="bi bi-upload" style="font-size: 35px;"></i>
                         </button>
-                        <span class="text-center">Open workspace</span>
+                        <span class="text-center mb-2">Open workspace</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
@@ -226,7 +226,7 @@ const openHelp = () => {
                         <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="saveConfig()">
                             <i class="bi bi-download" style="font-size: 35px;"></i>
                         </button>
-                        <span class="text-center">Save workspace</span>
+                        <span class="text-center mb-2">Save workspace</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
@@ -235,7 +235,7 @@ const openHelp = () => {
                         <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="openHelp()">
                             <i class="bi bi-book" style="font-size: 35px;"></i>
                         </button>
-                        <span class="text-center">Documentation</span>
+                        <span class="text-center mb-2">Documentation</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
