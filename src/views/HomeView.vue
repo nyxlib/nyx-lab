@@ -217,7 +217,7 @@ const openHelp = () => {
                         <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="openConfig()">
                             <i class="bi bi-upload" style="font-size: 35px;"></i>
                         </button>
-                        <span class="text-center mb-2">Open workspace</span>
+                        <span class="text-center mb-2">Import workspace</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
@@ -226,7 +226,7 @@ const openHelp = () => {
                         <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-2" type="button" style="width: 70px; height: 70px; border-radius: 35px;" @click="saveConfig()">
                             <i class="bi bi-download" style="font-size: 35px;"></i>
                         </button>
-                        <span class="text-center mb-2">Save workspace</span>
+                        <span class="text-center mb-2">Export workspace</span>
                     </div>
 
                     <!-- ******************************************************************************************* -->
@@ -292,11 +292,11 @@ const openHelp = () => {
 
     <teleport to="#nyx_toolbar" v-if="!state.currentPanelId">
 
-        <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 150px;" :disabled="!configStore.modified" @click="configStore.rollback()">
+        <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 150px;" @click="configStore.rollback()" v-if="configStore.modified">
             <i class="bi bi-x-lg"></i> Rollback changes
         </button>
 
-        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 150px;" :disabled="!configStore.modified" @click="configStore.persist()">
+        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 150px;" @click="configStore.persist()" v-if="configStore.modified">
             <i class="bi bi-check-lg"></i> Persist changes
         </button>
 

@@ -278,7 +278,7 @@ const useConfigStore = defineStore('config', {
 
         _confirm_close_workspace(f)
         {
-            this.dialog.confirm('Are you sure you want to close the current workspace?', 'Nyx Lab', {icon: 'question'}).then((choice) => {
+            this.dialog.confirm('Are you sure you want to close the current workspace and discard your changes?', 'Nyx Lab', {icon: 'question'}).then((choice) => {
 
                 if(choice)
                 {
