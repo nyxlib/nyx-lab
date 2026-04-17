@@ -290,13 +290,13 @@ const openHelp = () => {
     <!-- BUTTONS                                                                                                     -->
     <!-- *********************************************************************************************************** -->
 
-    <teleport to="#nyx_toolbar" v-if="!state.currentPanelId">
+    <teleport to="#nyx_toolbar" v-if="configStore.modified && !state.currentPanelId">
 
-        <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 150px;" @click="configStore.rollback()" v-if="configStore.modified">
+        <button class="btn btn-sm btn-outline-warning me-2" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 150px;" @click="configStore.rollback()">
             <i class="bi bi-x-lg"></i> Rollback changes
         </button>
 
-        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 150px;" @click="configStore.persist()" v-if="configStore.modified">
+        <button class="btn btn-sm btn-outline-success me-0" :class="{'pulse-btn': configStore.modified}" type="button" style="width: 150px;" @click="configStore.persist()">
             <i class="bi bi-check-lg"></i> Persist changes
         </button>
 
