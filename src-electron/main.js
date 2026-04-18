@@ -2,6 +2,8 @@
 
 const {app, shell, dialog, ipcMain, session, protocol, BrowserWindow} = require('electron');
 
+const process = require('node:child_process');
+
 const fsp = require('node:fs/promises');
 
 const path = require('node:path');
@@ -369,6 +371,49 @@ ipcMain.handle('nyx:dialog:save', async (_event, defaultPath, typeName, typeExts
 ipcMain.handle('nyx:browser:browse', (_, url) => {
 
     return shell.openExternal(url);
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* IPC - COMMAND                                                                                                      */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+ipcMain.handle('nyx:command:exec', async (event, cmd, args = []) => {
+
+    return await new Promise((resolve) => {
+
+        const proc = process.spawn(cmd, args);
+
+        let stdout = '';
+        let stderr = '';
+
+        proc.stdout.on('data', (data) => {
+
+            stdout += data.toString();
+        });
+
+        proc.stderr.on('data', (data) => {
+
+            stderr += data.toString();
+        });
+
+        proc.on('error', (e) => {
+
+            resolve({
+                stdout: /**/''/**/,
+                stderr: e.message,
+                code: -1,
+            });
+        });
+
+        proc.on('close', (code) => {
+
+            resolve({
+                stdout: stdout,
+                stderr: stderr,
+                code: code,
+            });
+        });
+    });
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
