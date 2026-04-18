@@ -126,10 +126,9 @@ export default {
         app.provide('addon', {
             app: app,
             router: router,
+            runtime: getRuntime,
             nyxStore: useNyxStore,
             configStore: useConfigStore,
-            /**/
-            getRuntime: getRuntime,
             /**/
             newId: () => uuid.v4().substring(0, 13),
             /**/
