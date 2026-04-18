@@ -73,6 +73,8 @@ watch(() => configStore.globals.askMQTTPassword, (ask) => {
 
 const checkMQTTConnection = () => {
 
+    dialog.lock();
+
     mqtt.check(configStore.globals.mqttURL, configStore.globals.mqttUsername, configStore.globals.mqttPassword).then((message) => {
 
         dialog.show(message, 'Testing MQTT broker', {icon: 'info'});
@@ -80,12 +82,18 @@ const checkMQTTConnection = () => {
     }).catch((error) => {
 
         dialog.show(error, 'Testing MQTT broker', {icon: 'error'});
+
+    }).finally(() => {
+
+        dialog.unlock();
     });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const checkNSSConnection = () => {
+
+    dialog.lock();
 
     nss.check(configStore.globals.nssURL, configStore.globals.nssUsername, configStore.globals.nssPassword).then((message) => {
 
@@ -94,6 +102,10 @@ const checkNSSConnection = () => {
     }).catch((error) => {
 
         dialog.show(error, 'Testing Nyx-Stream', {icon: 'error'});
+
+    }).finally(() => {
+
+        dialog.unlock();
     });
 };
 
