@@ -6,7 +6,9 @@ import * as tauriWindow from '@tauri-apps/api/window';
 
 import * as tauriFS from '@tauri-apps/plugin-fs';
 import * as tauriOS from '@tauri-apps/plugin-os';
+import * as tauriHTTP from '@tauri-apps/plugin-http';
 import * as tauriShell from '@tauri-apps/plugin-shell';
+import * as tauriStore from '@tauri-apps/plugin-store';
 import * as tauriDialog from '@tauri-apps/plugin-dialog';
 import * as tauriGeolocation from '@tauri-apps/plugin-geolocation';
 import * as tauriNotification from '@tauri-apps/plugin-notification';
@@ -15,9 +17,9 @@ import * as tauriNotification from '@tauri-apps/plugin-notification';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const HAS_TAURI = window['__TAURI__'] !== undefined;
+const HAS_TAURI = globalThis['__TAURI__'] !== undefined;
 
-const HAS_ELECTRON = window['__ELECTRON__'] !== undefined;
+const HAS_ELECTRON = globalThis['__ELECTRON__'] !== undefined;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -181,17 +183,17 @@ const _buildBrowserRuntime = () => ({
     /* BROWSER                                                                                                        */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    browse: (url) => window.open(url, '_blank', 'noopener,noreferrer'),
+    browse: (url) => globalThis.open(url, '_blank', 'noopener,noreferrer'),
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    fetch: (url, options) => globalThis.fetch(url, options),
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* COMMAND                                                                                                        */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    exec: () => Promise.reject({
-        stderr: 'Not supported',
-        stdout: '',
-        code: -1,
-    }),
+    exec: () => Promise.reject(new Error('Not supported.')),
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GEOLOCATION                                                                                                    */
@@ -320,6 +322,10 @@ const _buildElectronRuntime = () => ({
     browse: (url) => globalThis.__ELECTRON__.browse(url),
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    fetch: (url, options) => _buildBrowserRuntime().fetch(url, options),
+
+    /*----------------------------------------------------------------------------------------------------------------*/
     /* COMMAND                                                                                                        */
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -366,7 +372,7 @@ const _buildTauriRuntime = () => {
 
     const isMobile = ['android', 'ios'].includes(tauriOS.type());
 
-    const window = tauriWindow.getCurrentWindow();
+    const currentWindow = tauriWindow.getCurrentWindow();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -384,27 +390,27 @@ const _buildTauriRuntime = () => {
         /* DESKTOP                                                                                                    */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        minimize: () => window.minimize(),
+        minimize: () => currentWindow.minimize(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        maximize: () => window.maximize(),
+        maximize: () => currentWindow.maximize(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        toggleMaximize: () => window.toggleMaximize(),
+        toggleMaximize: () => currentWindow.toggleMaximize(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        isMaximized: () => window.isMaximized(),
+        isMaximized: () => currentWindow.isMaximized(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        close: () => window.close(),
+        close: () => currentWindow.close(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        destroy: () => window.destroy(),
+        destroy: () => currentWindow.destroy(),
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -517,15 +523,15 @@ const _buildTauriRuntime = () => {
 
         browse: (url) => tauriShell.open(url),
 
-        /*----------------------------------------------------------------------------------------------------------------*/
-        /* COMMAND                                                                                                        */
-        /*----------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        exec: () => Promise.reject({
-            stderr: 'Not supported',
-            stdout: '',
-            code: -1,
-        }),
+        fetch: (url, options) => tauriHTTP.fetch(url, options),
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* COMMAND                                                                                                    */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        exec: () => Promise.reject(new Error('Not supported.')),
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* GEOLOCATION                                                                                                */
@@ -547,12 +553,9 @@ const _buildTauriRuntime = () => {
 
         deleteCachedFile: (pathname) => {
 
-            return import('@tauri-apps/plugin-store').then(({load}) => {
+            return tauriStore.load('nyx-addons-store.json').then((store) => {
 
-                return load('nyx-addons-store.json').then((store) => {
-
-                    return store.delete(pathname);
-                });
+                return store.delete(pathname);
             });
         },
 
@@ -560,12 +563,9 @@ const _buildTauriRuntime = () => {
 
         deleteCachedFiles: () => {
 
-            return import('@tauri-apps/plugin-store').then(({load}) => {
+            return tauriStore.load('nyx-addons-store.json').then((store) => {
 
-                return load('nyx-addons-store.json').then((store) => {
-
-                    return store.clear();
-                });
+                return store.clear();
             });
         },
 
@@ -573,17 +573,14 @@ const _buildTauriRuntime = () => {
 
         listCachedFiles: () => {
 
-            return import('@tauri-apps/plugin-store').then(({load}) => {
+            return tauriStore.load('nyx-addons-store.json').then((store) => {
 
-                return load('nyx-addons-store.json').then((store) => {
+                return store.keys().then((keys) => {
 
-                    return store.keys().then((keys) => {
-
-                        return keys.map((key) => ({
-                            path: key,
-                            size: 0x0,
-                        }));
-                    });
+                    return keys.map((key) => ({
+                        path: key,
+                        size: 0x0,
+                    }));
                 });
             });
         },
