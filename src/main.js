@@ -83,6 +83,7 @@ app.directive('tooltip', {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+// noinspection JSCheckFunctionSignatures
 app.use(Particles, {
 
     init: (engine) => {

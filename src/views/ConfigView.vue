@@ -17,6 +17,7 @@ import CacheTable from '@/components/config/CacheTable.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+// noinspection NpmUsedModulesInstalled
 import license from '@/assets/license.md?raw';
 
 /*--------------------------------------------------------------------------------------------------------------------*/

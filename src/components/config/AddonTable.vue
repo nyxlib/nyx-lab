@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, watch, inject, onMounted, onUnmounted} from 'vue';
+import {ref, watch, inject, onMounted, onBeforeUnmount} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -200,7 +200,7 @@ onMounted(() => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
 
     window.removeEventListener('message', htmlMessageHandler);
 });
