@@ -253,22 +253,36 @@ const useConfigStore = defineStore('config', {
 
                         /*--------------------------------------------------------------------------------------------*/
 
-                        _safeSetItem('nyx-lab-config', json).then(() => {
+                        return _safeSetItem('nyx-lab-config', json).then((saved) => {
 
-                            nextTick().then(() => {
+                            if(!saved)
+                            {
+                                throw new Error('Failed to persist configuration in local storage.');
+                            }
+
+                            return nextTick().then(() => {
 
                                 this.modified = false;
-                            });
+                                this.dialog.success();
 
-                            this.dialog.success();
-                            this.dialog.unlock();
+                                return json;
+                            });
                         });
 
                         /*--------------------------------------------------------------------------------------------*/
-
-                        return json;
                     });
                 });
+
+            }).catch((e) => {
+
+                ////.modified = false;
+                this.dialog.error(e);
+
+                return null;
+
+            }).finally(() => {
+
+                this.dialog.unlock();
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -348,7 +362,10 @@ const useConfigStore = defineStore('config', {
         {
             this._setConfig(this.globals, false,true).then((json) => {
 
-                this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json);
+                if(json !== null)
+                {
+                    this.dialog.save('config.nyx', 'application/vnd.nyx+json;charset=utf-8', 'Nyx Configuration Files', ['nyx', 'json'], json);
+                }
             });
         },
 
