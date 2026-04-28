@@ -109,7 +109,7 @@ const _synchronizeVariable_func = (variable) => {
             }
         }
     }
-    catch(_)
+    catch
     {
         /* IGNORE */
     }
