@@ -117,12 +117,12 @@ const _notify = async (title, message) => {
 
     if(typeof title !== 'string')
     {
-        title = title ? String(title) : '';
+        title = title ? (title.title ?? String(title)) : '';
     }
 
     if(typeof message !== 'string')
     {
-        message = message ? String(message) : '';
+        message = message ? (message.message ?? String(message)) : '';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -258,14 +258,14 @@ const _show = (message, title, options = {}) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof message !== 'string')
-    {
-        message = message ? String(message) : '';
-    }
-
     if(typeof title !== 'string')
     {
         title = title ? String(title) : '';
+    }
+
+    if(typeof message !== 'string')
+    {
+        message = message ? String(message) : '';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -304,14 +304,14 @@ const _confirm = (message, title, options = {}) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(typeof message !== 'string')
-    {
-        message = message ? String(message): '';
-    }
-
     if(typeof title !== 'string')
     {
         title = title ? String(title) : '';
+    }
+
+    if(typeof message !== 'string')
+    {
+        message = message ? String(message): '';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -350,14 +350,20 @@ const _confirm = (message, title, options = {}) => {
 
 const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
-    return getRuntime().open(defaultPath, typeMime, typeName, typeExts);
+    return getRuntime().open(defaultPath, typeMime, typeName, typeExts).catch((_) => {
+
+        return _error(`Cannot open file ${defaultPath}`).then(() => null);
+    });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _save = (defaultPath, typeMime, typeName, typeExts, contents) => {
+const _save = (defaultPath, typeMime, typeName, typeExts, text) => {
 
-    return getRuntime().save(defaultPath, typeMime, typeName, typeExts, contents);
+    return getRuntime().save(defaultPath, typeMime, typeName, typeExts, text).catch((_) => {
+
+        return _error(`Cannot save file ${defaultPath}`).then(() => null);
+    });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
