@@ -59,7 +59,15 @@ contextBridge.exposeInMainWorld('__ELECTRON__', {
 
     open: (defaultPath, _typeMime, typeName, typeExts) => ipcRenderer.invoke('nyx:dialog:open', defaultPath, typeName, typeExts),
 
-    save: (defaultPath, _typeMime, typeName, typeExts, contents) => ipcRenderer.invoke('nyx:dialog:save', defaultPath, typeName, typeExts, contents),
+    save: (defaultPath, _typeMime, typeName, typeExts, text) => ipcRenderer.invoke('nyx:dialog:save', defaultPath, typeName, typeExts, text),
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* FILES                                                                                                          */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    read: (fileName) => ipcRenderer.invoke('nyx:file:read', fileName),
+
+    write: (fileName, text) => ipcRenderer.invoke('nyx:file:write', fileName, text),
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* BROWSER                                                                                                        */
