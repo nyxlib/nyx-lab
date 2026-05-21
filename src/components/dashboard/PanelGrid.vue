@@ -138,16 +138,18 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const getColumns = () => {
+    const computeColumns = () => {
 
         const width = gridEl.value?.clientWidth ?? 0;
 
-        return Math.max(MIN_COLS, Math.floor(width / CELL_WIDTH_PX));
+        const cols = Math.floor(width / CELL_WIDTH_PX);
+
+        return Math.max(MIN_COLS, Math.floor(cols / SNAP) * SNAP);
     };
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    grid = GridStack.init({float: true, margin: 0, column: getColumns(), disableOneColumnMode: true}, gridEl.value);
+    grid = GridStack.init({float: true, margin: 0, column: computeColumns()}, gridEl.value);
 
     if(grid)
     {
@@ -155,17 +157,15 @@ onMounted(() => {
         /* WINDOW RESIZING                                                                                            */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        let lastCols = 0;
+        let oldCols = -1;
 
         const updateColumns = () => {
 
-            const cols = Math.max(MIN_COLS, Math.floor(getColumns() / SNAP) * SNAP);
+            const newCols = computeColumns();
 
-            if(lastCols !== cols)
+            if(oldCols !== newCols)
             {
-                lastCols = cols;
-
-                grid.column(cols, 'none');
+                grid.column(oldCols = newCols, 'none');
             }
         };
 
