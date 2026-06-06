@@ -71,13 +71,19 @@ app.directive('tooltip', {
 
         if(title)
         {
-            /* NOSONAR */ new Tooltip(el, {
+            el._ovTooltip = new Tooltip(el, {
                 fallbackPlacements: ['right'],
                 placement: 'right',
                 trigger: 'hover',
                 title: title,
             });
         }
+    },
+    unmounted(el)
+    {
+        el._ovTooltip?.dispose();
+
+        delete el._ovTooltip;
     }
 });
 

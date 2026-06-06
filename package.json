@@ -17,7 +17,6 @@
         "lint": "eslint",
         "app-dev": "npm i --update vue-nyx && vite --port 1234 dev",
         "app-prod": "npm i --update vue-nyx && vite build",
-        "app-lint": "eslint",
         "electron-start": "npm i --update vue-nyx && vite build && cd src-electron && npm run electron-start",
         "electron-macos": "npm i --update vue-nyx && vite build && cd src-electron && npm run electron-make-macos",
         "electron-linux": "npm i --update vue-nyx && vite build && cd src-electron && npm run electron-make-linux",
