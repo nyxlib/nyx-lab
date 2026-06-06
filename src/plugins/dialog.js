@@ -172,13 +172,11 @@ const _success = (message) => {
 
     if(el)
     {
-        el.classList.remove('nyx-bg1');
         el.classList.add('bg-success');
 
         setTimeout(() => {
 
             el.classList.remove('bg-success');
-            el.classList.add('nyx-bg1');
 
         }, 500);
     }
@@ -202,13 +200,11 @@ const _warning = (message) => {
 
     if(el)
     {
-        el.classList.remove('nyx-bg1');
         el.classList.add('bg-warning');
 
         setTimeout(() => {
 
             el.classList.remove('bg-warning');
-            el.classList.add('nyx-bg1');
 
         }, 500);
     }
@@ -232,13 +228,11 @@ const _error = (message) => {
 
     if(el)
     {
-        el.classList.remove('nyx-bg1');
         el.classList.add('bg-danger');
 
         setTimeout(() => {
 
             el.classList.remove('bg-danger');
-            el.classList.add('nyx-bg1');
 
         }, 500);
     }
