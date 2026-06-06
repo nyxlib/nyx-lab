@@ -635,7 +635,7 @@ const getRuntime = () => {
             _runtime = _buildElectronRuntime();
         }
         else if(HAS_TAURI) {
-           _runtime = _buildTauriRuntime();
+            _runtime = _buildTauriRuntime();
         }
         else {
             _runtime = _buildBrowserRuntime();
