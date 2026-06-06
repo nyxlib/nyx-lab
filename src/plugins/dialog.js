@@ -142,18 +142,12 @@ const _notify = async (title, message) => {
     {
         if(await runtime.notifyIsPermissionGranted())
         {
-            Promise.resolve(runtime.notifySend(title, message)).catch(() => {
-                /* ignore notification send errors */
-            });
-            return;
+            return runtime.notifySend(title, message);
         }
 
         if(await runtime.notifyRequestPermission() === 'granted')
         {
-            Promise.resolve(runtime.notifySend(title, message)).catch(() => {
-                /* ignore notification send errors */
-            });
-            return;
+            return runtime.notifySend(title, message);
         }
 
         return _notify_fallback(title, message);
@@ -354,7 +348,7 @@ const _confirm = (message, title, options = {}) => {
 
 const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
-    return getRuntime().open(defaultPath, typeMime, typeName, typeExts).catch((e) => {
+    return getRuntime().open(defaultPath, typeMime, typeName, typeExts).catch((_) => {
 
         return _error(`Cannot open file ${defaultPath}`).then(() => null);
     });
@@ -364,7 +358,7 @@ const _open = (defaultPath, typeMime, typeName, typeExts) => {
 
 const _save = (defaultPath, typeMime, typeName, typeExts, text) => {
 
-    return getRuntime().save(defaultPath, typeMime, typeName, typeExts, text).catch((e) => {
+    return getRuntime().save(defaultPath, typeMime, typeName, typeExts, text).catch((_) => {
 
         return _error(`Cannot save file ${defaultPath}`).then(() => null);
     });
