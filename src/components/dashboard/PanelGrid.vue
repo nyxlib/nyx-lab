@@ -245,21 +245,21 @@ onBeforeUnmount(() => {
             :gs-no-resize="locked ? 'true' : undefined"
             v-for="widget in widgets" :key="widget.id"
         >
-            <div :class="['grid-stack-item-content', widget.shadow, 'card', 'h-100', 'w-100', 'm-0']">
-                <div class="card-header px-3 py-1">
+            <fieldset :class="['grid-stack-item-content', widget.shadow]">
+                <legend>
                     <span>
                         {{ widget.title || '/' }}
                     </span>
-                    <span :class="{'d-none': locked}">
+                    <span :class="[{'d-none': locked}, 'ms-1']">
                       <i class="bi bi-pencil me-1" style="cursor: pointer;" @click="newEditWidget(widget.id)"></i>
                       <i class="bi bi-x-lg me-0" style="cursor: pointer;" @click="closeWidget(widget.id)"></i>
                     </span>
-                </div>
-                <div :class="['card-body', 'px-1', 'py-1', {'nyx-group-disabled': !nyxStore.isConnected}]">
+                </legend>
+                <div :class="{'nyx-group-disabled': !nyxStore.isConnected}">
 
                     <!-- ******************************************************************************************* -->
 
-                    <nyx-group :group-descr="widget.variables1.map((vector) => nyxStore.defXXXVectorDict[vector]).filter(Boolean)" v-if="widget.mode === 'command'" />
+                    <nyx-group :group-descr="widget.variables1.map((vector) => nyxStore.defXXXVectorDict[vector]).filter(Boolean)" :align="widget.commandAlign" :direction="widget.commandDirection" :show-status="widget.commandShowStatus" v-if="widget.mode === 'command'" />
 
                     <!-- ******************************************************************************************* -->
 
@@ -268,7 +268,7 @@ onBeforeUnmount(() => {
                     <!-- ******************************************************************************************* -->
 
                 </div>
-            </div>
+            </fieldset>
         </div>
 
     </div>
@@ -313,39 +313,45 @@ onBeforeUnmount(() => {
 
 </template>
 
-<style>
+<style scoped>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.grid-stack-item {
-
-    border-radius: calc(var(--bs-border-radius) + 10px);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.grid-stack-item > .ui-resizable-se {
-
-    background-image: none;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.grid-stack-item .card-header {
+fieldset.grid-stack-item-content {
 
     display: flex;
-    overflow: hidden;
-    flex-direction: row;
-    justify-content: space-between;
-}
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.grid-stack-item .card-body {
-
-    display: flex;
-    overflow: hidden;
     flex-direction: column;
-    justify-content: /**/ center /**/;
+
+    border: 1px solid var(--bs-border-color);
+
+    border-radius: 8px 8px 0 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+fieldset.grid-stack-item-content > legend {
+
+    float: none;
+
+    padding: 0 0 0 00px;
+    margin: 0 0 0 16px;
+
+    font-size: revert;
+    line-height: revert;
+
+    width: auto;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+fieldset.grid-stack-item-content > div {
+
+    display: flex;
+
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

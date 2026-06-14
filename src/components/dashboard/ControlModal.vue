@@ -16,13 +16,7 @@ import ControlOption from '@/components/dashboard/ControlOption.vue';
 import useConfigStore from '@/stores/config';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* VARIABLES                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const configStore = useConfigStore();
-
-const nyxStore = useNyxStore();
-
+/* CONSTANTS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const MODE_VARIABLE = 'variable';
@@ -43,6 +37,38 @@ const MODES = [
     {value: MODE_OTHER, label: 'Other'},
 ];
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const COMMAND_ALIGN_TRUE = true;
+const COMMAND_ALIGN_FALSE = false;
+
+const COMMAND_ALIGN = [
+    {value: COMMAND_ALIGN_TRUE, label: 'True'},
+    {value: COMMAND_ALIGN_FALSE, label: 'False'},
+];
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const COMMAND_DIRECTION_COL = 'col';
+const COMMAND_DIRECTION_ROW = 'row';
+
+const COMMAND_DIRECTION = [
+    {value: COMMAND_DIRECTION_COL, label: 'Column'},
+    {value: COMMAND_DIRECTION_ROW, label: /**/'Row'/**/},
+];
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const COMMAND_SHOW_STATUS_TRUE = true;
+const COMMAND_SHOW_STATUS_FALSE = false;
+
+const COMMAND_SHOW_STATUS = [
+    {value: COMMAND_SHOW_STATUS_TRUE, label: 'True'},
+    {value: COMMAND_SHOW_STATUS_FALSE, label: 'False'},
+];
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const SHADOWS = [
     {value: 'shadow-none', label: 'None'},
     {value: 'shadow-sm', label: 'Small'},
@@ -59,6 +85,9 @@ const CONTROLS = [
 const DEFAULTS = Object.freeze({
     id: null,
     mode: MODE_VARIABLE,
+    commandAlign: COMMAND_ALIGN_TRUE,
+    commandDirection: COMMAND_DIRECTION_COL,
+    commandShowStatus: COMMAND_SHOW_STATUS_TRUE,
     maxPoints: 1000,
     control: '',
     shadow: 'shadow-sm',
@@ -68,6 +97,14 @@ const DEFAULTS = Object.freeze({
     title2: '',
     title3: '',
 });
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const configStore = useConfigStore();
+
+const nyxStore = useNyxStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -147,10 +184,15 @@ const _options = computed(() => Object.values(configStore.controls).flatMap((x) 
 
 watch(() => props.modelValue, (value) => {
 
+    console.log(value);
+
     const v = value ?? DEFAULTS;
 
     state.id = v.id ?? DEFAULTS.id;
     state.mode = v.mode ?? DEFAULTS.mode;
+    state.commandAlign = v.commandAlign ?? COMMAND_ALIGN_TRUE;
+    state.commandDirection = v.commandDirection ?? COMMAND_DIRECTION_COL;
+    state.commandShowStatus = v.commandShowStatus ?? COMMAND_SHOW_STATUS_TRUE;
     state.maxPoints = v.maxPoints ?? DEFAULTS.maxPoints;
     state.control = v.control ?? DEFAULTS.control;
     state.shadow = v.shadow ?? DEFAULTS.shadow;
@@ -233,6 +275,8 @@ const submit = () => {
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
+
+        console.log(newWidget);
 
         emit('update:modelValue', newWidget);
 
@@ -321,7 +365,25 @@ onBeforeUnmount(() => {
                                             <multiselect mode="single" :required="true" :can-clear="false" :searchable="true" :create-option="false" :allow-absent="false" :close-on-select="true" :options="MODES" id="D38EC0FA" v-model="state.mode" />
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div :class="['col-md-2', {'visually-hidden': state.mode !== MODE_COMMAND}]">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="F4EBA41C">Align</label>
+                                            <multiselect mode="single" :required="true" :can-clear="false" :searchable="true" :create-option="false" :allow-absent="false" :close-on-select="true" :options="COMMAND_ALIGN" id="F4EBA41C" v-model="state.commandAlign" />
+                                        </div>
+                                    </div>
+                                    <div :class="['col-md-2', {'visually-hidden': state.mode !== MODE_COMMAND}]">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="CE02F558">Direction</label>
+                                            <multiselect mode="single" :required="true" :can-clear="false" :searchable="true" :create-option="false" :allow-absent="false" :close-on-select="true" :options="COMMAND_DIRECTION" id="CE02F558" v-model="state.commandDirection" />
+                                        </div>
+                                    </div>
+                                    <div :class="['col-md-2', {'visually-hidden': state.mode !== MODE_COMMAND}]">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="E4C38282">Show status</label>
+                                            <multiselect mode="single" :required="true" :can-clear="false" :searchable="true" :create-option="false" :allow-absent="false" :close-on-select="true" :options="COMMAND_SHOW_STATUS" id="E4C38282" v-model="state.commandShowStatus" />
+                                        </div>
+                                    </div>
+                                    <div :class="['col-md-6', {'visually-hidden': state.mode === MODE_COMMAND}]">
                                         <div class="mb-3">
                                             <label class="form-label" for="E9549BAB">Max points</label>
                                             <input class="form-control form-control-sm" type="number" min="1" step="1" placeholder="Period" :disabled="state.mode !== MODE_VARIABLE && state.mode !== MODE_SCATTER_2D && state.mode !== MODE_STREAM" :required="true" id="E9549BAB" v-model.number="state.maxPoints" />
