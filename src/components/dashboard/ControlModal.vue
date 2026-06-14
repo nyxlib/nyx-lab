@@ -184,8 +184,6 @@ const _options = computed(() => Object.values(configStore.controls).flatMap((x) 
 
 watch(() => props.modelValue, (value) => {
 
-    console.log(value);
-
     const v = value ?? DEFAULTS;
 
     state.id = v.id ?? DEFAULTS.id;
@@ -275,8 +273,6 @@ const submit = () => {
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
-
-        console.log(newWidget);
 
         emit('update:modelValue', newWidget);
 

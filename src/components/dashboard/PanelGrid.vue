@@ -318,10 +318,6 @@ onBeforeUnmount(() => {
 
 fieldset.grid-stack-item-content {
 
-    display: flex;
-
-    flex-direction: column;
-
     border: 1px solid var(--bs-border-color);
 
     border-radius: 8px 8px 0 0;
@@ -348,7 +344,11 @@ fieldset.grid-stack-item-content > div {
 
     display: flex;
 
-    align-items: center;
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 0.5rem 1rem;
 
     height: 100%;
     width: 100%;
