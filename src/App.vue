@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject, reactive, computed, onMounted} from 'vue';
+import {inject, computed, onMounted} from 'vue';
 
 import {useNyxStore} from 'vue-nyx';
 

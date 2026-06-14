@@ -10,7 +10,7 @@ import addonDefault from '@/components/dashboard/addon/default';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _ADDON_DICT = {};
+const ADDON_DICT = new Map();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* HELPERS                                                                                                            */
@@ -67,9 +67,9 @@ function _load(path)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(path in _ADDON_DICT)
+        if(ADDON_DICT.has(path))
         {
-            resolve(_ADDON_DICT[path]);
+            resolve(ADDON_DICT.get(path));
 
             return;
         }
@@ -78,12 +78,14 @@ function _load(path)
 
         if(path.endsWith('/default/latest/'))
         {
-            const addon = _ADDON_DICT[path] = {
+            const addon = {
                 path: path,
                 name: 'addon_default',
                 module: addonDefault,
                 initialized: false,
             };
+
+            ADDON_DICT.set(path, addon);
 
             resolve(addon);
 
@@ -118,12 +120,14 @@ function _load(path)
 
                         if(module !== undefined)
                         {
-                            const addon = _ADDON_DICT[path] = {
+                            const addon = {
                                 path: path,
                                 name: name,
                                 module: module,
                                 initialized: false,
                             };
+
+                            ADDON_DICT.set(path, addon);
 
                             resolve(addon);
                         }
@@ -187,9 +191,16 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if(typeof addon.module.init === 'function')
+                if(addon.module.init !== undefined)
                 {
-                    addon.module.init(TEMP_GLOBALS, this.addon, name);
+                    if(typeof addon.module.init === 'function')
+                    {
+                        addon.module.init(TEMP_GLOBALS, addon.module, addon.name);
+                    }
+                    else
+                    {
+                        this.console.push(`For addon '${addon.name}', 'init' is defined but is not a function.`);
+                    }
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -250,9 +261,16 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 try
                 {
-                    if(typeof addon.module.start === 'function')
+                    if(addon.module.start !== undefined)
                     {
-                        addon.module.start(this.addon, addon.name);
+                        if(typeof addon.module.start === 'function')
+                        {
+                            addon.module.start(this.addon, addon.name);
+                        }
+                        else
+                        {
+                            e = new Error(`For addon '${addon.name}', 'start' is defined but is not a function.`);
+                        }
                     }
                 }
                 catch(error)
@@ -298,7 +316,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
             if(addon.initialized && descr.started)
             {
-                /*------------------------------------------------------------------------------------------------*/
+                /*----------------------------------------------------------------------------------------------------*/
 
                 for(const panel of this.appPanels[addon.name]?.panels ?? [])
                 {
@@ -309,9 +327,16 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
 
                 try
                 {
-                    if(typeof addon.stop === 'function')
+                    if(addon.module.stop !== undefined)
                     {
-                        addon.stop(this.addon, addon.name);
+                        if(typeof addon.stop === 'function')
+                        {
+                            addon.stop(this.addon, addon.name);
+                        }
+                        else
+                        {
+                            e = new Error(`For addon '${addon.name}', 'stop' is defined but is not a function.`);
+                        }
                     }
                 }
                 catch(error)
