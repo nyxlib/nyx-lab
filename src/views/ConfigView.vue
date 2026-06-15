@@ -284,7 +284,7 @@ onMounted(() => {
                                     <img class="logo-on-dark" src="@/assets/logo_lpsc_dark.svg" alt="LPSC" height="65" />
                                 </a>
 
-                                <a href="https://www.in2p3.fr/" target="_blank">
+                                <a href="https://www.in2p3.cnrs.fr/" target="_blank">
                                     <img class="logo-on-light" src="@/assets/logo_in2p3.svg" alt="IN2P3" height="65" />
                                     <img class="logo-on-dark" src="@/assets/logo_in2p3_dark.svg" alt="IN2P3" height="65" />
                                 </a>
