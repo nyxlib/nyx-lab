@@ -195,7 +195,7 @@ const addonFunctions = (DEFAULT_GLOBALS) => ({
                 {
                     if(typeof addon.module.init === 'function')
                     {
-                        addon.module.init(TEMP_GLOBALS, addon.module, addon.name);
+                        addon.module.init(TEMP_GLOBALS, this.addon, addon.name);
                     }
                     else
                     {
