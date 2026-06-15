@@ -273,6 +273,23 @@ onMounted(() => {
 
                         <!-- *************************************************************************************** -->
 
+                        <div class="shadow-sm card mb-3">
+                            <div class="card-header">
+                                <i class="bi bi-lightning-charge"></i> Powered by
+                            </div>
+                            <div class="d-flex card-body justify-content-around">
+
+                                <img src="@/assets/logo_lpsc.svg" alt="LPSC" height="100" />
+
+                                <img src="@/assets/logo_in2p3.svg" alt="IN2P3" height="100" />
+
+                                <img src="@/assets/logo_uga.svg" alt="UGA" height="100" />
+
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
                     </div>
                 </div>
 
