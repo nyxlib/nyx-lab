@@ -277,23 +277,31 @@ onMounted(() => {
                             <div class="card-header">
                                 <i class="bi bi-lightning-charge"></i> Powered by
                             </div>
-                            <div class="d-flex card-body justify-content-around">
+                            <div class="card-body">
+                                <div class="row g-3 align-items-center justify-content-center">
 
-                                <a href="https://lpsc.in2p3.fr/" target="_blank">
-                                    <img class="logo-on-light" src="@/assets/logo_lpsc.svg" alt="LPSC" height="65" />
-                                    <img class="logo-on-dark" src="@/assets/logo_lpsc_dark.svg" alt="LPSC" height="65" />
-                                </a>
+                                    <div class="col-12 col-sm-4">
+                                        <a href="https://lpsc.in2p3.fr/" target="_blank" rel="noopener">
+                                            <img class="logo-on-light img-fluid" src="@/assets/logo_lpsc.svg" alt="LPSC" style="max-height: 65px;" />
+                                            <img class="logo-on-dark img-fluid" src="@/assets/logo_lpsc_dark.svg" alt="LPSC" style="max-height: 65px;" />
+                                        </a>
+                                    </div>
 
-                                <a href="https://www.in2p3.cnrs.fr/" target="_blank">
-                                    <img class="logo-on-light" src="@/assets/logo_in2p3.svg" alt="IN2P3" height="65" />
-                                    <img class="logo-on-dark" src="@/assets/logo_in2p3_dark.svg" alt="IN2P3" height="65" />
-                                </a>
+                                    <div class="col-12 col-sm-4">
+                                        <a href="https://www.in2p3.cnrs.fr/" target="_blank" rel="noopener">
+                                            <img class="logo-on-light img-fluid" src="@/assets/logo_in2p3.svg" alt="IN2P3" style="max-height: 65px;" />
+                                            <img class="logo-on-dark img-fluid" src="@/assets/logo_in2p3_dark.svg" alt="IN2P3" style="max-height: 65px;" />
+                                        </a>
+                                    </div>
 
-                                <a href="https://www.univ-grenoble-alpes.fr/" target="_blank">
-                                    <img class="logo-on-light" src="@/assets/logo_uga.svg" alt="UGA" height="65" />
-                                    <img class="logo-on-dark" src="@/assets/logo_uga_dark.svg" alt="UGA" height="65" />
-                                </a>
+                                    <div class="col-12 col-sm-4">
+                                        <a href="https://www.univ-grenoble-alpes.fr/" target="_blank" rel="noopener">
+                                            <img class="logo-on-light img-fluid" src="@/assets/logo_uga.svg" alt="UGA" style="max-height: 65px;" />
+                                            <img class="logo-on-dark img-fluid" src="@/assets/logo_uga_dark.svg" alt="UGA" style="max-height: 65px;" />
+                                        </a>
+                                    </div>
 
+                                </div>
                             </div>
                         </div>
 
