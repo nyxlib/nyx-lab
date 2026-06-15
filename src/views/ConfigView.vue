@@ -279,11 +279,20 @@ onMounted(() => {
                             </div>
                             <div class="d-flex card-body justify-content-around">
 
-                                <img src="@/assets/logo_lpsc.svg" alt="LPSC" height="100" />
+                                <a href="https://lpsc.in2p3.fr/" target="_blank">
+                                    <img class="logo-on-light" src="@/assets/logo_lpsc.svg" alt="LPSC" height="65" />
+                                    <img class="logo-on-dark" src="@/assets/logo_lpsc_dark.svg" alt="LPSC" height="65" />
+                                </a>
 
-                                <img src="@/assets/logo_in2p3.svg" alt="IN2P3" height="100" />
+                                <a href="https://www.in2p3.fr/" target="_blank">
+                                    <img class="logo-on-light" src="@/assets/logo_in2p3.svg" alt="IN2P3" height="65" />
+                                    <img class="logo-on-dark" src="@/assets/logo_in2p3_dark.svg" alt="IN2P3" height="65" />
+                                </a>
 
-                                <img src="@/assets/logo_uga.svg" alt="UGA" height="100" />
+                                <a href="https://www.univ-grenoble-alpes.fr/" target="_blank">
+                                    <img class="logo-on-light" src="@/assets/logo_uga.svg" alt="UGA" height="65" />
+                                    <img class="logo-on-dark" src="@/assets/logo_uga_dark.svg" alt="UGA" height="65" />
+                                </a>
 
                             </div>
                         </div>
@@ -393,3 +402,24 @@ onMounted(() => {
     <!-- *********************************************************************************************************** -->
 
 </template>
+
+<style scoped>
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.logo-on-dark,
+.logo-on-light {
+    display: none;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+[data-bs-theme="dark"] .logo-on-dark {
+    display: inline-block;
+}
+
+[data-bs-theme="light"] .logo-on-light {
+    display: inline-block;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+</style>
