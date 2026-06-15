@@ -191,7 +191,7 @@ const showConsole = () => {
 
 const htmlMessageHandler = (e) => {
 
-    if(Object.prototype.toString.call(e.data) === '[object String]' && e.data.startsWith('addon://'))
+    if(Object.prototype.toString.call(e.data) === '[object String]' && e.data.trim().startsWith('addon://'))
     {
         addonAppend(e.data);
     }
