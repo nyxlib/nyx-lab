@@ -2,7 +2,7 @@
 
 const {app, shell, dialog, ipcMain, session, protocol, BrowserWindow} = require('electron');
 
-const process = require('node:child_process');
+const childProcess = require('node:child_process');
 
 const fsp = require('node:fs/promises');
 
@@ -164,7 +164,7 @@ const createWindow = () => {
 
         sendPendingConfig();
 
-        for(const arg of process.argv.slice(process.defaultApp ? 2 : 1))
+        for(const arg of childProcess.argv.slice(childProcess.defaultApp ? 2 : 1))
         {
             if(arg && !arg.startsWith('-') && /\.(nyx|json)$/i.test(arg))
             {
@@ -401,7 +401,7 @@ ipcMain.handle('nyx:command:exec', async (event, cmd, args = []) => {
 
     return await new Promise((resolve) => {
 
-        const proc = process.spawn(cmd, args);
+        const proc = childProcess.spawn(cmd, args);
 
         let stdout = '';
         let stderr = '';

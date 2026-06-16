@@ -51,7 +51,10 @@
                 "AppImage"
             ],
             "category": "Science",
-            "icon": "icons/app-icon.svg"
+            "icon": "icons/app-icon.svg",
+            "executableArgs": [
+                "--no-sandbox"
+            ]
         },
         "win": {
             "target": [
