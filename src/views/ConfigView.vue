@@ -278,23 +278,23 @@ onMounted(() => {
                                 <i class="bi bi-lightning-charge"></i> Powered by
                             </div>
                             <div class="card-body">
-                                <div class="row g-3 align-items-center justify-content-center">
+                                <div class="row g-3">
 
-                                    <div class="col-12 col-sm-4">
+                                    <div class="col-12 col-sm-4 text-center">
                                         <a href="https://lpsc.in2p3.fr/" target="_blank" rel="noopener">
                                             <img class="logo-on-light img-fluid" src="@/assets/logo_lpsc.svg" alt="LPSC" style="max-height: 65px;" />
                                             <img class="logo-on-dark img-fluid" src="@/assets/logo_lpsc_dark.svg" alt="LPSC" style="max-height: 65px;" />
                                         </a>
                                     </div>
 
-                                    <div class="col-12 col-sm-4">
+                                    <div class="col-12 col-sm-4 text-center">
                                         <a href="https://www.in2p3.cnrs.fr/" target="_blank" rel="noopener">
                                             <img class="logo-on-light img-fluid" src="@/assets/logo_in2p3.svg" alt="IN2P3" style="max-height: 65px;" />
                                             <img class="logo-on-dark img-fluid" src="@/assets/logo_in2p3_dark.svg" alt="IN2P3" style="max-height: 65px;" />
                                         </a>
                                     </div>
 
-                                    <div class="col-12 col-sm-4">
+                                    <div class="col-12 col-sm-4 text-center">
                                         <a href="https://www.univ-grenoble-alpes.fr/" target="_blank" rel="noopener">
                                             <img class="logo-on-light img-fluid" src="@/assets/logo_uga.svg" alt="UGA" style="max-height: 65px;" />
                                             <img class="logo-on-dark img-fluid" src="@/assets/logo_uga_dark.svg" alt="UGA" style="max-height: 65px;" />
